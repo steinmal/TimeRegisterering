@@ -1,10 +1,16 @@
-<html><body>
 <?php
-// A simple web site in Cloud9 that runs through Apache
-// Press the 'Run' button on the top to start the web server,
-// then click the URL that is emitted to the Output tab of the console
-
+require_once 'vendor/autoload.php';
 include('auth.php');
+$loader = new Twig_Loader_Filesystem('templates');
+$twig = new Twig_Environment($loader);
+
+$bool = false;
+if ($bool == true) {
+    $boolIsTrue = true;
+}
+else {
+    $boolIsTrue = false;
+}
+
+echo $twig->render('index.html', array('boolIsTrue'=>$boolIsTrue));
 ?>
-</body>
-</html>
