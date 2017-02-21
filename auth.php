@@ -1,7 +1,7 @@
 <?php
 $dsn = "mysql:dbname=stud_v17_gruppe2;host=kark.hin.no";
 $user = "stud_v17_gruppe2";
-$pswd = "";
+$pswd = "gruppe2";
 
 try {
     $db = new PDO($dsn, $user, $pswd);
@@ -11,3 +11,6 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
+
+
+

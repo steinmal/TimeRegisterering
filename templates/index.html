@@ -5,11 +5,29 @@
     <title>Timeregistrering</title>
 </head>
 <body>
-    <h1>Test av twig template:</h1>
-    {% if boolIsTrue %}
-        <h2 style="color:green;">bool er true</h1>
+    {% if innlogget %}
+        <h1>Velkommen</h1>
+        <a href="logout.php">Logg ut</a>
     {% else %}
-        <h2 style="color:red;">bool er false</h1>
+        <form method="post" action="index.php">
+        <table>
+            <tr>
+                <td> Brukernavn:</td>
+            </tr>
+            <tr>
+                <td><input type="text" name="brukernavn"></td>
+            </tr>
+            <tr>
+                <td>Passord:</td>
+            </tr>
+            <tr>
+                <td><input type="password" name="passord"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" name="login" value="Logg inn"></td>
+            </tr>
+        </table>
+    </form>
     {% endif %}
 </body>
 </html>
