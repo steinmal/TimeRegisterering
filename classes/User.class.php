@@ -7,18 +7,22 @@
             $this->brukernavn = $brukernavn;
             $this->passord = $passord;
         }
+        public function setPassword($newPassword) {
+			$this->password = password_hash($newPassword, PASSWORD_DEFAULT);
+			return $this;
+		}
         public static function login($db, $brukernavn, $passord) {
-            $stmt = $db->prepare("SELECT Bruker_Epost, Bruker_Passord FROM Bruker WHERE Bruker_Epost=:email");
+            $stmt = $db->prepare("SELECT bruker_epost, bruker_passord FROM bruker WHERE bruker_epost=:email");
             $stmt->bindparam(':email', $brukernavn, PDO::PARAM_STR);
             $stmt->execute();
             
             if($rad = $stmt->fetch()) {
-                $email = $rad['Bruker_Epost'];
-                $hash = $rad['Bruker_Passord'];
+                $email = $rad['bruker_epost'];
+                $hash = $rad['bruker_passord'];
 
                 
             }
-            if($passord == $hash) {
+            if(password_verify($passord, $hash)) {
                     $_SESSION['innlogget'] = true;
                     $_SESSION['bruker'] = new User($email, $passord);
                     return true;
