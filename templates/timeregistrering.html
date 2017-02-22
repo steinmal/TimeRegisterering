@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeregistrering</title>
+</head>
+<body>
+        <h1>Timeregistrering - {{ navn }} - <a href="logout.php">Logg ut</a></h1>
+        <form method="post" action="timeregistrering.php">
+        <table>
+            <tr>
+                <td>
+                    <select name="prosjekt">
+                        {% for prosjekt in prosjekter %}
+                        <option value="{{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</option>
+                        {% endfor %}
+                    </select> 
+                </td>
+            </tr>
+            <tr>
+                <td>Dato</td>
+            </tr>
+            <tr>
+                <td><input id="dato" type="date" value="2011-01-13"/></td>
+            </tr>
+            <tr>
+                <td>Starttid</td>
+            </tr>
+            <tr>
+                <td><input type="time" name="starttid"></td>
+            </tr>
+            <tr>
+                <td>Stopptid</td>
+            </tr>
+            <tr>
+                <td><input type="time" name="stopptid"></td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="automatisk" value="Checked"> Automatisk registrering</td>
+            </tr>
+            <tr>
+                <td><input type="submit" name="registrer" value="Registrer"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
