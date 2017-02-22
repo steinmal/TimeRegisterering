@@ -22,8 +22,19 @@
             
             return $prosjekter;
         }
-        public function lagProsjekt() {
+        public function lagProsjekt($prosjekt) {
+            $stmt = $this->db->prepare("INSERT INTO `prosjekt` () VALUES ()");
             
         }
+        public function hentProsjekt($id) {
+            $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE prosekt_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            if ($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                return $prosjekt;
+            }
+        }
+        
     }
 ?>
