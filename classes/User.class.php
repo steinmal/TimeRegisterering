@@ -2,6 +2,7 @@
     class User {
         private $brukernavn;
         private $passord;
+        private $bruker_id;
         
         function __construct($brukernavn,$passord){
             $this->brukernavn = $brukernavn;
@@ -30,5 +31,16 @@
             
             echo "Feil passord";
             return false;
+        }
+        public static function hentAlleBrukere($db) {
+            $brukere = array();
+            $stmt = $db->prepare("SELECT * FROM bruker");
+            $stmt->execute();
+            
+            if($rad = $stmt->fetch()) {
+                $bruker_id = $rad['bruker_id']; 
+                $brukernavn = $rad['bruker_navn'];
+            }
+            return $brukere;
         }
     }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prosjektadministrering</title>
+</head>
+<body>
+    <h1>Prosjektadministrering</h1>
+    <p>
+        <form action=prosjektoppretting.php method=GET>
+            <table border=1>
+                <tr>
+                    <th>Prosjekt</th>
+                    <th>Parent</th>
+                    <th>Prosjektleder</th>
+                    <th>Team</th>
+                    <th>Startdato</th>
+                    <th>Sluttdato</th>
+                    <th>Beskrivelse</th>
+                </tr>
+                {% for prosjekt in prosjektliste %}
+                    <tr>
+                        <td>{{ prosjekt.getProsjektNavn() }}</td>
+                        <td>{{ prosjekt.getProsjektParent().getProsjektNavn() }}</td>
+                        <td>{{ prosjekt.getProsjektLeder().getBrukerNavn() }}</td>
+                        <td>{{ prosjekt.getProsjektTeam().getTeamNavn() }}</td>
+                        <td>{{ prosjekt.getProsjektStartDato() }}</td>
+                        <td>{{ prosjekt.getProsjektSluttDato() }}</td>
+                        <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>
+                        <td><input type=radio value={{ prosjekt.getProsjektId() }} name="prosjektId"></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type=submit name=action value=Rediger>
+            <input type=submit name=action value="Opprett underprosjekt">
+            <input type=submit name=action value="Opprett grunnprosjekt">
+        </form>
+    </p>
+</body>
