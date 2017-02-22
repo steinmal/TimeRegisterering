@@ -6,6 +6,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
+$ProsjektReg = new ProsjektRegister($db);
 session_start();
 
 if(isset($_SESSION['innlogget'])) {
@@ -15,7 +16,7 @@ if(isset($_SESSION['innlogget'])) {
     return;
 }
 
-$prosjekter = Prosjekt::hentAlleProsjekter($db);
+$prosjekter = $ProsjektReg->hentAlleProsjekter($db);
 
 echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter));
 ?>

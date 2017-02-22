@@ -17,8 +17,8 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
     header("Location: index.html");
 }
 else{
-    $prosjektliste = 
-    $prosjektliste = Prosjekt::hentAlleProsjekter($db);
+    //$prosjektliste = 
+    //$prosjektliste = Prosjekt::hentAlleProsjekter($db);
     $brukerliste = User::hentAlleBrukere($db);
 }
 

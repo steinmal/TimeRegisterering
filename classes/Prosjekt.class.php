@@ -26,14 +26,14 @@
         public function getProsjektProductOwner() { return $this->prosjekt_product_owner; }
         public function getProsjektRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
         
-        public function setProsjektNavn($navn) { this->prosjekt_navn = $navn;}
-        public function setProsjektParet($parent) { this->foreldre_prosjekt_id = $parent;}
-        public function setProsjektLeder($leder) { this->prosjekt_leder = $leder;}
-        public function setProsjektTeam($team) { this->team_id = $team;}
-        public function setProsjektStartDato($startdato) { this->prosjekt_startdato = $startdato;}
-        public function setProsjektSluttDato($sluttdato) { this->prosjekt_sluttdato = $sluttdato;}
-        public function setProsjektBeskrivelse($beskrivelse) { this->prosjekt_beskrivelse = $beskrivelse;}
-        public function setProsjektProductOwner($product_owner) { this->prosjekt_product_owner = $prodct_owner;}
+        public function setProsjektNavn($navn) { $this->prosjekt_navn = $navn;}
+        public function setProsjektParet($parent) { $this->foreldre_prosjekt_id = $parent;}
+        public function setProsjektLeder($leder) { $this->prosjekt_leder = $leder;}
+        public function setProsjektTeam($team) { $this->team_id = $team;}
+        public function setProsjektStartDato($startdato) { $this->prosjekt_startdato = $startdato;}
+        public function setProsjektSluttDato($sluttdato) { $this->prosjekt_sluttdato = $sluttdato;}
+        public function setProsjektBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
+        public function setProsjektProductOwner($product_owner) { $this->prosjekt_product_owner = $prodct_owner;}
         
         
         
