@@ -15,27 +15,6 @@
             
         }
         
-        // public static function hentAlleProsjekter($db) {
-        //     $prosjekter = array();
-        //     $stmt = $db->prepare("SELECT * FROM prosjekt");
-        //     $stmt->execute();
-        //     echo("execute");
-            
-        //     while ($rad = $stmt->fetch()) { // Kan byttes ut med fetchObject('Prosjekt');
-        //         $prosjektId = $rad['prosjekt_id'];
-        //         $foreldreId = $rad['foreldre_prosjekt_id'];
-        //         $prosjektNavn = $rad['prosjekt_navn'];
-        //         $prosjektLeder = $rad['prosjekt_leder'];
-        //         $prosjektTeam = $rad['team_id'];
-        //         $prosjektStartDato = $rad['prosjekt_startdato'];
-        //         $prosjektSluttDato = $rad['prosjekt_sluttdato'];
-        //         $prosjektBeskrivelse = $rad['prosjekt_beskrivelse'];
-                
-        //         $prosjekter[] = new Prosjekt($prosjektId, $foreldreId, $prosjektNavn, $prosjektLeder, $prosjektTeam, $prosjektStartDato, $prosjektSluttDato, $prosjektBeskrivelse);
-        //     }
-            
-        //     return $prosjekter;
-        // }
         public function getId() { return $this->prosjekt_id; }
         public function getProsjektNavn() { return $this->prosjekt_navn; }
         public function getProsjektParent() { return $this->foreldre_prosjekt_id; }
@@ -46,6 +25,16 @@
         public function getProsjektBeskrivelse() { return $this->prosjekt_beskrivelse; }
         public function getProsjektProductOwner() { return $this->prosjekt_product_owner; }
         public function getProsjektRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
+        
+        public function setProsjektNavn($navn) { this->prosjekt_navn = $navn;}
+        public function setProsjektParet($parent) { this->foreldre_prosjekt_id = $parent;}
+        public function setProsjektLeder($leder) { this->prosjekt_leder = $leder;}
+        public function setProsjektTeam($team) { this->team_id = $team;}
+        public function setProsjektStartDato($startdato) { this->prosjekt_startdato = $startdato;}
+        public function setProsjektSluttDato($sluttdato) { this->prosjekt_sluttdato = $sluttdato;}
+        public function setProsjektBeskrivelse($beskrivelse) { this->prosjekt_beskrivelse = $beskrivelse;}
+        public function setProsjektProductOwner($product_owner) { this->prosjekt_product_owner = $prodct_owner;}
+        
         
         
         
