@@ -28,6 +28,7 @@
             if(password_verify($passord, $hash)) {
                     $_SESSION['innlogget'] = true;
                     $_SESSION['bruker'] = new User($id, $email, $passord);
+                    $_SESSION['brukerid'] = $id;
                     return true;
                 }
             
@@ -47,4 +48,5 @@
         }
         
         public function getBrukerId() { return $this->bruker_id; }
+        public function getBrukerNavn() { return $this->brukernavn; }
     }

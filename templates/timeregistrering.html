@@ -5,18 +5,32 @@
     <title>Timeregistrering</title>
 </head>
 <body>
-        <h1>Timeregistrering - {{ navn }} - <a href="logout.php">Logg ut</a></h1>
+        <h1>Timeregistrering - {{ brukernavn }} - <a href="logout.php">Logg ut</a></h1>
         <form method="post" action="timeregistrering.php">
         <table>
             <tr>
                 <td>
-                    <select name="prosjekt">
+                    <select name="prosjekt" onchange="submit()">
+                        <option value="0"></option>
                         {% for prosjekt in prosjekter %}
                         <option value="{{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</option>
                         {% endfor %}
                     </select> 
                 </td>
             </tr>
+        </form>
+        <form method="post" action="timeregistrering.php">
+        <table>
+            <tr>
+                <td>
+                    <select name="oppgave">
+                        {% for oppgave in oppgaver %}
+                        <option value="{{ oppgave.getOppgaveId() }}">{{ oppgave.getOppgaveNavn() }}</option>
+                        {% endfor %}
+                    </select> 
+                </td>
+            </tr>
+
             <tr>
                 <td>Dato</td>
             </tr>

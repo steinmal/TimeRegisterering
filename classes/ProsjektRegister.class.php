@@ -11,7 +11,6 @@
             $prosjekter = array();
             $stmt = $this->db->prepare("SELECT * FROM prosjekt");
             $stmt->execute();
-            echo("execute");
             
             $i = 0;
             while ($post = $stmt->fetchObject('Prosjekt')) {

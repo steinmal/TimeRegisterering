@@ -7,6 +7,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
+$OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 session_start();
 
@@ -17,25 +18,31 @@ if(isset($_SESSION['innlogget']) && $_SESSION['innlogget'] == true) {
     return;
 }
 
+
 if(isset($_POST['registrer'])) {
     $bruker = $_SESSION['bruker'];
-
     $bruker_id = $bruker->getBrukerId();
-    $prosjekt_id = $_POST['prosjekt'];
+    //$bruker_id = $_SESSION['brukerid'];
+    $oppgave_id = $_POST['oppgave'];
     $dato = $_POST['dato'];
     $starttid = $_POST['starttid'];
     $stopptid = $_POST['stopptid'];
     $automatisk = isset($_POST['automatisk']) ? 1 : 0;
-    /*
-    echo $prosjekt_id;
-    var_dump($prosjekt_id);
-    $TimeReg->lagTimeregistrering($prosjekt_id, $bruker_id, $dato, $starttid, $stopptid, $automatisk);
+
+    $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttid, $stopptid, $automatisk);
 
     echo "Timereg OK";
-    */
 }
 
 
-$prosjekter = $ProsjektReg->hentAlleProsjekter($db);
-echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter));
+$prosjekter = $ProsjektReg->hentAlleProsjekter();
+
+if(isset($_POST['prosjekt'])) {
+    $prosjekt_id = $_POST['prosjekt'];
+    $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
+    echo "Prosjekt: " . $prosjekt_id;
+}
+
+
+echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver));
 ?>

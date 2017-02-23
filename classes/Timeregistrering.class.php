@@ -16,7 +16,7 @@
             
         }
         
-        
+        public function getTimeregId() { return $this->timereg_id; }
         
         
     }

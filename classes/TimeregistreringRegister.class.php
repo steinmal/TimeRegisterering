@@ -11,8 +11,7 @@
             $timeregistreringer = array();
             $stmt = $this->db->prepare("SELECT * FROM timeregistrering");
             $stmt->execute();
-            echo("execute");
-            
+
             $i = 0;
             while ($post = $stmt->fetchObject('Timeregistrering')) {
                 $timeregistreringer[$i] = $post;
