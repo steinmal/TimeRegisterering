@@ -18,8 +18,9 @@ if(!isset($_SESSION['innlogget']) && $_SESSION['innlogget'] = true){
 }
 else{
     $prosjektliste = $ProsjektReg->hentAlleProsjekter();
+    
 }
 
-echo $twig->render('prosjektadministrering.html', array('prosjektliste'=>$prosjektliste));
+echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste));
 
 ?>

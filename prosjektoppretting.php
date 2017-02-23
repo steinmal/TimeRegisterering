@@ -16,25 +16,48 @@ session_start();
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
     header("Location: index.html");
 }
-else{
-    //$prosjektliste = 
-    //$prosjektliste = Prosjekt::hentAlleProsjekter($db);
-    $brukerliste = User::hentAlleBrukere($db);
+
+$prosjektliste = $ProsjektReg->hentAlleProsjekter($db);
+$brukerliste = User::hentAlleBrukere($db);
+$brukParent = true;
+$valgtProsjekt = new Prosjekt();
+//echo(count($brukerliste));
+//echo($brukerliste[0]);
+if(isset($_POST['opprettProsjekt'])){
+    $nyttProsjekt = new Prosjekt();
+    $nyttProsjekt->setProsjektNavn($_POST['prosjektNavn']);
+    $nyttProsjekt->setProsjektParent($_POST['foreldreProsjekt']);
+    $nyttProsjekt->setProsjektLeder($_POST['prosjektLeder']);
+    $nyttProsjekt->setProsjektBeskrivelse($_POST['prosjektBeskrivelse']);
+    $nyttProsjekt->setProsjektStartDato($_POST['startDato']);
+    $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
+    
+    if(!isset($_POST['prosjektId'])){
+        $ProsjektReg->lagProsjekt($nyttProsjekt);
+    }
+    else{
+        $nyttProsjekt->setProsjektId($_POST['prosjektId']);
+        $ProsjektReg->redigerProsjekt($nyttProsjekt);
+    }
 }
-
-
-if(isset($_GET['action'])){
+elseif(isset($_GET['action'])){
     switch($_GET['action']){
-        case 'Opprett GrunnProsjekt':
-            //$valgtProsjekt = new Prosjekt();
+        case 'Opprett grunnprosjekt':
+            $brukParent = false;
             break;
         case 'Rediger':
-            //$valgtProsjekt = Prosjekt::hentProsjektById($_GET['prosjektId']); //Noe lignende dette
+            $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
+            echo($valgtProsjekt->getId());
             break;
-        case 'Opprett UnderProsjekt':
+        case 'Opprett underprosjekt':
+            $valgtProsjekt = new Prosjekt();
+            $valgtProsjekt->setProsjektParent($_GET['prosjektId']);
+            //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getProsjektLeder());
+            //$valgtProsjekt->setProsjektId();
             break;
     }
 }
 
-echo $twig->render('prosjektoppretting.html', array('valgtProsjekt'=>$valgtProsjekt, 'prosjeker'=>$prosjektliste, 'brukere'=>$brukerliste));
+
+echo $twig->render('prosjektoppretting.html', array('brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste));
 ?>

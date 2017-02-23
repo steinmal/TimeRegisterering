@@ -40,9 +40,14 @@
             $stmt = $db->prepare("SELECT * FROM bruker");
             $stmt->execute();
             
-            if($rad = $stmt->fetch()) {
-                $bruker_id = $rad['bruker_id']; 
-                $brukernavn = $rad['bruker_navn'];
+            $i = 0;
+            while($post = $stmt->fetch()){
+                $brukere[$i] = new User($post['bruker_id'], $post['bruker_navn'], $post['bruker_passord']);
+                //echo($post['bruker_passord'] . '-');
+                //echo($brukere[$i]->brukernavn);
+                //echo($brukere[$i]->getBrukerNavn());
+                //print_r($brukere);
+                $i++;
             }
             return $brukere;
         }

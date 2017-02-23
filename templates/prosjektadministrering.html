@@ -21,13 +21,13 @@
                 {% for prosjekt in prosjektliste %}
                     <tr>
                         <td>{{ prosjekt.getProsjektNavn() }}</td>
-                        <td>{{ prosjekt.getProsjektParent().getProsjektNavn() }}</td>
+                        <td>{{ register.hentProsjekt(prosjekt.getProsjektParent()).getProsjektNavn() }}</td>
                         <td>{{ prosjekt.getProsjektLeder().getBrukerNavn() }}</td>
                         <td>{{ prosjekt.getProsjektTeam().getTeamNavn() }}</td>
                         <td>{{ prosjekt.getProsjektStartDato() }}</td>
                         <td>{{ prosjekt.getProsjektSluttDato() }}</td>
                         <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>
-                        <td><input type=radio value={{ prosjekt.getProsjektId() }} name="prosjektId"></td>
+                        <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
                     </tr>
                 {% endfor %}
             </table>
