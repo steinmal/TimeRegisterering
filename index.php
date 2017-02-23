@@ -17,6 +17,7 @@ if(isset($_POST['login'])) {
     $brukernavn = $_POST['brukernavn'];
     $passord = $_POST['passord'];
     User::login($db, $brukernavn, $passord);
+    
 }
 
 if(isset($_SESSION['innlogget'])) {

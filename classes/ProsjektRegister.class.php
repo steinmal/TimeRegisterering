@@ -33,7 +33,7 @@
             $stmt->bindParam(':beskrivelse', $prosjekt->getProsjektBeskrivelse(), PDO::PARAM_STR);
             $stmt->bindParam(':team_id', $prosjekt->getProsjektTeam(), PDO::PARAM_INT);
             $stmt->bindParam(':product_owner', $prosjekt->getProsjektProductOwner(), PDO::PARAM_STR);
-            $stmt-execute();
+            $stmt->execute();
         }
         public function hentProsjekt($id) {
             $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE prosekt_id = :id");

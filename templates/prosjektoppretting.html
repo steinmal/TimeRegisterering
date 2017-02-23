@@ -6,5 +6,45 @@
 </head>
 <body>
     <h1>Opprett nytt prosjekt</h1>
-    
+    <table>
+        <tr>
+            <td>Prosjektnavn:</td>
+        </tr>
+        <tr>
+            <td><input type="text" name="prosjektNavn"></td>
+        </tr>
+        <tr>
+            <td>Foreldre prosjekt:</td>
+            <td><select name="foreldreProsjekt">
+                <option value="Ingen foreldre prosjekt"></option>
+                {% for prosjekt in prosjekter %}
+                <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getId() equals prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
+                {% endfor %}
+            </select></td>
+        </tr>
+        <tr>
+            <td>Prosjektleder:</td>
+            <td><select name="prosjektLeder">
+                {% for bruker in brukere %}
+                <option value="{{ bruker.getId() }}">{{ bruker.getNavn() }}</option>
+                {% endfor %}
+            </select></td>
+        </tr>  
+        <tr>
+            <td>Produkt beskrivelse:</td>
+        </tr>
+        <tr>
+            <td><input type="textarea" name="prosjektBeskrivelse"></td>
+        </tr>
+        <tr>
+            <td>Start dato:</td>
+            <td><input type="text" name="startDato"></td>
+        </tr>
+            <td>Slutt dato:</td>
+            <td><input type="text" name="sluttDato"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" name="opprettProsjekt" value="Opprett prosjekt"></td>
+        </tr>
+    </table>
 </body>
