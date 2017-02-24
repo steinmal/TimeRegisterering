@@ -22,8 +22,8 @@
                     <tr>
                         <td>{{ prosjekt.getProsjektNavn() }}</td>
                         <td>{{ register.hentProsjekt(prosjekt.getProsjektParent()).getProsjektNavn() }}</td>
-                        <td>{{ prosjekt.getProsjektLeder().getBrukerNavn() }}</td>
-                        <td>{{ prosjekt.getProsjektTeam().getTeamNavn() }}</td>
+                        <td>{{ userReg.hentBruker(prosjekt.getProsjektLeder()).getBrukerNavn()}}</td>
+                        <td>{{ teamReg.hentTeam(prosjekt.getProsjektTeam()).getTeamNavn() }}</td>
                         <td>{{ prosjekt.getProsjektStartDato() }}</td>
                         <td>{{ prosjekt.getProsjektSluttDato() }}</td>
                         <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>

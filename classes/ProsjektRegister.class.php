@@ -13,8 +13,8 @@
             $stmt->execute();
 
             $i = 0;
-            while ($post = $stmt->fetchObject('Prosjekt')) {
-                $prosjekter[$i] = $post;
+            while ($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                $prosjekter[$i] = $prosjekt;
                 $i++;
             }
 

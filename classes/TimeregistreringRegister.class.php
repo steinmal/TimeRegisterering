@@ -13,8 +13,8 @@
             $stmt->execute();
 
             $i = 0;
-            while ($post = $stmt->fetchObject('Timeregistrering')) {
-                $timeregistreringer[$i] = $post;
+            while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+                $timeregistreringer[$i] = $timereg;
                 $i++;
             }
                 

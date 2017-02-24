@@ -8,6 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
+$UserReg = new UserRegister($db);
 
 
 session_start();
@@ -18,7 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
 }
 
 $prosjektliste = $ProsjektReg->hentAlleProsjekter($db);
-$brukerliste = User::hentAlleBrukere($db);
+$brukerliste =$UserReg->hentAlleBrukere();
 $brukParent = true;
 $valgtProsjekt = new Prosjekt();
 //echo(count($brukerliste));

@@ -13,8 +13,8 @@
             $stmt->execute();
             
             $i = 0;
-            while ($post = $stmt->fetchObject('Oppgave')) {
-                $oppgaver[$i] = $post;
+            while ($oppgave = $stmt->fetchObject('Oppgave')) {
+                $oppgaver[$i] = $oppgave;
                 $i++;
             }
                 
@@ -29,8 +29,8 @@
             $stmt->execute();
             
             $i = 0;
-            while ($post = $stmt->fetchObject('Oppgave')) {
-                $oppgaver[$i] = $post;
+            while ($oppgave = $stmt->fetchObject('Oppgave')) {
+                $oppgaver[$i] = $oppgave;
                 $i++;
             }
                 

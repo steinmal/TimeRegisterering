@@ -8,6 +8,8 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
+$UserReg = new UserRegister($db);
+$TeamReg = new TeamRegister($db);
 
 
 session_start();
@@ -21,6 +23,6 @@ else{
     
 }
 
-echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste));
+echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg));
 
 ?>

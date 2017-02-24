@@ -7,6 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
+$UserReg = new UserRegister($db);
 session_start();
 
 //Om du vil lage en hash til en passord som skal testes i fbm. databasen, kjør denne for å finne hash.
@@ -16,7 +17,8 @@ session_start();
 if(isset($_POST['login'])) {
     $brukernavn = $_POST['brukernavn'];
     $passord = $_POST['passord'];
-    User::login($db, $brukernavn, $passord);
+    $UserReg->login($brukernavn, $passord);
+    //User::login($db, $brukernavn, $passord);
 }
 
 if(isset($_SESSION['innlogget'])) {
