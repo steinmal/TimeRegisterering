@@ -15,8 +15,7 @@
             
             if(password_verify($passord, $bruker->getPassord())) {
                     $_SESSION['innlogget'] = true;
-                    $_SESSION['bruker'] = $user;
-                    $_SESSION['brukerid'] = $id;
+                    $_SESSION['bruker'] = $bruker;
                     return true;
                 }
             
