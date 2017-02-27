@@ -18,6 +18,7 @@ if(isset($_SESSION['innlogget']) && $_SESSION['innlogget'] == true) {
     return;
 }
 
+date_default_timezone_set('Europe/Oslo');
 
 if(isset($_POST['registrer'])) {
     $bruker = $_SESSION['bruker'];
@@ -43,6 +44,7 @@ if(isset($_POST['prosjekt'])) {
     echo "Prosjekt: " . $prosjekt_id;
 }
 
+$brukernavn = $_SESSION['bruker']->getBrukerNavn();
 
-echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver));
+echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i')));
 ?>
