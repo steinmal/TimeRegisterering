@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektoppretting</title>
+
 </head>
 <body>
-    <h1>Opprett nytt prosjekt</h1>
+    {% if valgtProsjekt.getId() > 0 %}
+        <h1>Rediger prosjekt</h1>
+    {% elseif valgtProsjekt.getProsjektParent() > 0 %}
+        <h1>Opprett nytt underprosjekt</h1>
+    {% elseif valgtProsjekt.getProsjektParent() == 0 %}
+        <h1>Opprett nytt prosjekt</h1>
+    {% endif %}
+    
     <form method="post" action="prosjektoppretting.php">
         {% if valgtProsjekt.getId() >= 0 %}
         <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">
@@ -21,7 +29,7 @@
                 <td><select name="foreldreProsjekt">
                     {% for prosjekt in prosjekter %}
                     <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getProsjektParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
-                    {% endfor %}a
+                    {% endfor %}
                 </select></td>
             </tr>
             {% endif %}
@@ -39,14 +47,15 @@
             </tr>
             <tr>
                 <td>Start dato:</td>
-                <td><input type="text" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}"></td>
+                <td><input type="date" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}"></td>
             </tr>
                 <td>Slutt dato:</td>
-                <td><input type="text" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}"></td>
+                <td><input type="date" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}"></td>
             </tr>
             <tr>
-                <td><input type="submit" name="opprettProsjekt" value="Opprett prosjekt"></td>
             </tr>
         </table>
+        <input type="submit" name="opprettProsjekt" value="Opprett prosjekt">
+        <a href="prosjektadministrering.php">Avbryt</a>
     </form>
 </body>

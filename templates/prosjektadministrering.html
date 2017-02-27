@@ -5,7 +5,11 @@
     <title>Prosjektadministrering</title>
 </head>
 <body>
+    <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Prosjektadministrering</h1>
+    {% if noRadio == true %}
+        <font color=red>Ingen prosjekt valgt</font>
+    {% endif %}
     <p>
         <form action=prosjektoppretting.php method=GET>
             <table border=1>

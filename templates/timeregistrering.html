@@ -11,7 +11,7 @@
             <tr>
                 <td>
                     <select name="prosjekt" onchange="submit()">
-                        <option value="0"></option>
+                        <!-- <option value="0"></option> Det ligger en slik i databasen nå -->
                         {% for prosjekt in prosjekter %}
                         <option value="{{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</option>
                         {% endfor %}

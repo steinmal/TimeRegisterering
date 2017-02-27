@@ -54,5 +54,11 @@
             $stmt->execute();
         }
         
+        public function slettProsjekt($prosjekt) {
+            $stmt = $this->db->prepare("DELETE FROM prosjekt WHERE prosjekt_id=:prosjektId");
+            $stmt->bindParam(':prosjektId', $prosjekt->getId(), PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
     }
 ?>

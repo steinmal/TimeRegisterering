@@ -32,27 +32,32 @@ if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt->setProsjektBeskrivelse($_POST['prosjektBeskrivelse']);
     $nyttProsjekt->setProsjektStartDato($_POST['startDato']);
     $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
-    
     if(!isset($_POST['prosjektId'])){
         $ProsjektReg->lagProsjekt($nyttProsjekt);
+        header("Location: prosjektadministrering.php");
     }
     else{
         $nyttProsjekt->setProsjektId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
+        header("Location: prosjektadministrering.php");
     }
 }
 elseif(isset($_GET['action'])){
     switch($_GET['action']){
         case 'Opprett grunnprosjekt':
             $brukParent = false;
+            $valgtProsjekt->setProsjektId(-1); // verdier < 0 tas ikke med videre
             break;
         case 'Rediger':
+            if(!isset($_GET['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+            }
             $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
             echo($valgtProsjekt->getId());
             break;
         case 'Opprett underprosjekt':
-            $valgtProsjekt = new Prosjekt();
             $valgtProsjekt->setProsjektParent($_GET['prosjektId']);
+            $valgtProsjekt->setProsjektId(-1);
             //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getProsjektLeder());
             //$valgtProsjekt->setProsjektId();
             break;
