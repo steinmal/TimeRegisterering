@@ -25,8 +25,8 @@ if(isset($_POST['registrer'])) {
     //$bruker_id = $_SESSION['brukerid'];
     $oppgave_id = $_POST['oppgave'];
     $dato = $_POST['dato'];
-    $starttid = $_POST['starttid'];
-    $stopptid = $_POST['stopptid'];
+    $starttid = $_POST['starttid'] . ":00";
+    $stopptid = $_POST['stopptid'] . ":00";
     $automatisk = isset($_POST['automatisk']) ? 1 : 0;
 
     $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttid, $stopptid, $automatisk);
