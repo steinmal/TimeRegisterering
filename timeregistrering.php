@@ -41,10 +41,9 @@ $prosjekter = $ProsjektReg->hentAlleProsjekter();
 if(isset($_POST['prosjekt'])) {
     $prosjekt_id = $_POST['prosjekt'];
     $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
-    echo "Prosjekt: " . $prosjekt_id;
 }
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
 
-echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i')));
+echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id));
 ?>

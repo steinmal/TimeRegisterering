@@ -13,7 +13,7 @@
                     <select name="prosjekt" onchange="submit()">
                         <option value="0"></option>
                         {% for prosjekt in prosjekter %}
-                        <option value="{{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</option>
+                        <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
                         {% endfor %}
                     </select> 
                 </td>
