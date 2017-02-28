@@ -32,7 +32,7 @@ if(isset($_POST['registrer'])) {
 
     $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttid, $stopptid, $automatisk);
 
-    echo "Timereg OK";
+    echo "Timeregistrering OK";
 }
 
 
