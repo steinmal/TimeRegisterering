@@ -46,5 +46,17 @@
             }
         }
         
+        public function hentTimeregistreringerFraBruker($bruker_id) {
+            $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id");
+            $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+            $stmt->execute();
+                
+                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+                $timeregistreringer[] = $timereg;
+            }
+
+            return $timeregistreringer;
+        }
+        
     }
 ?>
