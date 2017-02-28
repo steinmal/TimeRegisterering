@@ -27,8 +27,6 @@ if ($prosjekt == null) {
     echo "Ugyldig prosjektID";
     return;
 }
-var_dump($prosjekt);
-var_dump($OppgaveReg);
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 
 echo $twig->render('prosjektdetaljer.html', array('prosjekt'=>$Prosjekt, 'oppgavereg'=>$OppgaveReg, 'oppgaveliste'=>$OppgaveListe));

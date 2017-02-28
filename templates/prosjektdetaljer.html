@@ -25,7 +25,7 @@
                         <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getOppgaveNavn() }}</td>
                         <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getOppgaveType()) }}</td>
                         <td>{{ oppgave.getPeriode() }}</td>
-                        <td>{{ oppgave.getEstimertTid() }}</td>
+                        <td>{{ oppgave.getTidsestimat() }}</td>
                         <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
                         <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
                     </tr>

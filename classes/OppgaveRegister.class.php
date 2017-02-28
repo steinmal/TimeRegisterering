@@ -74,7 +74,7 @@
         }
         
         public function hentAktiveTimerPrOppgave($id) {
-            $stmt = $this->db->prepare("SELECT SUM(timereg_totaltid) as sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1");
+            $stmt = $this->db->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(`timereg_stopp`, `timereg_start`)))) as sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             
@@ -83,7 +83,7 @@
         }
         
         public function hentGodkjenteTimerPrOppgave($id) {
-            $stmt = $this->db->prepare("SELECT SUM(timereg_totaltid) AS sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1 AND timereg_godkjent = 1");
+            $stmt = $this->db->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(`timereg_stopp`, `timereg_start`)))) AS sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1 AND timereg_godkjent = 1");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             
