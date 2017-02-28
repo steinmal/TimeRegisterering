@@ -12,25 +12,21 @@
             $stmt = $this->db->prepare("SELECT * FROM timeregistrering");
             $stmt->execute();
 
-            $i = 0;
             while ($timereg = $stmt->fetchObject('Timeregistrering')) {
-                $timeregistreringer[$i] = $timereg;
-                $i++;
+                $timeregistreringer[] = $timereg;
             }
-                
-            
             return $timeregistreringer;
         }
         
         
-        public function lagTimeregistrering($oppgave_id, $bruker_id, $timereg_dato, $timereg_start, $timereg_slutt, $timereg_automatisk) {
-            $stmt = $this->db->prepare("INSERT INTO `timeregistrering` (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_slutt, timereg_automatisk)
-            VALUES (:bruker_id, :oppgave_id, :dato, :start, :slutt, :automatisk)");
+        public function lagTimeregistrering($oppgave_id, $bruker_id, $timereg_dato, $timereg_start, $timereg_totaltid, $timereg_automatisk) {
+            $stmt = $this->db->prepare("INSERT INTO `timeregistrering` (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_totaltid, timereg_automatisk)
+            VALUES (:bruker_id, :oppgave_id, :dato, :start, :lengde, :automatisk)");
             $stmt->bindParam(':oppgave_id', $oppgave_id, PDO::PARAM_INT);
             $stmt->bindParam(':bruker_id', $bruker_id, PDO::PARAM_INT);
             $stmt->bindParam(':dato', $timereg_dato);
-            $stmt->bindParam(':start', $timereg_start);
-            $stmt->bindParam(':slutt', $timereg_slutt);
+            $stmt->bindParam(':start', $timereg_start);  
+            $stmt->bindParam(':lengde', $timereg_totaltid);
             $stmt->bindParam(':automatisk', $timereg_automatisk, PDO::PARAM_INT);
             $stmt->execute();
         }

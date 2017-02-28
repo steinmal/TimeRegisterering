@@ -6,7 +6,7 @@
         private $oppgave_id;
         private $timereg_dato;
         private $timereg_start;
-        private $timereg_slutt;
+        private $timereg_totaltid;
         private $timereg_registreringsdato;
         private $timereg_aktiv;
         private $timereg_automatisk;
@@ -21,7 +21,7 @@
         public function getOppgaveId() { return $this->oppgave_id; }
         public function getDato() { return $this->timereg_dato; }
         public function getFra() { return $this->timereg_start; }
-        public function getTil() { return $this->timereg_slutt; }
+        public function getLengde() { return $this->timereg_totaltid; }
         public function getRegistreringsDato() { return $this->timereg_registreringdato; }
         public function getAktiv() { return $this->timereg_aktiv; }
         public function getAutomatisk() { return $this->timereg_automatisk; }

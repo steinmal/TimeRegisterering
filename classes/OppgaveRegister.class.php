@@ -63,5 +63,33 @@
             }
         }
         
+        
+        public function hentOppgaveTypeTekst($id) {
+            $stmt = $this->db->prepare("SELECT * FROM oppgavetype WHERE oppgavetype_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $oppgavetype = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $oppgavetype["oppgavetype_navn"];
+        }
+        
+        public function hentAktiveTimerPrOppgave($id) {
+            $stmt = $this->db->prepare("SELECT SUM(timereg_totaltid) as sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv IS 1");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $sum = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $sum["sum"];
+        }
+        
+        public function hentGodkjenteTimerPrOppgave($id) {
+            $stmt = $this->db->prepare("SELECT SUM(timereg_totaltid) AS sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv IS 1 AND timereg_godkjent IS 1");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $sum = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $sum["sum"];
+        }
+        
     }
 ?>
