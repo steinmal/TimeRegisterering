@@ -10,7 +10,7 @@
             <tr>
                 <th>Dato</th>
                 <th>Fra</th>
-                <th>Lengde</th>
+                <th>Til</th>
                 <th>Oppgave</th>
                 <th>Godkjent</th>
                 <th>Deaktiver</th>
@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ timereg.getDato() }}</td>
                 <td>{{ timereg.getFra() }}</td>
-                <td>{{ timereg.getLengde() }}</td>
+                <td>{{ timereg.getTil() }}</td>
                 <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
                 <td>{{ timereg.getGodkjentTekst() }}</td>
                 <td><input type="button" value="Deaktiver"/></td>

@@ -23,26 +23,14 @@ date_default_timezone_set('Europe/Oslo');
 if(isset($_POST['registrer'])) {
     $bruker = $_SESSION['bruker'];
     $bruker_id = $bruker->getBrukerId();
-    //$bruker_id = $_SESSION['brukerid'];
     $oppgave_id = $_POST['oppgave'];
     $dato = $_POST['dato'];
-    //$starttid = $_POST['starttid'] . ":00";
     $starttid = DateTime::createFromFormat('H:i', $_POST['starttid']);
-    var_dump($starttid);
     $stopptid = DateTime::createFromFormat('H:i', $_POST['stopptid']);
-    var_dump($stopptid);
-    $lengde = $stopptid->diff($starttid);
-    
-    var_dump($lengde);
-    $lengdeStr = $lengde->format("%H:%I:%S");
     $starttidStr = $starttid->format("H:i:s");
-    
+    $stopptidStr = $stopptid->format("H:i:s");
     $automatisk = isset($_POST['automatisk']) ? 1 : 0;
-        var_dump($lengdeStr);
-        var_dump($starttidStr);
-
-
-    $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttidStr, $lengdeStr, $automatisk);
+    $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttidStr, $stopptidStr, $automatisk);
 
     echo "Timeregistrering OK";
 }
