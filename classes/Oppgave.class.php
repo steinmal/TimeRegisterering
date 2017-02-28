@@ -15,9 +15,11 @@
         
         public function getOppgaveId() { return $this->oppgave_id; }
         public function getParentId() { return $this->foreldre_oppgave_id; }
+        public function getProsjektId() { return $this->prosjekt_id; }
         public function getOppgaveNavn() { return $this->oppgave_navn; }
         public function getTidsestimat() { return $this->oppgave_tidsestimat; }
         public function getOppgavetype() { return $this->oppgavetype_id; }
         public function getFaseId() { return $this->fase_id; }
+        public function getPeriode() { return $this->oppgave_periode; }
 
     }
