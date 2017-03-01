@@ -24,7 +24,7 @@
                 </tr>
                 {% for prosjekt in prosjektliste %}
                     <tr>
-                        <td>{{ prosjekt.getProsjektNavn() }}</td>
+                        <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</a></td>
                         <td>{{ register.hentProsjekt(prosjekt.getProsjektParent()).getProsjektNavn() }}</td>
                         <td>{{ userReg.hentBruker(prosjekt.getProsjektLeder()).getBrukerNavn()}}</td>
                         <td>{{ teamReg.hentTeam(prosjekt.getProsjektTeam()).getTeamNavn() }}</td>
