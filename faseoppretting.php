@@ -16,7 +16,7 @@ session_start();
 
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
-    header("Location: index.html");
+    header("Location: index.php");
 }
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: faseadministrering.php");

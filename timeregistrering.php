@@ -12,7 +12,7 @@ $TimeReg = new TimeregistreringRegister($db);
 session_start();
 
 if(isset($_SESSION['innlogget']) && $_SESSION['innlogget'] == true) {
-    $innlogget = $_SESSION['innlogget'];
+    $innlogget = $_SESSION['innlogget']; //Gjør denne noe?
 } else {
     header("Location: index.php");
     return;

@@ -14,13 +14,11 @@ $TeamReg = new TeamRegister($db);
 
 session_start();
 
-if($_GET['error'] == "noRadio") {
-    $noRadio = true;
-}
-if(!isset($_SESSION['innlogget']) && $_SESSION['innlogget'] = true){
-    header("Location: index.html");
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
+    header("Location: index.php");
 }
 else{
+    if($_GET['error'] == "noRadio") { $noRadio = true; }
     $prosjektliste = $ProsjektReg->hentAlleProsjekter();
     unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 }

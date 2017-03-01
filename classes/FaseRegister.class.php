@@ -6,6 +6,16 @@
         public function __construct(PDO $db) {
             $this->db = $db;
         }
+
+        public function hentFase($id) {
+            $stmt = $this->db->prepare("SELECT * FROM fase WHERE fase_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            if($fase = $stmt->fetchObject('Fase')) {
+                return $fase;
+            }
+        }
         
         public function hentAlleFaser($prosjekt_id){
             $faser = array();
@@ -30,13 +40,4 @@
             $stmt->execute();
         }
         
-        public function hentFase($id) {
-            $stmt = $this->db->prepare("SELECT * FROM fase WHERE fase_id = :id");
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            
-            if($fase = $stmt->fetchObject('Fase')) {
-                return $fase;
-            }
-        }
     }
