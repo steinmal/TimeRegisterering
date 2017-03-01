@@ -8,9 +8,10 @@
     
     {% if innlogget %}
         <h1>Velkommen</h1>
-        <a href="timeregistrering.php">Timeregistrering</a>
-        <a href="prosjektadministrering.php">Prosjektadministrering</a>
-        <a href="logout.php">Logg ut</a>
+        <a href="timeregistrering.php">Timeregistrering</a><br/>
+        <a href="prosjektadministrering.php">Prosjektadministrering</a><br/>
+        <a href="faseadministrering.php">Faseadministrering</a><br/>
+        <a href="logout.php">Logg ut</a><br/>
     {% else %}
         <form method="post" action="index.php">
         <table>
@@ -28,6 +29,9 @@
             </tr>
             <tr>
                 <td><input type="submit" name="login" value="Logg inn"></td>
+            </tr>
+            <tr>
+                <td><a href="brukerregistrering.php">Opprett bruker</a></a></td>
             </tr>
         </table>
     </form>
