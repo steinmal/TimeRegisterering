@@ -48,6 +48,35 @@
                     {% endif %}
                 {% endfor %}
             </table>
+    {% for fase in faseliste %}
+    <h1>{{ fase.getFaseNavn() }}</h1>
+            <table border=1>
+                <tr>
+                    <th>Oppgave</th>
+                    <th>Parent</th>
+                    <th>Oppgavetype</th>
+                    <th>Periode</th>
+                    <th>Estimert tid</th>
+                    <th>Registrert tid</th>
+                    <th>Godkjent tid</th>
+                </tr>
+                {% for oppgave in oppgaveliste %}
+                    {% if oppgave.getFaseId() == fase.getFaseId() %}
+                    <tr>
+                        <td>{{ oppgave.getOppgaveNavn() }}</td>
+                        <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getOppgaveNavn() }}</td>
+                        <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getOppgaveType()) }}</td>
+                        <td>{{ oppgave.getPeriode() }}</td>
+                        <td>{{ oppgave.getTidsestimat() }}</td>
+                        <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
+                        <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+            {% endfor %}
+            
             <a href="oppgaveoppretting.php?prosjekt={{ prosjekt.getId() }}">Legg til ny oppgave</a>
+    
 
 </body>
