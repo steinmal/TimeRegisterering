@@ -7,15 +7,14 @@
             $this->db = $db;
         }
         
-        public function hentAlleFaser(){
+        public function hentAlleFaser($prosjekt_id){
             $faser = array();
-            $stmt = $this->db->prepare("SELECT * FROM fase");
+            $stmt = $this->db->prepare("SELECT * FROM fase WHERE prosjekt_id=:pId");
+            $stmt->bindParam(':pId', $prosjekt_id);
             $stmt->execute();
             
-            $i = 0;
             while($fase = $stmt->fetchObject('Fase')){
-                $faser[$i] = $fase;
-                $i++;
+                $faser[$fase->getFaseId()] = $fase;
             }
             
             return $faser;

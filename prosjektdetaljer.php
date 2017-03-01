@@ -29,7 +29,7 @@ if ($prosjekt == null) {
     return;
 }
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
-$FaseListe = $FaseReg->hentAlleFaser();
+$FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 
 echo $twig->render('prosjektdetaljer.html', array('prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe));
 

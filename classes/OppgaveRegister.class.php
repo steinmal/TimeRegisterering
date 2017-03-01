@@ -74,14 +74,14 @@
         }
         
         public function hentAlleOppgaveTyper() {
-            $oppgavetype = array();
+            $oppgavetyper = array();
             $stmt = $this->db->prepare("SELECT * FROM oppgavetype");
             $stmt->execute();
 
-            while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $oppgavetype[] = $rad['oppgavetype_navn'];
+            while ($oppgtype = $stmt->fetchObject('Oppgavetype')) {
+                $oppgavetyper[$oppgtype->getId()] = $oppgtype;
             }
-            return $oppgavetype;
+            return $oppgavetyper;
         }
         
         public function hentAktiveTimerPrOppgave($id) {

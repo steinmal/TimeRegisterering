@@ -8,7 +8,8 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
-$UserReg = new UserRegister($db);
+$FaseReg = new FaseRegister($db);
+$OppgaveReg = new OppgaveRegister($db);
 
 
 session_start();
@@ -27,13 +28,10 @@ if ($prosjekt == null) {
     echo "Ugyldig prosjektID";
     return;
 }
-$OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
+$oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();
+$faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 
-
-$prosjektliste = $ProsjektReg->hentAlleProsjekter($db);
-$brukerliste =$UserReg->hentAlleBrukere();
-$brukParent = true;
-$valgtProsjekt = new Prosjekt();
+$valgtOppgave = new Oppgave();
 /*
 if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt = new Prosjekt();
@@ -78,6 +76,6 @@ elseif(isset($_GET['action'])){
 
 
 
-echo $twig->render('oppgaveoppretting.html', array('brukParent'=>$brukParent, 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgaver'=>$oppgaveliste, 'oppgavetyper'=>$oppgavetyper, 'faser'=>$faser));
+echo $twig->render('oppgaveoppretting.html', array('valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
+                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser));
 ?>

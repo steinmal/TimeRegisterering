@@ -15,7 +15,7 @@
     {% endif %}
     
     <form method="post" action="oppgaveoppretting.php">
-        <input type="hidden" name="prosjekt" value="{{ prosjekt }}">
+        <input type="hidden" name="prosjekt" value="{{ valgtProsjekt.getId() }}">
         {% if valgtOppgave.getId() >= 0 %}
         <input type="hidden" name="oppgaveId" value="{{ valgtOppgave.getId() }}">
         {% endif %}
@@ -24,30 +24,20 @@
                 <td>Oppgavenavn:</td>
                 <td><input type="text" name="oppgaveNavn" value="{{ valgtOppgave.getOppgaveNavn() }}"></td>
             </tr>
-            {% if brukParent %}
-            <tr>
-                <td>Foreldre oppgave:</td>
-                <td><select name="foreldreOppgave">
-                    {% for oppgave in oppgaver %}
-                    <option value="{{ oppgave.getId() }}" {% if valgtOppgave.getParentId() == oppgave.getId() %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
-                    {% endfor %}
-                </select></td>
-            </tr>
-            {% endif %}
             <tr>
                 <td>Oppgavetype</td>
                 <td><select name="oppgavetype">
                     {% for oppgavetype in oppgavetyper %}
-                    <option value="{{ oppgavetype.getId() }}" {% if valgtOppgave.getOppgaveType() == oppgavetype.getId() %} selected="selected"{% endif %}>{{ oppgavetype.getOppgavetypeNavn() }}</option>
+                    <option value="{{ oppgavetype.getId() }}" {% if valgtOppgave.getOppgaveType() == oppgavetype.getId() %} selected="selected"{% endif %}>{{ oppgavetype.getNavn() }}</option>
                     {% endfor %}
                 </select></td>
             </tr>
             <tr>
                 <td>Fase</td>
                 <td><select name="fase">
-                    <option value="Backlog" {% if valgtOppgave == null || valgtOppgave.getFase() == 0 %} selected="selected"{% endif %}>Backlog</option>
+                    <option value="0"{% if valgtOppgave == null or valgtOppgave.getFase() == 0 %} selected="selected"{% endif %}>Backlog</option>
                     {% for fase in faser %}
-                    <option value="{{ fase.getId() }}" {% if valgtOppgave.getFase() == fase.getId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>
+                    <option value="{{ fase.getFaseId() }}"{% if valgtOppgave.getFaseId() == fase.getFaseId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>
                     {% endfor %}
                 </select></td>
             </tr>
@@ -62,6 +52,6 @@
             </tr>
         </table>
         <input type="submit" name="opprettOppgave" value="Opprett oppgave">
-        <a href="prosjektdetaljer.php?prosjekt={{ prosjekt }}">Avbryt</a>
+        <a href="prosjektdetaljer.php?prosjekt={{ valgtProsjekt.getId() }}">Avbryt</a>
     </form>
 </body>
