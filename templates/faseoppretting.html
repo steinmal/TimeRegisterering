@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faseoppretting</title>
+</head>
+<body>
+    <h1>Opprett ny fase</h1>
+    <h2>Prosjekt: {{ prosjekt.getProsjektNavn() }}</h2>
+    <form method="post" action="faseoppretting.php">
+        <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
+        <table>
+            <tr>
+                <td>Navn</td>
+                <td><input type="text" name="faseNavn"/></td>
+            </tr>
+            <tr>
+                <td>Startdato</td>
+                <td><input type="date" name="faseStartdato"/></td>
+            </tr>
+            <tr>
+                <td>Sluttdato</td>
+                <td><input type="date" name="faseSluttdato"/></td>
+            </tr>
+        </table>
+        <input type="submit" value="Opprett fase" name="lagre"/>
+    </form>
