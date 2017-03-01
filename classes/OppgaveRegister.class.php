@@ -45,7 +45,7 @@
             $stmt->bindParam(':foreldre_id', $foreldre_oppgave_id, PDO::PARAM_INT);
             $stmt->bindParam(':prosjekt_id', $prosjekt_id, PDO::PARAM_INT);
             $stmt->bindParam(':oppgavetype_id', $oppgavetype_id, PDO::PARAM_INT);
-            $stmt->bindParam(':fase_id', $fase_id);
+            $stmt->bindParam(':fase_id', $fase_id, PDO::PARAM_INT);
             $stmt->bindParam(':navn', $oppgave_navn);
             $stmt->bindParam(':tidsestimat', $oppgave_tidsestimat, PDO::PARAM_INT);
             $stmt->bindParam(':periode', $oppgave_periode, PDO::PARAM_INT);

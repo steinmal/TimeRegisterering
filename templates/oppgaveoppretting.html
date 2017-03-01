@@ -16,7 +16,7 @@
     
     <form method="post" action="oppgaveoppretting.php">
         <input type="hidden" name="prosjekt" value="{{ valgtProsjekt.getId() }}">
-        {% if valgtOppgave.getId() >= 0 %}
+        {% if valgtOppgave.getId() > 0 %}
         <input type="hidden" name="oppgaveId" value="{{ valgtOppgave.getId() }}">
         {% endif %}
         <table>

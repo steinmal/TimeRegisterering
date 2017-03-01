@@ -32,25 +32,33 @@ $oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();
 $faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 
 $valgtOppgave = new Oppgave();
-/*
-if(isset($_POST['opprettProsjekt'])){
-    $nyttProsjekt = new Prosjekt();
-    $nyttProsjekt->setProsjektNavn($_POST['prosjektNavn']);
-    $nyttProsjekt->setProsjektParent($_POST['foreldreProsjekt']);
-    $nyttProsjekt->setProsjektLeder($_POST['prosjektLeder']);
-    $nyttProsjekt->setProsjektBeskrivelse($_POST['prosjektBeskrivelse']);
-    $nyttProsjekt->setProsjektStartDato($_POST['startDato']);
-    $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
-    if(!isset($_POST['prosjektId'])){
-        $ProsjektReg->lagProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php");
+
+if(isset($_POST['opprettOppgave'])){
+    $foreldreId = null;
+    if(isset($_POST['foreldreId']) && $_POST['foreldreId'] != 0) {
+        $foreldreId = $_POST['foreldreId'];
+    }
+    $oppgaveTypeId = $_POST['oppgavetype'];
+    $faseId = $_POST['fase'];
+    if ($faseId == 0) {
+        $faseId = null;
+    }
+    $oppgaveNavn = $_POST['oppgaveNavn'];
+    $tidsestimat = $_POST['tidsestimat'];
+    $periode = $_POST['periode'];
+    
+    
+    if(!isset($_POST['oppgaveId'])){
+        $OppgaveReg->lagOppgave($foreldreId, $prosjektId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        return;
     }
     else{
         $nyttProsjekt->setProsjektId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
     }
-}
+}/*
 elseif(isset($_GET['action'])){
     switch($_GET['action']){
         case 'Opprett grunnprosjekt':
