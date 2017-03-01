@@ -7,6 +7,22 @@
 <body>
     <br>&larr; <a href="prosjektadministrering.php">Prosjektoversikt</a>
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getProsjektNavn() }}</h1>
+    <h1>Faser</h1>
+        <table border=1>
+            <tr>
+                <th>Navn</th>
+                <th>Startdato</th>
+                <th>Sluttdato</th>
+            </tr>
+            {% for fase in faseliste %}
+                <tr>
+                    <td>{{ fase.getFaseNavn() }}</td>
+                    <td>{{ fase.getFaseStartDato() }}</td>
+                    <td>{{ fase.getFaseSluttDato() }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}">Legg til fase</a>
     <h1>Backlog</h1>
             <table border=1>
                 <tr>

@@ -77,9 +77,9 @@
             $oppgavetype = array();
             $stmt = $this->db->prepare("SELECT * FROM oppgavetype");
             $stmt->execute();
-            
+
             while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $oppgavetype[] = rad['oppgavetype_navn'];
+                $oppgavetype[] = $rad['oppgavetype_navn'];
             }
             return $oppgavetype;
         }

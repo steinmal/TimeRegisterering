@@ -9,6 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
+$FaseReg = new FaseRegister($db);
 $UserReg = new UserRegister($db);
 $TeamReg = new TeamRegister($db);
 
@@ -28,7 +29,8 @@ if ($prosjekt == null) {
     return;
 }
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
+$FaseListe = $FaseReg->hentAlleFaser();
 
-echo $twig->render('prosjektdetaljer.html', array('prosjekt'=>$Prosjekt, 'oppgavereg'=>$OppgaveReg, 'oppgaveliste'=>$OppgaveListe));
+echo $twig->render('prosjektdetaljer.html', array('prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe));
 
 ?>
