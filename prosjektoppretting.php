@@ -14,8 +14,9 @@ $UserReg = new UserRegister($db);
 session_start();
 
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
-    header("Location: index.html");
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+    header("Location: index.php");
+    return;
 }
 
 $prosjektliste = $ProsjektReg->hentAlleProsjekter($db);

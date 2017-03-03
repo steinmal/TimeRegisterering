@@ -8,7 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 
-$UserReg = new UserRegister($db);
+$userReg = new UserRegister($db);
 
 session_start();
 
@@ -18,6 +18,8 @@ if(isset($_POST['opprettBruker'])){
     $nyBruker->setBrukerEpost($_POST['epost']);
     $nyBruker->setPassword($_POST['passord']);
     $nyBruker->setBrukerTelefon($_POST['telefonnummer']);
+    
+    $userReg->opprettBruker($nyBruker);
 }
 
 echo $twig->render('brukerregistrering.html', array());

@@ -11,9 +11,7 @@ $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 session_start();
 
-if(isset($_SESSION['innlogget']) && $_SESSION['innlogget'] == true) {
-    $innlogget = $_SESSION['innlogget']; //Gjør denne noe?
-} else {
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php");
     return;
 }

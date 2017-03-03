@@ -24,18 +24,19 @@
         }
         
         
-        // ----- Ikke ferdig, BK
+        // ----- Ikke ferdig
         public function opprettBruker($bruker) {
-            $stmt = $this->db->prepare("INSERT INTO `bruker` 
-                (bruker_navn, bruker_epost, bruker_telefon, bruker_passord)
-                VALUES (:navn, :passord, :telefonnummer, :epost, now())");
+            $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord)
+            VALUES (:navn, :epost, :telefonnummer, :passord, now())");
   
             $stmt->bindParam(':navn', $bruker->getBrukerNavn(), PDO::PARAM_STR);
-            $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
-            $stmt->bindParam(':telefonnummer', $bruker->getBrukerTelefon(), PDO::PARAM_INT);
             $stmt->bindParam(':epost', $bruker->getBrukerEpost(), PDO::PARAM_STR);
+            $stmt->bindParam(':telefonnummer', $bruker->getBrukerTelefon(), PDO::PARAM_INT);
+            $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
             $stmt->execute();
         }
+        
+        
         
         
         public function hentAlleBrukere() {

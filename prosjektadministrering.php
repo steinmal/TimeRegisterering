@@ -14,8 +14,9 @@ $TeamReg = new TeamRegister($db);
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php");
+    return;
 }
 else{
     if($_GET['error'] == "noRadio") { $noRadio = true; }

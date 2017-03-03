@@ -15,8 +15,9 @@ $FaseReg = new FaseRegister($db);
 session_start();
 
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] = false){
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php");
+    return;
 }
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: faseadministrering.php");
