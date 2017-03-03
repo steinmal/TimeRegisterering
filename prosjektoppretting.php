@@ -36,11 +36,13 @@ if(isset($_POST['opprettProsjekt'])){
     if(!isset($_POST['prosjektId'])){
         $ProsjektReg->lagProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
+        return;
     }
     else{
         $nyttProsjekt->setProsjektId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
+        return;
     }
 }
 elseif(isset($_GET['action'])){
@@ -52,9 +54,9 @@ elseif(isset($_GET['action'])){
         case 'Rediger':
             if(!isset($_GET['prosjektId'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
+                return;
             }
             $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
-            echo($valgtProsjekt->getId());
             break;
         case 'Opprett underprosjekt':
             $valgtProsjekt->setProsjektParent($_GET['prosjektId']);

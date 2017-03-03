@@ -10,6 +10,9 @@
         <table>
             <tr>
                 <td>
+                    Prosjekt
+                </td>
+                <td>
                     <select name="prosjekt" onchange="submit()">
                         <!-- <option value="0"></option> Det ligger en slik i databasen nå -->
                         {% for prosjekt in prosjekter %}
@@ -19,13 +22,19 @@
                 </td>
             </tr>
         </form>
+        {% if valgtProsjekt <= 1 %}
+        Velg prosjekt
+        {% elseif oppgaver|length == 0 %}
+        Valgt prosjekt har ingen oppgaver
+        {% else %}
         <form method="post" action="timeregistrering.php">
         <table>
             <tr>
                 <td>
+                    Oppgave
                     <select name="oppgave">
                         {% for oppgave in oppgaver %}
-                        <option value="{{ oppgave.getOppgaveId() }}">{{ oppgave.getOppgaveNavn() }}</option>
+                        <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
                         {% endfor %}
                     </select> 
                 </td>
@@ -57,6 +66,7 @@
             </tr>
         </table>
     </form>
+    {% endif %}
     <a href="index.php">Tilbake</a>
 </body>
 </html>

@@ -21,29 +21,35 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: faseadministrering.php");
+    return;
 }
+$prosjektId = $_REQUEST['prosjektId'];
 
 if(isset($_POST['lagre'])){
     $nyFase = new Fase();
-    $nyFase->setProsjektId($_POST['prosjektId']);
+    $nyFase->setProsjektId($prosjektId);
     $nyFase->setFaseNavn($_POST['faseNavn']);
     $nyFase->setFaseStartDato($_POST['faseStartdato']);
     $nyFase->setFaseSluttDato($_POST['faseSluttdato']);
     if(isset($_POST['faseId'])){
         $nyFase->setFaseId($_POST['faseId']);
         $FaseReg->redigerFase($nyFase);
-        header("Location: faseadministrering.php");
+        //header("Location: faseadministrering.php");
+        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        return;
     }
     else{
         $FaseReg->lagFase($nyFase);
-        header("Location: faseadministrering.php");
+        //header("Location: faseadministrering.php");
+        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
     }
 }
 else{
-    $prosjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']);
+    $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
     if(isset($_GET['rediger'])){
         if(!isset($_GET['faseId'])){
             header("Location: faseadministrering.php?error=noRadio");
+            return;
         }
         $fase = $FaseReg->hentFase($_GET['faseId']);
     }

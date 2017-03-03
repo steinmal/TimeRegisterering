@@ -28,8 +28,9 @@ if(isset($_POST['registrer'])) {
     $starttidStr = $starttid->format("H:i:s");
     $stopptidStr = $stopptid->format("H:i:s");
     $automatisk = isset($_POST['automatisk']) ? 1 : 0;
+    $prosjekt_id = $OppgaveReg->hentOppgave($oppgave_id)->getProsjektId();
+    $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttidStr, $stopptidStr, $automatisk);
-
     echo "Timeregistrering OK";
 }
 
@@ -43,5 +44,5 @@ if(isset($_POST['prosjekt'])) {
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
 
-echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id));
+echo $twig->render('timeregistrering.html', array('prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id));
 ?>
