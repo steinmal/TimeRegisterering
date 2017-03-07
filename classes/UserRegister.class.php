@@ -26,13 +26,14 @@
         
         // ----- Ikke ferdig
         public function opprettBruker($bruker) {
-            $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord)
-            VALUES (:navn, :epost, :telefonnummer, :passord, now())");
+            $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord, bruker_registreringsdato, brukertype_id, bruker_aktivert)
+            VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 1)");
   
             $stmt->bindParam(':navn', $bruker->getBrukerNavn(), PDO::PARAM_STR);
             $stmt->bindParam(':epost', $bruker->getBrukerEpost(), PDO::PARAM_STR);
             $stmt->bindParam(':telefonnummer', $bruker->getBrukerTelefon(), PDO::PARAM_INT);
             $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
+            
             $stmt->execute();
         }
         

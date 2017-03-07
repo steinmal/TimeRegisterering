@@ -11,8 +11,8 @@
         
         public function __construct(){
         }
-        public function setPassword($newPassword) {
-			$this->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        public function setPassord($newPassword) {
+			$this->bruker_passord = password_hash($newPassword, PASSWORD_DEFAULT);
 			return $this;
 		}
         
