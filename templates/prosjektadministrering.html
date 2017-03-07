@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektadministrering</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 </head>
 <body>
+    <div class="container">
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Prosjektadministrering</h1>
     {% if noRadio == true %}
@@ -12,7 +14,7 @@
     {% endif %}
     <p>
         <form action=prosjektoppretting.php method=GET>
-            <table border=1>
+            <table class="table table-striped">
                 <tr>
                     <th>Prosjekt</th>
                     <th>Parent</th>
@@ -35,9 +37,10 @@
                     </tr>
                 {% endfor %}
             </table>
-            <input type=submit name=action value=Rediger>
-            <input type=submit name=action value="Opprett underprosjekt">
-            <input type=submit name=action value="Opprett grunnprosjekt">
+            <input class ="btn-primary" type=submit name=action value=Rediger>
+            <input class ="btn-primary" type=submit name=action value="Opprett underprosjekt">
+            <input class ="btn-primary" type=submit name=action value="Opprett grunnprosjekt">
         </form>
     </p>
+    </div>
 </body>
