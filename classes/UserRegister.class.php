@@ -13,13 +13,13 @@
             
             $bruker = $stmt->fetchObject('User');
             
-            if(password_verify($passord, $bruker->getPassord())) {
+            if($bruker != null && password_verify($passord, $bruker->getPassord())) {
                     $_SESSION['innlogget'] = true;
                     $_SESSION['bruker'] = $bruker;
                     return true;
                 }
             
-            echo "Feil passord";
+            echo "Feil brukernavn/passord";
             return false;
         }
         
