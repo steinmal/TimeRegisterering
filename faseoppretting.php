@@ -19,6 +19,12 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php");
     return;
 }
+
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+    echo "Du har ikke tilgang til faseoppretting";
+    return;
+}
+
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: faseadministrering.php");
     return;

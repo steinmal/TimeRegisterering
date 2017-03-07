@@ -20,6 +20,11 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+    echo "Du har ikke tilgang til oppgaveoppretting";
+    return;
+}
+
 $prosjektId = 0;
 if (isset($_REQUEST['prosjekt']))
     $prosjektId = $_REQUEST['prosjekt'];

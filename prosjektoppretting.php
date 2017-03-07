@@ -19,6 +19,11 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true){
+    echo "Du har ikke tilgang til prosjektadministrering";
+    return;
+}
+
 $prosjektliste = $ProsjektReg->hentAlleProsjekter($db);
 $brukerliste =$UserReg->hentAlleBrukere();
 $brukParent = true;
