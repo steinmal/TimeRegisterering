@@ -16,7 +16,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 
-if(!isset($_SESSION['bruker']) || $UserReg->getBrukertype($_SESSION['bruker']->getBrukertype())->isBrukeradmin() == false){
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true){
     echo "Du har ikke tilgang til brukeradministrering";
     return;
 }

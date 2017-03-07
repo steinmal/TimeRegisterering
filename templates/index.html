@@ -10,7 +10,7 @@
         <h1>Velkommen</h1>
         <a href="timeregistrering.php">Timeregistrering</a><br/>
         <a href="prosjektadministrering.php">Prosjektadministrering</a><br/>
-        {% if brukerReg.getBrukertype(innloggetBruker.getBrukertype()).isBrukeradmin() %} <a href="brukeradministrering.php">Brukeradministrering</a><br/>{% endif %}
+        {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php">Brukeradministrering</a><br/>{% endif %}
         <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
         <a href="logout.php">Logg ut</a><br/>
     {% else %}
