@@ -19,9 +19,12 @@
         public function getBrukerId() { return $this->bruker_id; }
         public function getBrukerNavn() { return $this->bruker_navn; }
         public function getPassord() { return $this->bruker_passord; }
+        public function getBrukertype() { return $this->brukertype_id; }
         public function getBrukerTelefon() { return $this->bruker_telefon; }
         public function getBrukerEpost() { return $this->bruker_epost; }
         public function getBrukerRegistreringsdato() { return $this->bruker_registreringsdato; }
+        public function isAktivert() { return $this->bruker_aktivert; }
+        public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
         public function setBrukerNavn($navn) { $this->bruker_navn = $navn; }
         public function setBrukerEpost($epost) { $this->bruker_epost = $epost; }

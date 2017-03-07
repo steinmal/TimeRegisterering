@@ -2,6 +2,7 @@
 
     class UserRegister {
         private $db;
+        private $brukertyper;
 
         public function __construct(PDO $db) {
             $this->db = $db;
@@ -62,4 +63,27 @@
             }
             
         }
+        
+        public function getAlleBrukertyper() {
+            $brukere = array();
+            $stmt = $this->db->prepare("SELECT * FROM brukertype");
+            $stmt->execute();
+
+            while($brukertype = $stmt->fetchObject('Brukertype')){
+                $brukertyper[$brukertype->getId()] = $brukertype;
+            }
+            return $brukertyper;
+        }
+        
+        public function getBrukertype($brukertype_id) {
+            if ($this->brukertyper == null)
+                $this->brukertyper = $this->getAlleBrukertyper();
+
+            if (!isset($this->brukertyper[$brukertype_id]))
+                throw new InvalidArgumentException('Usertype not defined: ' . $brukertype_id);
+
+            return $this->brukertyper[$brukertype_id];
+        }
+
+        
     }

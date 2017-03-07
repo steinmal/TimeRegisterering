@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brukeradministrering</title>
+</head>
+<body>
+    <br>&larr; <a href="index.php">Hovedside</a>
+    <h1>Brukeradministrering</h1>
+    <p>
+        <form>
+            <table border=1>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Navn</th>
+                    <th>Epost</th>
+                    <th>Telefon</th>
+                    <th>Aktivert</th>
+                    <th>Registreringsdato</th>
+                </tr>
+                {% for bruker in brukere %}
+                    <tr>
+                        <td>{{ bruker.getBrukerId() }}</td>
+                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
+                        <td>{{ bruker.getBrukerNavn() }}</td>
+                        <td>{{ bruker.getBrukerEpost() }}</td>
+                        <td>{{ bruker.getBrukerTelefon() }}</td>
+                        <td>{{ bruker.isAktivert() }}</td>
+                        <td>{{ bruker.getRegistreringsdato() }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </p>
+</body>
