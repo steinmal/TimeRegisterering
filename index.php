@@ -26,5 +26,5 @@ if(isset($_SESSION['innlogget'])) {
 }
 
 
-echo $twig->render('index.html', array('innlogget'=>$innlogget));
+echo $twig->render('index.html', array('innlogget'=>$innlogget, 'brukerReg'=>$UserReg, 'innloggetBruker'=>$_SESSION['bruker']));
 ?>

@@ -16,6 +16,11 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 
+if(!isset($_SESSION['bruker']) || $UserReg->getBrukertype($_SESSION['bruker']->getBrukertype())->isBrukeradmin() == false){
+    echo "Du har ikke tilgang til brukeradministrering";
+    return;
+}
+
 $brukere = $UserReg->hentAlleBrukere();
 
 echo $twig->render('brukeradministrering.html', array('brukerReg'=>$UserReg, 'brukere'=>$brukere));
