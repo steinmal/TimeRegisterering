@@ -25,10 +25,10 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
     return;
 }
 
-if($_GET['error'] == "noRadio") { $noRadio = true; }
+if(isset($_GET['error'])) { $error = $_GET['error']; }
 $prosjektliste = $ProsjektReg->hentAlleProsjekt();
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
-echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg, 'noRadio'=>$noRadio));
+echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg, 'error'=>$error));
 
 ?>

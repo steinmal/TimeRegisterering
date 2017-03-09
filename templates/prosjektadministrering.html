@@ -9,8 +9,10 @@
     <div class="container">
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Prosjektadministrering</h1>
-    {% if noRadio == true %}
+    {% if error == "noRadio" %}
         <font color=red>Ingen prosjekt valgt</font>
+    {% elseif error == "arkivert" %}
+        <font color=green>Prosjekt arkivert</font>
     {% endif %}
     <p>
         <form action=prosjektoppretting.php method=GET>
