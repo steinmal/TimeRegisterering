@@ -23,6 +23,6 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradm
 
 $brukere = $UserReg->hentAlleBrukere();
 
-echo $twig->render('brukeradministrering.html', array('brukerReg'=>$UserReg, 'brukere'=>$brukere));
+echo $twig->render('brukeradministrering.html', array('brukerReg'=>$UserReg, 'brukere'=>$brukere, 'error'=>$_REQUEST['error']));
 
 ?>

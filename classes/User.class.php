@@ -26,6 +26,7 @@
         public function isAktivert() { return $this->bruker_aktivert; }
         public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
+        public function setBrukerType($id) { $this->brukertype_id = $id; }
         public function setBrukerNavn($navn) { $this->bruker_navn = $navn; }
         public function setBrukerEpost($epost) { $this->bruker_epost = $epost; }
         public function setBrukerTelefon($telefonnummer) { $this->bruker_telefon = $telefonnummer; }        

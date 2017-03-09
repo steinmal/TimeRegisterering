@@ -9,10 +9,17 @@
     <div class="container">
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Brukeradministrering</h1>
+    {% if error == "noRadio" %}
+        <font color=red>Ingen bruker valgt</font>
+    {% elseif error == "lagret" %}
+        <font color=green>Endringer ble lagret</font>
+    {% endif %}
+    <h2></h2>
     <p>
-        <form>
+        <form action="brukerredigering.php" method=get>
             <table class="table table-striped">
                 <tr>
+                    <th></th>
                     <th>ID</th>
                     <th>Type</th>
                     <th>Navn</th>
@@ -23,6 +30,7 @@
                 </tr>
                 {% for bruker in brukere %}
                     <tr>
+                        <td><input type=radio name=brukerId value="{{ bruker.getBrukerId() }}" /></td>
                         <td>{{ bruker.getBrukerId() }}</td>
                         <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getBrukerNavn() }}</td>
@@ -33,6 +41,7 @@
                     </tr>
                 {% endfor %}
             </table>
+            <input class="btn-primary" type="submit" name="action" value="Rediger"/>
         </form>
     </p>
     </div>
