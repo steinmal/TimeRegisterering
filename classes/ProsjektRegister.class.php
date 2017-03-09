@@ -7,7 +7,7 @@
             $this->db = $db;
         }
 
-        public function hentAlleProsjekter() {
+        public function hentAlleProsjekt() {
             $prosjekter = array();
             $stmt = $this->db->prepare("SELECT * FROM prosjekt");
             $stmt->execute();
@@ -53,6 +53,20 @@
             $stmt->bindParam(':id', $prosjekt->getId(), PDO::PARAM_STR);
             $stmt->execute();
         }
+        
+        public function arkiverProsjekt($id, $gjenopprett=false){
+            $arkiver = ($gjenopprett ? 0 : 1);
+            $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_arkivert=:arkiver WHERE prosjekt_id=:id");
+            $stmt->bindParam(':arkiver', $arkiver, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $arkiver;
+        }
+        /*public function gjennopprettProsjekt($id){
+            $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_arkivert=0 WHERE prosjekt_id=:id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+        }*/
         
         public function slettProsjekt($prosjekt) {
             $stmt = $this->db->prepare("DELETE FROM prosjekt WHERE prosjekt_id=:prosjektId");

@@ -35,7 +35,7 @@ if(isset($_POST['registrer'])) {
 }
 
 
-$prosjekter = $ProsjektReg->hentAlleProsjekter();
+$prosjekter = $ProsjektReg->hentAlleProsjekt();
 
 if(isset($_POST['prosjekt'])) {
     $prosjekt_id = $_POST['prosjekt'];

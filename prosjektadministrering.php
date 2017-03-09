@@ -21,11 +21,12 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
     echo "Du har ikke tilgang til prosjektadministrering";
+    //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
 
 if($_GET['error'] == "noRadio") { $noRadio = true; }
-$prosjektliste = $ProsjektReg->hentAlleProsjekter();
+$prosjektliste = $ProsjektReg->hentAlleProsjekt();
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
 echo $twig->render('prosjektadministrering.html', array('register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg, 'noRadio'=>$noRadio));

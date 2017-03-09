@@ -16,6 +16,7 @@
         <form action=prosjektoppretting.php method=GET>
             <table class="table table-striped">
                 <tr>
+                    <th></th>
                     <th>Prosjekt</th>
                     <th>Parent</th>
                     <th>Prosjektleder</th>
@@ -26,6 +27,7 @@
                 </tr>
                 {% for prosjekt in prosjektliste %}
                     <tr>
+                        <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
                         <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</a></td>
                         <td>{{ register.hentProsjekt(prosjekt.getProsjektParent()).getProsjektNavn() }}</td>
                         <td>{{ userReg.hentBruker(prosjekt.getProsjektLeder()).getBrukerNavn()}}</td>
@@ -33,10 +35,11 @@
                         <td>{{ prosjekt.getProsjektStartDato() }}</td>
                         <td>{{ prosjekt.getProsjektSluttDato() }}</td>
                         <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>
-                        <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
+                        <!--<td><a href="prosjektadministrering.php?action=arkiver&id={{ prosjekt.getId() }}">Arkiver</a></td>-->
                     </tr>
                 {% endfor %}
             </table>
+            <input class ="btn-primary" type=submit name=action value=Arkiver>
             <input class ="btn-primary" type=submit name=action value=Rediger>
             <input class ="btn-primary" type=submit name=action value="Opprett underprosjekt">
             <input class ="btn-primary" type=submit name=action value="Opprett grunnprosjekt">

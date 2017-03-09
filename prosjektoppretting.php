@@ -24,7 +24,7 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjekta
     return;
 }
 
-$prosjektliste = $ProsjektReg->hentAlleProsjekter($db);
+$prosjektliste = $ProsjektReg->hentAlleProsjekt($db);
 $brukerliste =$UserReg->hentAlleBrukere();
 $brukParent = true;
 $valgtProsjekt = new Prosjekt();
@@ -69,6 +69,13 @@ elseif(isset($_GET['action'])){
             //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getProsjektLeder());
             //$valgtProsjekt->setProsjektId();
             break;
+        case 'Arkiver':
+            if(!isset($_GET['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+            }
+            $error = $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            header("Location: prosjektadministrering.php?error=$error");
+            return;
     }
 }
 
