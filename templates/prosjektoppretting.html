@@ -16,49 +16,93 @@
         <h1>Opprett nytt prosjekt</h1>
     {% endif %}
     
-    <form class="form-horizontal" method="post" action="prosjektoppretting.php">
-        {% if valgtProsjekt.getId() >= 0 %}
-        <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">
-        {% endif %}
-        <table>
-            <tr>
-                <td>Prosjektnavn:</td>
-                <td><input type="text" name="prosjektNavn" value="{{ valgtProsjekt.getProsjektNavn() }}"></td>
-            </tr>
+    <!--<form method="post" action="prosjektoppretting.php">-->
+        <!--{% if valgtProsjekt.getId() >= 0 %}-->
+        <!--<input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">-->
+        <!--{% endif %}-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Prosjektnavn:</td>-->
+                <!--<td><input type="text" name="prosjektNavn" value="{{ valgtProsjekt.getProsjektNavn() }}"></td>-->
+            <!--</tr>-->
+            <!--{% if brukParent %}-->
+            <!--<tr>-->
+                <!--<td>Foreldre prosjekt:</td>-->
+                <!--<td><select name="foreldreProsjekt">-->
+                    <!--{% for prosjekt in prosjekter %}-->
+                    <!--<option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getProsjektParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getProsjektNavn() }}</option>-->
+                    <!--{% endfor %}-->
+                <!--</select></td>-->
+            <!--</tr>-->
+            <!--{% endif %}-->
+            <!--<tr>-->
+                <!--<td>Prosjektleder:</td>-->
+                <!--<td><select name="prosjektLeder">-->
+                    <!--{% for bruker in brukere %}-->
+                    <!--<option value="{{ bruker.getBrukerId() }}" {% if valgtProsjekt.getProsjektLeder() == bruker.getBrukerId() %} selected {% endif %}>{{ bruker.getBrukerNavn() }}</option>-->
+                    <!--{% endfor %}-->
+                <!--</select></td>-->
+            <!--</tr>  -->
+            <!--<tr>-->
+                <!--<td>Prosjekt beskrivelse:</td>-->
+                <!--<td><input type="textarea" rows="4" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getProsjektBeskrivelse() }}"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Start dato:</td>-->
+                <!--<td><input type="date" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}"></td>-->
+            <!--</tr>-->
+                <!--<td>Slutt dato:</td>-->
+                <!--<td><input type="date" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <!--<input type="submit" name="opprettProsjekt" value="Opprett prosjekt">-->
+        <!--<a href="prosjektadministrering.php">Avbryt</a>-->
+
+    <!--</form>-->
+        <form method="post" action="prosjektoppretting.php" class="col-md-4">
+            {% if valgtProsjekt.getId() >= 0 %}
+            <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">
+            {% endif %}
+            <div class="form-group ">
+                <label for="navn">Prosjektnavn:</label>
+                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtProsjekt.getProsjektNavn() }}">
+            </div>
             {% if brukParent %}
-            <tr>
-                <td>Foreldre prosjekt:</td>
-                <td><select name="foreldreProsjekt">
+            <div class="form-group ">
+                <label for="foreldreProsjekt">Foreledreprosjekt:</label>
+                <select name="foreldreProsjekt" class="form-control" id="foreldreProsjekt">
                     {% for prosjekt in prosjekter %}
                     <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getProsjektParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
                     {% endfor %}
-                </select></td>
-            </tr>
+                </select>
+            </div>
             {% endif %}
-            <tr>
-                <td>Prosjektleder:</td>
-                <td><select name="prosjektLeder">
+            <div class="form-group ">
+                <label for="prosjektLeder">Prosjektleder:</label>
+                <select name="prosjektLeder" class="form-control" id="prosjektLeder">
                     {% for bruker in brukere %}
-                    <option value="{{ bruker.getBrukerId() }}" {% if valgtProsjekt.getProsjektLeder() == bruker.getBrukerId() %} selected {% endif %}>{{ bruker.getBrukerNavn() }}</option>
+                        <option value="{{ bruker.getBrukerId() }}" {% if valgtProsjekt.getProsjektLeder() == bruker.getBrukerId() %} selected {% endif %}>{{ bruker.getBrukerNavn() }}</option>
                     {% endfor %}
-                </select></td>
-            </tr>  
-            <tr>
-                <td>Prosjekt beskrivelse:</td>
-                <td><input type="textarea" rows="4" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getProsjektBeskrivelse() }}"></td>
-            </tr>
-            <tr>
-                <td>Start dato:</td>
-                <td><input type="date" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}"></td>
-            </tr>
-                <td>Slutt dato:</td>
-                <td><input type="date" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}"></td>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-        <input type="submit" name="opprettProsjekt" value="Opprett prosjekt">
-        <a href="prosjektadministrering.php">Avbryt</a>
-    </form>
+                </select>
+            </div>
+            <div class="form-group ">
+                <label for="prosjektBeskrivelse">Prosjektbeskrivelse:</label>
+                <input type="text" class="form-control" id="prosjektBeskrivelse" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getProsjektBeskrivelse() }}">
+            </div>
+            <div class="form-group ">
+                <label for="startDato">Startdato:</label>
+                <input type="date" class="form-control" id="startDato" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}">
+            </div>
+            <div class="form-group ">
+                <label for="sluttDato">Sluttdato:</label>
+                <input type="date" class="form-control" id="sluttDato" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}">
+            </div>
+            <div class="form-group ">
+                <input type="submit" name="opprettProsjekt" value="Opprett prosjekt">
+                <a href="prosjektadministrering.php">Avbryt</a>
+            </div>
+        </form>
     </div>
 </body>

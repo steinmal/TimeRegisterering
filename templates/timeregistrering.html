@@ -8,69 +8,111 @@
 <body>
 <div class="container">
     {% include 'header.html' %}
-        <h1>Timeregistrering - {{ brukernavn }} - <a href="timeoversikt.php">Timeoversikt</a> - <a href="logout.php">Logg ut</a></h1>
-        <form method="post" action="timeregistrering.php">
-        <table>
-            <tr>
-                <td>
-                    Prosjekt
-                </td>
-                <td>
-                    <select name="prosjekt" onchange="submit()">
-                        <!-- <option value="0"></option> Det ligger en slik i databasen nå -->
-                        {% for prosjekt in prosjekter %}
-                        <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
-                        {% endfor %}
-                    </select> 
-                </td>
-            </tr>
-        </form>
+        <h1>Timeregistrering - {{ brukernavn }} - <a href="timeoversikt.php">Timeoversikt</a></h1>
+        <!--<form method="post" action="timeregistrering.php">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>-->
+                    <!--Prosjekt-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<select name="prosjekt" onchange="submit()">-->
+                        <!--&lt;!&ndash; <option value="0"></option> Det ligger en slik i databasen nå &ndash;&gt;-->
+                        <!--{% for prosjekt in prosjekter %}-->
+                        <!--<option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>-->
+                        <!--{% endfor %}-->
+                    <!--</select> -->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</form>-->
+    <form method="post" action="timeregistrering.php" class="col-md-4">
+        <div class="form-group ">
+            <label for="prosjekt">Prosjekt:</label>
+            <select class="form-control" name="prosjekt" id="prosjekt" onchange="submit()">
+                {% for prosjekt in prosjekter %}
+                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
+                {% endfor %}
+            </select>
         {% if valgtProsjekt <= 1 %}
-        Velg prosjekt
+            <small class="form-text text-muted">Velg prosjekt</small>
+        </div>
+    </form>
         {% elseif oppgaver|length == 0 %}
-        Valgt prosjekt har ingen oppgaver
+            <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+        </div>
+    </form>
         {% else %}
-        <form method="post" action="timeregistrering.php">
-        <table>
-            <tr>
-                <td>
-                    Oppgave
-                    <select name="oppgave">
-                        {% for oppgave in oppgaver %}
-                        <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
-                        {% endfor %}
-                    </select> 
-                </td>
-            </tr>
+        <!--<form method="post" action="timeregistrering.php">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>-->
+                    <!--Oppgave-->
+                    <!--<select name="oppgave">-->
+                        <!--{% for oppgave in oppgaver %}-->
+                        <!--<option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>-->
+                        <!--{% endfor %}-->
+                    <!--</select> -->
+                <!--</td>-->
+            <!--</tr>-->
 
-            <tr>
-                <td>Dato</td>
-            </tr>
-            <tr>
-                <td><input type="date" value="{{ dagensdato }}" name="dato"/></td>
-            </tr>
-            <tr>
-                <td>Starttid</td>
-            </tr>
-            <tr>
-                <td><input type="time" value="{{ klokkeslett }}" name="starttid"></td>
-            </tr>
-            <tr>
-                <td>Stopptid</td>
-            </tr>
-            <tr>
-                <td><input type="time" value="{{ klokkeslett }}" name="stopptid"></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="automatisk" value="Checked"> Automatisk registrering</td>
-            </tr>
-            <tr>
-                <td><input type="submit" name="registrer" value="Registrer"></td>
-            </tr>
-        </table>
+            <!--<tr>-->
+                <!--<td>Dato</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input type="date" value="{{ dagensdato }}" name="dato"/></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Starttid</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input type="time" value="{{ klokkeslett }}" name="starttid"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Stopptid</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input type="time" value="{{ klokkeslett }}" name="stopptid"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input type="checkbox" name="automatisk" value="Checked"> Automatisk registrering</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input type="submit" name="registrer" value="Registrer"></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+    <!--<form method="post" action="timeregistrering.html">-->
+        </div>
+        <div class="form-group ">
+            <label for="oppgave">Oppgave:</label>
+            <select name="oppgave" class="form-control" id="oppgave">
+                {% for oppgave in oppgaver %}
+                <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group ">
+            <label for="dato">Dato:</label>
+            <input type="date" class="form-control" id="dato" name="dato" value="{{ dagensdato }}">
+        </div>
+        <div class="form-group ">
+            <label for="starttid">Starttid:</label>
+            <input type="time" class="form-control" id="starttid" name="time" value="{{ klokkeslett }}">
+        </div>
+        <div class="form-group ">
+            <label for="stopptid">Stopptid:</label>
+            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ klokkeslett }}">
+        </div>
+        <div class="form-group ">
+            <label for="automatisk">Automatisk registrering</label>
+            <input type="checkbox" class="form-check-input" id="automatisk" name="automatisk" value="checked">
+        </div>
+        <div class="form-group ">
+            <input type="submit" name="registrer" value="Registrer">
+        </div>
     </form>
     {% endif %}
-    <a href="index.php">Tilbake</a>
+    <!--<a href="index.php">Tilbake</a>-->
 </div>
 </body>
 </html>
