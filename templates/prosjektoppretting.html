@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektoppretting</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
+        {% include 'header.html' %}
     {% if valgtProsjekt.getId() > 0 %}
         <h1>Rediger prosjekt</h1>
     {% elseif valgtProsjekt.getProsjektParent() > 0 %}

@@ -1,0 +1,24 @@
+<img src="../header.jpg" style="width:100%">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">TimeRegistrering</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="index.php">Home</a></li>
+            <li><a href="#">Om</a></li>
+            <li><a href="#">Page2</a></li>
+            <li><a href="#">Page 3</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if innlogget %}
+                <li><a>Logget inn som {{ bruker.BrukerNavn }}</a></li>
+                <li><a href="logout.php"><span class="glyphicon glyphicon-user"></span> Logg ut</a></li>
+            {% else %}
+
+                <li><a href="brukerregistrering.php"><span class="glyphicon glyphicon-user"></span> Opprett bruker</a></li>
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>

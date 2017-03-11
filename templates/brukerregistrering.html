@@ -2,8 +2,11 @@
 <html>
     <head>
         <title>Brukerregistrering</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     </head>
     <body>
+    <div class="container">
+        {% include 'header.html' %}
         <h1>Opprett bruker</h1>
         <form method="post" action="brukerregistrering.php">
             <table>
@@ -26,5 +29,6 @@
             </table>
             <input type="submit" name="opprettBruker" value="Opprett bruker">
         </form>
+    </div>
     </body>
 </html>

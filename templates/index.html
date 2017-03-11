@@ -7,6 +7,7 @@
 </head>
 <body>
     <div class="container">
+        {% include 'header.html' %}
     {% if innlogget %}
         <h1>Velkommen {{ bruker.getBrukerNavn() }}</h1>
         {% if error == "noAccess" %}
@@ -14,12 +15,14 @@
         {% elseif error == "lagret" %}
         <font color=green>Endringene ble lagret</font><br/>
         {% endif %}
-        <a href="timeregistrering.php">Timeregistrering</a><br/>
-        {% if brukerTilgang.isTeamleder() %}<a href="prosjektadministrering.php">Prosjektadministrering</a><br/>{% endif %}
-        {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php">Brukeradministrering</a><br/>{% endif %}
-        <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
-        <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getBrukerId() }}">Rediger brukeropplysninger</a><br/>
-        <a href="logout.php">Logg ut</a><br/>
+        <div class="btn-group">
+            <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
+            {% if brukerTilgang.isTeamleder() %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
+            {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
+            <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
+            <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getBrukerId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+
+        </div>
     {% else %}
         <form method="post" action="index.php">
         <table>

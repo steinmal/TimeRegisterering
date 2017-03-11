@@ -68,6 +68,6 @@ if(isset($_POST['opprettOppgave'])){
 
 
 
-echo $twig->render('oppgaveoppretting.html', array('valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
+echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
                     'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser));
 ?>

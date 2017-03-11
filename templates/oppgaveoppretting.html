@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Oppgaveoppretting</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 </head>
 <body>
+<div class="container">
+{% include 'header.html' %}
     {% if valgtOppgave.getOppgaveId() > 0 %}
         <h1>Rediger oppgave</h1>
     {% elseif valgtOppgave.getParentId() > 0 %}
@@ -54,4 +56,5 @@
         <input type="submit" name="opprettOppgave" value="Opprett oppgave">
         <a href="prosjektdetaljer.php?prosjekt={{ valgtProsjekt.getId() }}">Avbryt</a>
     </form>
+</div>
 </body>

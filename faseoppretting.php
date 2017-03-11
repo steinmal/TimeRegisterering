@@ -65,5 +65,5 @@ else{
     }
 }
 
-echo $twig->render('faseoppretting.html', array('prosjekt'=>$prosjekt, 'fase'=>$fase));
+echo $twig->render('faseoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'fase'=>$fase));
 ?>
