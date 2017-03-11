@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Brukerredigering</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
+        {% include 'header.html' %}
     <h1>Rediger bruker</h1>
     {% if error == "mismatch" %}
     <font color=red>Feil i passord</font>

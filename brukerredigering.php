@@ -62,6 +62,6 @@ if(isset($_REQUEST['action'])){
 
 $typer = $UserReg->getAlleBrukertyper();
 
-echo $twig->render('brukerredigering.html', array('bruker'=>$bruker, 'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
