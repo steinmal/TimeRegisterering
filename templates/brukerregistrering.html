@@ -8,26 +8,48 @@
     <div class="container">
         {% include 'header.html' %}
         <h1>Opprett bruker</h1>
-        <form method="post" action="brukerregistrering.php">
-            <table>
-                <tr>
-                    <td>Navn:</td>
-                    <td><input type="text" name="navn"></td>
-                </tr>
-                <tr>
-                    <td>E-post:</td>
-                    <td><input type="email" name="epost"></td>
-                </tr>
-                <tr>
-                    <td>Passord:</td>
-                    <td><input type="password" name="passord"></td>
-                </tr>
-                <tr>
-                    <td>Telefonnummer:</td>
-                    <td><input type="tel" name="telefonnummer"></td>
-                </tr>
-            </table>
-            <input type="submit" name="opprettBruker" value="Opprett bruker">
+        <!--<form method="post" action="brukerregistrering.php">-->
+            <!--<table>-->
+                <!--<tr>-->
+                    <!--<td>Navn:</td>-->
+                    <!--<td><input type="text" name="navn"></td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>E-post:</td>-->
+                    <!--<td><input type="email" name="epost"></td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>Passord:</td>-->
+                    <!--<td><input type="password" name="passord"></td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>Telefonnummer:</td>-->
+                    <!--<td><input type="tel" name="telefonnummer"></td>-->
+                <!--</tr>-->
+            <!--</table>-->
+            <!--<input type="submit" name="opprettBruker" value="Opprett bruker">-->
+        <!--</form>-->
+        <form method="post" action="brukerregistrering.php" class="col-md-4">
+            <div class="form-group ">
+                <label for="navn">Navn:</label>
+                <input type="text" class="form-control" id="navn" name="navn">
+            </div>
+            <div class="form-group ">
+                <label for="epost">E-post:</label>
+                <input type="email" class="form-control" id="epost" name="epost">
+            </div>
+            <div class="form-group ">
+                <label for="telefon">Telefonnummer:</label>
+                <input type="text" class="form-control" id="telefon" name="telefonnummer">
+            </div>
+            <div class="form-group ">
+                <label for="passord">Passord:</label>
+                <input type="passord" class="form-control" id="passord" name="passord">
+            </div>
+            <div class="form-group ">
+                <input type="submit" name="opprettBruker" value="Opprett bruker">
+            </div>
+
         </form>
     </div>
     </body>
