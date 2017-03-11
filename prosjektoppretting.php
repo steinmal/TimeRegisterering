@@ -31,7 +31,6 @@ $valgtProsjekt = new Prosjekt();
 //echo(count($brukerliste));
 //echo($brukerliste[0]);
 if(isset($_POST['opprettProsjekt'])){
-    echo("her");
     $nyttProsjekt = new Prosjekt();
     $nyttProsjekt->setProsjektNavn($_POST['prosjektNavn']);
     $nyttProsjekt->setProsjektParent($_POST['foreldreProsjekt']);
@@ -41,7 +40,6 @@ if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
     if(!isset($_POST['prosjektId'])){
         $ProsjektReg->lagProsjekt($nyttProsjekt);
-        echo("Hit");
         header("Location: prosjektadministrering.php");
         return;
     }

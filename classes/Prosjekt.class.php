@@ -35,7 +35,7 @@
         public function setProsjektStartDato($startdato) { $this->prosjekt_startdato = $startdato;}
         public function setProsjektSluttDato($sluttdato) { $this->prosjekt_sluttdato = $sluttdato;}
         public function setProsjektBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
-        public function setProsjektProductOwner($product_owner) { $this->prosjekt_product_owner = $prodct_owner;}
+        public function setProsjektProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
         
         
         
