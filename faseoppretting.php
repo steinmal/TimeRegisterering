@@ -52,11 +52,12 @@ if(isset($_POST['lagre'])){
 }
 else{
     $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
-    if(isset($_GET['rediger'])){
+    /*if(isset($_GET['rediger'])){
         if(!isset($_GET['faseId'])){
             header("Location: faseadministrering.php?error=noRadio");
             return;
-        }
+        }*/
+    if(isset($_GET['faseId'])){
         $fase = $FaseReg->hentFase($_GET['faseId']);
     }
     else{

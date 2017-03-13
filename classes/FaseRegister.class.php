@@ -40,4 +40,14 @@
             $stmt->execute();
         }
         
+        public function redigerFase($fase){
+            $stmt = $this->db->prepare("UPDATE `fase` SET fase_navn=:navn,
+            fase_startdato=:startdato, fase_sluttdato=:sluttdato WHERE fase_id=:id");
+            $stmt->bindParam(':navn', $fase->getFaseNavn(), PDO::PARAM_STR);
+            $stmt->bindParam(':startdato', $fase->getFaseStartDato());
+            $stmt->bindParam(':sluttdato', $fase->getFaseSluttDato());
+            $stmt->bindParam(':id', $fase->getFaseId(), PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
     }
