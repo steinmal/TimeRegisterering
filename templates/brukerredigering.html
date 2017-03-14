@@ -12,69 +12,132 @@
     {% if error == "mismatch" %}
     <font color=red>Feil i passord</font>
     {% endif %}
+    <!--<form class="form-horizontal" method="post" action="brukerredigering.php">-->
+        <!--<input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">-->
+        <!--<table>-->
+            <!--{% if brukerTilgang.isBrukeradmin() %}-->
+            <!--<tr>-->
+                <!--<td>Navn:</td>-->
+                <!--<td><input type="text" name="navn" value="{{ bruker.getBrukerNavn() }}"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Brukertype:</td>-->
+                <!--<td><select name="type">-->
+                    <!--{% for type in typer %}-->
+                    <!--<option value="{{ type.getId() }}" {% if bruker.getBrukerType() == type.getId() %} selected {% endif %}>{{ type.getNavn() }}</option>-->
+                    <!--{% endfor %}-->
+                <!--</select></td>-->
+            <!--</tr>-->
+            <!--{% else %}-->
+            <!--<tr>-->
+                <!--<td>Navn:</td>-->
+                <!--<td>{{ bruker.getBrukerNavn() }}</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>BrukerType:</td>-->
+                <!--<td>{{ userReg.getBrukertype(bruker.getBrukerType()).getNavn() }}</td>-->
+            <!--</tr>-->
+            <!--{% endif %}-->
+            <!--<tr>-->
+                <!--<td>E-Post:</td>-->
+                <!--<td><input type="text" name="epost" value="{{ bruker.getBrukerEpost() }}"></td>-->
+            <!--</tr>-->
+                <!--<td>Telefon:</td>-->
+                <!--<td><input type="text" name="telefon" value="{{ bruker.getBrukerTelefon() }}"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <!--<input type="submit" name="action" value="Lagre">-->
 
-    <form class="form-horizontal" method="post" action="brukerredigering.php">
-        <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
-        <table>
+        <!--{% if brukerTilgang.isBrukeradmin() %}-->
+        <!--<a href="brukeradministrering.php">Avbryt</a>-->
+        <!--{% else %}-->
+        <!--<a href="index.php">Avbryt</a>-->
+        <!--{% endif %}-->
+    <!--</form><br/>-->
+        <form method="post" action="brukerredigering.php" class="col-md-4">
+            <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
             {% if brukerTilgang.isBrukeradmin() %}
-            <tr>
-                <td>Navn:</td>
-                <td><input type="text" name="navn" value="{{ bruker.getBrukerNavn() }}"></td>
-            </tr>
-            <tr>
-                <td>Brukertype:</td>
-                <td><select name="type">
+            <div class="form-group ">
+                <label for="navn">Navn:</label>
+                <input type="text" class="form-control" id="navn" name="navn" value="{{ bruker.getBrukerNavn() }}">
+            </div>
+            <div class="form-group ">
+                <label for="type">Brukertype:</label>
+                <select name="type" class="form-control" id="type">
                     {% for type in typer %}
                     <option value="{{ type.getId() }}" {% if bruker.getBrukerType() == type.getId() %} selected {% endif %}>{{ type.getNavn() }}</option>
                     {% endfor %}
-                </select></td>
-            </tr>
+                </select>
+            </div>
             {% else %}
-            <tr>
-                <td>Navn:</td>
-                <td>{{ bruker.getBrukerNavn() }}</td>
-            </tr>
-            <tr>
-                <td>BrukerType:</td>
-                <td>{{ userReg.getBrukertype(bruker.getBrukerType()).getNavn() }}</td>
-            </tr>
+            <div class="form-group ">
+                <label for="navn2">Navn:</label>
+                <input type="text" class="form-control" id="navn2" name="navn" value="{{ bruker.getBrukerNavn() }}">
+            </div>
+            <div class="form-group ">
+                <label for="type2">Brukertype:</label>
+                <input type="text" class="form-control" id="type2" name="type" value="{{ userReg.getBrukertype(bruker.getBrukerType()).getNavn() }}">
+            </div>
             {% endif %}
-            <tr>
-                <td>E-Post:</td>
-                <td><input type="text" name="epost" value="{{ bruker.getBrukerEpost() }}"></td>
-            </tr>
-                <td>Telefon:</td>
-                <td><input type="text" name="telefon" value="{{ bruker.getBrukerTelefon() }}"></td>
-            </tr>
-            <tr>
-            </tr>
-        </table>
-        <input type="submit" name="action" value="Lagre">
-        {% if brukerTilgang.isBrukeradmin() %}
-        <a href="brukeradministrering.php">Avbryt</a>
-        {% else %}
-        <a href="index.php">Avbryt</a>
-        {% endif %}
-    </form><br/>
-    <form class="form-horizontal" method="post" action="brukerredigering.php">
-        <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
-        <table>
-            <tr>
-                <td>Nytt passord:</td>
-                <td><input type="password" name="nytt_pass"></td>
-            </tr>
-            <tr>
-                <td>Bekreft nytt passord:</td>
-                <td><input type="password" name="nytt_pass2"></td>
-            </tr>
-        </table>
-        <input type="submit" name="action" value="Bekreft">
+            <div class="form-group ">
+                <label for="epost">Epost:</label>
+                <input type="text" class="form-control" id="epost" name="epost" value="{{ bruker.getBrukerEpost() }}">
+            </div>
+            <div class="form-group ">
+                <label for="telefon">Telefon:</label>
+                <input type="text" class="form-control" id="telefon" name="telefon" value="{{ bruker.getBrukerTelefon() }}">
+            </div>
+            <div class="form-group ">
+                <input type="submit" name="action" value="Lagre">
+                {% if brukerTilgang.isBrukeradmin() %}
+                <a href="brukeradministrering.php">Avbryt</a>
+                {% else %}
+                <a href="index.php">Avbryt</a>
+                {% endif %}
+            </div>
+        </form>
 
-        {% if brukerTilgang.isBrukeradmin() %}
-        <a href="brukeradministrering.php">Avbryt</a>
-        {% else %}
-        <a href="index.php">Avbryt</a>
-        {% endif %}
-    </form>
+        <form method="post" action="brukerredigering.php" class="col-md-4">
+            <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
+            <div class="form-group ">
+                <label for="nyttPassord">Nytt passord:</label>
+                <input type="password" class="form-control" id="nyttPassord" name="nytt_pass">
+            </div>
+            <div class="form-group ">
+                <label for="nyttPassord2">Bekreft nytt passord:</label>
+                <input type="password" class="form-control" id="nyttPassord2" name="nytt_pass2">
+            </div>
+            <div class="form-group ">
+                <input type="submit" name="action" value="Bekreft">
+                {% if brukerTilgang.isBrukeradmin() %}
+                <a href="brukeradministrering.php">Avbryt</a>
+                {% else %}
+                <a href="index.php">Avbryt</a>
+                {% endif %}
+            </div>
+        </form>
+
+    <!--<form method="post" action="brukerredigering.php">-->
+        <!--<input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Nytt passord:</td>-->
+                <!--<td><input type="password" name="nytt_pass"></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Bekreft nytt passord:</td>-->
+                <!--<td><input type="password" name="nytt_pass2"></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <!--<input type="submit" name="action" value="Bekreft">-->
+
+        <!--{% if brukerTilgang.isBrukeradmin() %}-->
+        <!--<a href="brukeradministrering.php">Avbryt</a>-->
+        <!--{% else %}-->
+        <!--<a href="index.php">Avbryt</a>-->
+        <!--{% endif %}-->
+    <!--</form>-->
     </div>
 </body>
