@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brukerredigering</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <div class="col-md-3">
+        <h1>Oppgavetyper</h1>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Oppgavetype</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for type in oppgavetyper %}
+            <tr>
+                <td>{{ type.Navn }}</td>
+                <td><a href="oppgavetypeoppretting.php?oppgavetypeId={{ type.getId }}">Rediger</a></td>
+                <td><a href="">Slett</a></td>
+            </tr>
+
+            {% endfor %}
+        </table>
+            <a href="oppgavetypeoppretting.php">Legg til oppgavetype</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
