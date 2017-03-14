@@ -10,24 +10,6 @@
     {% include 'header.html' %}
     <h1>Opprett ny fase</h1>
     <h2>Prosjekt: {{ prosjekt.getProsjektNavn() }}</h2>
-    <!--<form method="post" action="faseoppretting.php">-->
-        <!--<input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td>Navn</td>-->
-                <!--<td><input type="text" name="faseNavn"/></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Startdato</td>-->
-                <!--<td><input type="date" name="faseStartdato"/></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Sluttdato</td>-->
-                <!--<td><input type="date" name="faseSluttdato"/></td>-->
-            <!--</tr>-->
-        <!--</table>-->
-        <!--<input type="submit" value="Opprett fase" name="lagre"/>-->
-    <!--</form>-->
     <form method="post" action="faseoppretting.php"  class="col-md-4">
         <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
         {% if fase.getFaseId() > -1 %}
@@ -44,6 +26,14 @@
         <div class="form-group ">
             <label for="faseSluttdato">Sluttdato:</label>
             <input type="date" class="form-control" id="faseSluttdato" name="faseSluttdato" value="{{ fase.getFaseSluttDato() }}">
+        </div>
+        <div class="form-group ">
+            <label for="faseTilstand">Tilstand:</label>
+            <select name="faseTilstand" class="form control" id="faseTilstand">
+            {% for tilstand in fasetilstander %}
+                <option value="{{ tilstand }}" {% if tilstand == fase.getFaseTilstand() %}selected{% endif %}>{{ tilstand }}</option>
+            {% endfor %}
+            </select>
         </div>
         <div class="form-group ">
             <input type="submit" name="lagre" value="Opprett fase">

@@ -7,7 +7,7 @@
             $this->db = $db;
         }
 
-        public function hentAlleProsjekt($hentArkiverte=false) {
+        public function hentAlleProsjekt($hentArkiverte=true) {
             $prosjekter = array();
             if($hentArkiverte){
                 $stmt = $this->db->prepare("SELECT * FROM prosjekt");

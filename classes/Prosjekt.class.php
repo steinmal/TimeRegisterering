@@ -10,6 +10,7 @@
         private $team_id;
         private $prosjekt_product_owner;
         private $prosjekt_registrerings_dato;
+        private $prosjekt_arkivert;
         
         public function __construct() {
             
@@ -26,6 +27,9 @@
         public function getProsjektBeskrivelse() { return $this->prosjekt_beskrivelse; }
         public function getProsjektProductOwner() { return $this->prosjekt_product_owner; }
         public function getProsjektRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
+        public function getStatus() { return $this->isArkivert() ? "Arkivert" : "Aktiv"; }
+        
+        public function isArkivert() { return $this->prosjekt_arkivert; }
         
         public function setProsjektId($id) { $this->prosjekt_id = $id; }
         public function setProsjektNavn($navn) { $this->prosjekt_navn = $navn;}

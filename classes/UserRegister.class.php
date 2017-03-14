@@ -29,7 +29,7 @@
         // ----- Ikke ferdig
         public function opprettBruker($bruker) {
             $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord, bruker_registreringsdato, brukertype_id, bruker_aktivert)
-            VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 1)");
+            VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 0)");
   
             $stmt->bindParam(':navn', $bruker->getBrukerNavn(), PDO::PARAM_STR);
             $stmt->bindParam(':epost', $bruker->getBrukerEpost(), PDO::PARAM_STR);
@@ -51,8 +51,7 @@
             
             $stmt->execute();
         }
-        
-        
+
         
         public function hentAlleBrukere() {
             $brukere = array();
@@ -96,6 +95,12 @@
                 throw new InvalidArgumentException('Usertype not defined: ' . $brukertype_id);
 
             return $this->brukertyper[$brukertype_id];
+        }
+        
+        public function aktiverBruker($id){
+            $stmt = $this->db->prepare("UPDATE `bruker` SET bruker_aktivert=1 WHERE bruker_id=:id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
         }
 
     }

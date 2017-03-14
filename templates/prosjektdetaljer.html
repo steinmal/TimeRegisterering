@@ -14,6 +14,7 @@
         <table class="table table-striped">
             <tr>
                 <th>Navn</th>
+                <th>Tilstand</th>
                 <th>Startdato</th>
                 <th>Sluttdato</th>
                 <th></th>
@@ -21,6 +22,7 @@
             {% for fase in faseliste %}
                 <tr>
                     <td>{{ fase.getFaseNavn() }}</td>
+                    <td>{{ fase.getFaseTilstand() }}</td>
                     <td>{{ fase.getFaseStartDato() }}</td>
                     <td>{{ fase.getFaseSluttDato() }}</td>
                     <td><a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}&faseId={{ fase.getFaseId() }}">rediger</a></td>

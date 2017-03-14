@@ -20,9 +20,29 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradm
     echo "Du har ikke tilgang til brukeradministrering";
     return;
 }
+if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
+    if(!isset($_GET['brukerId'])){
+        $error = "noSelection";
+    } else {
+        if($UserReg->hentBruker($_GET['brukerId'])->isAktivert){
+            $error = "erAktivert";
+        } else {
+            $UserReg->aktiverBruker($_GET['brukerId']);
+            $error = "aktivert";
+        }
+    }
+} else {
+    $error = $_REQUEST['error'];
+}
 
 $brukere = $UserReg->hentAlleBrukere();
+$venterGodkjenning = 0;
+foreach($brukere as $bruker){
+    if(!$bruker->isAktivert()){
+        $venterGodkjenning++;
+    }
+}
 
-echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere, 'error'=>$_REQUEST['error']));
+echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$_GET['visNye'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere));
 
 ?>
