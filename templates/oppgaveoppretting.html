@@ -34,13 +34,15 @@
             </select>
         </div>
         <div class="form-group ">
-            <label for="fase">Oppgavetype:</label>
+            <label for="fase">Fase:</label>
             <select name="fase" class="form-control" id="fase">
-                <option value="0"{% if valgtOppgave == null or valgtOppgave.getFase() == 0 %} selected="selected"{% endif %}>Backlog</option>
                 {% for fase in faser %}
                 <option value="{{ fase.getFaseId() }}"{% if valgtOppgave.getFaseId() == fase.getFaseId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>
                 {% endfor %}
             </select>
+            {% if error == "ingenFase" %}
+            <font color=red>Ingen fase er valgt</font><br>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="tidsestimat">Tidsestimat:</label>

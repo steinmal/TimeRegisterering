@@ -25,6 +25,11 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
     return;
 }
 
+//Forslag: Dersom prosjektid eksisterer, anta at brukeren skal fylle inn skjema for å opprette oppgave
+//Hvis ikke, anta at skjema er ferdig utfyllt, men da må faseId være satt
+//else: header(location...)
+
+//ProsjektId = 0 har lite hensikt, tror databasen gir feilmelding i slikt tilfelle pga foreign key-forventninger
 $prosjektId = 0;
 if (isset($_REQUEST['prosjekt']))
     $prosjektId = $_REQUEST['prosjekt'];
@@ -36,25 +41,28 @@ if ($prosjekt == null) {
 $oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();
 $faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 
+//Benytt hentOppgave dersom en oppgave skal redigeres
+//Forslag for oppretting av oppgaver: Gjør om "lagoppgave"-metoden til å ta inn et objekt av type Oppgave
+//Bruk isåfall new Oppgave og fyll inn denne fra $_POST vha set-metodene.
 $valgtOppgave = new Oppgave();
 
 if(isset($_POST['opprettOppgave'])){
+    if(!isset($_POST['faseId']) && $_POST['faseId'] <= 0){
+        header("Location: oppgaveOppretting.php?prosjekt=" . $prosjektId . "&error=ingenFase");
+    }
+    $faseId = $_POST['fase'];
     $foreldreId = null;
     if(isset($_POST['foreldreId']) && $_POST['foreldreId'] != 0) {
         $foreldreId = $_POST['foreldreId'];
     }
     $oppgaveTypeId = $_POST['oppgavetype'];
-    $faseId = $_POST['fase'];
-    if ($faseId == 0) {
-        $faseId = null;
-    }
     $oppgaveNavn = $_POST['oppgaveNavn'];
     $tidsestimat = $_POST['tidsestimat'];
     $periode = $_POST['periode'];
     
     
     if(!isset($_POST['oppgaveId'])){
-        $OppgaveReg->lagOppgave($foreldreId, $prosjektId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
         header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
         return;
     }
@@ -66,8 +74,6 @@ if(isset($_POST['opprettOppgave'])){
     }
 }
 
-
-
 echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser));
+                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'error'=>$_GET['error']));
 ?>
