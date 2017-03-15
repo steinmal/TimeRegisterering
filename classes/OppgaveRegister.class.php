@@ -83,6 +83,27 @@
             }
             return $oppgavetyper;
         }
+        public function hentOppgaveType($id) {
+            $stmt = $this->db->prepare("SELECT * FROM oppgavetype WHERE oppgavetype_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($type = $stmt->fetchObject('Oppgavetype')) {
+                return $type;
+            }
+        }
+        public function lagOppgaveType($oppgavetype_navn) {
+            $stmt = $this->db->prepare("INSERT INTO oppgavetype (oppgavetype_navn) VALUES (:navn)");
+            $stmt->bindParam(':navn', $oppgavetype_navn);
+            $stmt->execute();
+        }
+        public function redigerOppgaveType($oppgavetype) {
+                $stmt = $this->db->prepare("UPDATE `oppgavetype` SET oppgavetype_navn=:navn
+                  WHERE oppgavetype_id=:id");
+                $stmt->bindParam(':navn', $oppgavetype->getNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':id', $oppgavetype->getId(), PDO::PARAM_INT);
+                $stmt->execute();
+        }
         
         public function hentAktiveTimerPrOppgave($id) {
             $stmt = $this->db->prepare("SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(`timereg_stopp`, `timereg_start`)))) as sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1");
