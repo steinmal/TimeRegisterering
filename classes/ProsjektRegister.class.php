@@ -79,5 +79,20 @@
             $stmt->execute();
         }
         
+        
+        
+        public function hentProsjekterFraTeam($teamID) {
+            $prosjekter = array();
+            $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE team_id=:id");
+            $stmt->bindParam(':id', $teamID, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            while ($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                $prosjekter[] = $prosjekt;
+            }
+            
+            return $prosjekter;
+        }
+        
     }
 ?>

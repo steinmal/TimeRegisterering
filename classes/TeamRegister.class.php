@@ -14,4 +14,19 @@
                 return  $team;
             }
         }
+        
+        
+        public function hentTeamIdFraBruker($brukerId) {
+            $teamId = array();
+            $stmt = $this->db->prepare("SELECT team_id FROM teammedlemskap WHERE bruker_id=:bId");
+            $stmt->bindParam(':bId', $brukerId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            while ($id = $stmt->fetch()) {
+                $teamId[] = (int) $id;
+            }
+            
+            return $teamId;
+        }
+
     }
