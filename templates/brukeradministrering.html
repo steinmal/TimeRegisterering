@@ -10,11 +10,15 @@
         {% include 'header.html' %}
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Brukeradministrering</h1>
-    <input class="btn-primary" type="button" name="visNye" value="Vis nye brukere" onClick="location.href='brukeradministrering.php?visNye=true'"/>
+    <div class=checkbox><!-- the style class defined is a placeholder only -->
+        <form method=get>
+            <input type="checkbox" name="visNye" onClick="submit()" {% if visNye %}checked{% endif %}/>Vis nye brukere
+        </form>
+    <!--TODO: Gjør om til av/på og ikke bare på, kanskje checkbox med form -->
     {% if venterGodkjenning > 0 %}
-    <font color=red>{{ venterGodkjenning }} brukere venter på godkjenning</font>
+    <font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>
     {% endif %}
-    <br/>
+    </div>
     {% if error == "noRadio" %}
         <font color=red>Ingen bruker valgt</font>
     {% elseif error == "lagret" %}
