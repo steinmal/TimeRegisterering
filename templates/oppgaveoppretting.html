@@ -15,47 +15,7 @@
     {% else %}
         <h1>Opprett ny oppgave</h1>
     {% endif %}
-    
-    <!--<form method="post" action="oppgaveoppretting.php">-->
-        <!--<input type="hidden" name="prosjekt" value="{{ valgtProsjekt.getId() }}">-->
-        <!--{% if valgtOppgave.getId() > 0 %}-->
-        <!--<input type="hidden" name="oppgaveId" value="{{ valgtOppgave.getId() }}">-->
-        <!--{% endif %}-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td>Oppgavenavn:</td>-->
-                <!--<td><input type="text" name="oppgaveNavn" value="{{ valgtOppgave.getOppgaveNavn() }}"></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Oppgavetype</td>-->
-                <!--<td><select name="oppgavetype">-->
-                    <!--{% for oppgavetype in oppgavetyper %}-->
-                    <!--<option value="{{ oppgavetype.getId() }}" {% if valgtOppgave.getOppgaveType() == oppgavetype.getId() %} selected="selected"{% endif %}>{{ oppgavetype.getNavn() }}</option>-->
-                    <!--{% endfor %}-->
-                <!--</select></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Fase</td>-->
-                <!--<td><select name="fase">-->
-                    <!--<option value="0"{% if valgtOppgave == null or valgtOppgave.getFase() == 0 %} selected="selected"{% endif %}>Backlog</option>-->
-                    <!--{% for fase in faser %}-->
-                    <!--<option value="{{ fase.getFaseId() }}"{% if valgtOppgave.getFaseId() == fase.getFaseId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>-->
-                    <!--{% endfor %}-->
-                <!--</select></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Tidsestimat:</td>-->
-                <!--<td><input type="text" name="tidsestimat" value="{{ valgtOppgave.getTidsestimat() }}"></td>-->
-            <!--</tr>-->
-                <!--<td>Oppgave periode:</td>-->
-                <!--<td><input type="text" name="periode" value="{{ valgtOppgave.getPeriode() }}"></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-            <!--</tr>-->
-        <!--</table>-->
-        <!--<input type="submit" name="opprettOppgave" value="Opprett oppgave">-->
-        <!--<a href="prosjektdetaljer.php?prosjekt={{ valgtProsjekt.getId() }}">Avbryt</a>-->
-    <!--</form>-->
+
     <form method="post" action="oppgaveoppretting.php" class="col-md-4">
         <input type="hidden" name="prosjekt" value="{{ valgtProsjekt.getId() }}">
         {% if valgtOppgave.getId() > 0 %}
@@ -74,13 +34,15 @@
             </select>
         </div>
         <div class="form-group ">
-            <label for="fase">Oppgavetype:</label>
+            <label for="fase">Fase:</label>
             <select name="fase" class="form-control" id="fase">
-                <option value="0"{% if valgtOppgave == null or valgtOppgave.getFase() == 0 %} selected="selected"{% endif %}>Backlog</option>
                 {% for fase in faser %}
                 <option value="{{ fase.getFaseId() }}"{% if valgtOppgave.getFaseId() == fase.getFaseId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>
                 {% endfor %}
             </select>
+            {% if error == "ingenFase" %}
+            <font color=red>Ingen fase er valgt</font><br>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="tidsestimat">Tidsestimat:</label>
@@ -94,7 +56,6 @@
             <input type="submit" name="opprettOppgave" value="Opprett oppgave">
             <a href="prosjektdetaljer.php?prosjekt={{ valgtProsjekt.getId() }}">Avbryt</a>
         </div>
-
 
     </form>
 </div>

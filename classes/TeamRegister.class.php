@@ -2,6 +2,7 @@
     class TeamRegister {
         private $db;
         
+        
         public function __construct(PDO $db) {
             $this->db = $db;
         }
@@ -29,4 +30,15 @@
             return $teamId;
         }
 
+        public function hentTeamMedlemmer($team_id, $UserReg) {
+            $stmt = $this-db-prepare("SELECT bruker_id FROM teammedlemskap WHERE team_id=:team_id");
+            $stmt->bindparam(':team_id', $team_id, PDO::PARAM_INT);
+            $stmt->execute();
+                
+            $brukere = array();
+            while($bruker_id = $stmt->fetch_assoc('bruker_id')) {
+                $brukere[] = $UserReg.hentBruker($bruker_id);
+            }
+            return $brukere;
+        }
     }

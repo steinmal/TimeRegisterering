@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7f156600bc09f39655d160f3f23f4bc6",
     "content-hash": "3883b3c9089c376ea64c962c72551d35",
     "packages": [
         {
@@ -56,7 +55,7 @@
                 "responsive",
                 "web"
             ],
-            "time": "2016-07-25 15:51:55"
+            "time": "2016-07-25T15:51:55+00:00"
         },
         {
             "name": "twig/twig",
@@ -100,7 +99,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2012-04-11 09:00:38"
+            "time": "2012-04-11T09:00:38+00:00"
         }
     ],
     "packages-dev": [],

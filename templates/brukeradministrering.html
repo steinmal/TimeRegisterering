@@ -10,10 +10,25 @@
         {% include 'header.html' %}
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Brukeradministrering</h1>
+    <div class=checkbox><!-- the style class defined is a placeholder only -->
+        <form method=get>
+            <input type="checkbox" name="visNye" onClick="submit()" {% if visNye %}checked{% endif %}/>Vis nye brukere
+        </form>
+    <!--TODO: Gjør om til av/på og ikke bare på, kanskje checkbox med form -->
+    {% if venterGodkjenning > 0 %}
+    <font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>
+    {% endif %}
+    </div>
     {% if error == "noRadio" %}
         <font color=red>Ingen bruker valgt</font>
     {% elseif error == "lagret" %}
         <font color=green>Endringer ble lagret</font>
+    {% elseif error == "erAktivert" %}
+        <font color=red>Bruker allerede aktivert</font>
+    {% elseif error == "noSelection" %}
+        <font color=red>Ingen bruker valgt</font>
+    {% elseif error == "aktivert" %}
+        <font color=green>Brukeren ble aktivert</font>
     {% endif %}
     <h2></h2>
     <p>
@@ -30,6 +45,7 @@
                     <th>Registreringsdato</th>
                 </tr>
                 {% for bruker in brukere %}
+                    {% if bruker.isAktivert() > 0 or visNye == true %}
                     <tr>
                         <td><input type=radio name=brukerId value="{{ bruker.getBrukerId() }}" /></td>
                         <td>{{ bruker.getBrukerId() }}</td>
@@ -39,7 +55,11 @@
                         <td>{{ bruker.getBrukerTelefon() }}</td>
                         <td>{{ bruker.isAktivert() }}</td>
                         <td>{{ bruker.getRegistreringsdato() }}</td>
+                        {% if not bruker.isAktivert %}
+                        <td><a href="?action=aktiver&brukerId={{ bruker.getBrukerId() }}">Aktiver</a></td>
+                        {% endif %}
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
             <input class="btn-primary" type="submit" name="action" value="Rediger"/>

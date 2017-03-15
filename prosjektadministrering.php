@@ -29,6 +29,6 @@ if(isset($_GET['error'])) { $error = $_GET['error']; }
 $prosjektliste = $ProsjektReg->hentAlleProsjekt();
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
-echo $twig->render('prosjektadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg, 'error'=>$error));
+echo $twig->render('prosjektadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'teamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$_GET['visArkivert']));
 
 ?>

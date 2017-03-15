@@ -37,13 +37,11 @@
             
             return $oppgaver;
         }
-        
-        
-        public function lagOppgave($foreldre_oppgave_id, $prosjekt_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode) {
+
+        public function lagOppgave($foreldre_oppgave_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode) {
             $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, prosjekt_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode)
-            VALUES (:foreldre_id, :prosjekt_id, :oppgavetype_id, :fase_id, :navn, :tidsestimat, :periode)");
+            VALUES (:foreldre_id, :oppgavetype_id, :fase_id, :navn, :tidsestimat, :periode)");
             $stmt->bindParam(':foreldre_id', $foreldre_oppgave_id, PDO::PARAM_INT);
-            $stmt->bindParam(':prosjekt_id', $prosjekt_id, PDO::PARAM_INT);
             $stmt->bindParam(':oppgavetype_id', $oppgavetype_id, PDO::PARAM_INT);
             $stmt->bindParam(':fase_id', $fase_id, PDO::PARAM_INT);
             $stmt->bindParam(':navn', $oppgave_navn);
@@ -82,6 +80,27 @@
                 $oppgavetyper[$oppgtype->getId()] = $oppgtype;
             }
             return $oppgavetyper;
+        }
+        public function hentOppgaveType($id) {
+            $stmt = $this->db->prepare("SELECT * FROM oppgavetype WHERE oppgavetype_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if($type = $stmt->fetchObject('Oppgavetype')) {
+                return $type;
+            }
+        }
+        public function lagOppgaveType($oppgavetype_navn) {
+            $stmt = $this->db->prepare("INSERT INTO oppgavetype (oppgavetype_navn) VALUES (:navn)");
+            $stmt->bindParam(':navn', $oppgavetype_navn);
+            $stmt->execute();
+        }
+        public function redigerOppgaveType($oppgavetype) {
+                $stmt = $this->db->prepare("UPDATE `oppgavetype` SET oppgavetype_navn=:navn
+                  WHERE oppgavetype_id=:id");
+                $stmt->bindParam(':navn', $oppgavetype->getNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':id', $oppgavetype->getId(), PDO::PARAM_INT);
+                $stmt->execute();
         }
         
         public function hentAktiveTimerPrOppgave($id) {

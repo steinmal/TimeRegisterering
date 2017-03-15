@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeoversikt</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+</head>
+
+// DIREKTE KOPIERT FRA TIMEOVERSIKT
+
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <h1>Timegodkjenning<a href="logout.php">Logg ut</a></h1>
+        <table class="table table-striped">
+            <tr>
+                <th>Dato</th>
+                <th>Bruker</th>
+                <th>Fra</th>
+                <th>Til</th>
+                <th>Oppgave</th>
+                <th>Status</th>
+                <th>Godkjenn</th>
+            </tr>
+            {% for timereg in timeregistreringer %}
+            <tr>
+                <td>{{ timereg.getDato() }}</td>
+                <td>{{ timereg.get }}</td> // BRUKER
+                <td>{{ timereg.getFra() }}</td>
+                <td>{{ timereg.getTil() }}</td>
+                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
+                <td>{{ timereg.getGodkjentTekst() }}</td>
+                <td><input type="button" value="Godkjenn"/></td>
+            </tr>
+            {% endfor %}
+        </table>
+    
+    <a href="timeregistrering.php">Tilbake</a>
+    </div>
+</body>
+</html>

@@ -21,6 +21,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+    //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
     echo "Du har ikke tilgang til faseoppretting";
     return;
 }
@@ -37,7 +38,8 @@ if(isset($_POST['lagre'])){
     $nyFase->setFaseNavn($_POST['faseNavn']);
     $nyFase->setFaseStartDato($_POST['faseStartdato']);
     $nyFase->setFaseSluttDato($_POST['faseSluttdato']);
-    if(isset($_POST['faseId'])){
+    $nyFase->setFaseTilstand($_POST['faseTilstand']);
+    if(isset($_POST['faseId'])){ //Redigering dersom id er satt på forhånd
         $nyFase->setFaseId($_POST['faseId']);
         $FaseReg->redigerFase($nyFase);
         //header("Location: faseadministrering.php");
@@ -52,11 +54,12 @@ if(isset($_POST['lagre'])){
 }
 else{
     $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
-    if(isset($_GET['rediger'])){
+    /*if(isset($_GET['rediger'])){
         if(!isset($_GET['faseId'])){
             header("Location: faseadministrering.php?error=noRadio");
             return;
-        }
+        }*/
+    if(isset($_GET['faseId'])){
         $fase = $FaseReg->hentFase($_GET['faseId']);
     }
     else{
@@ -65,5 +68,5 @@ else{
     }
 }
 
-echo $twig->render('faseoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'fase'=>$fase));
+echo $twig->render('faseoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander));
 ?>

@@ -16,6 +16,13 @@
         <font color=green>Prosjekt arkivert</font>
     {% endif %}
     <p>
+        <form method="get">
+            <input type="checkbox" name="visArkivert" onClick="submit()" {% if visArkivert %}checked{% endif %}/> Vis arkiverte prosjekter
+        </form>
+    </p>
+    
+
+    <p>
         <form action=prosjektoppretting.php method=GET>
             <table class="table table-striped">
                 <tr>
@@ -27,8 +34,10 @@
                     <th>Startdato</th>
                     <th>Sluttdato</th>
                     <th>Beskrivelse</th>
+                    <th>Status</th>
                 </tr>
                 {% for prosjekt in prosjektliste %}
+                    {% if (not prosjekt.isArkivert() > 0) or visArkivert == "on" %} 
                     <tr>
                         <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
                         <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</a></td>
@@ -38,8 +47,10 @@
                         <td>{{ prosjekt.getProsjektStartDato() }}</td>
                         <td>{{ prosjekt.getProsjektSluttDato() }}</td>
                         <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>
+                        <td>{{ prosjekt.getStatus() }}</td>
                         <!--<td><a href="prosjektadministrering.php?action=arkiver&id={{ prosjekt.getId() }}">Arkiver</a></td>-->
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
             <input class ="btn-primary" type=submit name=action value=Arkiver>

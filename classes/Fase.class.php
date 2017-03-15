@@ -5,6 +5,8 @@
         private $prosjekt_id;
         private $fase_startdato;
         private $fase_sluttdato;
+        private $fase_tilstand;
+        static $tilstander = array("Ikke påbegynt", "Aktiv", "Forsinket", "Ferdig");
         
         public function __construct(){
             
@@ -15,10 +17,13 @@
         public function getProsjektId(){ return $this->prosjekt_id; }
         public function getFaseStartDato(){ return $this->fase_startdato; }
         public function getFaseSluttDato(){ return $this->fase_sluttdato; }
+        public function getFaseTilstand() { return $this->fase_tilstand; }
 
         public function setFaseId($id){ $this->fase_id = $id; }
         public function setFaseNavn($navn){ $this->fase_navn = $navn; }
         public function setProsjektId($id){ $this->prosjekt_id = $id; }
         public function setFaseStartDato($dato){ $this->fase_startdato = $dato; }
         public function setFaseSluttDato($dato){ $this->fase_sluttdato = $dato; }
+        public function setFaseTilstand($tilstand) { $this->fase_tilstand = $tilstand; }
+        
     }
