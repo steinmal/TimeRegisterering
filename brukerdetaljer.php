@@ -32,17 +32,13 @@ $brukerType = $UserReg->getBrukerType($brukerTypeID)->getNavn();
 
 $brukerID = $bruker->getBrukerId();
 $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
-var_dump($teamIDs);
 
 $teamliste = array();
 $prosjekter = array();
 foreach ($teamIDs as $i) {
-    $teamliste[] = $TeamReg->hentTeam($teamIDs[$i]);
-    $prosjekter = array_merge($prosjekter, $ProsjektReg->hentProsjekterFraTeam($teamIDs[$i]));
+    $teamliste[] = $TeamReg->hentTeam($i);
+    $prosjekter = array_merge($prosjekter, $ProsjektReg->hentProsjekterFraTeam($i));
 }
-
-var_dump($teamliste);
-var_dump($prosjekter);
 
 echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'UserReg'=>$UserReg));
 
