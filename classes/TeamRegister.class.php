@@ -12,7 +12,7 @@
             $stmt->execute();
             
             if($team = $stmt->fetchObject('Team')) {
-                return  $team;
+                return $team;
             }
         }
         
