@@ -8,7 +8,7 @@
         }
         public function hentTeam($id) {
             $stmt = $this->db->prepare("SELECT * FROM team WHERE team_id=:id");
-            $stmt->bindparam(':id', $id, PDO::PARAM_STR);
+            $stmt->bindparam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
             
             if($team = $stmt->fetchObject('Team')) {
@@ -24,7 +24,7 @@
             $stmt->execute();
             
             while ($id = $stmt->fetch()) {
-                $teamId[] = (int) $id;
+                $teamId[] = $id['team_id'];
             }
             
             return $teamId;
