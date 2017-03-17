@@ -24,7 +24,8 @@
         
         public function hentOppgaverFraProsjekt($prosjekt_id) {
             $oppgaver = array();
-            $stmt = $this->db->prepare("SELECT * FROM oppgave WHERE prosjekt_id=:pId");
+            //$stmt = $this->db->prepare("SELECT * FROM oppgave WHERE prosjekt_id=:pId");
+            $stmt = $this->db->prepare("SELECT * FROM `oppgave` WHERE `fase_id` IN (SELECT `fase_id` FROM `fase` WHERE `fase`.`prosjekt_id`=:pId)");
             $stmt->bindParam(':pId', $prosjekt_id);
             $stmt->execute();
             
