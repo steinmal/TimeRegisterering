@@ -24,7 +24,7 @@
             <tbody>
                 {% for timereg in timeregistreringer %}
                 <tr>
-                    <td data-dato="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
+                    <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
                     <td>{{ timereg.getFra() }}</td>
                     <td>{{ timereg.getTil() }}</td>
                     <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
@@ -39,8 +39,8 @@
     <script type="text/javascript">
         <!--
         function dateSorter(a, b) {
-            if (a.dato < b.dato) return -1;
-            if (a.dato > b.dato) return 1;
+            if (a.datoklokkeslett < b.datoklokkeslett) return -1;
+            if (a.datoklokkeslett > b.datoklokkeslett) return 1;
             return 0;
         }
         //-->
