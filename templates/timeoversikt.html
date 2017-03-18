@@ -4,33 +4,41 @@
     <meta charset="UTF-8">
     <title>Timeoversikt</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-table.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
         <h1>Timeoversikt</h1>
-        <table class="table table-striped">
-            <tr>
-                <th>Dato</th>
-                <th>Fra</th>
-                <th>Til</th>
-                <th>Oppgave</th>
-                <th>Godkjent</th>
-                <th>Deaktiver</th>
-            </tr>
-            {% for timereg in timeregistreringer %}
-            <tr>
-                <td>{{ timereg.getDato() }}</td>
-                <td>{{ timereg.getFra() }}</td>
-                <td>{{ timereg.getTil() }}</td>
-                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
-                <td>{{ timereg.getGodkjentTekst() }}</td>
-                <td><input type="button" value="Deaktiver"/></td>
-            </tr>
-            {% endfor %}
+        <table data-toggle="table" data-height="460" data-sort-name="name" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="date" data-sortable="true">Dato</th>
+                    <th data-field="from" data-sortable="true">Fra</th>
+                    <th data-field="to" data-sortable="true">Til</th>
+                    <th data-field="task" data-sortable="true">Oppgave</th>
+                    <th data-field="approved" data-sortable="true">Godkjent</th>
+                    <th data-field="deactivate" data-sortable="true">Deaktiver</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for timereg in timeregistreringer %}
+                <tr>
+                    <td>{{ timereg.getDato() }}</td>
+                    <td>{{ timereg.getFra() }}</td>
+                    <td>{{ timereg.getTil() }}</td>
+                    <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
+                    <td>{{ timereg.getGodkjentTekst() }}</td>
+                    <td><input type="button" value="Deaktiver"/></td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     
     <a href="index.php">Tilbake</a>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 </body>
 </html>
