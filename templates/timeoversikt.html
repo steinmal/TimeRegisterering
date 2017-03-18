@@ -11,15 +11,15 @@
     <div class="container">
         {% include 'header.html' %}
         <h1>Timeoversikt</h1>
-        <table data-toggle="table" data-height="460" data-sort-name="name" data-sort-order="desc">
+        <table data-toggle="table" data-height="460" data-sort-name="date" data-sort-order="asc">
             <thead>
                 <tr>
                     <th data-field="date" data-sortable="true">Dato</th>
-                    <th data-field="from" data-sortable="true">Fra</th>
-                    <th data-field="to" data-sortable="true">Til</th>
+                    <th data-field="from">Fra</th>
+                    <th data-field="to">Til</th>
                     <th data-field="task" data-sortable="true">Oppgave</th>
                     <th data-field="approved" data-sortable="true">Godkjent</th>
-                    <th data-field="deactivate" data-sortable="true">Deaktiver</th>
+                    <th>Deaktiver</th>
                 </tr>
             </thead>
             <tbody>
