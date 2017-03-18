@@ -2,6 +2,7 @@
     class OppgaveRegister {
         
         private $db;
+        private $oppgavetyper;
 
         public function __construct(PDO $db) {
             $this->db = $db;
@@ -62,7 +63,30 @@
             }
         }
         
+        //Use these functions to avoid many calls to the database
+        public function getAlleOppgavetyper() {
+            $oppgavetyper = array();
+            $stmt = $this->db->prepare("SELECT * FROM oppgavetype");
+            $stmt->execute();
+
+            while($oppgavetype = $stmt->fetchObject('Oppgavetype')){
+                $oppgavetyper[$oppgavetype->getId()] = $oppgavetype;
+            }
+            return $oppgavetyper;
+        }
         
+        public function getOppgavetype($oppgavetype_id) {
+            if ($this->oppgavetyper == null)
+                $this->oppgavetyper = $this->getAlleOppgavetyper();
+
+            if (!isset($this->oppgavetyper[$oppgavetype_id]))
+                throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
+
+            return $this->oppgavetyper[$oppgavetype_id];
+        }
+
+        
+        //Outdated, as these requests sql data for each row
         public function hentOppgaveTypeTekst($id) {
             $stmt = $this->db->prepare("SELECT * FROM oppgavetype WHERE oppgavetype_id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);

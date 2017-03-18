@@ -26,6 +26,17 @@
         public function getAktiv() { return $this->timereg_aktiv; }
         public function getAutomatisk() { return $this->timereg_automatisk; }
         public function getGodkjent() { return $this->timereg_godkjent; }
+        public function getHours() {
+            $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());
+            $stopptid = DateTime::createFromFormat('H:i:s', $this->getTil());
+            $hours = "00:00";
+            if ($starttid && $stopptid)
+            {
+                $diff = $stopptid->diff($starttid);
+                $hours = $diff->format("%H:%I");
+            }
+            return $hours;
+        }
         
         public function getGodkjentTekst() {
             if ($this->timereg_godkjent) {

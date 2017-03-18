@@ -17,7 +17,9 @@
                     <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
                     <th data-field="from">Fra</th>
                     <th data-field="to">Til</th>
+                    <th data-field="hours" data-sortable="true">Timer</th>
                     <th data-field="task" data-sortable="true">Oppgave</th>
+                    <th data-field="tasktype" data-sortable="true">Oppgavetype</th>
                     <th data-field="approved" data-sortable="true">Godkjent</th>
                 </tr>
             </thead>
@@ -27,7 +29,9 @@
                     <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
                     <td>{{ timereg.getFra() }}</td>
                     <td>{{ timereg.getTil() }}</td>
+                    <td>{{ timereg.getHours() }}</td>
                     <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
+                    <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgavetype()).getNavn() }}</td>
                     <td>{{ timereg.getGodkjentTekst() }}</td>
                 </tr>
                 {% endfor %}
