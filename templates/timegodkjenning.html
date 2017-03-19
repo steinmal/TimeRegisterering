@@ -10,12 +10,19 @@
     <div class="container">
         {% include 'header.html' %}
 
-        <h1>Timegodkjenning</h1>
+    <br>&larr; <a href="index.php">Hovedside</a>
+    <h1>Timegodkjenning</h1>
 
-        <!--Teamleders team-->
-        {% for team in teams %}
-            <h2>{{ team.getTeamNavn() }}</h2>
+    <!--Teamleders team-->
+    {% for team in teams %}
+        <h2>{{ team.getTeamNavn() }}</h2>
+        <p>
+            <form method="get">
+                <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente timer
+            </form>
+        </p>
             
+        <form action=timegodkjenning.php method=GET>
             <table class="table table-striped">
                 <tr>
                     <th>Navn</th>
@@ -29,6 +36,7 @@
                     
                 <!--Alle timeoppføringer på teamet-->
                 {% for timereg in timeregistreringer %}
+                    {% if (timereg.getGodkjent == false) or visGodkjent == "on" %}
                     <tr>
                         <td>{{ userReg.hentBruker(timereg.getBrukerId()).getBrukerNavn() }}</td>
                         <td>{{ timereg.getDato() }}</td>
@@ -43,7 +51,7 @@
                         <td><a href="?action=avvis&timeregId={{ timereg.getTimeregId() }}">Avvis</a></td>
                         {% endif %}
                     </tr>
-          
+                    {% endif %}
                 {% endfor %}
             </table>
         {% endfor %}

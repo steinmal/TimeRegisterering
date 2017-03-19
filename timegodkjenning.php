@@ -69,5 +69,6 @@ echo $twig->render(
     'timeReg'=>$TimeReg, 
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,
-    'timeregistreringer'=>$timeregistreringer));
+    'timeregistreringer'=>$timeregistreringer,
+    'visGodkjent'=>$_GET['visGodkjent']));
 ?>
