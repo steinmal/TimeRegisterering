@@ -8,23 +8,8 @@
 <body>
 <div class="container">
     {% include 'header.html' %}
+    <br>&larr; <a href="index.php">Hovedside</a>
         <h1>Timeregistrering</h1>
-        <!--<form method="post" action="timeregistrering.php">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td>-->
-                    <!--Prosjekt-->
-                <!--</td>-->
-                <!--<td>-->
-                    <!--<select name="prosjekt" onchange="submit()">-->
-                        <!--&lt;!&ndash; <option value="0"></option> Det ligger en slik i databasen nå &ndash;&gt;-->
-                        <!--{% for prosjekt in prosjekter %}-->
-                        <!--<option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>-->
-                        <!--{% endfor %}-->
-                    <!--</select> -->
-                <!--</td>-->
-            <!--</tr>-->
-        <!--</form>-->
     <form method="post" action="timeregistrering.php" class="col-md-4">
         <div class="form-group ">
             <label for="prosjekt">Prosjekt:</label>
