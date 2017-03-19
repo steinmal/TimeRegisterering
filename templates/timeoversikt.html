@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <title>Timeoversikt</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-table.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css"/>
+    <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+    
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
         <h1>Timeoversikt</h1>
-        <table data-toggle="table" data-height="460" data-sort-name="date" data-sort-order="asc">
+        <table id="table" data-toggle="table" data-height="460" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id">
             <thead>
                 <tr>
                     <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
@@ -50,6 +51,7 @@
         //-->
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 </body>
 </html>
