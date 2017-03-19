@@ -18,6 +18,7 @@
         <div class="btn-group">
             <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
             <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+            {% if brukerTilgang.isTeamleder() %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
             <a href="brukerdetaljer.php"><button type="button" class="btn btn-primary">Brukerdetaljer</button></a>
             {% if brukerTilgang.isTeamleder() %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
             {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
