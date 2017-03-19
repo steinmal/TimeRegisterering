@@ -50,11 +50,23 @@
             $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
             $stmt->execute();
                 
-                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+            while ($timereg = $stmt->fetchObject('Timeregistrering')) {
                 $timeregistreringer[] = $timereg;
             }
 
             return $timeregistreringer;
+        }
+        
+        public function godkjennTimeregistrering($timeregId){
+            $stmt = $this->db->prepare("UPDATE `timeregistrering` SET timereg_godkjent=1 WHERE timereg_id=:id");
+            $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
+        public function avvisTimeregistrering($timeregId){
+            $stmt = $this->db->prepare("UPDATE `timeregistrering` SET timereg_godkjent=0 WHERE timereg_id=:id");
+            $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+            $stmt->execute();
         }
         
     }

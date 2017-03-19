@@ -15,7 +15,6 @@
         function __construct() {
             
         }
-        
         public function getTimeregId() { return $this->timereg_id; }
         public function getBrukerId() { return $this->bruker_id; }
         public function getOppgaveId() { return $this->oppgave_id; }
