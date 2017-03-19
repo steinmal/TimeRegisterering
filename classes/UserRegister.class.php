@@ -24,9 +24,7 @@
             echo "Feil brukernavn/passord";
             return false;
         }
-        
-        
-        // ----- Ikke ferdig
+
         public function opprettBruker($bruker) {
             $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord, bruker_registreringsdato, brukertype_id, bruker_aktivert)
             VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 0)");

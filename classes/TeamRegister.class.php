@@ -36,8 +36,8 @@
             $stmt->execute();
                 
             $brukere = array();
-            while($bruker_id = $stmt->fetch_assoc('bruker_id')) {
-                $brukere[] = $UserReg.hentBruker($bruker_id);
+            while($bruker = $stmt->fetch()) {
+                $brukere[] = $UserReg.hentBruker($bruker_id['bruker_id']);
             }
             return $brukere;
         }
