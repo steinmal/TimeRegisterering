@@ -44,5 +44,5 @@ if(isset($_POST['prosjekt'])) {
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
 
-echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id));
+echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

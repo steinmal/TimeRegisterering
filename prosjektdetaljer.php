@@ -37,6 +37,6 @@ if ($prosjekt == null) {
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 
-echo $twig->render('prosjektdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe));
+echo $twig->render('prosjektdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
