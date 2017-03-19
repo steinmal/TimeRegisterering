@@ -4,33 +4,54 @@
     <meta charset="UTF-8">
     <title>Timeoversikt</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css"/>
+    <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+    
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
-        <h1>Timeoversikt - {{ brukernavn }} - <a href="logout.php">Logg ut</a></h1>
-        <table class="table table-striped">
-            <tr>
-                <th>Dato</th>
-                <th>Fra</th>
-                <th>Til</th>
-                <th>Oppgave</th>
-                <th>Godkjent</th>
-                <th>Deaktiver</th>
-            </tr>
-            {% for timereg in timeregistreringer %}
-            <tr>
-                <td>{{ timereg.getDato() }}</td>
-                <td>{{ timereg.getFra() }}</td>
-                <td>{{ timereg.getTil() }}</td>
-                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
-                <td>{{ timereg.getGodkjentTekst() }}</td>
-                <td><input type="button" value="Deaktiver"/></td>
-            </tr>
-            {% endfor %}
+        <h1>Timeoversikt</h1>
+        <table id="table" data-toggle="table" data-height="460" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id">
+            <thead>
+                <tr>
+                    <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
+                    <th data-field="from">Fra</th>
+                    <th data-field="to">Til</th>
+                    <th data-field="hours" data-sortable="true">Timer</th>
+                    <th data-field="task" data-sortable="true">Oppgave</th>
+                    <th data-field="tasktype" data-sortable="true">Oppgavetype</th>
+                    <th data-field="approved" data-sortable="true">Godkjent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for timereg in timeregistreringer %}
+                <tr>
+                    <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
+                    <td>{{ timereg.getFra() }}</td>
+                    <td>{{ timereg.getTil() }}</td>
+                    <td>{{ timereg.getHours() }}</td>
+                    <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
+                    <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgavetype()).getNavn() }}</td>
+                    <td>{{ timereg.getGodkjentTekst() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     
-    <a href="timeregistrering.php">Tilbake</a>
+    <a href="index.php">Tilbake</a>
     </div>
+    <script type="text/javascript">
+        <!--
+        function dateSorter(a, b) {
+            if (a.datoklokkeslett < b.datoklokkeslett) return -1;
+            if (a.datoklokkeslett > b.datoklokkeslett) return 1;
+            return 0;
+        }
+        //-->
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 </body>
 </html>
