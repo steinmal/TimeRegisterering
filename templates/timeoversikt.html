@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Timeoversikt</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css"/>
-    <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
         &larr; <a href="index.php">Hovedside</a>
         <h1>Timeoversikt</h1>
-        <table id="table" data-toggle="table" data-height="460" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id">
+        <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
             <thead>
                 <tr>
                     <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
+                    <!--<th data-field="date" data-sortable="true">Dato</th>-->
                     <th data-field="from">Fra</th>
                     <th data-field="to">Til</th>
                     <th data-field="hours" data-sortable="true">Timer</th>
                     <th data-field="task" data-sortable="true">Oppgave</th>
-                    <th data-field="tasktype" data-sortable="true">Oppgavetype</th>
-                    <th data-field="approved" data-sortable="true">Godkjent</th>
+                    <th data-field="oppgavetype" data-sortable="true" data-filter-control="select">Oppgavetype</th>
+                    <th data-field="godkjent" data-sortable="true">Godkjent</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,8 +54,5 @@
         }
         //-->
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 </body>
 </html>
