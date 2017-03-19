@@ -10,7 +10,7 @@
         {% include 'header.html' %}
     <br>&larr; <a href="index.php">Hovedside</a>
     <h1>Brukeradministrering</h1>
-    <div class=checkbox><!-- the style class defined is a placeholder only -->
+    <!--<div class=checkbox>&lt;!&ndash; the style class defined is a placeholder only &ndash;&gt;-->
         <form method=get>
             <input type="checkbox" name="visNye" onClick="submit()" {% if visNye %}checked{% endif %}/>Vis nye brukere
         </form>
@@ -18,7 +18,7 @@
     {% if venterGodkjenning > 0 %}
     <font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>
     {% endif %}
-    </div>
+    <!--</div>-->
     {% if error == "noRadio" %}
         <font color=red>Ingen bruker valgt</font>
     {% elseif error == "lagret" %}
@@ -32,6 +32,7 @@
     {% endif %}
     <h2></h2>
     <p>
+        <a href="brukerregistrering.php"><button class="btn-primary">Opprett bruker</button></a>
         <form action="brukerredigering.php" method=get>
             <table class="table table-striped">
                 <tr>
@@ -66,7 +67,9 @@
                 {% endfor %}
             </table>
             <input class="btn-primary" type="submit" name="action" value="Rediger"/>
+
         </form>
+
     </p>
     </div>
 </body>
