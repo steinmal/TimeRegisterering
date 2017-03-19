@@ -43,6 +43,7 @@
                     <th>Telefon</th>
                     <th>Aktivert</th>
                     <th>Registreringsdato</th>
+                    <th></th>
                 </tr>
                 {% for bruker in brukere %}
                     {% if bruker.isAktivert() > 0 or visNye == true %}
@@ -57,6 +58,8 @@
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
                         <td><a href="?action=aktiver&brukerId={{ bruker.getBrukerId() }}">Aktiver</a></td>
+                        {% else %}
+                        <td>&nbsp;</td>
                         {% endif %}
                     </tr>
                     {% endif %}
