@@ -47,8 +47,9 @@
             {% endfor %}
         </table>
 ======= -->
-        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
-        <h1>Timeoversikt</h1>
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    <h1>Timeoversikt</h1>
+    <form action="timekorrigering.php" method=GET>
         <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
             <thead>
                 <tr>
@@ -65,6 +66,7 @@
             <tbody>
                 {% for timereg in timeregistreringer %}
                 <tr>
+                    <td><input type=radio name="timeregId" value={{ timereg.getTimeregId() }}/></td>
                     <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
                     <td>{{ timereg.getFra() }}</td>
                     <td>{{ timereg.getTil() }}</td>
@@ -77,7 +79,10 @@
             </tbody>
 
         </table>
-    
+        <input class="btn-primary" type="submit" name=action value="Korriger">
+        <input class="btn-primary" type="submit" name=action value="Deaktiver">
+        
+    </form>
     <a href="index.php">Tilbake</a>
     </div>
     <script type="text/javascript">

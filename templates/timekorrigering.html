@@ -9,26 +9,26 @@
 <div class="container">
     {% include 'header.html' %}
         <h1>Korrigering av timeregistrering - {{ brukernavn }}</h1>
+        heiheieheieheihei
         
     <form method="post" action="timekorrigering.php" class="col-md-4">
         <div class="form-group ">
-            {% for time in time %}
-            <b>Oppgave:</b>
-            <p>{{ oppgavenavn }}</p> <!-- Brukeren får opp oppgaven som var valgt på den orginale timeregistreringen -->
-            <input type="hidden" name="timeId" value="{{ time.getTimeregId() }}">
+            <p><b>Oppgave:</b>
+            <br/>{{ oppgavenavn }}</p> <!-- Brukeren får opp oppgaven som var valgt på den orginale timeregistreringen -->
+            <input type="hidden" name="timeId" value="{{ timereg.getTimeregId() }}">
             <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId }}">
         </div>
         <div class="form-group ">
             <label for="dato">Dato:</label>
-            <input type="date" class="form-control" id="dato" name="dato" value="{{ time.getDato() }}">
+            <input type="date" class="form-control" id="dato" name="dato" value="{{ timereg.getDato() }}">
         </div>
         <div class="form-group ">
             <label for="starttid">Starttid:</label>
-            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ time.getFra() }}">
+            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ timereg.getFra() }}">
         </div>
         <div class="form-group ">
             <label for="stopptid">Stopptid:</label>
-            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ time.getTil() }}">
+            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ timereg.getTil() }}">
         </div>
        <!-- <div class="form-group "> Tenker at alle korrigeringer merkes som manuell i tabellen?
             <label for="automatisk">Automatisk registrering</label>
@@ -42,7 +42,6 @@
             <input type="submit" name="lagre" value="Lagre korrigering">
         </div>
     </form>
-    {% endfor %}
 </div>
 </body>
 </html>
