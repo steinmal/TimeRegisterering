@@ -43,6 +43,6 @@ foreach($brukere as $bruker){
     }
 }
 
-echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>($_GET['visNye'] == "on"), 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere));
+echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>($_GET['visNye'] == "on"), 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

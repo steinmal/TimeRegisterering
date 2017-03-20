@@ -2,40 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Timeoversikt</title>
+    <title>Timegodkjenning</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-
-// DIREKTE KOPIERT FRA TIMEOVERSIKT
 
 <body>
     <div class="container">
         {% include 'header.html' %}
-        <h1>Timegodkjenning<a href="logout.php">Logg ut</a></h1>
-        <table class="table table-striped">
-            <tr>
-                <th>Dato</th>
-                <th>Bruker</th>
-                <th>Fra</th>
-                <th>Til</th>
-                <th>Oppgave</th>
-                <th>Status</th>
-                <th>Godkjenn</th>
-            </tr>
-            {% for timereg in timeregistreringer %}
-            <tr>
-                <td>{{ timereg.getDato() }}</td>
-                <td>{{ timereg.get }}</td> // BRUKER
-                <td>{{ timereg.getFra() }}</td>
-                <td>{{ timereg.getTil() }}</td>
-                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
-                <td>{{ timereg.getGodkjentTekst() }}</td>
-                <td><input type="button" value="Godkjenn"/></td>
-            </tr>
-            {% endfor %}
-        </table>
-    
-    <a href="timeregistrering.php">Tilbake</a>
+
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    <h1>Timegodkjenning</h1>
+
+    <!--Teamleders team-->
+    {% for team in teams %}
+        <h2>{{ team.getTeamNavn() }}</h2>
+        <p>
+            <form method="get">
+                <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente timer
+            </form>
+        </p>
+            
+        <form action=timegodkjenning.php method=GET>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Dato</th>
+                    <th>Fra</th>
+                    <th>Til</th>
+                    <th>Oppgave</th>
+                    <th>Status</th>
+                    <th>Endre status</th>
+                </tr>
+                    
+                <!--Alle timeoppføringer på teamet-->
+                {% for timereg in timeregistreringer %}
+                    {% if (timereg.getGodkjent == false) or visGodkjent == "on" %}
+                    <tr>
+                        <td>{{ userReg.hentBruker(timereg.getBrukerId()).getBrukerNavn() }}</td>
+                        <td>{{ timereg.getDato() }}</td>
+                        <td>{{ timereg.getFra() }}</td>
+                        <td>{{ timereg.getTil() }}</td>
+                        <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getOppgaveNavn() }}</td>
+                        <td>{{ timereg.getGodkjentTekst() }}</td>
+                        
+                        {% if timereg.getGodkjent() == false %}
+                        <td><a href="?action=godkjenn&timeregId={{ timereg.getTimeregId() }}">Godkjenn</a></td>
+                        {% else %}
+                        <td><a href="?action=avvis&timeregId={{ timereg.getTimeregId() }}">Avvis</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endfor %}
+
     </div>
 </body>
 </html>

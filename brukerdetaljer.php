@@ -40,6 +40,6 @@ foreach ($teamIDs as $i) {
     $prosjekter = array_merge($prosjekter, $ProsjektReg->hentProsjekterFraTeam($i));
 }
 
-echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'UserReg'=>$UserReg));
+echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'UserReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

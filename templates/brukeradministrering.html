@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Brukeradministrering</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
-    <br>&larr; <a href="index.php">Hovedside</a>
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Brukeradministrering</h1>
-    <div class=checkbox><!-- the style class defined is a placeholder only -->
+    <!--<div class=checkbox>&lt;!&ndash; the style class defined is a placeholder only &ndash;&gt;-->
         <form method=get>
             <input type="checkbox" name="visNye" onClick="submit()" {% if visNye %}checked{% endif %}/>Vis nye brukere
         </form>
@@ -18,7 +20,7 @@
     {% if venterGodkjenning > 0 %}
     <font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>
     {% endif %}
-    </div>
+    <!--</div>-->
     {% if error == "noRadio" %}
         <font color=red>Ingen bruker valgt</font>
     {% elseif error == "lagret" %}
@@ -32,6 +34,7 @@
     {% endif %}
     <h2></h2>
     <p>
+        <a href="brukerregistrering.php"><button class="btn-primary">Opprett bruker</button></a>
         <form action="brukerredigering.php" method=get>
             <table class="table table-striped">
                 <tr>
@@ -43,6 +46,7 @@
                     <th>Telefon</th>
                     <th>Aktivert</th>
                     <th>Registreringsdato</th>
+                    <th></th>
                 </tr>
                 {% for bruker in brukere %}
                     {% if bruker.isAktivert() > 0 or visNye == true %}
@@ -57,13 +61,17 @@
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
                         <td><a href="?action=aktiver&brukerId={{ bruker.getBrukerId() }}">Aktiver</a></td>
+                        {% else %}
+                        <td>&nbsp;</td>
                         {% endif %}
                     </tr>
                     {% endif %}
                 {% endfor %}
             </table>
             <input class="btn-primary" type="submit" name="action" value="Rediger"/>
+
         </form>
+
     </p>
     </div>
 </body>

@@ -4,27 +4,14 @@
     <meta charset="UTF-8">
     <title>Timeregistrering</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
     {% include 'header.html' %}
-        <h1>Timeregistrering - {{ brukernavn }} - <a href="timeoversikt.php">Timeoversikt</a></h1>
-        <!--<form method="post" action="timeregistrering.php">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td>-->
-                    <!--Prosjekt-->
-                <!--</td>-->
-                <!--<td>-->
-                    <!--<select name="prosjekt" onchange="submit()">-->
-                        <!--&lt;!&ndash; <option value="0"></option> Det ligger en slik i databasen nå &ndash;&gt;-->
-                        <!--{% for prosjekt in prosjekter %}-->
-                        <!--<option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>-->
-                        <!--{% endfor %}-->
-                    <!--</select> -->
-                <!--</td>-->
-            <!--</tr>-->
-        <!--</form>-->
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+        <h1>Timeregistrering</h1>
     <form method="post" action="timeregistrering.php" class="col-md-4">
         <div class="form-group ">
             <label for="prosjekt">Prosjekt:</label>
@@ -42,46 +29,7 @@
         </div>
     </form>
         {% else %}
-        <!--<form method="post" action="timeregistrering.php">-->
-        <!--<table>-->
-            <!--<tr>-->
-                <!--<td>-->
-                    <!--Oppgave-->
-                    <!--<select name="oppgave">-->
-                        <!--{% for oppgave in oppgaver %}-->
-                        <!--<option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>-->
-                        <!--{% endfor %}-->
-                    <!--</select> -->
-                <!--</td>-->
-            <!--</tr>-->
 
-            <!--<tr>-->
-                <!--<td>Dato</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><input type="date" value="{{ dagensdato }}" name="dato"/></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Starttid</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><input type="time" value="{{ klokkeslett }}" name="starttid"></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Stopptid</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><input type="time" value="{{ klokkeslett }}" name="stopptid"></td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><input type="checkbox" name="automatisk" value="Checked"> Automatisk registrering</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td><input type="submit" name="registrer" value="Registrer"></td>-->
-            <!--</tr>-->
-        <!--</table>-->
-    <!--</form>-->
-    <!--<form method="post" action="timeregistrering.html">-->
         </div>
         <div class="form-group ">
             <label for="oppgave">Oppgave:</label>
@@ -97,7 +45,7 @@
         </div>
         <div class="form-group ">
             <label for="starttid">Starttid:</label>
-            <input type="time" class="form-control" id="starttid" name="time" value="{{ klokkeslett }}">
+            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ klokkeslett }}">
         </div>
         <div class="form-group ">
             <label for="stopptid">Stopptid:</label>

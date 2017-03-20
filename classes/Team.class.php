@@ -6,4 +6,5 @@
         
         public function getTeamNavn() { return $this->team_navn; }
         public function getTeamLeder() { return $this->team_leder; }
+        public function getTeamId() { return $this->team_id; }
     }
