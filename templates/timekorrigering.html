@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeregistrering</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    {% include 'header.html' %}
+        <h1>Korrigering av timeregistrering - {{ brukernavn }}</h1>
+        
+    <form method="post" action="timekorrigering.php" class="col-md-4">
+        <div class="form-group ">
+            {% for time in time %}
+            <b>Oppgave:</b>
+            <p>{{ oppgavenavn }}</p> <!-- Brukeren får opp oppgaven som var valgt på den orginale timeregistreringen -->
+            <input type="hidden" name="timeId" value="{{ time.getTimeregId() }}">
+            <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId }}">
+        </div>
+        <div class="form-group ">
+            <label for="dato">Dato:</label>
+            <input type="date" class="form-control" id="dato" name="dato" value="{{ time.getDato() }}">
+        </div>
+        <div class="form-group ">
+            <label for="starttid">Starttid:</label>
+            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ time.getFra() }}">
+        </div>
+        <div class="form-group ">
+            <label for="stopptid">Stopptid:</label>
+            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ time.getTil() }}">
+        </div>
+       <!-- <div class="form-group "> Tenker at alle korrigeringer merkes som manuell i tabellen?
+            <label for="automatisk">Automatisk registrering</label>
+            <input type="checkbox" class="form-check-input" id="automatisk" name="automatisk" value="checked">
+        </div> -->
+        <div class="form-group">
+            <label for="kommentar">Kommentar til korrigeringen:</label>
+            <input type="text" name="kommentar" rows="5" cols="15" id="kommentar">
+        </div>
+        <div class="form-group ">
+            <input type="submit" name="lagre" value="Lagre korrigering">
+        </div>
+    </form>
+    {% endfor %}
+</div>
+</body>
+</html>

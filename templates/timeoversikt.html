@@ -16,6 +16,7 @@
                 <th>Til</th>
                 <th>Oppgave</th>
                 <th>Godkjent</th>
+                <th>Korriger</th>
                 <th>Deaktiver</th>
             </tr>
             {% for timereg in timeregistreringer %}
@@ -25,7 +26,14 @@
                 <td>{{ timereg.getTil() }}</td>
                 <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getOppgaveNavn() }}</td>
                 <td>{{ timereg.getGodkjentTekst() }}</td>
-                <td><input type="button" value="Deaktiver"/></td>
+                <form action="timekorrigering.php" method="post" id="KorrigerTime">
+                    <input type="hidden" name="timeregId" value="{{ timereg.getTimeregId() }}">
+                    <td><input type="submit" name="korriger" value="Korriger"/></td>
+                <form/>
+                <form action="timekorrigering.php" method="post" id="DeaktiverTime">
+                    <input type="hidden" name="timeregId" value="{{ timereg.getTimeregId() }}"/>
+                    <td><input type="button" name="deaktiver" value="Deaktiver"/></td>
+                </form>
             </tr>
             {% endfor %}
         </table>

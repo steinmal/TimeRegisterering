@@ -57,5 +57,46 @@
             return $timeregistreringer;
         }
         
+        
+        public function kopierTimeregistrering($timeregId) {
+            $opprinneligTime = $this->hentTimeregistrering($timeregId);
+            
+            $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_redigeringsdato, timereg_aktiv, timereg_automatisk, timereg_godkjent) 
+            VALUES (:bID, :oID, :dato, :start, :stopp, :rDato, :aktiv, :automatisk, :godkjent)");
+            $stmt->bindParam(':oID', $opprinneligTime->getOppgaveId(), PDO::PARAM_INT);
+            $stmt->bindParam(':bID', $opprinneligTime->getBrukerId(), PDO::PARAM_INT);
+            $stmt->bindParam(':dato', $opprinneligTime->getDato());
+            $stmt->bindParam(':start', $opprinneligTime->getFra());  
+            $stmt->bindParam(':stopp', $opprinneligTime->getTil());
+            $stmt->bindParam(':rDato', $opprinneligTime->getRegistreringsDato());
+            $stmt->bindParam(':aktiv', $opprinneligTime->getAktiv());
+            $stmt->bindParam(':automatisk', $opprinneligTime->getAutomatisk(), PDO::PARAM_INT);
+            $stmt->bindParam(':godkjent', $opprinneligTime->getGodkjent(), PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $kopiId = $this->db->lastInsertId();
+            $kopiTime = $this->hentTimeregistrering($kopiId);
+            var_dump($kopiId);
+            var_dump($kopiTime);
+            return $kopiTime;
+        }
+        
+        
+        public function deaktiverTimeregistrering($timeregId) {
+            $stmt = $this->db->preapre("UPDATE timeregistrering SET timereg_aktiv=0 WHERE timereg_id=:id");
+            $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
+        
+         public function oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar) {
+             $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_dato=:dato, timereg_start=:start, timereg_slutt=:slutt, timereg_kommentar=:komm WHERE timereg_id=:id");
+             $stmt->bindParam(':id', $timeId, PDO::PARAM_INT);
+             $stmt->bindParam(':dato', $dato);
+             $stmt->bindParam(':start', $fra);
+             $stmt->bindParam(':slutt', $til);
+             $stmt->bindParam(':komm', $kommentar, PDO::PARAM_STR);
+             $stmt->execute();
+         }
     }
 ?>
