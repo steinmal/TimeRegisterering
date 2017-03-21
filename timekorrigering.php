@@ -26,12 +26,10 @@ if (isset($_REQUEST['action'])) {
         case 'Korriger':
             $timeId = $_REQUEST['timeregId'];
             $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-           // var_dump($timeregKopi);
     
             $twigs['timereg'] = $timeregKopi;
             $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
     
-           // echo $twig->render('timekorrigering.html', $twigs);
             break;
             
         case 'Deaktiver':
@@ -44,14 +42,11 @@ if (isset($_REQUEST['action'])) {
     }
 } else if (isset($_POST['lagre'])) {
     $timeId = $_REQUEST['timeId'];
-   // $oppgaveId = $_REQUEST['oppgaveId'] oppgave skal ikke endres, samme som i den opprinnelige timereg
     $dato = $_REQUEST['dato'];
     $fra = $_REQUEST['starttid'];
     $til = $_REQUEST['stopptid'];
-    //$automatisk = $_REQUEST['automatisk']; alle endringer i timereg skal vel merkes som manuelle?
     $kommentar = $_REQUEST['kommentar'];
-    //korrigering av timen skal lagres, lagre endringene i kopien
-    ///HENT UT ALLE NYE VERDIER; SEND DEM TIL OPPDATERTIME (LAG OPPDATERTIME)
+
     
     $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar);
     header('Location: timeoversikt.php');
@@ -62,40 +57,6 @@ if (isset($_REQUEST['action'])) {
 date_default_timezone_set('Europe/Oslo');
 
 echo $twig->render('timekorrigering.html', $twigs);
-
-
-/*if(isset($_POST['korriger'])) {
-    
-    $timeId = $_POST['timeregId'];
-    $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-    
-    $twigs['time'] = $timeregKopi;
-    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeId)->getOppgaveNavn();
-    
-    echo $twig->render('timekorrigering.html', array('brukernavn'=>'Hei', 'time'=>$timeregKopi));
-    
-} else if(isset($_POST['lagre'])) {
-    $timeId = $_REQUEST['timeId'];
-   // $oppgaveId = $_REQUEST['oppgaveId'] oppgave skal ikke endres, samme som i den opprinnelige timereg
-    $dato = $_REQUEST['dato'];
-    $fra = $_REQUEST['starttid'];
-    $til = $_REQUEST['stopptid'];
-    //$automatisk = $_REQUEST['automatisk']; alle endringer i timereg skal vel merkes som manuelle?
-    $kommentar = $_REQUEST['kommentar'];
-    //korrigering av timen skal lagres, lagre endringene i kopien
-    ///HENT UT ALLE NYE VERDIER; SEND DEM TIL OPPDATERTIME (LAG OPPDATERTIME)
-    
-    $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar);
-    header('Location: timeoversikt.php');
-    return;
-    
-} else if(isset($_POST['deaktiver'])) {
-    $timeId = $_POST['timeregId'];
-    
-    $TimeReg->deaktiverTimeregistrering($timeId);
-    header('Location: timeoversikt.php');
-    return;
-} */
 
 
 ?>

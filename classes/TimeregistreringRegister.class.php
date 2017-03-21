@@ -100,13 +100,14 @@
         }
         
         
-         public function oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar) {
-             $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_dato=:dato, timereg_start=:start, timereg_stopp=:slutt, timereg_kommentar=:komm WHERE timereg_id=:id");
+         public function oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar, $godkjent=0) {
+             $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_dato=:dato, timereg_start=:start, timereg_stopp=:slutt, timereg_kommentar=:komm, timereg_godkjent=:godkjent WHERE timereg_id=:id");
              $stmt->bindParam(':id', $timeId, PDO::PARAM_INT);
              $stmt->bindParam(':dato', $dato);
              $stmt->bindParam(':start', $fra);
              $stmt->bindParam(':slutt', $til);
              $stmt->bindParam(':komm', $kommentar, PDO::PARAM_STR);
+             $stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
              $stmt->execute();
          }
 

@@ -9,12 +9,11 @@
 <div class="container">
     {% include 'header.html' %}
         <h1>Korrigering av timeregistrering - {{ brukernavn }}</h1>
-        heiheieheieheihei
         
     <form method="post" action="timekorrigering.php" class="col-md-4">
         <div class="form-group ">
             <p><b>Oppgave:</b>
-            <br/>{{ oppgavenavn }}</p> <!-- Brukeren får opp oppgaven som var valgt på den orginale timeregistreringen -->
+            <br/>{{ oppgavenavn }}</p> 
             <input type="hidden" name="timeId" value="{{ timereg.getTimeregId() }}">
             <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId }}">
         </div>
@@ -30,10 +29,6 @@
             <label for="stopptid">Stopptid:</label>
             <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ timereg.getTil() }}">
         </div>
-       <!-- <div class="form-group "> Tenker at alle korrigeringer merkes som manuell i tabellen?
-            <label for="automatisk">Automatisk registrering</label>
-            <input type="checkbox" class="form-check-input" id="automatisk" name="automatisk" value="checked">
-        </div> -->
         <div class="form-group">
             <label for="kommentar">Kommentar til korrigeringen:</label>
             <input type="text" name="kommentar" rows="5" cols="15" id="kommentar">
