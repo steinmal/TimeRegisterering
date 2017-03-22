@@ -39,6 +39,17 @@
             
             return $oppgaver;
         }
+        
+        public function hentProsjektFraOppgave($oppgave_id){
+            $stmt = $this->db->prepare(
+                    "SELECT * FROM `prosjekt` WHERE prosjekt_id=
+                    (SELECT `prosjekt_id` FROM `fase` WHERE `fase`.`fase_id`=
+                    (SELECT `fase_id` FROM `oppgave` WHERE `oppgave`.`oppgave_id`=:id))");
+            $stmt->bindParam(':id', $oppgave_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchObject('Prosjekt');
+        }
 
         public function lagOppgave($foreldre_oppgave_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode) {
             $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, prosjekt_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode)

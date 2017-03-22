@@ -18,7 +18,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 date_default_timezone_set('Europe/Oslo');
 
-if(isset($_POST['registrer'])) {
+/*if(isset($_POST['registrer'])) {
     $bruker = $_SESSION['bruker'];
     $bruker_id = $bruker->getBrukerId();
     $oppgave_id = $_POST['oppgave'];
@@ -32,17 +32,48 @@ if(isset($_POST['registrer'])) {
     $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttidStr, $stopptidStr, $automatisk);
     echo "Timeregistrering OK";
+}*/
+
+if(isset($_POST['submit'])){
+    $id = $_POST['regId'];
+    echo $_POST['submit'];
+    switch($_POST['submit']){
+        case 'Start':
+            $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getBrukerId());
+            break;
+        case 'Pause':
+            $TimeReg->pauserTimeReg($id);
+            break;
+        case 'Fortsett':
+            $TimeReg->fortsettTimeReg($id);
+            break;
+        case 'Stopp':
+            $TimeReg->stoppTimeReg($id);
+            break;
+    }
 }
 
-
-$prosjekter = $ProsjektReg->hentAlleProsjekt();
-
-if(isset($_POST['prosjekt'])) {
-    $prosjekt_id = $_POST['prosjekt'];
-    $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
-}
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
+$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getBrukerId());
+//$prosjekt = $ProsjektReg->hentAlleProsjekt();
+if($registrering != null && sizeof($registrering) > 0){
+    $registrering = $registrering[0];
+    $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
+    $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
+    $prosjekt_id = $prosjekt->getId();
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'aktiv'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+}
+else{
+    if(isset($_POST['prosjekt'])) {
+        $prosjekt_id = $_POST['prosjekt'];
+        $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
+    }
+    $prosjektListe = $ProsjektReg->hentAlleProsjekt();
+    $visSkjema = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0) ? true : false;
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'aktiv'=>false, 'visSkjema'=>$visSkjema, 'prosjektListe'=>$prosjektListe, 'oppgaveListe'=>$oppgaveListe, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+}
 
-echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekter'=>$prosjekter, 'oppgaver'=>$oppgaver, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+
+
 ?>

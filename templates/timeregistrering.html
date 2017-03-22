@@ -11,56 +11,65 @@
 <div class="container">
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
-        <h1>Timeregistrering</h1>
+    <h1>Timeregistrering</h1>
+        
     <form method="post" action="timeregistrering.php" class="col-md-4">
-        <div class="form-group ">
+        <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
+        {% if aktiv %}
+            <input type=hidden name=regId value="{{ registrering.getTimeregId() }}">
+            <select class="form-control" name="prosjekt" id="prosjekt" disabled onchange="submit()">
+                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getProsjektNavn() }}</option>
+            </select>
+        {% else %}
             <select class="form-control" name="prosjekt" id="prosjekt" onchange="submit()">
-                {% for prosjekt in prosjekter %}
+                {% for prosjekt in prosjektListe %}
                 <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
                 {% endfor %}
             </select>
-        {% if valgtProsjekt <= 1 %}
+            {% if valgtProsjekt <= 1 %}
             <small class="form-text text-muted">Velg prosjekt</small>
-        </div>
-    </form>
-        {% elseif oppgaver|length == 0 %}
+            {% elseif oppgaver|length == 0 %}
             <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+            {% endif %}
+        {% endif %}
         </div>
-    </form>
-        {% else %}
-
-        </div>
+        {% if visSkjema %}
         <div class="form-group ">
             <label for="oppgave">Oppgave:</label>
-            <select name="oppgave" class="form-control" id="oppgave">
-                {% for oppgave in oppgaver %}
-                <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
-                {% endfor %}
-            </select>
+            {% if aktiv %}
+                <select name="oppgave" class="form-control" disabled id="oppgave">
+                    <option value="{{ oppgave.getOppgaveId() }}" selected="selected">{{ oppgave.getOppgaveNavn() }}</option>
+                </select>
+            {% else %}
+                <select name="oppgave" class="form-control" id="oppgave">
+                    {% for oppgave in oppgaveListe %}
+                    <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
         </div>
         <div class="form-group ">
             <label for="dato">Dato:</label>
-            <input type="date" class="form-control" id="dato" name="dato" value="{{ dagensdato }}">
+            <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
         </div>
-        <div class="form-group ">
-            <label for="starttid">Starttid:</label>
-            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ klokkeslett }}">
+        <div class="form-group">
+            {% if aktiv %}
+                <input type="submit" name="submit" value="Start" disabled/>
+                {% if registrering.getStatus() == 1 %}
+                <input type="submit" name="submit" value="Fortsett"/>
+                {% else %}
+                <input type="submit" name="submit" value="Pause"/>
+                {% endif %}
+                <input type="submit" name="submit" value="Stopp"/>
+            {% else %}
+                <input type="submit" name="submit" value="Start"/>
+                <input type="submit" name="submit" value="Pause" disabled/>
+                <input type="submit" name="submit" value="Stopp" disabled/>
+            {% endif %}
         </div>
-        <div class="form-group ">
-            <label for="stopptid">Stopptid:</label>
-            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ klokkeslett }}">
-        </div>
-        <div class="form-group ">
-            <label for="automatisk">Automatisk registrering</label>
-            <input type="checkbox" class="form-check-input" id="automatisk" name="automatisk" value="checked">
-        </div>
-        <div class="form-group ">
-            <input type="submit" name="registrer" value="Registrer">
-        </div>
+        {% endif %}
     </form>
-    {% endif %}
-    <!--<a href="index.php">Tilbake</a>-->
 </div>
 </body>
 </html>

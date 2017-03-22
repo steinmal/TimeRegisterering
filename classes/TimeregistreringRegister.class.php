@@ -33,7 +33,51 @@
             $stmt->execute();
         }
         
+        public function startTimeReg($oppgave_id, $bruker_id){
+            $stmt = $this->db->prepare(
+                "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)
+                VALUES (:bId, :oId, 0, CURDATE(), NOW(), NOW(), 1, 0)");
+            $stmt->bindParam(':oId', $oppgave_id, PDO::PARAM_INT);
+            $stmt->bindParam(':bId', $bruker_id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
         
+        public function pauserTimeReg($id){
+            $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_stopp=NOW(), timereg_status=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
+            $stmt->bindParam('id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
+        public function fortsettTimeReg($id){
+            $reg = $this->hentTimeregistrering($id);
+            $pause = $reg->getPause();
+            if($reg->getStatus() == 1){
+                $pause += $this->beregnPause($reg->getTil(), date('H:i'));
+            }
+            $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_status=2, timereg_pause=:pause, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
+            $stmt->bindParam('id', $id, PDO::PARAM_INT);
+            $stmt->bindParam('pause', $pause, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
+        public function stoppTimeReg($id){
+            $reg = $this->hentTimeregistrering($id);
+            $pause = $reg->getPause();
+            if($reg->getStatus() == 1){
+                $pause += $this->beregnPause($reg->getTil(), date('H:i'));
+            }
+            $stmt = $this->db->prepare(
+                "UPDATE timeregistrering SET timereg_stopp=NOW(), timereg_pause=:pause, timereg_status=3, timereg_godkjent=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
+            $stmt->bindParam('id', $id, PDO::PARAM_INT);
+            $stmt->bindParam('pause', $pause, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        
+        public function beregnPause($tid1, $tid2){
+            $diff = (new DateTime($tid1))->diff(new DateTime($tid2));
+            return $diff->i;
+        }
+
         public function hentTimeregistrering($id) {
             $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE timereg_id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -57,7 +101,19 @@
             return $timeregistreringer;
         }
         
-        
+        public function hentAktiveTimeregistreringer($bruker_id){
+            $registreringer = array();
+            $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id=:id AND timereg_status < 3");
+            $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            while($reg = $stmt->fetchObject('Timeregistrering')){
+                $registreringer[] = $reg;
+            }
+            
+            return $registreringer;
+        }
+
         public function kopierTimeregistrering($timeregId) {
             $opprinneligTime = $this->hentTimeregistrering($timeregId);
             $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_redigeringsdato, timereg_aktiv, timereg_automatisk, timereg_godkjent) 

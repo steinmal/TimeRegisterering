@@ -102,5 +102,14 @@
             return $prosjekter;
         }
         
+        public function hentProsjektFraFase($fase_id){
+            $stmt = $this->db->prepare(
+                "SELECT * FROM prosjekt WHERE prosjekt_id=
+                (SELECT prosjekt_id FROM fase WHERE fase_id=:id)");
+            $stmt->bindParam(':id', $fase_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchObject('Prosjekt');
+        }
     }
 ?>
