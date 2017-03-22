@@ -49,7 +49,7 @@
                 
             $brukere = array();
             while($bruker = $stmt->fetch()) {
-                $brukere[] = $UserReg.hentBruker($bruker_id['bruker_id']);
+                $brukere[] = $UserReg->hentBruker($bruker['bruker_id']);
             }
             return $brukere;
         }
