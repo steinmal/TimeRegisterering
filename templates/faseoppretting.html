@@ -38,7 +38,7 @@
             </select>
         </div>
         <div class="form-group ">
-            <input type="submit" name="lagre" value="Opprett fase">
+            <input type="submit" name="lagre" {% if fase.getId() >= 0 %} value="Endre fase" {% else %} value="Opprett fase" {% endif %}>
         </div>
     </form>
 </div>
