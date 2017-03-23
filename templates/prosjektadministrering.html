@@ -29,14 +29,14 @@
             <table class="table table-striped">
                 <tr>
                     <th></th>
-                    <th>Prosjekt</th>
-                    <th>Parent</th>
-                    <th>Prosjektleder</th>
-                    <th>Team</th>
-                    <th>Startdato</th>
-                    <th>Sluttdato</th>
-                    <th>Beskrivelse</th>
-                    <th>Status</th>
+                    <th class="col-lg-2">Prosjekt</th>
+                    <th class="col-lg-1">Parent</th>
+                    <th class="col-lg-1">Prosjektleder</th>
+                    <th class="col-lg-1">Team</th>
+                    <th class="col-lg-2">Startdato</th>
+                    <th class="col-lg-2">Sluttdato</th>
+                    <th class="col-lg-2">Beskrivelse</th>
+                    <th class="col-lg-1">Status</th>
                 </tr>
                 {% for prosjekt in prosjektliste %}
                     {% if (not prosjekt.isArkivert() > 0) or visArkivert == "on" %} 
