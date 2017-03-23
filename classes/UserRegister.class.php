@@ -20,8 +20,7 @@
                     $_SESSION['brukerTilgang'] = $this->getBrukertype($bruker->getBrukertype());
                     return true;
                 }
-            
-            echo "Feil brukernavn/passord";
+            $_POST['fail'] = true;
             return false;
         }
 
