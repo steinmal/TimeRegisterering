@@ -25,7 +25,14 @@ if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
         case 'Korriger':
             $timeId = $_REQUEST['timeregId'];
+            
+            if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
+                echo "Timeregistreringen er deaktivert og kan ikke korrigeres";
+                return;
+            }
+            
             $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
+            $TimeReg->deaktiverTimeregistrering($timeId);
     
             $twigs['timereg'] = $timeregKopi;
             $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();

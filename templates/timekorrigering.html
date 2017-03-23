@@ -15,11 +15,12 @@
             <p><b>Oppgave:</b>
             <br/>{{ oppgavenavn }}</p> 
             <input type="hidden" name="timeId" value="{{ timereg.getTimeregId() }}">
-            <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId }}">
+            <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId() }}">
+            <input type="text" name="dato" value="{{ timereg.getDato() }}"/>
         </div>
         <div class="form-group ">
             <label for="dato">Dato:</label>
-            <input type="date" class="form-control" id="dato" name="dato" value="{{ timereg.getDato() }}">
+            <input type="date" class="form-control" id="dato" name="dato" value="{{ timereg.getDato() }}" disabled>
         </div>
         <div class="form-group ">
             <label for="starttid">Starttid:</label>
