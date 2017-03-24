@@ -7,9 +7,9 @@
         public function __construct(PDO $db) {
             $this->db = $db;
         }
-        public function login($brukernavn, $passord) {
-            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_epost=:email");
-            $stmt->bindparam(':email', $brukernavn, PDO::PARAM_STR);
+        public function login($login, $passord) {
+            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE (bruker_epost=:login OR bruker_navn=:login)");
+            $stmt->bindparam(':login', $login, PDO::PARAM_STR);
             $stmt->execute();
             
             $bruker = $stmt->fetchObject('User');
