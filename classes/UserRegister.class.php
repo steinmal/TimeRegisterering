@@ -100,4 +100,27 @@
             $stmt->execute();
         }
 
+        public function brukernavnEksisterer($brukernavn) {
+            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_navn = :brukernavn");
+            $stmt->bindParam(':brukernavn', $brukernavn);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0) {
+                return true;
+            }
+            else
+                return false;
+        }
+        public function emailEksisterer($email) {
+            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_epost = :epost");
+            $stmt->bindParam(':epost', $email);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0) {
+                return true;
+            }
+            else
+                return false;
+        }
+
     }

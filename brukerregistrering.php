@@ -7,12 +7,20 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-
 $userReg = new UserRegister($db);
+$mailExists = 0;
 
 session_start();
 
 if(isset($_POST['opprettBruker'])){
+    if($userReg->brukernavnEksisterer($_POST['navn'])){
+        header("Location: brukerregistrering.php?nameExists=1" );
+        return;
+    }
+    if($userReg->emailEksisterer($_POST['epost'])){
+        header("Location: brukerregistrering.php?mailExists=1");
+        return;
+    }
     $nyBruker = new User();
     $nyBruker->setBrukerNavn($_POST['navn']);
     $nyBruker->setBrukerEpost($_POST['epost']);
@@ -21,5 +29,12 @@ if(isset($_POST['opprettBruker'])){
     $userReg->opprettBruker($nyBruker);
 }
 
-echo $twig->render('brukerregistrering.html', array());
+if($_GET['mailExists'] == 1) {
+    $mailExists = 1;
+}
+if($_GET['nameExists'] == 1) {
+    $nameExists = 1;
+}
+
+echo $twig->render('brukerregistrering.html', array('mailExists'=>$mailExists, 'nameExists'=>$nameExists));
 ?>
