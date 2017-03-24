@@ -13,6 +13,7 @@
         private $timereg_aktiv;
         private $timereg_automatisk;
         private $timereg_godkjent;
+        private $timereg_kommentar;
         
         function __construct() {
             
@@ -30,6 +31,7 @@
         public function getAktiv() { return $this->timereg_aktiv; }
         public function getAutomatisk() { return $this->timereg_automatisk; }
         public function getGodkjent() { return $this->timereg_godkjent; }
+        public function getKommentar() { return $this->timereg_kommentar; }
         public function getHours() {
             $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());
             $stopptid = DateTime::createFromFormat('H:i:s', $this->getTil());

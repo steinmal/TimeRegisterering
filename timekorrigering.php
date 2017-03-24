@@ -20,6 +20,9 @@ $twigs = array();
 $twigs['innlogget'] = $_SESSION['innlogget'];
 $twigs['bruker'] = $_SESSION['bruker'];
 $twigs['brukernavn'] = $_SESSION['bruker']->getBrukerNavn();
+$twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
+$twigs['status'] = "ok";
+$twigs['oppgavereg'] = $OppgaveReg;
 
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
@@ -27,24 +30,30 @@ if (isset($_REQUEST['action'])) {
             $timeId = $_REQUEST['timeregId'];
             
             if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
-                echo "Timeregistreringen er deaktivert og kan ikke korrigeres";
-                return;
+                $twigs['status'] = "kanIkkeEndres";
+                $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+                
+                echo $twig->render('timeoversikt.html', $twigs);
+                
+            } else {
+                $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
+                $TimeReg->deaktiverTimeregistrering($timeId);
+    
+                $twigs['timereg'] = $timeregKopi;
+                $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
+                echo $twig->render('timekorrigering.html', $twigs);
             }
-            
-            $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-            $TimeReg->deaktiverTimeregistrering($timeId);
-    
-            $twigs['timereg'] = $timeregKopi;
-            $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
-    
+           
             break;
             
         case 'Deaktiver':
             $timeId = $_REQUEST['timeregId'];
     
             $TimeReg->deaktiverTimeregistrering($timeId);
-            header('Location: timeoversikt.php');
-            return;
+            $twigs['status'] = "deaktivert";
+            $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+            
+            echo $twig->render('timeoversikt.html', $twigs);
             break;
     }
 } else if (isset($_POST['lagre'])) {
@@ -56,14 +65,14 @@ if (isset($_REQUEST['action'])) {
 
     
     $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar);
-    header('Location: timeoversikt.php');
-    return;
+    $twigs['status'] = "lagret";
+    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
     
+    echo $twig->render('timeoversikt.html', $twigs);
+
 }
 
 date_default_timezone_set('Europe/Oslo');
-
-echo $twig->render('timekorrigering.html', $twigs);
 
 
 ?>
