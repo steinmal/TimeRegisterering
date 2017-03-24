@@ -52,6 +52,11 @@ if(isset($_POST['submit'])){
             break;
     }
 }
+if(isset($_POST['forslag'])){
+    $oppgaveId = $_POST['oppgave'];
+    header("Location: nyttTidsestimat.php?oppgaveId=" . $oppgaveId);
+    return;
+}
 
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();

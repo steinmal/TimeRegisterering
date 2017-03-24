@@ -156,6 +156,15 @@
             $sum = $stmt->fetch(PDO::FETCH_ASSOC);
             return $sum["sum"];
         }
+
+        public function lagNyttEstimat($oppgave_id, $estimat, $bruker) {
+            $stmt = $this->db->prepare("INSERT INTO forslag_tidsestimat (oppgave_id, estimat, bruker_id) VALUES (:oppgaveId, :estimat, :brukerId)");
+            $stmt->bindParam(':oppgaveId', $oppgave_id, PDO::PARAM_INT);
+            $stmt->bindParam(':brukerId', $bruker->getBrukerId(), PDO::PARAM_INT);
+            $stmt->bindParam(':estimat', $estimat);
+            $stmt->execute();
+
+        }
         
     }
 ?>

@@ -35,20 +35,29 @@
         {% endif %}
         </div>
         {% if visSkjema %}
+
         <div class="form-group ">
+
             <label for="oppgave">Oppgave:</label>
-            {% if aktiv %}
+            <div class="form-inline">
+                {% if aktiv %}
                 <select name="oppgave" class="form-control" disabled id="oppgave">
-                    <option value="{{ oppgave.getOppgaveId() }}" selected="selected">{{ oppgave.getOppgaveNavn() }}</option>
+                    <option value="{{ oppgave.getOppgaveId() }}" selected="selected">{{ oppgave.getOppgaveNavn() }}
+                    </option>
                 </select>
-            {% else %}
+                {% else %}
                 <select name="oppgave" class="form-control" id="oppgave">
                     {% for oppgave in oppgaveListe %}
-                    <option value="{{ oppgave.getOppgaveId() }}"{% if oppgave.getOppgaveId() == valgtOppgave %} selected="selected"{% endif %}>{{ oppgave.getOppgaveNavn() }}</option>
+                    <option value="{{ oppgave.getOppgaveId() }}" {% if oppgave.getOppgaveId()== valgtOppgave %}
+                            selected="selected" {% endif %}>{{ oppgave.getOppgaveNavn() }}
+                    </option>
                     {% endfor %}
                 </select>
-            {% endif %}
+                {% endif %}
+                <input type="submit" name="forslag" value="Foreslå tidsestimat">
+            </div>
         </div>
+
         <div class="form-group ">
             <label for="dato">Dato:</label>
             <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
