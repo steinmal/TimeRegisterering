@@ -61,7 +61,12 @@ if(isset($_REQUEST['action'])){
 }
 
 $typer = $UserReg->getAlleBrukertyper();
+if(isset($_GET['error'])){
+    if($_GET['error'] == "mismatch"){
+        $mismatch = 1;
+    }
+}
 
-echo $twig->render('brukerredigering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
