@@ -220,7 +220,46 @@
             }
         }
         
-        
+        public function hentAlleEstimatForOppgave($oppgave_id) {
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM forslag_tidsestimat WHERE oppgave_id = :id");
+                $stmt->bindParam(':id', $oppgave_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                while ($estimat = $stmt->fetchObject('Estimat')) {
+                    $estimater[$estimat->getEstimatId()] = $estimat;
+                }
+
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $estimater;
+        }
+
+        public function endreEstimatForOppgave($oppgave_id, $nyttEstimat){
+            try {
+                $stmt = $this->db->prepare("UPDATE oppgave SET oppgave_tidsestimat = :estimat WHERE oppgave_id = :id");
+                $stmt->bindParam(':id', $oppgave_id, PDO::PARAM_INT);
+                $stmt->bindParam(':estimat', $nyttEstimat, PDO::PARAM_INT);
+                $stmt->execute();
+
+
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function slettEstimatForslag($estimatId) {
+            try {
+                $stmt = $this->db->prepare("DELETE FROM forslag_tidsestimat WHERE estimat_id = :estimatId");
+                $stmt->bindParam(':estimatId', $estimatId, PDO::PARAM_INT);
+                $stmt->execute();
+
+
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         
         private function Feil($feilmelding) {
             print "<h2>Oisann... Noe gikk galt</h2>";
