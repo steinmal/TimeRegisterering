@@ -19,11 +19,23 @@
     <h1>Timeoversikt</h1>
     
         {% if status == "kanIkkeEndres" %}
-            <font color=red>Timeregistreringen er deaktivert og kan ikke korrigeres</font>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen er deaktivert og kan ikke korrigeres
+        </div>
         {% elseif status == "deaktivert" %}
-            <font color=green>Timeregistreringen ble deaktivert</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen ble deaktivert
+        </div>
         {% elseif status == "lagret" %}
-            <font color=green>Korrigeringen er lagret i en ny timeregistrering. Den gamle er deaktivert</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Korrigeringen er lagret i en ny timeregistrering. Den gamle er deaktivert
+        </div>
         {% endif %}
         
     <form action="timekorrigering.php" method=GET>
