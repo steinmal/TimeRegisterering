@@ -19,12 +19,12 @@
         {% if aktiv %}
             <input type=hidden name=regId value="{{ registrering.getTimeregId() }}">
             <select class="form-control" name="prosjekt" id="prosjekt" disabled onchange="submit()">
-                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getProsjektNavn() }}</option>
+                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
             </select>
         {% else %}
             <select class="form-control" name="prosjekt" id="prosjekt" onchange="submit()">
                 {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
+                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getNavn() }}</option>
                 {% endfor %}
             </select>
             {% if valgtProsjekt <= 1 %}

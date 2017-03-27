@@ -50,13 +50,13 @@
                     {% if (not prosjekt.isArkivert() > 0) or visArkivert == "on" %} 
                     <tr>
                         <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
-                        <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</a></td>
-                        <td>{{ register.hentProsjekt(prosjekt.getProsjektParent()).getProsjektNavn() }}</td>
-                        <td>{{ userReg.hentBruker(prosjekt.getProsjektLeder()).getBrukerNavn()}}</td>
-                        <td>{{ teamReg.hentTeam(prosjekt.getProsjektTeam()).getTeamNavn() }}</td>
-                        <td>{{ prosjekt.getProsjektStartDato() }}</td>
-                        <td>{{ prosjekt.getProsjektSluttDato() }}</td>
-                        <td>{{ prosjekt.getProsjektBeskrivelse() }}</td>
+                        <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getNavn() }}</a></td>
+                        <td>{{ register.hentProsjekt(prosjekt.getParent()).getNavn() }}</td>
+                        <td>{{ userReg.hentBruker(prosjekt.getLeder()).getBrukerNavn()}}</td>
+                        <td>{{ teamReg.hentTeam(prosjekt.getTeam()).getTeamNavn() }}</td>
+                        <td>{{ prosjekt.getStartDato() }}</td>
+                        <td>{{ prosjekt.getSluttDato() }}</td>
+                        <td>{{ prosjekt.getBeskrivelse() }}</td>
                         <td>{{ prosjekt.getStatus() }}</td>
                         <!--<td><a href="prosjektadministrering.php?action=arkiver&id={{ prosjekt.getId() }}">Arkiver</a></td>-->
                     </tr>

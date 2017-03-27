@@ -37,14 +37,14 @@
                 INSERT INTO `fase` (fase_navn, prosjekt_id, fase_startdato, fase_sluttdato)
                             VALUES ('Backlog', LAST_INSERT_ID(), :startdato, :sluttdato)");
     
-                $stmt->bindParam(':foreldre_id', $prosjekt->getProsjektParent(), PDO::PARAM_INT);
-                $stmt->bindParam(':navn', $prosjekt->getProsjektNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':leder', $prosjekt->getProsjektLeder(), PDO::PARAM_INT);
-                $stmt->bindParam(':startdato', $prosjekt->getProsjektStartDato());
-                $stmt->bindParam(':sluttdato', $prosjekt->getProsjektSluttDato());
-                $stmt->bindParam(':beskrivelse', $prosjekt->getProsjektBeskrivelse(), PDO::PARAM_STR);
-                $stmt->bindParam(':team_id', $prosjekt->getProsjektTeam(), PDO::PARAM_INT);
-                $stmt->bindParam(':product_owner', $prosjekt->getProsjektProductOwner(), PDO::PARAM_STR);
+                $stmt->bindParam(':foreldre_id', $prosjekt->getParent(), PDO::PARAM_INT);
+                $stmt->bindParam(':navn', $prosjekt->getNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':leder', $prosjekt->getLeder(), PDO::PARAM_INT);
+                $stmt->bindParam(':startdato', $prosjekt->getStartDato());
+                $stmt->bindParam(':sluttdato', $prosjekt->getSluttDato());
+                $stmt->bindParam(':beskrivelse', $prosjekt->getBeskrivelse(), PDO::PARAM_STR);
+                $stmt->bindParam(':team_id', $prosjekt->getTeam(), PDO::PARAM_INT);
+                $stmt->bindParam(':product_owner', $prosjekt->getProductOwner(), PDO::PARAM_STR);
     
                 $id = $stmt->execute();
             } catch (Exception $e) {
@@ -70,11 +70,11 @@
             try {
                 $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse WHERE prosjekt_id=:id");
                 
-                $stmt->bindParam(':navn', $prosjekt->getProsjektNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':leder', $prosjekt->getProsjektLeder(), PDO::PARAM_INT);
-                $stmt->bindParam(':startdato', $prosjekt->getProsjektStartDato());
-                $stmt->bindParam(':sluttdato', $prosjekt->getProsjektSluttDato());
-                $stmt->bindParam(':beskrivelse', $prosjekt->getProsjektBeskrivelse(), PDO::PARAM_STR);
+                $stmt->bindParam(':navn', $prosjekt->getNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':leder', $prosjekt->getLeder(), PDO::PARAM_INT);
+                $stmt->bindParam(':startdato', $prosjekt->getStartDato());
+                $stmt->bindParam(':sluttdato', $prosjekt->getSluttDato());
+                $stmt->bindParam(':beskrivelse', $prosjekt->getBeskrivelse(), PDO::PARAM_STR);
                 $stmt->bindParam(':id', $prosjekt->getId(), PDO::PARAM_STR);
                 $stmt->execute();
             } catch (Exception $e) {

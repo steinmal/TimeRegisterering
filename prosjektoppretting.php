@@ -32,19 +32,19 @@ $valgtProsjekt = new Prosjekt();
 //echo($brukerliste[0]);
 if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt = new Prosjekt();
-    $nyttProsjekt->setProsjektNavn($_POST['prosjektNavn']);
-    $nyttProsjekt->setProsjektParent($_POST['foreldreProsjekt']);
-    $nyttProsjekt->setProsjektLeder($_POST['prosjektLeder']);
-    $nyttProsjekt->setProsjektBeskrivelse($_POST['prosjektBeskrivelse']);
-    $nyttProsjekt->setProsjektStartDato($_POST['startDato']);
-    $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
+    $nyttProsjekt->setNavn($_POST['prosjektNavn']);
+    $nyttProsjekt->setParent($_POST['foreldreProsjekt']);
+    $nyttProsjekt->setLeder($_POST['prosjektLeder']);
+    $nyttProsjekt->setBeskrivelse($_POST['prosjektBeskrivelse']);
+    $nyttProsjekt->setStartDato($_POST['startDato']);
+    $nyttProsjekt->setSluttDato($_POST['sluttDato']);
     if(!isset($_POST['prosjektId'])){
         $ProsjektReg->lagProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
         return;
     }
     else{
-        $nyttProsjekt->setProsjektId($_POST['prosjektId']);
+        $nyttProsjekt->setId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
         return;
@@ -54,7 +54,7 @@ elseif(isset($_GET['action'])){
     switch($_GET['action']){
         case 'Opprett grunnprosjekt':
             $brukParent = false;
-            $valgtProsjekt->setProsjektId(-1); // verdier < 0 tas ikke med videre
+            $valgtProsjekt->setId(-1); // verdier < 0 tas ikke med videre
             break;
         case 'Rediger':
             if(!isset($_GET['prosjektId'])){
@@ -64,8 +64,8 @@ elseif(isset($_GET['action'])){
             $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
             break;
         case 'Opprett underprosjekt':
-            $valgtProsjekt->setProsjektParent($_GET['prosjektId']);
-            $valgtProsjekt->setProsjektId(-1);
+            $valgtProsjekt->setParent($_GET['prosjektId']);
+            $valgtProsjekt->setId(-1);
             //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getProsjektLeder());
             //$valgtProsjekt->setProsjektId();
             break;
