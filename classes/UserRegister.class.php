@@ -35,8 +35,8 @@
                 VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 0)");
       
                 $stmt->bindParam(':navn', $bruker->getBrukerNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':epost', $bruker->getBrukerEpost(), PDO::PARAM_STR);
-                $stmt->bindParam(':telefonnummer', $bruker->getBrukerTelefon(), PDO::PARAM_INT);
+                $stmt->bindParam(':epost', $bruker->getEpost(), PDO::PARAM_STR);
+                $stmt->bindParam(':telefonnummer', $bruker->getTelefon(), PDO::PARAM_INT);
                 $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
                 
                 $stmt->execute();
@@ -49,11 +49,11 @@
             try {
                 $stmt = $this->db->prepare("UPDATE bruker SET brukertype_id=:type, bruker_navn=:navn, bruker_epost=:epost, bruker_telefon=:telefon, bruker_passord=:passord WHERE bruker_id=:id");
                 
-                $stmt->bindParam(':id', $bruker->getBrukerId(), PDO::PARAM_INT);
+                $stmt->bindParam(':id', $bruker->getId(), PDO::PARAM_INT);
                 $stmt->bindParam(':type', $bruker->getBrukerType(), PDO::PARAM_INT);
                 $stmt->bindParam(':navn', $bruker->getBrukerNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':epost', $bruker->getBrukerEpost(), PDO::PARAM_STR);
-                $stmt->bindParam(':telefon', $bruker->getBrukerTelefon(), PDO::PARAM_INT);
+                $stmt->bindParam(':epost', $bruker->getEpost(), PDO::PARAM_STR);
+                $stmt->bindParam(':telefon', $bruker->getTelefon(), PDO::PARAM_INT);
                 $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
                 
                 $stmt->execute();

@@ -17,7 +17,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
-        && $_REQUEST['brukerId'] != $_SESSION['bruker']->getBrukerId()){
+        && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     echo "Du har ikke tilgang til Brukerredigering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
@@ -38,8 +38,8 @@ if(isset($_REQUEST['action'])){
                 $bruker->setBrukerType($_POST['type']);
             }
             echo $bruker->getBrukertype();
-            $bruker->setBrukerEpost($_POST['epost']);
-            $bruker->setBrukerTelefon($_POST['telefon']);
+            $bruker->setEpost($_POST['epost']);
+            $bruker->setTelefon($_POST['telefon']);
             
             $UserReg->redigerBruker($bruker);
             if($_SESSION['brukerTilgang']->isBrukeradmin()){

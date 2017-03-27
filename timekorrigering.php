@@ -28,14 +28,14 @@ if (isset($_REQUEST['action'])) {
     $timeId = $_REQUEST['timeregId'];
     if ($timeId == NULL) {
         $twigs['status'] = "ingenValgt";
-        $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+        $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
         echo $twig->render('timeoversikt.html', $twigs);
     } else {
         switch ($_REQUEST['action']) {
             case 'Korriger':
                 if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
                     $twigs['status'] = "kanIkkeEndres";
-                    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+                    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
                     echo $twig->render('timeoversikt.html', $twigs);
                     
                 } else {
@@ -56,7 +56,7 @@ if (isset($_REQUEST['action'])) {
             case 'Deaktiver':
                 $TimeReg->deaktiverTimeregistrering($timeId);
                 $twigs['status'] = "deaktivert";
-                $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+                $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
                 
                 echo $twig->render('timeoversikt.html', $twigs);
                 break;
@@ -77,12 +77,12 @@ if (isset($_REQUEST['action'])) {
     $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar);
     $twigs['status'] = "lagret";
 
-    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
     echo $twig->render('timeoversikt.html', $twigs);
     
 } else if (isset($_POST['avbryt'])) {
     $twigs['status'] = "avbryt";
-    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
     echo $twig->render('timeoversikt.html', $twigs);
 }
 

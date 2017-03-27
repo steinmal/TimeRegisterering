@@ -18,10 +18,10 @@
     <h2>Brukeropplysninger</h2>
     
     <p><b>Navn: </b> {{ bruker.getBrukerNavn() }}<br/>
-       <b>Epost: </b> {{ bruker.getBrukerEpost() }}<br/>
-       <b>Telefon: </b> {{ bruker.getBrukerTelefon() }}<br/>
+       <b>Epost: </b> {{ bruker.getEpost() }}<br/>
+       <b>Telefon: </b> {{ bruker.getTelefon() }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
-       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getBrukerId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
         
     
     <h2>Prosjekter</h2>

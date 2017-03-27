@@ -13,7 +13,7 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Rediger bruker</h1>
             <form method="post" action="brukerredigering.php" class="col-md-4">
-            <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
+            <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
 
             {% if brukerTilgang.isBrukeradmin() %}
             <div class="form-group ">
@@ -40,11 +40,11 @@
             {% endif %}
             <div class="form-group ">
                 <label for="epost">Epost:</label>
-                <input type="text" class="form-control" id="epost" name="epost" value="{{ bruker.getBrukerEpost() }}">
+                <input type="text" class="form-control" id="epost" name="epost" value="{{ bruker.getEpost() }}">
             </div>
             <div class="form-group ">
                 <label for="telefon">Telefon:</label>
-                <input type="text" class="form-control" id="telefon" name="telefon" value="{{ bruker.getBrukerTelefon() }}">
+                <input type="text" class="form-control" id="telefon" name="telefon" value="{{ bruker.getTelefon() }}">
             </div>
             <div class="form-group ">
                 <input type="submit" name="action" value="Lagre">
@@ -57,7 +57,7 @@
         </form>
 
         <form method="post" action="brukerredigering.php" class="col-md-4">
-            <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
+            <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
             <div class="form-group ">
                 <label for="nyttPassord">Nytt passord:</label>
                 <input type="password" class="form-control" id="nyttPassord" name="nytt_pass">

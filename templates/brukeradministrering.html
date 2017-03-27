@@ -51,16 +51,16 @@
                 {% for bruker in brukere %}
                     {% if bruker.isAktivert() > 0 or visNye == true %}
                     <tr>
-                        <td><input type=radio name=brukerId value="{{ bruker.getBrukerId() }}" /></td>
-                        <td>{{ bruker.getBrukerId() }}</td>
+                        <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
+                        <td>{{ bruker.getId() }}</td>
                         <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getBrukerNavn() }}</td>
-                        <td>{{ bruker.getBrukerEpost() }}</td>
-                        <td>{{ bruker.getBrukerTelefon() }}</td>
+                        <td>{{ bruker.getEpost() }}</td>
+                        <td>{{ bruker.getTelefon() }}</td>
                         <td>{{ bruker.isAktivert() }}</td>
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
-                        <td><a href="?action=aktiver&brukerId={{ bruker.getBrukerId() }}">Aktiver</a></td>
+                        <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>
                         {% else %}
                         <td>&nbsp;</td>
                         {% endif %}

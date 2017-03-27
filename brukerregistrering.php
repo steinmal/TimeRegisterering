@@ -23,9 +23,9 @@ if(isset($_POST['opprettBruker'])){
     }
     $nyBruker = new User();
     $nyBruker->setBrukerNavn($_POST['navn']);
-    $nyBruker->setBrukerEpost($_POST['epost']);
+    $nyBruker->setEpost($_POST['epost']);
     $nyBruker->setPassord($_POST['passord']);
-    $nyBruker->setBrukerTelefon($_POST['telefonnummer']);
+    $nyBruker->setTelefon($_POST['telefonnummer']);
     $userReg->opprettBruker($nyBruker);
 }
 

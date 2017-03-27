@@ -30,7 +30,7 @@ $bruker = $_SESSION['bruker'];
 $brukerTypeID = $bruker->getBrukerType();
 $brukerType = $UserReg->getBrukerType($brukerTypeID)->getNavn();
 
-$brukerID = $bruker->getBrukerId();
+$brukerID = $bruker->getId();
 $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
 
 $teamliste = array();

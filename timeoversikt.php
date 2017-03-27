@@ -19,7 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 date_default_timezone_set('Europe/Oslo');
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
-$timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+$timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
 
 
 

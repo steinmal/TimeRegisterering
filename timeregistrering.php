@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
     echo $_POST['submit'];
     switch($_POST['submit']){
         case 'Start':
-            $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getBrukerId());
+            $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
             $TimeReg->pauserTimeReg($id);
@@ -60,7 +60,7 @@ if(isset($_POST['forslag'])){
 
 
 $brukernavn = $_SESSION['bruker']->getBrukerNavn();
-$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getBrukerId());
+$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
 //$prosjekt = $ProsjektReg->hentAlleProsjekt();
 if($registrering != null && sizeof($registrering) > 0){
     $registrering = $registrering[0];
