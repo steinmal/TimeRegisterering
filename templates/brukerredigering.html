@@ -12,11 +12,7 @@
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Rediger bruker</h1>
-    {% if error == "mismatch" %}
-    <font color=red>Feil i passord</font>
-    {% endif %}
-
-        <form method="post" action="brukerredigering.php" class="col-md-4">
+            <form method="post" action="brukerredigering.php" class="col-md-4">
             <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
 
             {% if brukerTilgang.isBrukeradmin() %}
@@ -78,6 +74,13 @@
                 <a href="index.php">Avbryt</a>
                 {% endif %}
             </div>
+            {% if mismatch %}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Passordene var ikke like
+            </div>
+            {% endif %}
         </form>
 
     </div>

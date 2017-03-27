@@ -13,9 +13,17 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Prosjektadministrering</h1>
     {% if error == "noRadio" %}
-        <font color=red>Ingen prosjekt valgt</font>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ingen prosjekt valgt
+        </div>
     {% elseif error == "arkivert" %}
-        <font color=green>Prosjekt arkivert</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Prosjekt arkivert
+        </div>
     {% endif %}
     <p>
         <form method="get">

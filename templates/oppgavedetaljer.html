@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgavedetaljer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    {% include 'header.html' %}
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    <h1>Oppgavedetaljer for {{ oppgave.getOppgaveNavn }}</h1>
+    {% if error == "noRadio" %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Ingen prosjekt valgt
+    </div>
+    {% elseif error == "arkivert" %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Prosjekt arkivert
+    </div>
+    {% endif %}
+
+    
+
+    <div class="col-lg-4">
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Forslag</th>
+                    <th>Foreslått av</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for forslag in estimatliste %}
+                <tr>
+                    <td>{{ forslag.getEstimat() }}</td>
+                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getBrukerNavn() }}</td>
+                    <td>
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}&accept={{ forslag.getEstimatId() }}&estimat={{ forslag.getEstimat() }}">
+                            <button class="btn btn-success">Godkjenn</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}&reject={{ forslag.getEstimatId() }}">
+                            <button class="btn btn-danger">Forkast</button>
+                        </a></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+    </div>
+</div>
+</body>

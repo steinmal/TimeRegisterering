@@ -49,7 +49,7 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.getFaseId() == fase.getFaseId() %}
                 <tr>
-                    <td>{{ oppgave.getOppgaveNavn() }}</td>
+                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}">{{ oppgave.getOppgaveNavn() }}</a></td>
                     <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getOppgaveNavn() }}</td>
                     <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getOppgaveType()) }}</td>
                     <td>{{ oppgave.getPeriode() }}</td>
