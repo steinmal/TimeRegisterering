@@ -31,6 +31,7 @@
                     <th>Dato</th>
                     <th>Fra</th>
                     <th>Til</th>
+                    <th>Pause</th>
                     <th>Oppgave</th>
                     <th>Status</th>
                     <th>Endre status</th>
@@ -44,6 +45,7 @@
                         <td>{{ timereg.getDato() }}</td>
                         <td>{{ timereg.getFra() }}</td>
                         <td>{{ timereg.getTil() }}</td>
+                        <td>{{ timereg.getPause() }} min</td>
                         <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getOppgaveNavn() }}</td>
                         <td>{{ timereg.getGodkjentTekst() }}</td>
                         

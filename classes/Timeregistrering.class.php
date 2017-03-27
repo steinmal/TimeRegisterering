@@ -35,6 +35,8 @@
         public function getHours() {
             $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());
             $stopptid = DateTime::createFromFormat('H:i:s', $this->getTil());
+            $pause = DateInterval::createFromDateString($this->getPause() . " minutes");
+            $stopptid->sub($pause);
             $hours = "00:00";
             if ($starttid && $stopptid)
             {
