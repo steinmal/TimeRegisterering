@@ -35,12 +35,12 @@ $prosjektId = $_REQUEST['prosjektId'];
 if(isset($_POST['lagre'])){
     $nyFase = new Fase();
     $nyFase->setProsjektId($prosjektId);
-    $nyFase->setFaseNavn($_POST['faseNavn']);
-    $nyFase->setFaseStartDato($_POST['faseStartdato']);
-    $nyFase->setFaseSluttDato($_POST['faseSluttdato']);
-    $nyFase->setFaseTilstand($_POST['faseTilstand']);
+    $nyFase->setNavn($_POST['faseNavn']);
+    $nyFase->setStartDato($_POST['faseStartdato']);
+    $nyFase->setSluttDato($_POST['faseSluttdato']);
+    $nyFase->setTilstand($_POST['faseTilstand']);
     if(isset($_POST['faseId'])){ //Redigering dersom id er satt på forhånd
-        $nyFase->setFaseId($_POST['faseId']);
+        $nyFase->setId($_POST['faseId']);
         $FaseReg->redigerFase($nyFase);
         //header("Location: faseadministrering.php");
         header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
@@ -64,7 +64,7 @@ else{
     }
     else{
         $fase = new Fase();
-        $fase->setFaseId(-1);
+        $fase->setId(-1);
     }
 }
 

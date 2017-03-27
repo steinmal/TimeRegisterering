@@ -29,7 +29,7 @@
                 $stmt->execute();
                 
                 while($fase = $stmt->fetchObject('Fase')){
-                    $faser[$fase->getFaseId()] = $fase;
+                    $faser[$fase->getId()] = $fase;
                 }
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
@@ -42,11 +42,11 @@
             try {
                 $stmt = $this->db->prepare("INSERT INTO `fase` (fase_navn, prosjekt_id, fase_startdato, fase_sluttdato, fase_tilstand)
                 VALUES (:navn, :prosjekt_id, :startdato, :sluttdato, :tilstand)");
-                $stmt->bindParam(':navn', $fase->getFaseNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':navn', $fase->getNavn(), PDO::PARAM_STR);
                 $stmt->bindParam(':prosjekt_id', $fase->getProsjektId(), PDO::PARAM_INT);
-                $stmt->bindParam(':startdato', $fase->getFaseStartDato());
-                $stmt->bindParam(':sluttdato', $fase->getFaseSluttDato());
-                $stmt->bindParam(':tilstand', $fase->getFaseTilstand());
+                $stmt->bindParam(':startdato', $fase->getStartDato());
+                $stmt->bindParam(':sluttdato', $fase->getSluttDato());
+                $stmt->bindParam(':tilstand', $fase->getTilstand());
                 $stmt->execute();
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
@@ -57,11 +57,11 @@
             try {
                 $stmt = $this->db->prepare("UPDATE `fase` SET fase_navn=:navn,
                 fase_startdato=:startdato, fase_sluttdato=:sluttdato, fase_tilstand=:tilstand WHERE fase_id=:id");
-                $stmt->bindParam(':navn', $fase->getFaseNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':startdato', $fase->getFaseStartDato());
-                $stmt->bindParam(':sluttdato', $fase->getFaseSluttDato());
-                $stmt->bindParam(':id', $fase->getFaseId(), PDO::PARAM_INT);
-                $stmt->bindParam(':tilstand', $fase->getFaseTilstand());
+                $stmt->bindParam(':navn', $fase->getNavn(), PDO::PARAM_STR);
+                $stmt->bindParam(':startdato', $fase->getStartDato());
+                $stmt->bindParam(':sluttdato', $fase->getSluttDato());
+                $stmt->bindParam(':id', $fase->getId(), PDO::PARAM_INT);
+                $stmt->bindParam(':tilstand', $fase->getTilstand());
                 $stmt->execute();
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());

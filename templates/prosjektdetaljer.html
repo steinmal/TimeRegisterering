@@ -25,17 +25,17 @@
         </tr>
         {% for fase in faseliste %}
             <tr>
-                <td>{{ fase.getFaseNavn() }}</td>
-                <td>{{ fase.getFaseTilstand() }}</td>
-                <td>{{ fase.getFaseStartDato() }}</td>
-                <td>{{ fase.getFaseSluttDato() }}</td>
-                <td><a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}&faseId={{ fase.getFaseId() }}">rediger</a></td>
+                <td>{{ fase.getNavn() }}</td>
+                <td>{{ fase.getTilstand() }}</td>
+                <td>{{ fase.getStartDato() }}</td>
+                <td>{{ fase.getSluttDato() }}</td>
+                <td><a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}&faseId={{ fase.getId() }}">rediger</a></td>
             </tr>
         {% endfor %}
     </table>
     <a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}">Legg til fase</a>
     {% for fase in faseliste %}
-        <h1>{{ fase.getFaseNavn() }}</h1>
+        <h1>{{ fase.getNavn() }}</h1>
         <table class="table table-striped">
             <tr>
                 <th>Oppgave</th>
@@ -47,7 +47,7 @@
                 <th>Godkjent tid</th>
             </tr>
             {% for oppgave in oppgaveliste %}
-                {% if oppgave.getFaseId() == fase.getFaseId() %}
+                {% if oppgave.getFaseId() == fase.getId() %}
                 <tr>
                     <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}">{{ oppgave.getOppgaveNavn() }}</a></td>
                     <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getOppgaveNavn() }}</td>

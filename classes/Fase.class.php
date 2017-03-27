@@ -12,18 +12,18 @@
             
         }
         
-        public function getFaseId(){ return $this->fase_id; }
-        public function getFaseNavn(){ return $this->fase_navn; }
+        public function getId(){ return $this->fase_id; }
+        public function getNavn(){ return $this->fase_navn; }
         public function getProsjektId(){ return $this->prosjekt_id; }
-        public function getFaseStartDato(){ return $this->fase_startdato; }
-        public function getFaseSluttDato(){ return $this->fase_sluttdato; }
-        public function getFaseTilstand() { return $this->fase_tilstand; }
+        public function getStartDato(){ return $this->fase_startdato; }
+        public function getSluttDato(){ return $this->fase_sluttdato; }
+        public function getTilstand() { return $this->fase_tilstand; }
 
-        public function setFaseId($id){ $this->fase_id = $id; }
-        public function setFaseNavn($navn){ $this->fase_navn = $navn; }
+        public function setId($id){ $this->fase_id = $id; }
+        public function setNavn($navn){ $this->fase_navn = $navn; }
         public function setProsjektId($id){ $this->prosjekt_id = $id; }
-        public function setFaseStartDato($dato){ $this->fase_startdato = $dato; }
-        public function setFaseSluttDato($dato){ $this->fase_sluttdato = $dato; }
-        public function setFaseTilstand($tilstand) { $this->fase_tilstand = $tilstand; }
+        public function setStartDato($dato){ $this->fase_startdato = $dato; }
+        public function setSluttDato($dato){ $this->fase_sluttdato = $dato; }
+        public function setTilstand($tilstand) { $this->fase_tilstand = $tilstand; }
         
     }

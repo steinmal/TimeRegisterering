@@ -12,12 +12,12 @@ class Estimat
 
     }
 
-    public function getEstimatId()
+    public function getId()
     {
         return $this->estimat_id;
     }
 
-    public function setEstimatId($estimat_id)
+    public function setId($estimat_id)
     {
         $this->estimat_id = $estimat_id;
     }

@@ -39,7 +39,7 @@
             <label for="fase">Fase:</label>
             <select name="fase" class="form-control" id="fase">
                 {% for fase in faser %}
-                <option value="{{ fase.getFaseId() }}"{% if valgtOppgave.getFaseId() == fase.getFaseId() %} selected="selected"{% endif %}>{{ fase.getFaseNavn() }}</option>
+                <option value="{{ fase.getId() }}"{% if valgtOppgave.getFaseId() == fase.getId() %} selected="selected"{% endif %}>{{ fase.getNavn() }}</option>
                 {% endfor %}
             </select>
             {% if error == "ingenFase" %}
