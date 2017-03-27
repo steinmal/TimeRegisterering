@@ -4,7 +4,7 @@
         private $team_leder;
         private $team_navn;
         
-        public function getTeamNavn() { return $this->team_navn; }
-        public function getTeamLeder() { return $this->team_leder; }
-        public function getTeamId() { return $this->team_id; }
+        public function getNavn() { return $this->team_navn; }
+        public function getLeder() { return $this->team_leder; }
+        public function getId() { return $this->team_id; }
     }

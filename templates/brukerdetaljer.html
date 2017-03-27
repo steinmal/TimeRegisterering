@@ -56,8 +56,8 @@
                 </tr>
                 {% for t in teamliste %}
                     <tr>
-                        <td>{{ t.getTeamNavn() }}</td>
-                        <td>{{ UserReg.hentBruker(t.getTeamLeder()).getBrukerNavn() }}</td>
+                        <td>{{ t.getNavn() }}</td>
+                        <td>{{ UserReg.hentBruker(t.getLeder()).getBrukerNavn() }}</td>
                     </tr>
                 {% endfor %}
             </table>
