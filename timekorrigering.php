@@ -39,11 +39,16 @@ if (isset($_REQUEST['action'])) {
                     echo $twig->render('timeoversikt.html', $twigs);
                     
                 } else {
+                    $timereg = $TimeReg->hentTimeregistrering($timeId);
+                    $twigs['timereg'] = $timereg;
+                    $teigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timereg->getOppgaveId())->getOppgaveNavn();
+                    
+                    /*
                     $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
                     $TimeReg->deaktiverTimeregistrering($timeId);          
                     $twigs['gammelTimeId'] = $timeId;
                     $twigs['timereg'] = $timeregKopi;
-                    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
+                    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();*/
                     echo $twig->render('timekorrigering.html', $twigs);
                 }
                 break;
@@ -58,8 +63,11 @@ if (isset($_REQUEST['action'])) {
         }
     }
 } else if (isset($_POST['lagre'])) {
-    $gammelTimeId = $_REQUEST['gammelTimeId'];
-    $timeId = $_REQUEST['timeId'];
+    $gammelTimeId = $_REQUEST['timeId'];
+    $timeregKopi = $TimeReg->kopierTimeregistrering($gammelTimeId);
+    $TimeReg->deaktiverTimeregistrering($gammelTimeId);
+    
+    $timeId = $timeregKopi->getTimeregId();
     $dato = $_REQUEST['dato'];
     $fra = $_REQUEST['starttid'];
     $til = $_REQUEST['stopptid'];
