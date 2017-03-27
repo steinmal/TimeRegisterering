@@ -36,6 +36,18 @@
             <span class="sr-only">Error:</span>
             Korrigeringen er lagret i en ny timeregistrering. Den gamle er deaktivert
         </div>
+        {% elseif status == "ingenValgt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må velge timeregistrering
+        </div>
+        {% elseif status == "avbryt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timekorrigeringen ble avbrutt. Den gamle timeregistreringen er deaktivert, og en kopi ligger nå til godkjenning.
+        </div>
         {% endif %}
         
     <form action="timekorrigering.php" method=GET>

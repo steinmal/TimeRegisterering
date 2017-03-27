@@ -14,6 +14,7 @@
         <div class="form-group ">
             <p><b>Oppgave:</b>
             <br/>{{ oppgavenavn }}</p> 
+            <input type="hidden" name="gammelTimeId" value="{{ gammelTimeId }}"
             <input type="hidden" name="timeId" value="{{ timereg.getTimeregId() }}">
             <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId() }}">
             <input type="hidden" name="dato" value="{{ timereg.getDato() }}"/>
@@ -40,6 +41,7 @@
         </div>
         <div class="form-group ">
             <input type="submit" name="lagre" value="Lagre korrigering">
+            <input type="submit" name="avbryt" value="Avbryt">
         </div>
     </form>
 </div>

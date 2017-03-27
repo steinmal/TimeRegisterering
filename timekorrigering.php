@@ -25,52 +25,57 @@ $twigs['status'] = "ok";
 $twigs['oppgavereg'] = $OppgaveReg;
 
 if (isset($_REQUEST['action'])) {
-    switch ($_REQUEST['action']) {
-        case 'Korriger':
-            $timeId = $_REQUEST['timeregId'];
-            
-            if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
-                $twigs['status'] = "kanIkkeEndres";
+    $timeId = $_REQUEST['timeregId'];
+    if ($timeId == NULL) {
+        $twigs['status'] = "ingenValgt";
+        $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+        echo $twig->render('timeoversikt.html', $twigs);
+    } else {
+        switch ($_REQUEST['action']) {
+            case 'Korriger':
+                if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
+                    $twigs['status'] = "kanIkkeEndres";
+                    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+                    echo $twig->render('timeoversikt.html', $twigs);
+                    
+                } else {
+                    $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
+                    $TimeReg->deaktiverTimeregistrering($timeId);          
+                    $twigs['gammelTimeId'] = $timeId;
+                    $twigs['timereg'] = $timeregKopi;
+                    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
+                    echo $twig->render('timekorrigering.html', $twigs);
+                }
+                break;
+                
+            case 'Deaktiver':
+                $TimeReg->deaktiverTimeregistrering($timeId);
+                $twigs['status'] = "deaktivert";
                 $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
                 
                 echo $twig->render('timeoversikt.html', $twigs);
-                
-            } else {
-                $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-                $TimeReg->deaktiverTimeregistrering($timeId);
-    
-                $twigs['timereg'] = $timeregKopi;
-                $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();
-                echo $twig->render('timekorrigering.html', $twigs);
-            }
-           
-            break;
-            
-        case 'Deaktiver':
-            $timeId = $_REQUEST['timeregId'];
-    
-            $TimeReg->deaktiverTimeregistrering($timeId);
-            $twigs['status'] = "deaktivert";
-            $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
-            
-            echo $twig->render('timeoversikt.html', $twigs);
-            break;
+                break;
+        }
     }
 } else if (isset($_POST['lagre'])) {
+    $gammelTimeId = $_REQUEST['gammelTimeId'];
     $timeId = $_REQUEST['timeId'];
     $dato = $_REQUEST['dato'];
     $fra = $_REQUEST['starttid'];
     $til = $_REQUEST['stopptid'];
     $pause = $_REQUEST['pause'];
     $kommentar = $_REQUEST['kommentar'];
-
     
     $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar);
     $twigs['status'] = "lagret";
-    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
-    
-    echo $twig->render('timeoversikt.html', $twigs);
 
+    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+    echo $twig->render('timeoversikt.html', $twigs);
+    
+} else if (isset($_POST['avbryt'])) {
+    $twigs['status'] = "avbryt";
+    $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+    echo $twig->render('timeoversikt.html', $twigs);
 }
 
 date_default_timezone_set('Europe/Oslo');
