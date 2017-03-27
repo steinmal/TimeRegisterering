@@ -11,9 +11,9 @@
 <div class="container">
     {% include 'header.html' %}
     <h1>Foreslå tidsestimat</h1>
-    <h2>Oppgave: {{ oppgave.getOppgaveNavn() }}</h2>
+    <h2>Oppgave: {{ oppgave.getNavn() }}</h2>
     <form method="post" action="nyttTidsestimat.php"  class="col-md-4">
-        <input type="hidden" name="oppgaveId" value="{{ oppgave.getOppgaveId() }}"/>
+        <input type="hidden" name="oppgaveId" value="{{ oppgave.getId() }}"/>
         <div class="form-group ">
             <label for="estimat">Nytt estimat:</label>
             <input type="text" class="form-control" id="estimat" name="estimat" value="{{ oppgave.getTidsestimat() }}">

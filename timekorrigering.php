@@ -41,14 +41,14 @@ if (isset($_REQUEST['action'])) {
                 } else {
                     $timereg = $TimeReg->hentTimeregistrering($timeId);
                     $twigs['timereg'] = $timereg;
-                    $teigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timereg->getOppgaveId())->getOppgaveNavn();
+                    $teigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timereg->getOppgaveId())->getNavn();
                     
                     /*
                     $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
                     $TimeReg->deaktiverTimeregistrering($timeId);          
                     $twigs['gammelTimeId'] = $timeId;
                     $twigs['timereg'] = $timeregKopi;
-                    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getOppgaveNavn();*/
+                    $twigs['oppgavenavn'] = $OppgaveReg->hentOppgave($timeregKopi->getOppgaveId())->getNavn();*/
                     echo $twig->render('timekorrigering.html', $twigs);
                 }
                 break;

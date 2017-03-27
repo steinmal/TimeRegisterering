@@ -11,7 +11,7 @@
 <div class="container">
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ fasereg.hentFase(oppgave.getFaseId()).getProsjektId }}">Prosjektdetaljer</a>
-    <h1>Oppgavedetaljer for {{ oppgave.getOppgaveNavn }}</h1>
+    <h1>Oppgavedetaljer for {{ oppgave.getNavn }}</h1>
     {% if error == "noRadio" %}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -42,12 +42,12 @@
                     <td>{{ forslag.getEstimat() }}</td>
                     <td>{{ userReg.hentBruker(forslag.getBrukerId()).getBrukerNavn() }}</td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}&accept={{ forslag.getEstimatId() }}&estimat={{ forslag.getEstimat() }}">
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&accept={{ forslag.getEstimatId() }}&estimat={{ forslag.getEstimat() }}">
                             <button class="btn btn-success">Godkjenn</button>
                         </a>
                     </td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}&reject={{ forslag.getEstimatId() }}">
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&reject={{ forslag.getEstimatId() }}">
                             <button class="btn btn-danger">Forkast</button>
                         </a></td>
                 </tr>

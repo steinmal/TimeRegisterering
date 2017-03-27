@@ -10,7 +10,7 @@
 <body>
 <div class="container">
 {% include 'header.html' %}
-    {% if valgtOppgave.getOppgaveId() > 0 %}
+    {% if valgtOppgave.getId() > 0 %}
         <h1>Rediger oppgave</h1>
     {% elseif valgtOppgave.getParentId() > 0 %}
         <h1>Opprett ny underoppgave</h1>
@@ -25,13 +25,13 @@
         {% endif %}
         <div class="form-group">
             <label for="oppgavenavn">Oppgavenavn:</label>
-            <input type="text" class="form-control" id="oppgavenavn" name="oppgaveNavn" value="{{ valgtOppgave.getOppgaveNavn() }}">
+            <input type="text" class="form-control" id="oppgavenavn" name="oppgaveNavn" value="{{ valgtOppgave.getNavn() }}">
         </div>
         <div class="form-group ">
             <label for="oppgavetype">Oppgavetype:</label>
             <select name="oppgavetype" class="form-control" id="oppgavetype">
                 {% for oppgavetype in oppgavetyper %}
-                <option value="{{ oppgavetype.getId() }}" {% if valgtOppgave.getOppgaveType() == oppgavetype.getId() %} selected="selected"{% endif %}>{{ oppgavetype.getNavn() }}</option>
+                <option value="{{ oppgavetype.getId() }}" {% if valgtOppgave.getType() == oppgavetype.getId() %} selected="selected"{% endif %}>{{ oppgavetype.getNavn() }}</option>
                 {% endfor %}
             </select>
         </div>

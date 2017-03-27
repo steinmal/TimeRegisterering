@@ -46,7 +46,7 @@
                         <td>{{ timereg.getFra() }}</td>
                         <td>{{ timereg.getTil() }}</td>
                         <td>{{ timereg.getPause() }} min</td>
-                        <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getOppgaveNavn() }}</td>
+                        <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
                         <td>{{ timereg.getGodkjentTekst() }}</td>
                         
                         {% if timereg.getGodkjent() == false %}

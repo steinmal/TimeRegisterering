@@ -42,14 +42,14 @@
             <div class="form-inline">
                 {% if aktiv %}
                 <select name="oppgave" class="form-control" disabled id="oppgave">
-                    <option value="{{ oppgave.getOppgaveId() }}" selected="selected">{{ oppgave.getOppgaveNavn() }}
+                    <option value="{{ oppgave.getId() }}" selected="selected">{{ oppgave.getNavn() }}
                     </option>
                 </select>
                 {% else %}
                 <select name="oppgave" class="form-control" id="oppgave">
                     {% for oppgave in oppgaveListe %}
-                    <option value="{{ oppgave.getOppgaveId() }}" {% if oppgave.getOppgaveId()== valgtOppgave %}
-                            selected="selected" {% endif %}>{{ oppgave.getOppgaveNavn() }}
+                    <option value="{{ oppgave.getId() }}" {% if oppgave.getId()== valgtOppgave %}
+                            selected="selected" {% endif %}>{{ oppgave.getNavn() }}
                     </option>
                     {% endfor %}
                 </select>

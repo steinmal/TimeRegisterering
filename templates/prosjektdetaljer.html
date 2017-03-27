@@ -49,13 +49,13 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.getFaseId() == fase.getId() %}
                 <tr>
-                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getOppgaveId() }}">{{ oppgave.getOppgaveNavn() }}</a></td>
-                    <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getOppgaveNavn() }}</td>
-                    <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getOppgaveType()) }}</td>
+                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}">{{ oppgave.getNavn() }}</a></td>
+                    <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getNavn() }}</td>
+                    <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getType()) }}</td>
                     <td>{{ oppgave.getPeriode() }}</td>
                     <td>{{ oppgave.getTidsestimat() }}</td>
-                    <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
-                    <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.getOppgaveId()) }}</td>
+                    <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.getId()) }}</td>
+                    <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.getId()) }}</td>
                 </tr>
                 {% endif %}
             {% endfor %}
