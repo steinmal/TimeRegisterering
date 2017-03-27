@@ -2,7 +2,6 @@
     class Oppgave {
         private $oppgave_id;
         private $foreldre_oppgave_id;
-        private $prosjekt_id;
         private $oppgavetype_id;
         private $fase_id;
         private $oppgave_navn;
@@ -15,7 +14,6 @@
         
         public function getOppgaveId() { return $this->oppgave_id; }
         public function getParentId() { return $this->foreldre_oppgave_id; }
-        public function getProsjektId() { return $this->prosjekt_id; }
         public function getOppgaveNavn() { return $this->oppgave_navn; }
         public function getTidsestimat() { return $this->oppgave_tidsestimat; }
         public function getOppgavetype() { return $this->oppgavetype_id; }

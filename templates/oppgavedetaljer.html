@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     {% include 'header.html' %}
-    <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ fasereg.hentFase(oppgave.getFaseId()).getProsjektId }}">Prosjektdetaljer</a>
     <h1>Oppgavedetaljer for {{ oppgave.getOppgaveNavn }}</h1>
     {% if error == "noRadio" %}
     <div class="alert alert-danger" role="alert">
@@ -26,7 +26,7 @@
     </div>
     {% endif %}
 
-    
+
 
     <div class="col-lg-4">
 
