@@ -31,6 +31,10 @@
             <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ timereg.getTil() }}">
         </div>
         <div class="form-group">
+            <label for="pause">Pause:</label>
+            <input type="number" class="form-control" id="pause" name="pause" value="{{ timereg.getPause() }}"/>
+        </div>
+        <div class="form-group">
             <label for="kommentar">Kommentar til korrigeringen:</label>
             <input type="text" name="kommentar" rows="5" cols="15" id="kommentar">
         </div>

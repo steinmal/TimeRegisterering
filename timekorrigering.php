@@ -61,10 +61,11 @@ if (isset($_REQUEST['action'])) {
     $dato = $_REQUEST['dato'];
     $fra = $_REQUEST['starttid'];
     $til = $_REQUEST['stopptid'];
+    $pause = $_REQUEST['pause'];
     $kommentar = $_REQUEST['kommentar'];
 
     
-    $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $kommentar);
+    $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar);
     $twigs['status'] = "lagret";
     $twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
     
