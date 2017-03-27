@@ -20,7 +20,7 @@
         }
         
         public function getStatus(){ return $this->timereg_status; }
-        public function getTimeregId() { return $this->timereg_id; }
+        public function getId() { return $this->timereg_id; }
         public function getBrukerId() { return $this->bruker_id; }
         public function getOppgaveId() { return $this->oppgave_id; }
         public function getDato() { return $this->timereg_dato; }

@@ -70,7 +70,7 @@
             <tbody>
                 {% for timereg in timeregistreringer %}
                 <tr>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} <input type=radio name="timeregId" value={{ timereg.getTimeregId() }}/>{% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} <input type=radio name="timeregId" value={{ timereg.getId() }}/>{% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getDato() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getFra() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getTil() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>

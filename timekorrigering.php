@@ -67,7 +67,7 @@ if (isset($_REQUEST['action'])) {
     $timeregKopi = $TimeReg->kopierTimeregistrering($gammelTimeId);
     $TimeReg->deaktiverTimeregistrering($gammelTimeId);
     
-    $timeId = $timeregKopi->getTimeregId();
+    $timeId = $timeregKopi->getId();
     $dato = $_REQUEST['dato'];
     $fra = $_REQUEST['starttid'];
     $til = $_REQUEST['stopptid'];
