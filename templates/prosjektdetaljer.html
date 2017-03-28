@@ -13,7 +13,8 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getProsjektNavn() }}</h1>
-        <a href="oppgavetyper.php">Endre oppgavetyper</a>
+        <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
+        <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
     <h1>Faser</h1>
     <table class="table table-striped">
         <tr>

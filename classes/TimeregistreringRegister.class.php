@@ -132,6 +132,25 @@
             return $timeregistreringer;
         }
         
+        public function hentTimeregistreringerFraUnderProsjekt($prosjekt_id){
+          $timeregistreringer = array();
+            try {
+                $stmt = $this->db->prepare("
+                        SELECT * FROM timeregistrering WHERE oppgave_id IN (
+                        SELECT `oppgave_id` FROM `oppgave` WHERE `oppgave`.`fase_id` IN (
+                        SELECT `fase_id` FROM `fase` WHERE `fase`.`prosjekt_id`=:pId))
+                        ");
+                $stmt->bindParam(':pId', $prosjekt_id, PDO::PARAM_INT);
+                $stmt->execute();
+                    
+                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+                    $timeregistreringer[] = $timereg;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $timeregistreringer;        }
+        
         public function hentAktiveTimeregistreringer($bruker_id){
             $registreringer = array();
             try {

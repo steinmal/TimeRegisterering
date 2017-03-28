@@ -28,6 +28,22 @@
             }
             return $prosjekter;
         }
+        
+        public function hentUnderProsjekt($id){
+            $prosjektListe = array();
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE foreldre_prosjekt_id = :id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                if ($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                    $prosjektListe[] = $prosjekt;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $prosjektListe;
+        }
 
         public function lagProsjekt($prosjekt) {
             try {
