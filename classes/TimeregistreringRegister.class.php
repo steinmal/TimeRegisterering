@@ -115,12 +115,19 @@
                 $this->Feil($e->getMessage());
             }
         }
-        
-        public function hentTimeregistreringerFraBruker($bruker_id) {
+
+        public function hentTimeregistreringerFraBruker($bruker_id, $datefrom, $dateto) {
             $timeregistreringer = array();
             try {
-                $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id");
-                $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+                if ($datefrom && $dateto) {
+                    $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id AND (timereg_dato BETWEEN :datefrom AND :dateto)");
+                    $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+                    $stmt->bindParam(':datefrom', $datefrom, PDO::PARAM_STR);
+                    $stmt->bindParam(':dateto', $dateto, PDO::PARAM_STR);
+                } else {
+                    $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id");
+                    $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+                }
                 $stmt->execute();
                     
                 while ($timereg = $stmt->fetchObject('Timeregistrering')) {
