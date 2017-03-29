@@ -98,12 +98,12 @@ $(function() {
         endDate: end,
         ranges: {
            'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Month-1': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-           'Month-2': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-           'Month-3': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
-           'Month-4': [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
-           'Month-5': [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
-           'Month-6': [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
+           '-1 Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           '-2 Month': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+           '-3 Month': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+           '-4 Month': [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
+           '-5 Month': [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
+           '-6 Month': [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
            'This year': [moment().startOf('year'), moment().endOf('year')],
            'Last year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
            'All': [moment('1970-01-01'), moment('2038-01-19')]
