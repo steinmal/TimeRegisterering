@@ -82,6 +82,15 @@
             </div>
             {% endif %}
         </form>
+        <form method="post" action="brukerredigering.php" class="col-md-4">
+            <input type="hidden" name="brukerId" value="{{ bruker.getBrukerId() }}">
+            <h4>Deaktiver bruker</h3>
+           <!-- <p>Ved å deaktivere en bruker vil denne ikke lenger ha tilgang til systemet.
+                Dette må kun gjøres når brukeren ikke lenger er ansatt. Er du sikker på at du vil deaktivere brukeren?</p> -->
+            <div class="form-group ">
+                <input type="submit" name="deaktiver" value="Deaktiver bruker">
+            </div>
+        </form>
 
     </div>
 </body>

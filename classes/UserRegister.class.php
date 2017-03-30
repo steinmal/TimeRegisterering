@@ -128,6 +128,17 @@
                 $this->Feil($e->getMessage());
             }
         }
+        
+        public function deaktiverBruker($id){
+            try {
+                $stmt = $this->db->prepare("UPDATE `bruker` SET bruker_aktivert=0 WHERE bruker_id=:id");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
 
         public function brukernavnEksisterer($brukernavn) {
             try {
