@@ -139,7 +139,7 @@
             return $timeregistreringer;
         }
         
-        public function hentTimeregistreringerFraUnderProsjekt($prosjekt_id){
+        public function hentTimeregistreringerFraProsjekt($prosjekt_id){
           $timeregistreringer = array();
             try {
                 $stmt = $this->db->prepare("

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prosjektrapport</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">Prosjektdetaljer</a>
+
+        <h1>Prosjektrapport for prosjekt {{ prosjekt.getProsjektNavn() }}</h1>
+        <form method=get class="col-md-4">
+            <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
+            <div class="form-group">
+                <label for="rapportType">Type rapport:</label>
+                <select id=rapportType name=rapportType class="form-control" onchange="submit()">
+                    <option value="team">Pr. Team</option>
+                    <option value="prosjekt" {% if type == "prosjekt" %}selected{% endif %}>Pr. Delprosjekt</option>
+                    <option value="oppgave"{% if type == "oppgave" %}selected{% endif %}>Pr. Oppgave</option>
+                </select>
+            </div>
+        </form>
+        
+        <div class="rapport">
+            <table class="table table-striped">
+            {% if type == "team" %}
+            {% elseif type == "prosjekt" %}
+                <tr>
+                    <th>Prosjekt</th>
+                    <th>Timer</th>
+                </tr>
+                <tr>
+                    <td>{{ rapport.getProsjekt().getProsjektNavn() }}</td>
+                    <td>{{ rapport.getTimer() }}</td>
+                </tr>
+                {% for up in rapport.getUnderProsjekt() %}
+                <tr>
+                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ up.getProsjekt().getId() }}">{{ up.getProsjekt().getProsjektNavn() }}</a></td>
+                    <td>{{ up.getTimer() }}</td>
+                </tr>
+                {% endfor %}
+            {% elseif type == "oppgave" %}
+            {% endif %}
+            </table>
+        </div>
+        
+    </div>
+</body>
+</html>

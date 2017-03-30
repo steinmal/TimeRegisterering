@@ -57,7 +57,7 @@
                 <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
                 <td>{{ timereg.getFra() }}</td>
                 <td>{{ timereg.getTil() }}</td>
-                <td>{{ timereg.getHours() }}</td>
+                <td>{{ timereg.getHourString() }}</td>
                 <td>{{ (oppgavereg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
                 <td>{{ oppgavereg.getOppgavetype((oppgavereg.hentOppgave(timereg.getOppgaveId())).getType()).getNavn() }}</td>
             </tr>

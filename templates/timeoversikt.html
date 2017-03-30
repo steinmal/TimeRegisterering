@@ -143,7 +143,7 @@ $(function() {
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getFra() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getTil() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getPause() }} min {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getHours() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getHourString() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.hentOppgave(timereg.getId()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
                     <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getGodkjentTekst() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>

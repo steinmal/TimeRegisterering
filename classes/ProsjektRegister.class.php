@@ -32,11 +32,11 @@
         public function hentUnderProsjekt($id){
             $prosjektListe = array();
             try {
-                $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE foreldre_prosjekt_id = :id");
+                $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE foreldre_prosjekt_id = :id AND prosjekt_id != 1");
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
                 
-                if ($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                while($prosjekt = $stmt->fetchObject('Prosjekt')) {
                     $prosjektListe[] = $prosjekt;
                 }
             } catch (Exception $e) {

@@ -35,18 +35,19 @@
         public function getGodkjent() { return $this->timereg_godkjent; }
 
         public function getKommentar() { return $this->timereg_kommentar; }
-        public function getHours() {
+        public function getHourAsDateInterval(){
             $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());
             $stopptid = DateTime::createFromFormat('H:i:s', $this->getTil());
             $pause = DateInterval::createFromDateString($this->getPause() . " minutes");
             $stopptid->sub($pause);
-            $hours = "00:00";
-            if ($starttid && $stopptid)
-            {
-                $diff = $stopptid->diff($starttid);
-                $hours = $diff->format("%H:%I");
+            $diff = DateInterval::createFromDateString('0 seconds');
+            if($starttid && $starttid){
+                $diff = $starttid->diff($stopptid);
             }
-            return $hours;
+            return $diff;
+        }
+        public function getHourString() {
+            return $this->getHourAsDateInterval()->format("%H:%I");
         }
         
         public function getGodkjentTekst() {
