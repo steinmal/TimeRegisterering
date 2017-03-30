@@ -40,8 +40,8 @@
                     <td>{{ p.getProsjektNavn() }}</td>
                     <td>{{ p.getProsjektBeskrivelse() }}</td>
                     <td>{{ UserReg.hentBruker(p.getProsjektLeder()).getBrukerNavn() }}</td>
-                    <td>{{ p.getProsjektProductOwner() }}</td>
-                    <td>{{ p.getProsjektTeam() }}</td>
+                    <td>{{ UserReg.hentBruker(p.getProsjektProductOwner()).getBrukerNavn() }}</td>
+                    <td>{{ TeamReg.hentTeam(p.getProsjektTeam()).getTeamNavn() }}</td>
                     <td>{{ p.getProsjektStartDato() }}</td>
                     <td>{{ p.getProsjektSluttDato() }}</td>
                 </tr>
