@@ -60,6 +60,14 @@ if(isset($_REQUEST['action'])){
     }
 }
 
+if(isset($_REQUEST['deaktiver'])) {
+    $brukerID = $_REQUEST['brukerId'];
+    $UserReg->deaktiverBruker($brukerID);
+    if($_SESSION['brukerTilgang']->isBrukeradmin()){
+        header("Location: brukeradministrering.php?error=deaktivert");
+    }
+}
+
 $typer = $UserReg->getAlleBrukertyper();
 if(isset($_GET['error'])){
     if($_GET['error'] == "mismatch"){
