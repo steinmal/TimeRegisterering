@@ -23,7 +23,7 @@
         public function getBrukerTelefon() { return $this->bruker_telefon; }
         public function getBrukerEpost() { return $this->bruker_epost; }
         public function getBrukerRegistreringsdato() { return $this->bruker_registreringsdato; }
-        public function isAktivert() { return $this->bruker_aktivert; }
+        public function isAktivert() { return $this->bruker_aktivert > 0; }
         public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
         public function setBrukerType($id) { $this->brukertype_id = $id; }

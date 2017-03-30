@@ -47,7 +47,7 @@
                     <th class="col-lg-1">Status</th>
                 </tr>
                 {% for prosjekt in prosjektliste %}
-                    {% if (not prosjekt.isArkivert() > 0) or visArkivert == "on" %} 
+                    {% if (prosjekt.isArkivert() > 0) == (visArkivert == "on") %}
                     <tr>
                         <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
                         <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getProsjektNavn() }}</a></td>

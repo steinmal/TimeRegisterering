@@ -28,9 +28,12 @@
         public function getTil() { return $this->timereg_stopp; }
         public function getPause() { return $this->timereg_pause; }
         public function getRegistreringsDato() { return $this->timereg_registreringdato; }
+
+        // bool-metoder burde hete is... istedet for get...
         public function getAktiv() { return $this->timereg_aktiv; }
         public function getAutomatisk() { return $this->timereg_automatisk; }
         public function getGodkjent() { return $this->timereg_godkjent; }
+
         public function getKommentar() { return $this->timereg_kommentar; }
         public function getHours() {
             $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());

@@ -9,6 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $UserReg = new UserRegister($db);
+$TeamReg = new TeamRegister($db);
 
 
 session_start();
@@ -25,7 +26,8 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjekta
 }
 
 $prosjektliste = $ProsjektReg->hentAlleProsjekt($db);
-$brukerliste =$UserReg->hentAlleBrukere();
+$brukerliste = $UserReg->hentAlleBrukere();
+$teamListe = $TeamReg->hentAlleTeam();
 $brukParent = true;
 $valgtProsjekt = new Prosjekt();
 //echo(count($brukerliste));
@@ -35,6 +37,7 @@ if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt->setProsjektNavn($_POST['prosjektNavn']);
     $nyttProsjekt->setProsjektParent($_POST['foreldreProsjekt']);
     $nyttProsjekt->setProsjektLeder($_POST['prosjektLeder']);
+    $nyttProsjekt->setProsjektTeam($_POST['team']);
     $nyttProsjekt->setProsjektBeskrivelse($_POST['prosjektBeskrivelse']);
     $nyttProsjekt->setProsjektStartDato($_POST['startDato']);
     $nyttProsjekt->setProsjektSluttDato($_POST['sluttDato']);
@@ -80,5 +83,5 @@ elseif(isset($_GET['action'])){
 }
 
 
-echo $twig->render('prosjektoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('prosjektoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

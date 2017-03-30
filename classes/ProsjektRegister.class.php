@@ -84,13 +84,14 @@
 
         public function redigerProsjekt($prosjekt) {
             try {
-                $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse WHERE prosjekt_id=:id");
+                $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse, team_id=:team WHERE prosjekt_id=:id");
                 
                 $stmt->bindParam(':navn', $prosjekt->getProsjektNavn(), PDO::PARAM_STR);
                 $stmt->bindParam(':leder', $prosjekt->getProsjektLeder(), PDO::PARAM_INT);
                 $stmt->bindParam(':startdato', $prosjekt->getProsjektStartDato());
                 $stmt->bindParam(':sluttdato', $prosjekt->getProsjektSluttDato());
                 $stmt->bindParam(':beskrivelse', $prosjekt->getProsjektBeskrivelse(), PDO::PARAM_STR);
+                $stmt->bindParam(':team', $prosjekt->getProsjektTeam(), PDO::PARAM_INT);
                 $stmt->bindParam(':id', $prosjekt->getId(), PDO::PARAM_STR);
                 $stmt->execute();
             } catch (Exception $e) {

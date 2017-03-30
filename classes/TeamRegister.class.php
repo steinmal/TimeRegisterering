@@ -7,6 +7,20 @@
             $this->db = $db;
         }
         
+        public function hentAlleTeam() {
+            $teamListe = array();
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM team");
+                $stmt->execute();
+                
+                while($team = $stmt->fetchObject('Team')) {
+                    $teamListe[] = $team;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $teamListe;
+        }        
         public function hentTeam($id) {
             try {
                 $stmt = $this->db->prepare("SELECT * FROM team WHERE team_id=:id");
