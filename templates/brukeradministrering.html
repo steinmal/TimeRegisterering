@@ -49,7 +49,7 @@
                     <th></th>
                 </tr>
                 {% for bruker in brukere %}
-                    {% if bruker.isAktivert() > 0 or visNye == true %}
+                    {% if bruker.isAktivert() != visNye %}
                     <tr>
                         <td><input type=radio name=brukerId value="{{ bruker.getBrukerId() }}" /></td>
                         <td>{{ bruker.getBrukerId() }}</td>
