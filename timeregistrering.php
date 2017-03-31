@@ -49,7 +49,7 @@ if(isset($_POST['submit'])){
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getBrukerId());
             var_dump($teamListe);
             var_dump($prosjekt);
-            if(!in_array($prosjekt->getProsjektTeam(), $teamListe)){
+            if(!in_array($prosjekt->getTeam(), $teamListe)){
             
             //$oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($_POST['prosjektId']);
             //var_dump($oppgaver);

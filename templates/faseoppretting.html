@@ -11,7 +11,7 @@
 <div class="container">
     {% include 'header.html' %}
     <h1>Opprett ny fase</h1>
-    <h2>Prosjekt: {{ prosjekt.getProsjektNavn() }}</h2>
+    <h2>Prosjekt: {{ prosjekt.getNavn() }}</h2>
     <form method="post" action="faseoppretting.php"  class="col-md-4">
         <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
         {% if fase.getId() > -1 %}
