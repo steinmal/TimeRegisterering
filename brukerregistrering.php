@@ -9,8 +9,8 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $userReg = new UserRegister($db);
 $mailExists = 0;
-
 session_start();
+
 
 if(isset($_POST['opprettBruker'])){
     if($userReg->brukernavnEksisterer($_POST['navn'])){
@@ -36,5 +36,5 @@ if($_GET['nameExists'] == 1) {
     $nameExists = 1;
 }
 
-echo $twig->render('brukerregistrering.html', array('mailExists'=>$mailExists, 'nameExists'=>$nameExists));
+echo $twig->render('brukerregistrering.html', array('bruker'=>$_SESSION['bruker'], 'innlogget'=>$_SESSION['innlogget'], 'mailExists'=>$mailExists, 'nameExists'=>$nameExists));
 ?>

@@ -50,7 +50,11 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.getFaseId() == fase.getId() %}
                 <tr>
+                    {% if brukerTilgang.isTeamleder() %}
                     <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}">{{ oppgave.getNavn() }}</a></td>
+                    {% else %}
+                    <td>{{ oppgave.getNavn() }}</td>
+                    {% endif %}
                     <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getNavn() }}</td>
                     <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getType()) }}</td>
                     <td>{{ oppgave.getPeriode() }}</td>
