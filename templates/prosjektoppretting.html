@@ -48,7 +48,7 @@
                 <label for="team">Team:</label>
                 <select name="team" class="form-control" id="team">
                     {% for team in teamListe %}
-                        <option value="{{ team.getTeamId() }}" {% if valgtProsjekt.getTeam() == team.getId() %} selected {% endif %}>{{ team.getTeamNavn() }}</option>
+                        <option value="{{ team.getId() }}" {% if valgtProsjekt.getTeam() == team.getId() %} selected {% endif %}>{{ team.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>

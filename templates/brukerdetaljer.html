@@ -41,7 +41,7 @@
                     <td>{{ p.getBeskrivelse() }}</td>
                     <td>{{ UserReg.hentBruker(p.getLeder()).getBrukerNavn() }}</td>
                     <td>{{ UserReg.hentBruker(p.getProductOwner()).getBrukerNavn() }}</td>
-                    <td>{{ TeamReg.hentTeam(p.getTeam()).getTeamNavn() }}</td>
+                    <td>{{ TeamReg.hentTeam(p.getTeam()).getNavn() }}</td>
                     <td>{{ p.getStartDato() }}</td>
                     <td>{{ p.getSluttDato() }}</td>
                 </tr>
@@ -56,8 +56,8 @@
                 </tr>
                 {% for t in teamliste %}
                     <tr>
-                        <td>{{ t.getTeamNavn() }}</td>
-                        <td>{{ UserReg.hentBruker(t.getTeamLeder()).getBrukerNavn() }}</td>
+                        <td>{{ t.getNavn() }}</td>
+                        <td>{{ UserReg.hentBruker(t.getLeder()).getBrukerNavn() }}</td>
                     </tr>
                 {% endfor %}
             </table>
