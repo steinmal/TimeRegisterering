@@ -26,6 +26,13 @@
             Du har ikke tilgang til prosjektet
         </div>
     {% endif %}
+    {% if sendt %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Forslag er sendt!
+    </div>
+    {% endif %}
         
     <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
         <div class="form-group">

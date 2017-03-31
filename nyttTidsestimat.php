@@ -22,10 +22,16 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 $oppgaveId = $_REQUEST['oppgaveId'];
 $oppgave = $OppgaveReg->hentOppgave($oppgaveId);
 if (isset($_POST['submit'])) {
-    $estimat = $_POST['estimat'];
-    $OppgaveReg->lagNyttEstimat($oppgaveId, $estimat, $_SESSION['bruker']);
-    header("Location: timeregistrering.php");
-    return;
+    if(is_numeric($_POST['estimat'])){
+        $estimat = $_POST['estimat'];
+        $OppgaveReg->lagNyttEstimat($oppgaveId, $estimat, $_SESSION['bruker']);
+        header("Location: timeregistrering.php?sendt=1");
+        return;
+    }
+    else {
+        header("Location: nyttTidsestimat.php?error=1");
+    }
+
 }
 
 
