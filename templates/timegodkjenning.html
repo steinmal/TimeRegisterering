@@ -50,9 +50,9 @@
                         <td>{{ timereg.getGodkjentTekst() }}</td>
                         
                         {% if timereg.getGodkjent() == false %}
-                        <td><a href="?action=godkjenn&timeregId={{ timereg.getTimeregId() }}">Godkjenn</a></td>
+                        <td><a href="?action=godkjenn&timeregId={{ timereg.getId() }}">Godkjenn</a></td>
                         {% else %}
-                        <td><a href="?action=avvis&timeregId={{ timereg.getTimeregId() }}">Avvis</a></td>
+                        <td><a href="?action=avvis&timeregId={{ timereg.getId() }}">Avvis</a></td>
                         {% endif %}
                     </tr>
                     {% endif %}

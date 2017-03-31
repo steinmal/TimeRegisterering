@@ -20,14 +20,14 @@
         }
         
         public function getStatus(){ return $this->timereg_status; }
-        public function getTimeregId() { return $this->timereg_id; }
+        public function getId() { return $this->timereg_id; }
         public function getBrukerId() { return $this->bruker_id; }
         public function getOppgaveId() { return $this->oppgave_id; }
         public function getDato() { return $this->timereg_dato; }
         public function getFra() { return $this->timereg_start; }
         public function getTil() { return $this->timereg_stopp; }
         public function getPause() { return $this->timereg_pause; }
-        public function getRegistreringsDato() { return $this->timereg_registreringdato; }
+        public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
 
         // bool-metoder burde hete is... istedet for get...
         public function getAktiv() { return $this->timereg_aktiv; }

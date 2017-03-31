@@ -61,7 +61,7 @@ if (isset($_REQUEST['action'])) {
     $timeregKopi = $TimeReg->kopierTimeregistrering($gammelTimeId);
     $TimeReg->deaktiverTimeregistrering($gammelTimeId);
     
-    $timeId = $timeregKopi->getTimeregId();
+    $timeId = $timeregKopi->getId();
     $dato = $_REQUEST['dato'];
     //$dato = "2017-04-04";
     //var_dump($timeregKopi->getDato());

@@ -38,7 +38,7 @@
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <input type=hidden name=regId value="{{ registrering.getTimeregId() }}">
+            <input type=hidden name=regId value="{{ registrering.getId() }}">
             <select class="form-control" name="prosjekt" id="prosjekt" disabled>
                 <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
             </select>
