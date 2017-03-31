@@ -227,7 +227,7 @@
                 $stmt->execute();
 
                 while ($estimat = $stmt->fetchObject('Estimat')) {
-                    $estimater[$estimat->getEstimatId()] = $estimat;
+                    $estimater[$estimat->getId()] = $estimat;
                 }
 
             } catch (Exception $e) {
