@@ -3,6 +3,7 @@ class RapportProsjekt {
     private $ProsjektReg;
     private $underProsjekt = array();
     private $prosjekt;
+    private $prosjektOgUnderProsjekt = array();
     private $OppgaveReg;
     private $oppgaver = array();
     private $TimeregReg;
@@ -18,6 +19,7 @@ class RapportProsjekt {
             Prosjekt $prosjekt){
         $this->ProsjektReg = $ProsjektReg;
         $this->prosjekt = $prosjekt;
+        $this->prosjektOgUnderProsjekt[] = $prosjekt;
         $this->OppgaveReg = $OppgaveReg;
         $this->TimeregReg = $TimeregRegister;
 
@@ -34,6 +36,7 @@ class RapportProsjekt {
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         if($underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
             foreach($underProsjektListe as $p){
+                $this->prosjektOgUnderProsjekt[] = $p;
                 $rapport = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p);
                 $this->underProsjekt[] = $rapport;
                 $this->totaltid->add(DtimeToDInterval($rapport->getTid()));
@@ -41,6 +44,7 @@ class RapportProsjekt {
         }
     }
 
+    public function getProsjektOgUnderProsjekt(){ return $this->prosjektOgUnderProsjekt; }
     public function getTimeregistreringer(){ return $this->timeregistreringer; }
     public function getProsjekt(){ return $this->prosjekt; }
     public function getUnderProsjekt(){ return $this->underProsjekt; }

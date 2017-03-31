@@ -65,6 +65,7 @@ if(isset($_REQUEST['deaktiver'])) {
     $UserReg->deaktiverBruker($brukerID);
     if($_SESSION['brukerTilgang']->isBrukeradmin()){
         header("Location: brukeradministrering.php?error=deaktivert");
+        return;
     }
 }
 

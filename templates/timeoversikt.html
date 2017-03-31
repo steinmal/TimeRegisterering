@@ -27,35 +27,41 @@
     <h1>Timeoversikt</h1>
     <!-- // Twig har switch-syntax -->
     
-        {% if status == "kanIkkeEndres" %}
-        <div class="alert alert-danger" role="alert">
+        {% if error == "kanIkkeEndres" %}
+        <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timeregistreringen er deaktivert og kan ikke korrigeres
         </div>
-        {% elseif status == "deaktivert" %}
+        {% elseif error == "deaktivert" %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timeregistreringen ble deaktivert
         </div>
-        {% elseif status == "lagret" %}
+        {% elseif error == "lagret" %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Korrigeringen er lagret i en ny timeregistrering. Den gamle er deaktivert
         </div>
-        {% elseif status == "ingenValgt" %}
-        <div class="alert alert-danger" role="alert">
+        {% elseif error == "ingenValgt" %}
+        <div class="alert alert-info" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Du må velge timeregistrering
         </div>
-        {% elseif status == "avbryt" %}
+        {% elseif error == "avbryt" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timekorrigeringen ble avbrutt
+        </div>
+        {% elseif error == "ugyldigId" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Feil ID
         </div>
         {% endif %}
         

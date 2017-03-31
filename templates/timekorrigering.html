@@ -9,7 +9,40 @@
 <div class="container">
     {% include 'header.html' %}
         <h1>Korrigering av timeregistrering - {{ brukernavn }}</h1>
+    
+        {% if error == "datoForandret" %}
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Dato kan ikke endres
+        </div>
+        {% elseif error == "stoppEtterStart" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Stopptid må være etter starttid
+        </div>
+        {% elseif error == "pauseForLang" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Pausetiden må være kortere enn arbeidstiden
+        </div>
+        {% elseif error == "ingenVerdi" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Alle felter må fylles ut
+        </div>
+        {% elseif error == "ugyldigId" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ugyldig ID
+        </div>
+        {% endif %}
 
+        
     <form method="post" action="timekorrigering.php" class="col-md-4">
         <div class="form-group ">
             <p><b>Oppgave:</b>
@@ -24,11 +57,11 @@
         </div>
         <div class="form-group ">
             <label for="starttid">Starttid:</label>
-            <input type="time" class="form-control" id="starttid" name="starttid" value="{{ timereg.getFra() }}">
+            <input type="time" step="1" class="form-control" id="starttid" name="starttid" value="{{ timereg.getFra() }}">
         </div>
         <div class="form-group ">
             <label for="stopptid">Stopptid:</label>
-            <input type="time" class="form-control" id="stopptid" name="stopptid" value="{{ timereg.getTil() }}">
+            <input type="time" step="1" class="form-control" id="stopptid" name="stopptid" value="{{ timereg.getTil() }}">
         </div>
         <div class="form-group">
             <label for="pause">Pause:</label>

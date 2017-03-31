@@ -30,8 +30,11 @@ if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $datefrom = substr($_GET['daterange'], 0, 10);
     $dateto = substr($_GET['daterange'], 13, 10);
 }
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
 $timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId(), $datefrom, $dateto);
 
 echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
-    'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$_GET['noRadio'], 'deaktivertError'=>$_GET['deaktivertError'], 'datefrom'=>$datefrom, 'dateto'=>$dateto));
+    'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$_GET['noRadio'], 'deaktivertError'=>$_GET['deaktivertError'], 'datefrom'=>$datefrom, 'dateto'=>$dateto, 'error'=>$error));
 ?>

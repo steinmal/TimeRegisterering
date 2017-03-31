@@ -41,7 +41,9 @@
         public function setProsjektBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
         public function setProsjektProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
         
-        
+        public function __toString() {
+            return $this->prosjekt_id . " " . $this->prosjek_navn . " " . $this->prosjekt_leder;
+        }
         
         
     }
