@@ -41,7 +41,7 @@
                 {% for timereg in timeregistreringer %}
                     {% if timereg.getGodkjent == (visGodkjent == "on") %}
                     <tr>
-                        <td>{{ userReg.hentBruker(timereg.getBrukerId()).getBrukerNavn() }}</td>
+                        <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
                         <td>{{ timereg.getDato() }}</td>
                         <td>{{ timereg.getFra() }}</td>
                         <td>{{ timereg.getTil() }}</td>

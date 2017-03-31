@@ -16,18 +16,18 @@
 			return $this;
 		}
         
-        public function getBrukerId() { return $this->bruker_id; }
-        public function getBrukerNavn() { return $this->bruker_navn; }
+        public function getId() { return $this->bruker_id; }
+        public function getNavn() { return $this->bruker_navn; }
         public function getPassord() { return $this->bruker_passord; }
         public function getBrukertype() { return $this->brukertype_id; }
-        public function getBrukerTelefon() { return $this->bruker_telefon; }
-        public function getBrukerEpost() { return $this->bruker_epost; }
-        public function getBrukerRegistreringsdato() { return $this->bruker_registreringsdato; }
+        public function getTelefon() { return $this->bruker_telefon; }
+        public function getEpost() { return $this->bruker_epost; }
+
         public function isAktivert() { return $this->bruker_aktivert > 0; }
         public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
-        public function setBrukerType($id) { $this->brukertype_id = $id; }
-        public function setBrukerNavn($navn) { $this->bruker_navn = $navn; }
-        public function setBrukerEpost($epost) { $this->bruker_epost = $epost; }
-        public function setBrukerTelefon($telefonnummer) { $this->bruker_telefon = $telefonnummer; }        
+        public function setBrukertype($id) { $this->brukertype_id = $id; }
+        public function setNavn($navn) { $this->bruker_navn = $navn; }
+        public function setEpost($epost) { $this->bruker_epost = $epost; }
+        public function setTelefon($telefonnummer) { $this->bruker_telefon = $telefonnummer; }
     }

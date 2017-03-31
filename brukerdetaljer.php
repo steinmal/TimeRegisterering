@@ -27,10 +27,10 @@ if(!isset($_SESSION['brukerTilgang'])){
 
 $bruker = $_SESSION['bruker'];
 
-$brukerTypeID = $bruker->getBrukerType();
+$brukerTypeID = $bruker->getBrukertype();
 $brukerType = $UserReg->getBrukerType($brukerTypeID)->getNavn();
 
-$brukerID = $bruker->getBrukerId();
+$brukerID = $bruker->getId();
 $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
 
 $teamliste = array();

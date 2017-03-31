@@ -40,7 +40,7 @@
                 <label for="prosjektLeder">Prosjektleder:</label>
                 <select name="prosjektLeder" class="form-control" id="prosjektLeder">
                     {% for bruker in brukere %}
-                        <option value="{{ bruker.getBrukerId() }}" {% if valgtProsjekt.getLeder() == bruker.getBrukerId() %} selected {% endif %}>{{ bruker.getBrukerNavn() }}</option>
+                        <option value="{{ bruker.getId() }}" {% if valgtProsjekt.getLeder() == bruker.getId() %} selected {% endif %}>{{ bruker.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>

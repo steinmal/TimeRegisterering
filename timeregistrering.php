@@ -21,7 +21,7 @@ date_default_timezone_set('Europe/Oslo');
 
 /*if(isset($_POST['registrer'])) {
     $bruker = $_SESSION['bruker'];
-    $bruker_id = $bruker->getBrukerId();
+    $bruker_id = $bruker->getId();
     $oppgave_id = $_POST['oppgave'];
     $dato = $_POST['dato'];
     $starttid = DateTime::createFromFormat('H:i', $_POST['starttid']);
@@ -36,7 +36,7 @@ date_default_timezone_set('Europe/Oslo');
 }*/
 
 if(isset($_POST['submit'])){
-    if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getBrukerId()) {  //Registreringen hører ikke til innlogget bruker
+    if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
         header("Location: timeregistrering.php?error=ugyldigId"); //SJEKKFØRLEVERING
         return;
     }
@@ -46,7 +46,7 @@ if(isset($_POST['submit'])){
     switch($_POST['submit']){
         case 'Start':
             $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);
-            $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getBrukerId());
+            $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
             var_dump($teamListe);
             var_dump($prosjekt);
             if(!in_array($prosjekt->getTeam(), $teamListe)){
@@ -57,7 +57,7 @@ if(isset($_POST['submit'])){
                 header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
                 return;
             }
-            $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getBrukerId());
+            $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
             $TimeReg->pauserTimeReg($id);
@@ -77,8 +77,8 @@ if(isset($_POST['forslag'])){
 }
 
 
-$brukernavn = $_SESSION['bruker']->getBrukerNavn();
-$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getBrukerId());
+$brukernavn = $_SESSION['bruker']->getNavn();
+$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
 //$prosjekt = $ProsjektReg->hentAlleProsjekt();
 if($registrering != null && sizeof($registrering) > 0){
     $registrering = $registrering[0];
@@ -88,7 +88,7 @@ if($registrering != null && sizeof($registrering) > 0){
     echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'aktiv'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$_GET['error']));
 }
 else{
-    $brukerID = $_SESSION['bruker']->getBrukerId();
+    $brukerID = $_SESSION['bruker']->getId();
     $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
     $grunnProsjekter = array();
     $alleProsjekter = array();

@@ -19,7 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 $twigs = array();
 $twigs['innlogget'] = $_SESSION['innlogget'];
 $twigs['bruker'] = $_SESSION['bruker'];
-$twigs['brukernavn'] = $_SESSION['bruker']->getBrukerNavn();
+$twigs['brukernavn'] = $_SESSION['bruker']->getNavn();
 $twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
 $twigs['oppgavereg'] = $OppgaveReg;
 $error = "";
@@ -28,7 +28,7 @@ if (isset($_REQUEST['action'])) {
     $timeId = $_REQUEST['timeregId'];
     if ($timeId == NULL) {
         $error = "ingenValgt";
-    } else if ($TimeReg->hentTimeregistrering($timeId)->getBrukerId() != $_SESSION['bruker']->getBrukerId() ){
+    } else if ($TimeReg->hentTimeregistrering($timeId)->getBrukerId() != $_SESSION['bruker']->getId() ){
         $error = "ugyldigId";
 
     } else {
@@ -126,7 +126,7 @@ if (isset($_REQUEST['action'])) {
 
 date_default_timezone_set('Europe/Oslo');
 
-//$twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId());
+//$twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
 //echo $twig->render('timeoversikt.html', $twigs);
 //header("Location: timeoversikt.php?error=" . $error);
 return;

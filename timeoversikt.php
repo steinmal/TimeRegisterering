@@ -17,7 +17,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 
 date_default_timezone_set('Europe/Oslo');
-$brukernavn = $_SESSION['bruker']->getBrukerNavn();
+$brukernavn = $_SESSION['bruker']->getNavn();
 
 $firstDayOfMonth = mktime(0, 0, 0, date("m"), 1, date("Y"));
 $lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
@@ -33,7 +33,7 @@ if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
 }
-$timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getBrukerId(), $datefrom, $dateto);
+$timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), $datefrom, $dateto);
 
 echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
     'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$_GET['noRadio'], 'deaktivertError'=>$_GET['deaktivertError'], 'datefrom'=>$datefrom, 'dateto'=>$dateto, 'error'=>$error));

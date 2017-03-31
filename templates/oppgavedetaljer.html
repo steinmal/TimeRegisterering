@@ -40,7 +40,7 @@
                 {% for forslag in estimatliste %}
                 <tr>
                     <td>{{ forslag.getEstimat() }}</td>
-                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getBrukerNavn() }}</td>
+                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getNavn() }}</td>
                     <td>
                         <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&accept={{ forslag.getId() }}&estimat={{ forslag.getEstimat() }}">
                             <button class="btn btn-success">Godkjenn</button>
