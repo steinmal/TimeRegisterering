@@ -13,7 +13,7 @@ $UserReg = new UserRegister($db);
 $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
-
+$visGodkjent = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -24,6 +24,9 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
     echo "Kun teamleder har tilgang til timegodkjenning";
     return;
+}
+if(isset($_GET['visGodkjent'])){
+    $visGodkjent = $_GET['visGodkjent'];
 }
 
 if(isset($_GET['action'])){
@@ -69,5 +72,5 @@ echo $twig->render(
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
-    'visGodkjent'=>$_GET['visGodkjent'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+    'visGodkjent'=>$visGodkjent, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

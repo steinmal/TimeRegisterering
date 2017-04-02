@@ -9,7 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
 $OppgaveRegister = new OppgaveRegister($db);
-
+$error = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -23,7 +23,10 @@ if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukerad
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
+if(isset($_GET['error'])){
+    $error = $_GET['error'];
+}
 $oppgavetyper= $OppgaveRegister->hentAlleOppgaveTyper();
 
 
-echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
