@@ -24,14 +24,14 @@
             {% endif %}
             <div class="form-group ">
                 <label for="navn">Prosjektnavn:</label>
-                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtProsjekt.getNavn() }}">
+                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtprosjekt.getNavn() }}">
             </div>
             {% if brukParent %}
             <div class="form-group ">
                 <label for="foreldreProsjekt">Foreledreprosjekt:</label>
                 <select name="foreldreProsjekt" class="form-control" id="foreldreProsjekt">
                     {% for prosjekt in prosjekter %}
-                    <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getNavn() }}</option>
+                    <option value="{{ prosjekt.getId() }}" {% if valgtprosjekt.getParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>

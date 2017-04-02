@@ -52,8 +52,6 @@ if(isset($_POST['submit'])){
         return;
     }
 
-    echo $_POST['regId'];
-    echo $_POST['submit'];
     switch($_POST['submit']){
         case 'Start':
             $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);

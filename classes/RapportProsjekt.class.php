@@ -45,7 +45,6 @@ class RapportProsjekt {
                 $this->prosjektOgUnderProsjekt = array_merge($this->prosjektOgUnderProsjekt, $rapport->getProsjektOgUnderProsjekt());
                 $this->prosjektRapporter[] = $rapport;
                 $this->prosjektRapporter = array_merge($this->prosjektRapporter, $rapport->getProsjektRapporter());
-                //var_dump($this->prosjektOgUnderProsjekt);
                 $this->underProsjekt[] = $rapport;
                 $this->totaltid->add(DtimeToDInterval($rapport->getTid()));
             }

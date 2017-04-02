@@ -64,8 +64,6 @@ if (isset($_REQUEST['action'])) {
     
     $timeId = $timeregKopi->getId();
     $dato = $_REQUEST['dato'];
-    //$dato = "2017-04-04";
-    //var_dump($timeregKopi->getDato());
     if($dato != $timeregKopi->getDato()){
         header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=datoForandret");
         return;
@@ -90,21 +88,14 @@ if (isset($_REQUEST['action'])) {
         $til = $til . ':00';
     }
     
-    var_dump($fra);          // ------------------------------------------ FJERNES
-    var_dump($til);          // ------------------------------------------ FJERNES
     $startTid = DateTime::createFromFormat('H:i:s', $fra);
     $stoppTid = DateTime::createFromFormat('H:i:s', $til);
 
     if(!($startTid && $stoppTid)) {
-            var_dump($startTid);          // ------------------------------------------ FJERNES
-            var_dump($stoppTid);          // ------------------------------------------ FJERNES
             // Dette burde ikke skje ved normalt bruk
             header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=datoFeilFormat");
             return;
     }
-    
-    var_dump($startTid);          // ------------------------------------------ FJERNES
-    var_dump($stoppTid);          // ------------------------------------------ FJERNES
 
     if($startTid->getTimestamp() > $stoppTid->getTimestamp()){
         header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=stoppEtterStart");
@@ -113,7 +104,9 @@ if (isset($_REQUEST['action'])) {
     
     
     $pause = $_REQUEST['pause'];
-    if( true/* pause må være mellom 0 og jobblengden */ )
+    if( true/* pause må være mellom 0 og jobblengden */ ){
+
+    }
     
     $kommentar = $_REQUEST['kommentar'];
     
@@ -127,8 +120,6 @@ if (isset($_REQUEST['action'])) {
 
 date_default_timezone_set('Europe/Oslo');
 
-//$twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
-//echo $twig->render('timeoversikt.html', $twigs);
 header("Location: timeoversikt.php?error=" . $error);
 return;
 
