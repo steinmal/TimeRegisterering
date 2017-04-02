@@ -46,6 +46,6 @@
         public function setDelNivaa(int $nivaa){ $this->delNivaa = $nivaa; }
         
         public function __toString() {
-            return $this->prosjekt_id . " " . $this->prosjek_navn . " " . $this->prosjekt_leder;
+            return $this->prosjekt_id . " " . $this->prosjekt_navn . " " . $this->prosjekt_leder;
         }
     }

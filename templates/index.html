@@ -12,11 +12,7 @@
         {% include 'header.html' %}
     {% if innlogget %}
         <h1>Velkommen {{ bruker.getNavn() }}</h1>
-        {% if error == "noAccess" %}
-        <font color=red>Du har ikke tilgang til denne siden</font><br/>
-        {% elseif error == "lagret" %}
-        <font color=green>Endringene ble lagret</font><br/>
-        {% endif %}
+
         <div class="btn-group">
             <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
             <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
