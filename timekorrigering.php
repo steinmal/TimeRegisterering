@@ -35,7 +35,6 @@ if (isset($_REQUEST['action'])) {
         switch ($_REQUEST['action']) {
             case 'Korriger':
                 if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
-                    echo "getAktiv if feil?";
                     $error = "kanIkkeEndres";
                     
                 } else {

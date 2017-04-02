@@ -30,8 +30,6 @@ $brukerliste = $UserReg->hentAlleBrukere();
 $teamListe = $TeamReg->hentAlleTeam();
 $brukParent = true;
 $valgtProsjekt = new Prosjekt();
-//echo(count($brukerliste));
-//echo($brukerliste[0]);
 if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt = new Prosjekt();
     $nyttProsjekt->setNavn($_POST['prosjektNavn']);

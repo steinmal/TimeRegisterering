@@ -29,22 +29,6 @@ if(isset($_GET['error'])) {
 
 date_default_timezone_set('Europe/Oslo');
 
-/*if(isset($_POST['registrer'])) {
-    $bruker = $_SESSION['bruker'];
-    $bruker_id = $bruker->getId();
-    $oppgave_id = $_POST['oppgave'];
-    $dato = $_POST['dato'];
-    $starttid = DateTime::createFromFormat('H:i', $_POST['starttid']);
-    $stopptid = DateTime::createFromFormat('H:i', $_POST['stopptid']);
-    $starttidStr = $starttid->format("H:i:s");
-    $stopptidStr = $stopptid->format("H:i:s");
-    $automatisk = isset($_POST['automatisk']) ? 1 : 0;
-    $prosjekt_id = $OppgaveReg->hentOppgave($oppgave_id)->getProsjektId();
-    $oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
-    $TimeReg->lagTimeregistrering($oppgave_id, $bruker_id, $dato, $starttidStr, $stopptidStr, $automatisk);
-    echo "Timeregistrering OK";
-}*/
-
 if(isset($_POST['submit'])){
     $id = $_POST['regId'];
     if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
@@ -56,13 +40,7 @@ if(isset($_POST['submit'])){
         case 'Start':
             $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
-            var_dump($teamListe);
-            var_dump($prosjekt);
             if(!in_array($prosjekt->getTeam(), $teamListe)){
-            
-            //$oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($_POST['prosjektId']);
-            //var_dump($oppgaver);
-            //if (!in_array($OppgaveReg->hentOppgave($_POST['oppgave']), $oppgaver)) {
                 header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
                 return;
             }

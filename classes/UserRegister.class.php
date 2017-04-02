@@ -49,7 +49,8 @@
             try {
                 $stmt = $this->db->prepare("UPDATE bruker SET brukertype_id=:type, bruker_navn=:navn, bruker_epost=:epost, bruker_telefon=:telefon, bruker_passord=:passord WHERE bruker_id=:id");
                 
-                $stmt->bindParam(':id', $bruker->getId(), PDO::PARAM_INT);
+                $id = $bruker->getId();
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->bindParam(':type', $bruker->getBrukertype(), PDO::PARAM_INT);
                 $stmt->bindParam(':navn', $bruker->getNavn(), PDO::PARAM_STR);
                 $stmt->bindParam(':epost', $bruker->getEpost(), PDO::PARAM_STR);
