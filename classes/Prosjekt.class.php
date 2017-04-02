@@ -42,6 +42,6 @@
         public function setProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
         
         public function __toString() {
-            return $this->prosjekt_id . " " . $this->prosjek_navn . " " . $this->prosjekt_leder;
+            return $this->prosjekt_id . " " . $this->prosjekt_navn . " " . $this->prosjekt_leder;
         }
     }

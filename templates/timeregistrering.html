@@ -38,14 +38,14 @@
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <input type=hidden name=regId value="{{ registrering.getId() }}">
+            <input type="hidden" name="regId" value="{{ registrering.getId() }}">
             <select class="form-control" name="prosjekt" id="prosjekt" disabled>
                 <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
             </select>
         {% else %}
             <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                 {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjekt() }}</option>
+                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getNavn() }}</option>
                 {% endfor %}
             </select>
             {% if valgtProsjekt <= 1 %}
@@ -58,6 +58,7 @@
     </form>
     {% if visSkjema %}
     <form method="post" action="timeregistrering.php" class="col-md-4">
+        <input type="hidden" name="regId" value="{{ registrering.getId() }}">
         <div class="form-group ">
             <label for="oppgave">Oppgave:</label>
             <div class="form-inline">
