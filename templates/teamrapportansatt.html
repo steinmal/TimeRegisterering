@@ -9,8 +9,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
-
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 </head>
 <body>
 <div class="container">
@@ -19,21 +17,10 @@
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Teamrapport - Timeoversikt medarbeidere</h1>
     {% for team in teams %}
-    <h2>{{ team.getNavn() }}</h2>
+    <h2>{{ team.getTeamNavn() }}</h2>
 
-
-            <!-- Direkte kopiert fra timeoversikt -->
-          <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
-              <input type="text" name="daterange" />
-              <!--
-              <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                  <span></span> <b class="caret"></b>
-              </div>-->
-          </form>  <br/>
-    
-
-
+    Sorter på periode<br/>
+    <form action="teamrapportansatt.php" method="GET">
         <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
             <thead>
             <tr>
@@ -45,7 +32,6 @@
                 <th data-field="hours" data-sortable="true">Timer</th>
                 <th data-field="task" data-sortable="true">Oppgave</th>
                 <th data-field="oppgavetype" data-sortable="true" data-filter-control="select">Oppgavetype</th>
-
             </tr>
             </thead>
             <tbody>
@@ -58,17 +44,17 @@
                 <td>{{ timereg.getFra() }}</td>
                 <td>{{ timereg.getTil() }}</td>
                 <td>{{ timereg.getHourString() }}</td>
-                <td>{{ (oppgavereg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
-                <td>{{ oppgavereg.getOppgavetype((oppgavereg.hentOppgave(timereg.getOppgaveId())).getType()).getNavn() }}</td>
+                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
+                <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }}</td>
+
             </tr>
             {% endif %}
             {% endfor %}
             </tbody>
 
         </table>
-
-        
-
+        <input name="download" type="submit" value="Last ned rapport"/>
+    </form>
 
 
     </p>
@@ -87,54 +73,5 @@
     }
     //-->
 </script>
-
-<!-- Direkte kopiert fra timeoversikt -->
-<script type="text/javascript">
-    <!--
-    $(function() {
-        //var start = moment().subtract(29, 'days');
-        //var end = moment();
-        //var start = moment().startOf('month');
-        //var end = moment().endOf('month');
-        {% if datefrom %}
-        var start = moment("{{ datefrom }}");
-        var end = moment("{{ dateto }}");
-        {% else %}
-        var start = moment().startOf('month');
-        var end = moment().endOf('month');
-        {% endif %}
-
-        function cb(start, end) {
-            $('input[name="daterange"]').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
-        }
-
-        $('input[name="daterange"]').daterangepicker({
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Month-1': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Month-2': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-                'Month-3': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
-                'Month-4': [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
-                'Month-5': [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
-                'Month-6': [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
-                'This year': [moment().startOf('year'), moment().endOf('year')],
-                'Last year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                'All': [moment('1970-01-01'), moment('2038-01-19')]
-            },
-
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
-        }, cb);
-        cb(start, end);
-        $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-            document.getElementById("datefilterform").submit();
-        });
-    });
-    //-->
-</script>
-
 </body>
 </html>

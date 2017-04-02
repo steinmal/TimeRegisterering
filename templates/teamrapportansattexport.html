@@ -1,0 +1,36 @@
+<html>
+    <body>
+    <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+        <thead>
+        <tr>
+            <th data-field="ansatt" data-sortable="true" data-filter-control="select">Ansatt</th>
+            <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
+            <!--<th data-field="date" data-sortable="true">Dato</th>-->
+            <th data-field="from">Fra</th>
+            <th data-field="to">Til</th>
+            <th data-field="hours" data-sortable="true">Timer</th>
+            <th data-field="task" data-sortable="true">Oppgave</th>
+            <th data-field="oppgavetype" data-sortable="true" data-filter-control="select">Oppgavetype</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for timereg in timeregistreringer %}
+        {% if timereg.getGodkjent() %}
+        <tr>
+            <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
+            <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
+            <td>{{ timereg.getFra() }}</td>
+            <td>{{ timereg.getTil() }}</td>
+            <td>{{ timereg.getHourString() }}</td>
+            <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
+            <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }}</td>
+
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+
+    </table>
+    </body>
+</html>
