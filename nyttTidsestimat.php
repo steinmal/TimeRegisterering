@@ -9,7 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 
 $OppgaveReg = new OppgaveRegister($db);
-
+$error = "";
 
 session_start();
 
@@ -17,6 +17,9 @@ session_start();
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php");
     return;
+}
+if(isset($_GET['error'])){
+    $error = $_GET['error'];
 }
 
 $oppgaveId = $_REQUEST['oppgaveId'];
@@ -36,5 +39,5 @@ if (isset($_POST['submit'])) {
 
 
 echo $twig->render('nyttTidsestimat.html', array('oppgave'=>$oppgave, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
-                     'error'=>$_GET['error'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+                     'error'=>$error, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

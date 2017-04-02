@@ -8,6 +8,8 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
+$mismatch = "";
+$error = "";
 
 session_start();
 
@@ -34,12 +36,12 @@ if(isset($_REQUEST['action'])){
             break;
         case 'Lagre':
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
-                $bruker->setBrukerNavn($_POST['navn']);
-                $bruker->setBrukerType($_POST['type']);
+                $bruker->setNavn($_POST['navn']);
+                $bruker->setBrukertype($_POST['type']);
             }
             echo $bruker->getBrukertype();
-            $bruker->setBrukerEpost($_POST['epost']);
-            $bruker->setBrukerTelefon($_POST['telefon']);
+            $bruker->setEpost($_POST['epost']);
+            $bruker->setTelefon($_POST['telefon']);
             
             $UserReg->redigerBruker($bruker);
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
@@ -74,8 +76,9 @@ if(isset($_GET['error'])){
     if($_GET['error'] == "mismatch"){
         $mismatch = 1;
     }
+    $error = $_GET['error'];
 }
 
-echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$error, 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
