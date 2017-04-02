@@ -3,7 +3,8 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 require_once 'vendor/autoload.php';
-//require_once 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+require_once 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
@@ -27,12 +28,17 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 date_default_timezone_set('Europe/Oslo');
 $firstDayOfMonth = mktime(0, 0, 0, date("m"), 1, date("Y"));
 $lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
-$datefrom = date("Y-m-d", $firstDayOfMonth);
-$dateto = date("Y-m-d", $lastDayOfMonth);
+
+//$datefrom = date("Y-m-d", $firstDayOfMonth);          // Finne en standarddato som får med alle registreringer.   
+//$dateto = date("Y-m-d", $lastDayOfMonth); 
+$datefrom = date("Y-m-d", '1970-01-01');          // Manuell, fjernes   
+$dateto = date("Y-m-d"); 
+
+/* Følgende er ikke implementert enda... 
 if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $datefrom = substr($_GET['daterange'], 0, 10);
     $dateto = substr($_GET['daterange'], 13, 10);
-}
+}*/
 
 $bruker = $_SESSION['bruker'];
 
@@ -54,23 +60,46 @@ $timeregistreringer = array();
 foreach($brukerIds as $brukerId) {
     $brukersTimeregistreringer = array();
     $brukersTimeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($brukerId, $datefrom, $dateto);
+    //$brukersTimeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($brukerId);         // Finne en standarddato som får med alle registreringer. 
     foreach ($brukersTimeregistreringer as $timereg) {
         $timeregistreringer[] = $timereg;
     }
 }
 
-echo $twig->render(
-    'teamrapportansatt.html',
-    array('innlogget'=>$_SESSION['innlogget'],
-        'bruker'=>$_SESSION['bruker'],
-        'timeregistreringer'=>$timeregistreringer,
-        'oppgavereg'=>$OppgaveReg,
-        'teamReg'=>$TeamReg,
-        'timeReg'=>$TimeReg,
-        'userReg'=>$UserReg,
-        'brukerIds'=>$brukerIds,
-        'teams'=>$teams,
-        'datefrom'=>$datefrom,
-        'dateto'=>$dateto,
-        'brukerTilgang'=>$_SESSION['brukerTilgang']));
-?>
+$twigArray = array('innlogget'=>$_SESSION['innlogget'],
+    'bruker'=>$_SESSION['bruker'],
+    'timeregistreringer'=>$timeregistreringer,
+    'brukernavn'=>$brukernavn,
+    'oppgavereg'=>$OppgaveReg,
+    'teamReg'=>$TeamReg,
+    'timeReg'=>$TimeReg,
+    'userReg'=>$UserReg,
+    'brukerIds'=>$brukerIds,
+    'teams'=>$teams,
+    'brukerTilgang'=>$_SESSION['brukerTilgang']);
+
+if(isset($_GET['download'])){
+    $filename = date('Y-m-d') . ' TimeRegistrering rapport.xlsx';
+ 
+    $objPHPExcel = new PHPExcel();
+    $tmpFile = tempnam('tempfolder', 'tmp');
+    echo file_put_contents($tmpFile, $twig->render('teamrapportansattexport.html', $twigArray));
+    
+    $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
+    //$excelHTMLReader->loadIntoExisting($testTemp, $objPHPExcel); //
+
+    $objPHPExcel = $excelHTMLReader->load($tmpFile);
+
+    unlink($tmpFile); 
+    //fclose($tmpFile);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename='.$filename);
+    header('Cache-Control: max-age=0');
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    ob_end_clean();
+    $objWriter->save('php://output');
+    exit;
+}
+
+echo $twig->render('teamrapportansatt.html', $twigArray);
