@@ -17,11 +17,11 @@
 
     <h2>Brukeropplysninger</h2>
     
-    <p><b>Navn: </b> {{ bruker.getBrukerNavn() }}<br/>
-       <b>Epost: </b> {{ bruker.getBrukerEpost() }}<br/>
-       <b>Telefon: </b> {{ bruker.getBrukerTelefon() }}<br/>
+    <p><b>Navn: </b> {{ bruker.getNavn() }}<br/>
+       <b>Epost: </b> {{ bruker.getEpost() }}<br/>
+       <b>Telefon: </b> {{ bruker.getTelefon() }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
-       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getBrukerId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
         
     
     <h2>Prosjekter</h2>
@@ -37,13 +37,13 @@
             </tr>
             {% for p in prosjekter %}
                 <tr>
-                    <td>{{ p.getProsjektNavn() }}</td>
-                    <td>{{ p.getProsjektBeskrivelse() }}</td>
-                    <td>{{ UserReg.hentBruker(p.getProsjektLeder()).getBrukerNavn() }}</td>
-                    <td>{{ UserReg.hentBruker(p.getProsjektProductOwner()).getBrukerNavn() }}</td>
-                    <td>{{ TeamReg.hentTeam(p.getProsjektTeam()).getTeamNavn() }}</td>
-                    <td>{{ p.getProsjektStartDato() }}</td>
-                    <td>{{ p.getProsjektSluttDato() }}</td>
+                    <td>{{ p.getNavn() }}</td>
+                    <td>{{ p.getBeskrivelse() }}</td>
+                    <td>{{ UserReg.hentBruker(p.getLeder()).getNavn() }}</td>
+                    <td>{{ UserReg.hentBruker(p.getProductOwner()).getNavn() }}</td>
+                    <td>{{ TeamReg.hentTeam(p.getTeam()).getNavn() }}</td>
+                    <td>{{ p.getStartDato() }}</td>
+                    <td>{{ p.getSluttDato() }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -56,8 +56,8 @@
                 </tr>
                 {% for t in teamliste %}
                     <tr>
-                        <td>{{ t.getTeamNavn() }}</td>
-                        <td>{{ UserReg.hentBruker(t.getTeamLeder()).getBrukerNavn() }}</td>
+                        <td>{{ t.getNavn() }}</td>
+                        <td>{{ UserReg.hentBruker(t.getLeder()).getNavn() }}</td>
                     </tr>
                 {% endfor %}
             </table>

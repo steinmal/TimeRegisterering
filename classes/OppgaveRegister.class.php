@@ -212,7 +212,7 @@
             try {
                 $stmt = $this->db->prepare("INSERT INTO forslag_tidsestimat (oppgave_id, estimat, bruker_id) VALUES (:oppgaveId, :estimat, :brukerId)");
                 $stmt->bindParam(':oppgaveId', $oppgave_id, PDO::PARAM_INT);
-                $stmt->bindParam(':brukerId', $bruker->getBrukerId(), PDO::PARAM_INT);
+                $stmt->bindParam(':brukerId', $bruker->getId(), PDO::PARAM_INT);
                 $stmt->bindParam(':estimat', $estimat);
                 $stmt->execute();
             } catch (Exception $e) {
@@ -227,7 +227,7 @@
                 $stmt->execute();
 
                 while ($estimat = $stmt->fetchObject('Estimat')) {
-                    $estimater[$estimat->getEstimatId()] = $estimat;
+                    $estimater[$estimat->getId()] = $estimat;
                 }
 
             } catch (Exception $e) {

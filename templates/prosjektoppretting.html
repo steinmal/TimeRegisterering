@@ -12,9 +12,9 @@
         {% include 'header.html' %}
     {% if valgtProsjekt.getId() > 0 %}
         <h1>Rediger prosjekt</h1>
-    {% elseif valgtProsjekt.getProsjektParent() > 0 %}
+    {% elseif valgtprosjekt.getParent() > 0 %}
         <h1>Opprett nytt underprosjekt</h1>
-    {% elseif valgtProsjekt.getProsjektParent() == 0 %}
+    {% elseif valgtprosjekt.getParent() == 0 %}
         <h1>Opprett nytt prosjekt</h1>
     {% endif %}
 
@@ -24,14 +24,14 @@
             {% endif %}
             <div class="form-group ">
                 <label for="navn">Prosjektnavn:</label>
-                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtProsjekt.getProsjektNavn() }}">
+                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtprosjekt.getNavn() }}">
             </div>
             {% if brukParent %}
             <div class="form-group ">
                 <label for="foreldreProsjekt">Foreledreprosjekt:</label>
                 <select name="foreldreProsjekt" class="form-control" id="foreldreProsjekt">
                     {% for prosjekt in prosjekter %}
-                    <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getProsjektParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
+                    <option value="{{ prosjekt.getId() }}" {% if valgtprosjekt.getParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -40,7 +40,7 @@
                 <label for="prosjektLeder">Prosjektleder:</label>
                 <select name="prosjektLeder" class="form-control" id="prosjektLeder">
                     {% for bruker in brukere %}
-                        <option value="{{ bruker.getBrukerId() }}" {% if valgtProsjekt.getProsjektLeder() == bruker.getBrukerId() %} selected {% endif %}>{{ bruker.getBrukerNavn() }}</option>
+                        <option value="{{ bruker.getId() }}" {% if valgtProsjekt.getLeder() == bruker.getId() %} selected {% endif %}>{{ bruker.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -48,21 +48,21 @@
                 <label for="team">Team:</label>
                 <select name="team" class="form-control" id="team">
                     {% for team in teamListe %}
-                        <option value="{{ team.getTeamId() }}" {% if valgtProsjekt.getProsjektTeam() == team.getId() %} selected {% endif %}>{{ team.getTeamNavn() }}</option>
+                        <option value="{{ team.getId() }}" {% if valgtProsjekt.getTeam() == team.getId() %} selected {% endif %}>{{ team.getNavn() }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group ">
                 <label for="prosjektBeskrivelse">Prosjektbeskrivelse:</label>
-                <input type="text" class="form-control" id="prosjektBeskrivelse" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getProsjektBeskrivelse() }}">
+                <input type="text" class="form-control" id="prosjektBeskrivelse" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getBeskrivelse() }}">
             </div>
             <div class="form-group ">
                 <label for="startDato">Startdato:</label>
-                <input type="date" class="form-control" id="startDato" name="startDato" value="{{ valgtProsjekt.getProsjektStartDato() }}">
+                <input type="date" class="form-control" id="startDato" name="startDato" value="{{ valgtProsjekt.getStartDato() }}">
             </div>
             <div class="form-group ">
                 <label for="sluttDato">Sluttdato:</label>
-                <input type="date" class="form-control" id="sluttDato" name="sluttDato" value="{{ valgtProsjekt.getProsjektSluttDato() }}">
+                <input type="date" class="form-control" id="sluttDato" name="sluttDato" value="{{ valgtProsjekt.getSluttDato() }}">
             </div>
             <div class="form-group ">
                 <input type="submit" name="opprettProsjekt" {% if valgtProsjekt.getId() >= 0 %} value="Endre prosjekt" {% else %} value="Opprett prosjekt" {% endif %}>

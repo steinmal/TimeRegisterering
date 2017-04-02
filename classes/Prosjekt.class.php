@@ -17,29 +17,29 @@
         }
         
         public function getId() { return $this->prosjekt_id; }
-        public function getProsjektNavn() { return $this->prosjekt_navn; }
-        public function getProsjektParent() { return $this->foreldre_prosjekt_id; }
+        public function getNavn() { return $this->prosjekt_navn; }
+        public function getParent() { return $this->foreldre_prosjekt_id; }
         //public function getProsjektParent() { return ProsjektRegister::hentProsjekt($this->foreldre_prosjekt_id); }
-        public function getProsjektLeder() { return $this->prosjekt_leder; }
-        public function getProsjektTeam() { return $this->team_id; }
-        public function getProsjektStartDato() { return $this->prosjekt_startdato; }
-        public function getProsjektSluttDato() { return $this->prosjekt_sluttdato; }
-        public function getProsjektBeskrivelse() { return $this->prosjekt_beskrivelse; }
-        public function getProsjektProductOwner() { return $this->prosjekt_product_owner; }
-        public function getProsjektRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
+        public function getLeder() { return $this->prosjekt_leder; }
+        public function getTeam() { return $this->team_id; }
+        public function getStartDato() { return $this->prosjekt_startdato; }
+        public function getSluttDato() { return $this->prosjekt_sluttdato; }
+        public function getBeskrivelse() { return $this->prosjekt_beskrivelse; }
+        public function getProductOwner() { return $this->prosjekt_product_owner; }
+        public function getRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
         public function getStatus() { return $this->isArkivert() ? "Arkivert" : "Aktiv"; }
         
         public function isArkivert() { return $this->prosjekt_arkivert; }
         
-        public function setProsjektId($id) { $this->prosjekt_id = $id; }
-        public function setProsjektNavn($navn) { $this->prosjekt_navn = $navn;}
-        public function setProsjektParent($parent) { $this->foreldre_prosjekt_id = $parent;}
-        public function setProsjektLeder($leder) { $this->prosjekt_leder = $leder;}
-        public function setProsjektTeam($team) { $this->team_id = $team;}
-        public function setProsjektStartDato($startdato) { $this->prosjekt_startdato = $startdato;}
-        public function setProsjektSluttDato($sluttdato) { $this->prosjekt_sluttdato = $sluttdato;}
-        public function setProsjektBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
-        public function setProsjektProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
+        public function setId($id) { $this->prosjekt_id = $id; }
+        public function setNavn($navn) { $this->prosjekt_navn = $navn;}
+        public function setParent($parent) { $this->foreldre_prosjekt_id = $parent;}
+        public function setLeder($leder) { $this->prosjekt_leder = $leder;}
+        public function setTeam($team) { $this->team_id = $team;}
+        public function setStartDato($startdato) { $this->prosjekt_startdato = $startdato;}
+        public function setSluttDato($sluttdato) { $this->prosjekt_sluttdato = $sluttdato;}
+        public function setBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
+        public function setProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
         
         public function __toString() {
             return $this->prosjekt_id . " " . $this->prosjek_navn . " " . $this->prosjekt_leder;

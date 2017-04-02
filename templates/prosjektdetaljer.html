@@ -12,7 +12,7 @@
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
-    <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getProsjektNavn() }}</h1>
+    <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getNavn() }}</h1>
         <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
         <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
     <h1>Faser</h1>
@@ -50,7 +50,11 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.getFaseId() == fase.getId() %}
                 <tr>
+                    {% if brukerTilgang.isTeamleder() %}
                     <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}">{{ oppgave.getNavn() }}</a></td>
+                    {% else %}
+                    <td>{{ oppgave.getNavn() }}</td>
+                    {% endif %}
                     <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getNavn() }}</td>
                     <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getType()) }}</td>
                     <td>{{ oppgave.getPeriode() }}</td>

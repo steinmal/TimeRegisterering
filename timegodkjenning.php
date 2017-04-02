@@ -38,7 +38,7 @@ if(isset($_GET['action'])){
 
 $bruker = $_SESSION['bruker'];
 $teamIDs = array();
-$teamIDs = $TeamReg->getTeamIdFraTeamleder($bruker->getBrukerID());
+$teamIDs = $TeamReg->getTeamIdFraTeamleder($bruker->getId());
 
 $teams = array();
 $brukerIds = array();

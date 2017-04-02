@@ -26,19 +26,26 @@
             Du har ikke tilgang til prosjektet
         </div>
     {% endif %}
+    {% if sendt %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Forslag er sendt!
+    </div>
+    {% endif %}
         
     <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <input type=hidden name=regId value="{{ registrering.getTimeregId() }}">
+            <input type=hidden name=regId value="{{ registrering.getId() }}">
             <select class="form-control" name="prosjekt" id="prosjekt" disabled>
-                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getProsjektNavn() }}</option>
+                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
             </select>
         {% else %}
             <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                 {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjektNavn() }}</option>
+                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getProsjekt() }}</option>
                 {% endfor %}
             </select>
             {% if valgtProsjekt <= 1 %}

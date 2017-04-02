@@ -9,8 +9,8 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $userReg = new UserRegister($db);
 $mailExists = 0;
-
 session_start();
+
 
 if(isset($_POST['opprettBruker'])){
     if($userReg->brukernavnEksisterer($_POST['navn'])){
@@ -22,10 +22,10 @@ if(isset($_POST['opprettBruker'])){
         return;
     }
     $nyBruker = new User();
-    $nyBruker->setBrukerNavn($_POST['navn']);
-    $nyBruker->setBrukerEpost($_POST['epost']);
+    $nyBruker->setNavn($_POST['navn']);
+    $nyBruker->setEpost($_POST['epost']);
     $nyBruker->setPassord($_POST['passord']);
-    $nyBruker->setBrukerTelefon($_POST['telefonnummer']);
+    $nyBruker->setTelefon($_POST['telefonnummer']);
     $userReg->opprettBruker($nyBruker);
 }
 
@@ -36,5 +36,5 @@ if($_GET['nameExists'] == 1) {
     $nameExists = 1;
 }
 
-echo $twig->render('brukerregistrering.html', array('mailExists'=>$mailExists, 'nameExists'=>$nameExists));
+echo $twig->render('brukerregistrering.html', array('bruker'=>$_SESSION['bruker'], 'innlogget'=>$_SESSION['innlogget'], 'mailExists'=>$mailExists, 'nameExists'=>$nameExists));
 ?>

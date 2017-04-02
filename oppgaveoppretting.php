@@ -67,7 +67,7 @@ if(isset($_POST['opprettOppgave'])){
         return;
     }
     else{
-        $nyttProsjekt->setProsjektId($_POST['prosjektId']);
+        $nyttProsjekt->setId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
         header("Location: prosjektadministrering.php");
         return;
