@@ -34,7 +34,6 @@ if(isset($_GET['action'])){
         $TimeReg->avvisTimeregistrering($_GET['timeregId']);
     }
     header('location: timegodkjenning.php');
-    
 }
 
 $bruker = $_SESSION['bruker'];

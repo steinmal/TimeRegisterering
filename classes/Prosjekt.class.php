@@ -44,6 +44,4 @@
         public function __toString() {
             return $this->prosjekt_id . " " . $this->prosjek_navn . " " . $this->prosjekt_leder;
         }
-        
-        
     }
