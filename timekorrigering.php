@@ -35,6 +35,7 @@ if (isset($_REQUEST['action'])) {
         switch ($_REQUEST['action']) {
             case 'Korriger':
                 if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
+                    echo "getAktiv if feil?";
                     $error = "kanIkkeEndres";
                     
                 } else {
@@ -128,7 +129,7 @@ date_default_timezone_set('Europe/Oslo');
 
 //$twigs['timeregistreringer'] = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId());
 //echo $twig->render('timeoversikt.html', $twigs);
-//header("Location: timeoversikt.php?error=" . $error);
+header("Location: timeoversikt.php?error=" . $error);
 return;
 
 ?>

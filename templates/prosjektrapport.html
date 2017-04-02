@@ -34,13 +34,13 @@
                     <th>Timer</th>
                 </tr>
                 <tr>
-                    <td>{{ rapport.getProsjekt().getNavn() }}</td>
-                    <td>{{ rapport.getTimer() }}</td>
+                    <td>{{ valgtRapport.getProsjekt().getNavn() }}</td>
+                    <td>{{ valgtRapport.getTimer() }}</td>
                 </tr>
-                {% for up in rapport.getUnderProsjekt() %}
+                {% for rapport in valgtRapport.getProsjektRapporter() %}
                 <tr>
-                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ up.getProsjekt().getId() }}">{{ up.getProsjekt().getNavn() }}</a></td>
-                    <td>{{ up.getTimer() }}</td>
+                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ rapport.getProsjekt().getId() }}">{{ rapport.getNavnMedInnrykk() }}</a></td>
+                    <td>{{ rapport.getTimer() }}</td>
                 </tr>
                 {% endfor %}
             {% elseif type == "oppgave" %}

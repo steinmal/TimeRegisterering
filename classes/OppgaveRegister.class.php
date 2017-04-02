@@ -61,7 +61,7 @@
 
         public function lagOppgave($foreldre_oppgave_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode) {
             try {
-                $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, prosjekt_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode)
+                $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode)
                 VALUES (:foreldre_id, :oppgavetype_id, :fase_id, :navn, :tidsestimat, :periode)");
                 $stmt->bindParam(':foreldre_id', $foreldre_oppgave_id, PDO::PARAM_INT);
                 $stmt->bindParam(':oppgavetype_id', $oppgavetype_id, PDO::PARAM_INT);

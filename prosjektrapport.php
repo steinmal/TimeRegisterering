@@ -45,7 +45,7 @@ switch ($type) {
     case 'prosjekt':
         $grunnProsjekt = $prosjekt;
         $underProsjekt = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
-        $twigs['rapport'] = $rapportProsjekt;
+        $twigs['valgtRapport'] = $rapportProsjekt;
         break;
     case 'oppgave':
         

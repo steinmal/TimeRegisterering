@@ -4,11 +4,13 @@ class RapportProsjekt {
     private $underProsjekt = array();
     private $prosjekt;
     private $prosjektOgUnderProsjekt = array();
+    private $prosjektRapporter = array();
     private $OppgaveReg;
     private $oppgaver = array();
     private $TimeregReg;
     private $timeregistreringer = array();
     
+    private $delNivaa;
     private $tid;
     private $totaltid;
 
@@ -16,9 +18,11 @@ class RapportProsjekt {
             ProsjektRegister $ProsjektReg,
             OppgaveRegister $OppgaveReg,
             TimeregistreringRegister $TimeregRegister,
-            Prosjekt $prosjekt){
+            Prosjekt $prosjekt,
+            $nivaa = 0){
         $this->ProsjektReg = $ProsjektReg;
         $this->prosjekt = $prosjekt;
+        $this->delNivaa = $nivaa;
         $this->prosjektOgUnderProsjekt[] = $prosjekt;
         $this->OppgaveReg = $OppgaveReg;
         $this->TimeregReg = $TimeregRegister;
@@ -36,8 +40,12 @@ class RapportProsjekt {
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         if($underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
             foreach($underProsjektListe as $p){
-                $this->prosjektOgUnderProsjekt[] = $p;
-                $rapport = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p);
+                //$this->prosjektOgUnderProsjekt[] = $p; // Ikke rekursiv
+                $rapport = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1);
+                $this->prosjektOgUnderProsjekt = array_merge($this->prosjektOgUnderProsjekt, $rapport->getProsjektOgUnderProsjekt());
+                $this->prosjektRapporter[] = $rapport;
+                $this->prosjektRapporter = array_merge($this->prosjektRapporter, $rapport->getProsjektRapporter());
+                //var_dump($this->prosjektOgUnderProsjekt);
                 $this->underProsjekt[] = $rapport;
                 $this->totaltid->add(DtimeToDInterval($rapport->getTid()));
             }
@@ -45,9 +53,26 @@ class RapportProsjekt {
     }
 
     public function getProsjektOgUnderProsjekt(){ return $this->prosjektOgUnderProsjekt; }
+    public function getProsjektRapporter(){ return $this->prosjektRapporter; }
     public function getTimeregistreringer(){ return $this->timeregistreringer; }
     public function getProsjekt(){ return $this->prosjekt; }
     public function getUnderProsjekt(){ return $this->underProsjekt; }
+    
+    public function getNavnMedInnrykk(){
+        $navn = $this->prosjekt->getNavn();
+        for($i = 0; $i < $delNivaa; $i++){
+            $navn = "&emsp;" . $navn;
+        }
+        return $navn;
+    }
+    public function getNavnMedSymbol($symbol){
+        $navn = $this->prosjekt->getNavn();
+        for($i = 0; $i < $delNivaa; $i++){
+            $navn = $symbol . $navn;
+        }
+        return $navn;
+    }
+
 
     public function getTid(){
         return $this->tid;
