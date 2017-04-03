@@ -40,7 +40,7 @@ $twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'
 $TimeregReg = new TimeregistreringRegister($db);
 $FaseReg = new FaseRegister($db);
 //$rapportProsjekt = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregReg, $prosjekt);
-$oversikt = new ProsjektOversikt($prosjekt, $FaseReg, $OppgaveReg, $TimeregReg);
+$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg);
 
 //Type kan slås sammen med rapportType
 

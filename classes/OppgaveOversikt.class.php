@@ -11,7 +11,7 @@ class OppgaveOversikt{
         //$this->OppgaveReg = $OppgaveReg;
         
         $helper = new DateHelper();
-        $timeregListe = $TimeregReg->hentTimeregistreringerFraOppgave($oppgave->getId());
+        $timeregListe = $TimeregReg->hentTimeregFraOppgave($oppgave->getId());
         foreach($timeregListe as $timereg){
             $helper->add($timereg->getHourAsDateInterval());
         }

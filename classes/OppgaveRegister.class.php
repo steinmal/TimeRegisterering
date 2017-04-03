@@ -29,7 +29,7 @@
         public function hentOppgaverFraFase($fase_id){
             $oppgaver = array();
             try {
-                $stmt = $this->db->prepare("SELECT * FROM oppgave WHERE fase_id=:id)");
+                $stmt = $this->db->prepare("SELECT * FROM oppgave WHERE fase_id=:id");
                 $stmt->bindParam(':id', $fase_id, PDO::PARAM_INT);
                 $stmt->execute();
                 

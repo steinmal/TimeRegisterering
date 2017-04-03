@@ -1,7 +1,7 @@
 <?php
 
 class DateHelper{
-    public static function sumDateInterval(DateInterval $d1, DateInterval $d2){
+    public static function sumDateInterval($d1, $d2){
         $before = DateTime::createFromFormat('!', "");
         $after = clone $before;
 
@@ -31,11 +31,11 @@ class DateHelper{
     }
     
     public function add(DateInterval $dt){
-        $after->add($dt);
+        $this->after->add($dt);
     }
     
     public function getInterval(){
-        return $before->diff($after);
+        return $this->before->diff($this->after);
     }
 }
 

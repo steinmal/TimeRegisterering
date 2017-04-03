@@ -16,6 +16,7 @@ class ProsjektOversikt {
 
     public function __construct(
             Prosjekt $prosjekt,
+            ProsjektRegister $ProsjektReg,
             FaseRegister $FaseReg,
             OppgaveRegister $OppgaveReg,
             TimeregistreringRegister $TimeregRegister,
@@ -28,7 +29,7 @@ class ProsjektOversikt {
 
         $tidHelper = new DateHelper();
         $totalHelper = new DateHelper();
-        $this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
+        //$this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
 
         foreach($FaseReg->hentAlleFaser($prosjekt->getId()) as $fase){
             $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
@@ -43,11 +44,11 @@ class ProsjektOversikt {
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
-            $oversikt = new ProsjektOversikt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
+            $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
             $this->oversiktListe[] = $oversikt;
-            $this->oversiktListe = array_merge($this->oversiktListe, $rapport->getOversiktListe());
+            $this->oversiktListe = array_merge($this->oversiktListe, $oversikt->getOversiktListe());
             $this->prosjektListe[] = $p;
-            $totalHelper->add(DtimeToDInterval($rapport->getTid()));
+            $totalHelper->add($oversikt->getTid());
         }
         //}
         $this->totaltid = $totalHelper->getInterval();
@@ -83,10 +84,6 @@ class ProsjektOversikt {
     }
     
     public function getTimer(){
-        var_dump($this->tid);
-        var_dump(number_format($this->tid->getTimestamp() / 3600.0, 2));
-        return number_format($this->tid->getTimestamp() / 3600.0, 2);
-        
         $tid = $this->tid->h + ($this->tid->i + $this->tid->s / 60.0) / 60.0;
         return number_format($tid, 2);
     }

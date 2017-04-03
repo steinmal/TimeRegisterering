@@ -9,18 +9,18 @@ class FaseOversikt {
     
     public function __construct(
             Fase $fase,
-            OppgaveReg $OppgaveReg,
+            OppgaveRegister $OppgaveReg,
             TimeregistreringRegister $TimeregReg)
     {
         $this->fase = $fase;
 
         $oppgaveListe = $OppgaveReg->hentOppgaverFraFase($fase->getId());
         foreach($oppgaveListe as $oppgave){
-            $oversikt = new OppgaveOversikt($oppgave->getId(), $TimeregReg);
+            $oversikt = new OppgaveOversikt($oppgave, $TimeregReg);
             $oppgaveOversiktListe[] = $oversikt;
 
             $type = $oppgave->getType();
-            $tid[$type] = DateHelper::sumDateInterval($tid[$type], $oversikt->getTid());
+            $this->tid[$type] = DateHelper::sumDateInterval($this->tid[$type], $oversikt->getTid());
         }
     }
     
