@@ -31,7 +31,7 @@ $lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
 
 //$datefrom = date("Y-m-d", $firstDayOfMonth);          // Finne en standarddato som får med alle registreringer.   
 //$dateto = date("Y-m-d", $lastDayOfMonth); 
-$datefrom = date("Y-m-d", '1970-01-01');          // Manuell, fjernes   
+$datefrom = date("Y-m-d", strtotime('1970-01-01'));          // Manuell, fjernes // Fikk en warning på denne, måtte sette strtotime().
 $dateto = date("Y-m-d"); 
 
 /* Følgende er ikke implementert enda... 
@@ -69,7 +69,7 @@ foreach($brukerIds as $brukerId) {
 $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
     'timeregistreringer'=>$timeregistreringer,
-    'brukernavn'=>$brukernavn,
+//    'brukernavn'=>$brukernavn, //brukes ikke
     'oppgavereg'=>$OppgaveReg,
     'teamReg'=>$TeamReg,
     'timeReg'=>$TimeReg,

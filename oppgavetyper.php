@@ -19,7 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
-    echo "Du har ikke tilgang til Brukerredigering";
+    echo "Du har ikke tilgang til oppgavetyperedigering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }

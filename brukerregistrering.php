@@ -12,6 +12,7 @@ $mailExists = 0;
 $nameExists = 0;
 $innlogget = 0;
 $bruker = "";
+$brukerTilgang = "";
 session_start();
 
 
@@ -47,7 +48,10 @@ if(isset($_SESSION['bruker'])){
 if(isset($_SESSION['innlogget'])){
     $innlogget = $_SESSION['innlogget'];
 }
+if(isset($_SESSION['burkerTilgang'])){
+    $innlogget = $_SESSION['brukerTilgang'];
+}
 
 
-echo $twig->render('brukerregistrering.html', array('bruker'=>$bruker, 'innlogget'=>$innlogget, 'mailExists'=>$mailExists, 'nameExists'=>$nameExists));
+echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'mailExists'=>$mailExists, 'nameExists'=>$nameExists));
 ?>

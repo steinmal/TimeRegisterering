@@ -71,14 +71,14 @@ class RapportProsjekt {
     
     public function getNavnMedInnrykk(){
         $navn = $this->prosjekt->getNavn();
-        for($i = 0; $i < $delNivaa; $i++){
+        for($i = 0; $i < $this->delNivaa; $i++){ //La til $this, phpstorm ga error her.
             $navn = "&emsp;" . $navn;
         }
         return $navn;
     }
     public function getNavnMedSymbol($symbol){
         $navn = $this->prosjekt->getNavn();
-        for($i = 0; $i < $delNivaa; $i++){
+        for($i = 0; $i < $this->delNivaa; $i++){
             $navn = $symbol . $navn;
         }
         return $navn;

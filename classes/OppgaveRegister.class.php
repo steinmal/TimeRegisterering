@@ -237,6 +237,7 @@
         }
         
         public function hentAlleEstimatForOppgave($oppgave_id) {
+            $estimater = array();
             try {
                 $stmt = $this->db->prepare("SELECT * FROM forslag_tidsestimat WHERE oppgave_id = :id");
                 $stmt->bindParam(':id', $oppgave_id, PDO::PARAM_INT);

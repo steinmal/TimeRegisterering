@@ -75,5 +75,5 @@ if(isset($_POST['opprettOppgave'])){
 }
 
 echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'error'=>$_GET['error'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

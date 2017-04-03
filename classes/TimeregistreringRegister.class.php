@@ -132,8 +132,14 @@
             }
         }
 
-        public function hentTimeregistreringerFraBruker($bruker_id, $datefrom, $dateto) {
+        public function hentTimeregistreringerFraBruker($bruker_id) { //($bruker_id, $dateto ,$datefrom) fjernet to siste argumenter
             $timeregistreringer = array();
+            if(!isset($datefrom)){
+                $datefrom ="";
+            }
+            if(!isset($dateto)){
+                $dateto ="";
+            }
             try {
                 if ($datefrom && $dateto) {
                     $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id AND (timereg_dato BETWEEN :datefrom AND :dateto)");

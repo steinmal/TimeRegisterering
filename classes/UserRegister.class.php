@@ -50,12 +50,17 @@
                 $stmt = $this->db->prepare("UPDATE bruker SET brukertype_id=:type, bruker_navn=:navn, bruker_epost=:epost, bruker_telefon=:telefon, bruker_passord=:passord WHERE bruker_id=:id");
                 
                 $id = $bruker->getId();
+                $brukertype = $bruker->getBrukertype();
+                $brukernavn = $bruker->getNavn();
+                $epost = $bruker->getEpost();
+                $telefon = $bruker->getTelefon();
+                $passord = $bruker->getPassord();
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->bindParam(':type', $bruker->getBrukertype(), PDO::PARAM_INT);
-                $stmt->bindParam(':navn', $bruker->getNavn(), PDO::PARAM_STR);
-                $stmt->bindParam(':epost', $bruker->getEpost(), PDO::PARAM_STR);
-                $stmt->bindParam(':telefon', $bruker->getTelefon(), PDO::PARAM_INT);
-                $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
+                $stmt->bindParam(':type', $brukertype, PDO::PARAM_INT);
+                $stmt->bindParam(':navn', $brukernavn, PDO::PARAM_STR);
+                $stmt->bindParam(':epost', $epost, PDO::PARAM_STR);
+                $stmt->bindParam(':telefon', $telefon, PDO::PARAM_INT);
+                $stmt->bindParam(':passord', $passord, PDO::PARAM_STR);
                 
                 $stmt->execute();
             } catch (Exception $e) {

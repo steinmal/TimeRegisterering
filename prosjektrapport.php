@@ -12,7 +12,7 @@ $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 //$UserReg = new UserRegister($db);
 //$TeamReg = new TeamRegister($db);
-
+$rapportType = "";
 
 session_start();
 
@@ -31,9 +31,11 @@ if(!isset($_GET['prosjektId'])){
     header("Location: prosjektadministrering.php");
     return;
 }
-
+if(isset($_GET['rapportType'])){
+    $rapportType = $_GET['rapportType'];
+}
 $prosjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']);
-$twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'prosjekt'=>$prosjekt, 'type'=>$_GET['rapportType']);
+$twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'prosjekt'=>$prosjekt, 'type'=>$rapportType);
 
 $TimeregReg = new TimeregistreringRegister($db);
 var_dump($prosjekt);
