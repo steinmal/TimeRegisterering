@@ -13,7 +13,9 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getNavn() }}</h1>
+        {% if brukerTilgang.isProsjektAdmin %}
         <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
+        {% endif %}
         <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
     <h1>Faser</h1>
     <table class="table table-striped">
