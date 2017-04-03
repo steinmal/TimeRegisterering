@@ -33,14 +33,14 @@
                     <th>Prosjekt</th>
                     <th>Timer</th>
                 </tr>
+                <!--<tr>
+                    <td>{{ oversikt.getProsjekt().getNavn() }}</td>
+                    <td>{{ oversikt.getTimer() }}</td>
+                </tr>-->
+                {% for oversikt in oversiktListe %}
                 <tr>
-                    <td>{{ valgtRapport.getProsjekt().getNavn() }}</td>
-                    <td>{{ valgtRapport.getTimer() }}</td>
-                </tr>
-                {% for rapport in valgtRapport.getProsjektRapporter() %}
-                <tr>
-                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ rapport.getProsjekt().getId() }}">{{ rapport.getNavnMedInnrykk() }}</a></td>
-                    <td>{{ rapport.getTimer() }}</td>
+                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ rapport.getProsjekt().getId() }}">{{ oversikt.getNavnMedInnrykk() }}</a></td>
+                    <td>{{ oversikt.getTimer() }}</td>
                 </tr>
                 {% endfor %}
             {% elseif type == "oppgave" %}

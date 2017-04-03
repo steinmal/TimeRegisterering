@@ -1,74 +1,63 @@
 <?php
 class ProsjektOversikt {
     private $prosjekt;
-    private $prosjektListe = array();
-    private $oversiktListe = array();
+    private $prosjektListe = array(); //Alle underordnede prosjekt
 
-    private $OppgaveReg;
-    private $ProsjektReg;
-    private $TimeregReg;
+    private $oversiktListe = array();
+    private $faseOversiktListe = array();
 
     private $oppgaver = array();
     private $timeregistreringer = array();
     
+
     private $delNivaa;
     private $tid;
     private $totaltid;
 
     public function __construct(
-            ProsjektRegister $ProsjektReg,
+            Prosjekt $prosjekt,
+            FaseRegister $FaseReg,
             OppgaveRegister $OppgaveReg,
             TimeregistreringRegister $TimeregRegister,
-            Prosjekt $prosjekt,
-            $nivaa = 0,
-            ProsjektOversikt $grunnRapport = null)
+            $nivaa = 0)//,
+            //ProsjektOversikt $grunnRapport = null) // For debugging
     {
-        $this->ProsjektReg = $ProsjektReg;
         $this->prosjekt = $prosjekt;
         $this->delNivaa = $nivaa;
         $this->prosjektOgUnderProsjekt[] = $prosjekt;
-        $this->OppgaveReg = $OppgaveReg;
-        $this->TimeregReg = $TimeregRegister;
 
-        $this->oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
-        
-        echo "<font color=red>Nivå: " . $this->delNivaa . "</font>";
-        if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
-        }
-        $this->tid = DateTime::createFromFormat('!', "");
+        $tidHelper = new DateHelper();
+        $totalHelper = new DateHelper();
         $this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
 
-        foreach($this->timeregistreringer as $reg){
-            $this->tid->add($reg->getHourAsDateInterval());
+        foreach($FaseReg->hentAlleFaser($prosjekt->getId()) as $fase){
+            $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
+            $faseOversiktListe[] = $oversikt;
+            $tidHelper->add($oversikt->getTid());
         }
-        if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
-        }
-        $this->totaltid = $this->tid;
 
+        $this->tid = $tidHelper->getInterval();
+        $totalHelper->add($this->tid);
+
+        $oversiktListe[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
-        if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
-            foreach($underProsjektListe as $p){
-                $oversikt = new ProsjektOversikt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1, null/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
-                $this->oversiktListe[] = $oversikt;
-                $this->oversiktListe = array_merge($this->oversiktListe, $rapport->getOversiktListe());
-                $this->prosjektListe[] = $p;
-                $this->totaltid->add(DtimeToDInterval($rapport->getTid()));
-            }
+        //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
+        foreach($underProsjektListe as $p){
+            $oversikt = new ProsjektOversikt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
+            $this->oversiktListe[] = $oversikt;
+            $this->oversiktListe = array_merge($this->oversiktListe, $rapport->getOversiktListe());
+            $this->prosjektListe[] = $p;
+            $totalHelper->add(DtimeToDInterval($rapport->getTid()));
         }
-        if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
-        }
-        //var_dump($this);
+        //}
+        $this->totaltid = $totalHelper->getInterval();
     }
 
-    public function getProsjektOgUnderProsjekt(){ return $this->prosjektOgUnderProsjekt; }
-    public function getProsjektRapporter(){ return $this->prosjektRapporter; }
-    public function getTimeregistreringer(){ return $this->timeregistreringer; }
     public function getProsjekt(){ return $this->prosjekt; }
-    public function getUnderProsjekt(){ return $this->underProsjekt; }
-    
+    public function getAlleUnderProsjekt(){ return $this->prosjektListe; }
+    public function getOversiktListe(){ return $this->oversiktListe; }
+    public function getFaseOversiktListe(){ return $this->faseOversiktListe; }
+
     public function getNavnMedInnrykk(){
         $navn = $this->prosjekt->getNavn();
         for($i = 0; $i < $delNivaa; $i++){
@@ -97,6 +86,9 @@ class ProsjektOversikt {
         var_dump($this->tid);
         var_dump(number_format($this->tid->getTimestamp() / 3600.0, 2));
         return number_format($this->tid->getTimestamp() / 3600.0, 2);
+        
+        $tid = $this->tid->h + ($this->tid->i + $this->tid->s / 60.0) / 60.0;
+        return number_format($tid, 2);
     }
     
     public function getTotalTimer(){

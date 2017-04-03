@@ -25,9 +25,9 @@ class DateHelper{
     private $before;
     private $after;
     
-    public function __construct($before = null, $after = null){
-        $this->before = $before ? $before : DateTime::createFromFormat('!', "");
-        $this->after = $after ? $after : DateTime::createFromFormat('!', "");
+    public function __construct(DateTime $before = null, DateTime $after = null){
+        $this->before = ($before != null ? $before : DateTime::createFromFormat('!', ""));
+        $this->after = ($after != null ? $after : DateTime::createFromFormat('!', ""));
     }
     
     public function add(DateInterval $dt){

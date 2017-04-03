@@ -6,12 +6,12 @@ class OppgaveOversikt{
     
     private $tid;
     
-    public function __construct(Oppgave $oppgave, TimeRegister $TimeReg){
+    public function __construct(Oppgave $oppgave, TimeregistreringRegister $TimeregReg){
         $this->oppgave = $oppgave;
         //$this->OppgaveReg = $OppgaveReg;
         
         $helper = new DateHelper();
-        $timeregListe = $TimeReg->hentTimeregistreringerFraOppgave($oppgave->getId());
+        $timeregListe = $TimeregReg->hentTimeregistreringerFraOppgave($oppgave->getId());
         foreach($timeregListe as $timereg){
             $helper->add($timereg->getHourAsDateInterval());
         }
