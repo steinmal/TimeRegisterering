@@ -35,7 +35,10 @@ if(!isset($_GET['prosjektId'])){
 $prosjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']);
 $twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'prosjekt'=>$prosjekt, 'type'=>$_GET['rapportType']);
 
-$rapportProsjekt = new RapportProsjekt($ProsjektReg, $OppgaveReg, new TimeregistreringRegister($db), $prosjekt);
+$TimeregReg = new TimeregistreringRegister($db);
+var_dump($prosjekt);
+$rapportProsjekt = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregReg, $prosjekt);
+var_dump($rapportProsjekt);
 
 $type = "team";
 if(isset($_GET['rapportType'])){ $type = $_GET['rapportType']; }
@@ -46,12 +49,11 @@ switch ($type) {
         $grunnProsjekt = $prosjekt;
         $underProsjekt = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         $twigs['valgtRapport'] = $rapportProsjekt;
+        echo $rapportProsjekt->getTimer();
         break;
     case 'oppgave':
         
         break;
 }
-var_dump($rapportProsjekt->getTid());
-var_dump($rapportProsjekt->getTimer());
 
 echo $twig->render('prosjektrapport.html', $twigs);

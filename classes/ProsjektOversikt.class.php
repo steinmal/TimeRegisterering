@@ -1,13 +1,14 @@
 <?php
-class RapportProsjekt {
-    private $ProsjektReg;
-    private $underProsjekt = array();
+class ProsjektOversikt {
     private $prosjekt;
-    private $prosjektOgUnderProsjekt = array();
-    private $prosjektRapporter = array();
+    private $prosjektListe = array();
+    private $oversiktListe = array();
+
     private $OppgaveReg;
-    private $oppgaver = array();
+    private $ProsjektReg;
     private $TimeregReg;
+
+    private $oppgaver = array();
     private $timeregistreringer = array();
     
     private $delNivaa;
@@ -20,7 +21,8 @@ class RapportProsjekt {
             TimeregistreringRegister $TimeregRegister,
             Prosjekt $prosjekt,
             $nivaa = 0,
-            RapportProsjekt $grunnRapport = null){
+            ProsjektOversikt $grunnRapport = null)
+    {
         $this->ProsjektReg = $ProsjektReg;
         $this->prosjekt = $prosjekt;
         $this->delNivaa = $nivaa;
@@ -48,12 +50,10 @@ class RapportProsjekt {
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
             foreach($underProsjektListe as $p){
-                //$this->prosjektOgUnderProsjekt[] = $p; // Ikke rekursiv
-                $rapport = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1, $this->nivaa == 0 ? $this : $grunnRapport);
-                $this->prosjektOgUnderProsjekt = array_merge($this->prosjektOgUnderProsjekt, $rapport->getProsjektOgUnderProsjekt());
-                $this->prosjektRapporter[] = $rapport;
-                $this->prosjektRapporter = array_merge($this->prosjektRapporter, $rapport->getProsjektRapporter());
-                $this->underProsjekt[] = $rapport;
+                $oversikt = new ProsjektOversikt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1, null/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
+                $this->oversiktListe[] = $oversikt;
+                $this->oversiktListe = array_merge($this->oversiktListe, $rapport->getOversiktListe());
+                $this->prosjektListe[] = $p;
                 $this->totaltid->add(DtimeToDInterval($rapport->getTid()));
             }
         }

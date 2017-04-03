@@ -22,6 +22,22 @@
             return $timeregistreringer;
         }
         
+        public function hentTimeregFraOppgave($oppgave_id){
+            $timeregistreringer = array();
+            try{
+                $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE oppgave_id=:id");
+                $stmt->bindParam(':id', $oppgave_id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                while($timereg = $stmt->fetchObject('Timeregistrering')){
+                    $timeregistreringer[] = $timereg;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $timeregistreringer;
+        }
+        
         
         public function lagTimeregistrering($oppgave_id, $bruker_id, $timereg_dato, $timereg_start, $timereg_stopp, $timereg_automatisk) {
             try {

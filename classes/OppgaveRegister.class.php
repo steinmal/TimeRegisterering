@@ -26,6 +26,22 @@
             return $oppgaver;
         }
         
+        public function hentOppgaverFraFase($fase_id){
+            $oppgaver = array();
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM oppgave WHERE fase_id=:id)");
+                $stmt->bindParam(':id', $fase_id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                while ($oppgave = $stmt->fetchObject('Oppgave')) {
+                    $oppgaver[] = $oppgave;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $oppgaver;
+        }
+        
         public function hentOppgaverFraProsjekt($prosjekt_id) {
             $oppgaver = array();
             try {

@@ -78,12 +78,15 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'teams'=>$teams,
     'brukerTilgang'=>$_SESSION['brukerTilgang']);
 
+$tabellRender = $twig->render('rapportansatt.html', $twigArray);
+
 if(isset($_GET['download'])){
     $filename = date('Y-m-d') . ' TimeRegistrering rapport.xlsx';
  
     $objPHPExcel = new PHPExcel();
     $tmpFile = tempnam('tempfolder', 'tmp');
-    echo file_put_contents($tmpFile, $twig->render('teamrapportansattexport.html', $twigArray));
+    
+    file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
     
     $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
     //$excelHTMLReader->loadIntoExisting($testTemp, $objPHPExcel); //
@@ -102,4 +105,6 @@ if(isset($_GET['download'])){
     exit;
 }
 
-echo $twig->render('teamrapportansatt.html', $twigArray);
+echo $twig->render('teamrapporttopp.html', $twigArray);
+echo $tabellRender;
+echo $twig->render('teamrapportbunn.html', $twigArray);
