@@ -38,7 +38,7 @@ class RapportProsjekt {
         $this->totaltid = $this->tid;
 
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
-        if($underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
+        if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
             foreach($underProsjektListe as $p){
                 //$this->prosjektOgUnderProsjekt[] = $p; // Ikke rekursiv
                 $rapport = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregRegister, $p, $this->delNivaa + 1);

@@ -8,6 +8,8 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
+$error = "";
+$visNye = "";
 
 session_start();
 
@@ -24,7 +26,7 @@ if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
     if(!isset($_GET['brukerId'])){
         $error = "noSelection";
     } else {
-        if($UserReg->hentBruker($_GET['brukerId'])->isAktivert){
+        if($UserReg->hentBruker($_GET['brukerId'])->isAktivert()){
             $error = "erAktivert";
         } else {
             $UserReg->aktiverBruker($_GET['brukerId']);
@@ -32,7 +34,13 @@ if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
         }
     }
 } else {
-    $error = $_REQUEST['error'];
+    if(isset($_REQUEST['error'])){
+        $error = $_REQUEST['error'];
+    }
+
+}
+if(isset($_GET['visNye'])){
+    $visNye = 'on';
 }
 
 $brukere = $UserReg->hentAlleBrukere();
@@ -43,6 +51,6 @@ foreach($brukere as $bruker){
     }
 }
 
-echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>($_GET['visNye'] == "on"), 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
