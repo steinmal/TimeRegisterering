@@ -21,7 +21,17 @@ class DateHelper{
         
         return $before->diff($after);
     }
+    public static function intervallTilTimer(DateInterval $tid){
+        $timer = $tid->d * 24 + $tid->h + ($tid->i + $tid->s / 60.0) / 60.0;
+        return number_format($timer, 2);
+    }
     
+    public static function DtimeToDInterval(DateTime $dt){
+        $formatted = $dt->format('H:i:s');
+        list($hours, $minutes, $seconds) = sscanf($formatted, '%d:%d:%d');
+        return new DateInterval(sprintf('PT%dH%dM%dS', $hours, $minutes, $seconds));
+    }    
+
     private $before;
     private $after;
     
@@ -36,6 +46,10 @@ class DateHelper{
     
     public function getInterval(){
         return $this->before->diff($this->after);
+    }
+    
+    public function getTimer(){
+        return DateHelper::intervallTilTimer($this->getInterval());
     }
 }
 

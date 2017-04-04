@@ -31,7 +31,10 @@
             {% elseif type == "prosjekt" %}
                 <tr>
                     <th>Prosjekt</th>
-                    <th>Timer</th>
+                    {% for oType in  oppgaveTyper %}
+                        <th>{{ oType.Navn }}</th>
+                    {% endfor %}
+                    <th>Sum</th>
                 </tr>
                 <!--<tr>
                     <td>{{ oversikt.getProsjekt().getNavn() }}</td>
@@ -39,10 +42,20 @@
                 </tr>-->
                 {% for oversikt in oversiktListe %}
                 <tr>
-                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ rapport.getProsjekt().getId() }}">{{ oversikt.getNavnMedInnrykk() }}</a></td>
-                    <td>{{ oversikt.getTimer() }}</td>
+                    <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ oversikt.getProsjekt().getId() }}">{{ oversikt.getNavnMedInnrykk()|raw }}</a></td>
+                    {% for oType in  oppgaveTyper %}
+                        <td>{{ oversikt.getTimer(oType.Id) }}</td>
+                    {% endfor %}
+                    <td>{{ oversikt.Timer }}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td id="sum-linje">Totalt:</td>
+                    {% for oType in  oppgaveTyper %}
+                        <td>{{ oversiktListe[0].getTotalTimer(oType.Id) }}</td>
+                    {% endfor %}
+                    <td>{{ oversiktListe[0].Timer }}</td>
+                </tr>
             {% elseif type == "oppgave" %}
             {% endif %}
             </table>

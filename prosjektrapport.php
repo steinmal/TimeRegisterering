@@ -53,6 +53,7 @@ switch ($type) {
         /*$grunnProsjekt = $prosjekt;
         $underProsjekt = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());*/
         $twigs['oversiktListe'] = $oversikt->getOversiktListe();
+        $twigs['oppgaveTyper'] = $OppgaveReg->getAlleOppgavetyper();
         break;
     case 'oppgave':
         

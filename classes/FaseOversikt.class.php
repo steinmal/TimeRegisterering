@@ -30,4 +30,7 @@ class FaseOversikt {
         }
         return $this->tid[$type_id];
     }
+    public function getTidArray(){
+        return $this->tid;
+    }
 }

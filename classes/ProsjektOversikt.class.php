@@ -11,8 +11,8 @@ class ProsjektOversikt {
     
 
     private $delNivaa;
-    private $tid;
-    private $totaltid;
+    private $tid = array();
+    private $totaltid = array();
 
     public function __construct(
             Prosjekt $prosjekt,
@@ -27,31 +27,46 @@ class ProsjektOversikt {
         $this->delNivaa = $nivaa;
         $this->prosjektOgUnderProsjekt[] = $prosjekt;
 
-        $tidHelper = new DateHelper();
-        $totalHelper = new DateHelper();
+        //$tidHelper = new DateHelper();
+        //$totalHelper = new DateHelper();
         //$this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
 
         foreach($FaseReg->hentAlleFaser($prosjekt->getId()) as $fase){
             $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
             $faseOversiktListe[] = $oversikt;
-            $tidHelper->add($oversikt->getTid());
+            //$tidHelper->add($oversikt->getTid());
+            
+            foreach($oversikt->getTidArray() as $type => $tid){
+                //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
+                $this->tid[$type] = DateHelper::sumDateInterval($this->tid[$type], $tid);
+            }
         }
 
-        $this->tid = $tidHelper->getInterval();
-        $totalHelper->add($this->tid);
+        //$this->tid = $tidHelper->getInterval();
+        //$totalHelper->add($this->tid);
+        foreach($this->tid as $type => $tid){
+            $this->totaltid[$type] = $tid;
+        }
 
         $oversiktListe[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
+            echo $p->getNavn() . "<br>";
             $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
             $this->oversiktListe[] = $oversikt;
             $this->oversiktListe = array_merge($this->oversiktListe, $oversikt->getOversiktListe());
             $this->prosjektListe[] = $p;
-            $totalHelper->add($oversikt->getTid());
+            //$totalHelper->add($oversikt->getTid());
+            //var_dump($this->totaltid);
+            foreach($oversikt->getTotalTidArray() as $type => $tid){
+                //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
+                $this->totaltid[$type] = DateHelper::sumDateInterval($this->totaltid[$type], $tid);
+            }
+            //var_dump($this->totaltid);
         }
         //}
-        $this->totaltid = $totalHelper->getInterval();
+        //$this->totaltid = $totalHelper->getInterval();
     }
 
     public function getProsjekt(){ return $this->prosjekt; }
@@ -61,45 +76,51 @@ class ProsjektOversikt {
 
     public function getNavnMedInnrykk(){
         $navn = $this->prosjekt->getNavn();
-        for($i = 0; $i < $delNivaa; $i++){
+        for($i = 0; $i < $this->delNivaa; $i++){
             $navn = "&emsp;" . $navn;
         }
         return $navn;
     }
     public function getNavnMedSymbol($symbol){
         $navn = $this->prosjekt->getNavn();
-        for($i = 0; $i < $delNivaa; $i++){
+        for($i = 0; $i < $this->delNivaa; $i++){
             $navn = $symbol . $navn;
         }
         return $navn;
     }
 
-
-    public function getTid(){
+    public function getTid($type_id = 0){
+        if($type_id == 0){
+            return DateHelper::sumDateIntervalList($this->tid);
+        }
+        if(!isset($this->tid[$type_id])){
+            return new DateInterval("PT0S");
+        }
+        return $this->tid[$type_id];
+    }
+    public function getTidArray(){
         return $this->tid;
     }
     
-    public function getTotalTid(){
+    public function getTotalTid($type_id = 0){
+        if($type_id == 0){
+            return DateHelper::sumDateIntervalList($this->totaltid);
+        }
+        if(!isset($this->totaltid[$type_id])){
+            return new DateInterval("PT0S");
+        }
+        return $this->totaltid[$type_id];
+    }
+    public function getTotalTidArray(){
         return $this->totaltid;
     }
     
-    public function getTimer(){
-        $tid = $this->tid->h + ($this->tid->i + $this->tid->s / 60.0) / 60.0;
-        return number_format($tid, 2);
+    public function getTimer($type_id = 0){
+        return DateHelper::intervallTilTimer($this->getTid($type_id));
     }
     
-    public function getTotalTimer(){
-        return number_format($this->totaltid->getTimestamp() / 3600.0, 2);
+    public function getTotalTimer($type_id = 0){
+        return DateHelper::intervallTilTimer($this->getTotalTid($type_id));
     }
-    
-    /*public function getProsjektOgTid(array $prosjektMedTid, bool $innrykk){
-        $prosjektMedTid[]["prosjekt"] = $this->prosjekt;
-        $prosjektMedTid[]["tid"] = $this->getTid();
-    }*/
 }
 
-function DtimeToDInterval(DateTime $dt){
-    $formatted = $dt->format('H:i:s');
-    list($hours, $minutes, $seconds) = sscanf($formatted, '%d:%d:%d');
-    return new DateInterval(sprintf('PT%dH%dM%dS', $hours, $minutes, $seconds));
-}
