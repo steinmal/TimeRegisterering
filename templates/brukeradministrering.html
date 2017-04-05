@@ -42,8 +42,8 @@
                 <tr>
                     <th></th>
                     <th>ID</th>
-                    <th>Type</th>
                     <th>Navn</th>
+                    <th>Type</th>
                     <th>Epost</th>
                     <th>Telefon</th>
                     <th>Aktivert</th>
@@ -55,11 +55,11 @@
                     <tr>
                         <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
                         <td>{{ bruker.getId() }}</td>
-                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getNavn() }}</td>
+                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getEpost() }}</td>
                         <td>{{ bruker.getTelefon() }}</td>
-                        <td>{{ bruker.isAktivert() }}</td>
+                        <td>{{ bruker.isAktivertTekst() }}</td>
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
                         <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>
