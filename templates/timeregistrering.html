@@ -25,6 +25,18 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til prosjektet
         </div>
+    {% elseif error == "ugyldigOppgave" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til oppgaven
+        </div>
+    {% elseif error == "ugyldigTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til denne timeregistreringen
+        </div>
     {% endif %}
     {% if sendt %}
     <div class="alert alert-success" role="alert">
