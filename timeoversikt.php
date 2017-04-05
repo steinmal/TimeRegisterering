@@ -28,12 +28,19 @@ $lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
 
 $datefrom = date("Y-m-d", $firstDayOfMonth);
 $dateto = date("Y-m-d", $lastDayOfMonth);
-//$datefrom = "";
-//$dateto = "";
+
+if (isset($_SESSION['datefrom'])) $datefrom = $_SESSION['datefrom'];
+if (isset($_SESSION['dateto'])) $dateto = $_SESSION['dateto'];
+
+
 if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $datefrom = substr($_GET['daterange'], 0, 10);
     $dateto = substr($_GET['daterange'], 13, 10);
 }
+
+$_SESSION['datefrom'] = $datefrom;
+$_SESSION['dateto'] = $dateto;
+
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
 }
@@ -43,6 +50,7 @@ if (isset($_GET['noRadio'])) {
 if (isset($_GET['deaktivertError'])) {
     $deaktivertError = $_GET['deaktivertError'];
 }
+
 $timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), $datefrom, $dateto);
 
 echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,

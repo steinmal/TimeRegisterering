@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>-->
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
@@ -88,25 +90,29 @@ $(function() {
     var start = moment().startOf('month');
     var end = moment().endOf('month');
     {% endif %}
+    
+    moment.lang("nb"); //Norsk bokmaal
 
     function cb(start, end) {
         $('input[name="daterange"]').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
     }
+////'This Month'
+//           moment().startOf('month').format('MMM'): [moment().startOf('month'), moment().endOf('month')], 
 
     $('input[name="daterange"]').daterangepicker({
         startDate: start,
         endDate: end,
         ranges: {
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           '-1 Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-           '-2 Month': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-           '-3 Month': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
-           '-4 Month': [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
-           '-5 Month': [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
-           '-6 Month': [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
-           'This year': [moment().startOf('year'), moment().endOf('year')],
-           'Last year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-           'All': [moment('1970-01-01'), moment('2038-01-19')]
+           [moment().startOf('month').format('MMMM')]: [moment().startOf('month'), moment().endOf('month')], 
+           [moment().startOf('month').subtract(1, 'month').format('MMMM')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+           [moment().startOf('month').subtract(2, 'month').format('MMMM')]: [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+           [moment().startOf('month').subtract(3, 'month').format('MMMM')]: [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+           [moment().startOf('month').subtract(4, 'month').format('MMMM')]: [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
+           [moment().startOf('month').subtract(5, 'month').format('MMMM')]: [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
+           [moment().startOf('month').subtract(6, 'month').format('MMMM')]: [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
+           'Dette året': [moment().startOf('year'), moment().endOf('year')],
+           'Forrige år': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+           'Alt': [moment('1970-01-01'), moment('2038-01-19')]
         },
         
         locale: {
