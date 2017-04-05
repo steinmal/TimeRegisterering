@@ -109,6 +109,8 @@ if (isset($_REQUEST['action'])) {
     
     $kommentar = $_REQUEST['kommentar'];
     
+    var_dump($timeId);
+    var_dump($dato);
     $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar);
     $error = "lagret";
 

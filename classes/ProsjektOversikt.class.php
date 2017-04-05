@@ -45,7 +45,7 @@ class ProsjektOversikt {
         //$this->tid = $tidHelper->getInterval();
         //$totalHelper->add($this->tid);
         foreach($this->tid as $type => $tid){
-            $this->totaltid[$type] = $tid;
+            $this->totaltid[$type] = clone $tid;
         }
 
         $oversiktListe[] = $this;
