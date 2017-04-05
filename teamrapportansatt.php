@@ -66,6 +66,9 @@ foreach($brukerIds as $brukerId) {
     }
 }
 
+$ansatt = isset($_GET['ansatt'])?$_GET['ansatt']:"";
+$oppgavetype = isset($_GET['oppgavetype'])?$_GET['oppgavetype']:"";
+
 $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
     'timeregistreringer'=>$timeregistreringer,
@@ -76,11 +79,30 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'userReg'=>$UserReg,
     'brukerIds'=>$brukerIds,
     'teams'=>$teams,
-    'brukerTilgang'=>$_SESSION['brukerTilgang']);
-
-$tabellRender = $twig->render('rapportansatt.html', $twigArray);
+    'brukerTilgang'=>$_SESSION['brukerTilgang'],
+    'ansatt'=>$ansatt,
+    'oppgavetype'=>$oppgavetype
+    );
 
 if(isset($_GET['download'])){
+    if ($ansatt){
+        foreach($timeregistreringer as $key => $element) {
+            if ($UserReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
+                unset($timeregistreringer[$key]);
+            }
+        }
+    }
+    if ($oppgavetype){
+        foreach($timeregistreringer as $key => $element) {
+            if ($OppgaveReg->getOppgavetype($OppgaveReg->hentOppgave($element->getOppgaveId())->getType())->getNavn() != $oppgavetype) {
+                unset($timeregistreringer[$key]);
+            }
+        }
+    }
+    $twigArray['timeregistreringer'] = $timeregistreringer;
+
+    $tabellRender = $twig->render('rapportansatt.html', $twigArray);
+
     $filename = date('Y-m-d') . ' TimeRegistrering rapport.xlsx';
  
     $objPHPExcel = new PHPExcel();
@@ -104,6 +126,8 @@ if(isset($_GET['download'])){
     $objWriter->save('php://output');
     exit;
 }
+
+$tabellRender = $twig->render('rapportansatt.html', $twigArray);
 
 echo $twig->render('teamrapporttopp.html', $twigArray);
 echo $tabellRender;
