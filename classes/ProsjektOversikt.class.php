@@ -45,16 +45,19 @@ class ProsjektOversikt {
         //$this->tid = $tidHelper->getInterval();
         //$totalHelper->add($this->tid);
         foreach($this->tid as $type => $tid){
-            $this->totaltid[$type] = clone $tid;
+            $this->totaltid[$type] = new DateInterval("PT0S");
+            $this->totaltid[$type]->d = $tid->d;
+            $this->totaltid[$type]->h = $tid->h;
+            $this->totaltid[$type]->i = $tid->i;
+            $this->totaltid[$type]->s = $tid->s;
         }
 
-        $oversiktListe[] = $this;
+        $this->oversiktListe[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
-            echo $p->getNavn() . "<br>";
             $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
-            $this->oversiktListe[] = $oversikt;
+            //$this->oversiktListe[] = $oversikt;
             $this->oversiktListe = array_merge($this->oversiktListe, $oversikt->getOversiktListe());
             $this->prosjektListe[] = $p;
             //$totalHelper->add($oversikt->getTid());

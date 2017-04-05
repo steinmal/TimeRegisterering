@@ -46,6 +46,9 @@
     {% endif %}
 
         <form method="post" action="prosjektoppretting.php" class="col-md-4">
+            {% if action != null %}
+            <input type="hidden" name=action value="{{ action }}"/>
+            {% endif %}
             {% if valgtProsjekt.getId() >= 0 %}
             <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">
             {% endif %}

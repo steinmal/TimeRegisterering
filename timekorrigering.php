@@ -58,10 +58,7 @@ if (isset($_REQUEST['action'])) {
     }
 } else if (isset($_POST['lagre'])) {
     $gammelTimeId = $_REQUEST['timeId'];
-    
-    //Valideringene ser ut til å funke, for jeg får opp linken med riktig feilmelding etter hva jeg gjør (dog når jeg har tatt bort header og return på linje 135 og 136), men
-    //siden (timekorrigering) lastes ikke, det kommer bare opp en tom side. Hvis linje 135 og 136 får stå, så lastes timeoversikt uansett hva man gjør. Jeg finner ikke ut av det. Ine
-    
+
     if(!isset($_REQUEST['starttid']) || !isset($_REQUEST['stopptid'])) {
         header("Location: timekorrigering.php?timeregId=". $gammelTimeId . "error=ingenVerdi");
         return;
@@ -95,9 +92,9 @@ if (isset($_REQUEST['action'])) {
     $pause = $_REQUEST['pause'];
     $differanse = $startTid->diff($stoppTid);
     var_dump($differanse);
-    $arbeidsTid = $differanse->i;    //antall minutter
-    var_dump($arbeidsTid); 
-    if($pause < 0 || $pause > $arbeidsTid ){
+    $arbeidstid = DateHelper::intervallTilMinutt($differanse);
+    var_dump($arbeidstid);
+    if($pause < 0 || $pause > $arbeidstid ){
         header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=pauseForLang");
         return;
     }

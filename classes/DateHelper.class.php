@@ -25,6 +25,10 @@ class DateHelper{
         $timer = $tid->d * 24 + $tid->h + ($tid->i + $tid->s / 60.0) / 60.0;
         return number_format($timer, 2);
     }
+    public static function intervallTilMinutt(DateInterval $tid){
+        $minutt = $tid->d * 24*60 + $tid->h * 60 + $tid->i + $tid->s / 60.0;
+        return $minutt;
+    }
     
     public static function DtimeToDInterval(DateTime $dt){
         $formatted = $dt->format('H:i:s');
