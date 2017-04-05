@@ -10,18 +10,19 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $UserReg = new UserRegister($db);
 $TeamReg = new TeamRegister($db);
+$error = "none";
 
 
 session_start();
 
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true){
-    echo "Du har ikke tilgang til prosjektadministrering";
+    header("Location: index.php?error=manglendeRettighet");
     return;
 }
 
@@ -32,22 +33,37 @@ $brukParent = true;
 $valgtProsjekt = new Prosjekt();
 if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt = new Prosjekt();
+    
+    foreach(array('prosjektNavn', 'prosjektLeder', 'team', 'prosjektBeskrivelse', 'startDato', 'sluttDato') as $field) {
+        if(!isset($_POST[$field]) || strcmp($_POST[$field], "") == 0) {
+            header('Location: prosjektoppretting.php?error=ingenVerdi&felt=' . $field);
+            return;
+        }
+    }
+    
     $nyttProsjekt->setNavn($_POST['prosjektNavn']);
     $nyttProsjekt->setParent($_POST['foreldreProsjekt']);
     $nyttProsjekt->setLeder($_POST['prosjektLeder']);
     $nyttProsjekt->setTeam($_POST['team']);
     $nyttProsjekt->setBeskrivelse($_POST['prosjektBeskrivelse']);
-    $nyttProsjekt->setStartDato($_POST['startDato']);
-    $nyttProsjekt->setSluttDato($_POST['sluttDato']);
+    
+    $start = $_REQUEST['startDato'];
+    $slutt = $_REQUEST['sluttDato'];
+    if($start > $slutt){
+        header("Location: prosjektoppretting.php?error=stoppEtterStart&prosjektId=" . $_POST['prosjektId']); 
+        return;
+    }
+    $nyttProsjekt->setStartDato($start);
+    $nyttProsjekt->setSluttDato($slutt);
     if(!isset($_POST['prosjektId'])){
         $ProsjektReg->lagProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php");
+        header("Location: prosjektadministrering.php?error=lagret");
         return;
     }
     else{
         $nyttProsjekt->setId($_POST['prosjektId']);
         $ProsjektReg->redigerProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php");
+        header("Location: prosjektadministrering.php?error=redigert");
         return;
     }
 }
@@ -80,6 +96,9 @@ elseif(isset($_GET['action'])){
     }
 }
 
+if(isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
 
-echo $twig->render('prosjektoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('prosjektoppretting.html', array('error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

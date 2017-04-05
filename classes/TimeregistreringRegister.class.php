@@ -199,17 +199,26 @@
         public function kopierTimeregistrering($timeregId) {
             $opprinneligTime = $this->hentTimeregistrering($timeregId);
             try {
-                $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_redigeringsdato, timereg_aktiv, timereg_automatisk, timereg_godkjent) 
-                VALUES (:bID, :oID, :dato, :start, :stopp, :rDato, :aktiv, :automatisk, :godkjent)");
-                $stmt->bindParam(':oID', $opprinneligTime->getOppgaveId(), PDO::PARAM_INT);
-                $stmt->bindParam(':bID', $opprinneligTime->getBrukerId(), PDO::PARAM_INT);
-                $stmt->bindParam(':dato', $opprinneligTime->getDato());
-                $stmt->bindParam(':start', $opprinneligTime->getFra());  
-                $stmt->bindParam(':stopp', $opprinneligTime->getTil());
-                $stmt->bindParam(':rDato', $opprinneligTime->getRegistreringsDato());
-                $stmt->bindParam(':aktiv', $opprinneligTime->getAktiv());
-                $stmt->bindParam(':automatisk', $opprinneligTime->getAutomatisk(), PDO::PARAM_INT);
-                $stmt->bindParam(':godkjent', $opprinneligTime->getGodkjent(), PDO::PARAM_INT);
+                $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_pause, timereg_aktiv, timereg_automatisk, timereg_godkjent) 
+                VALUES (:bID, :oID, :dato, :start, :stopp, :pause, :aktiv, :automatisk, :godkjent)");
+                $oID = $opprinneligTime->getOppgaveId();
+                $stmt->bindParam(':oID', $oID, PDO::PARAM_INT);
+                $bID = $opprinneligTime->getBrukerId();
+                $stmt->bindParam(':bID', $bID, PDO::PARAM_INT);
+                $dato = $opprinneligTime->getDato();
+                $stmt->bindParam(':dato', $dato);
+                $fra = $opprinneligTime->getFra();
+                $stmt->bindParam(':start', $fra);
+                $til = $opprinneligTime->getTil();
+                $stmt->bindParam(':stopp', $til);
+                $pause = $opprinneligTime->getPause();
+                $stmt->bindParam(':pause', $pause);
+                $aktiv = $opprinneligTime->getAktiv();
+                $stmt->bindParam(':aktiv', $aktiv);
+                $automatisk = $opprinneligTime->getAutomatisk();
+                $stmt->bindParam(':automatisk', $automatisk, PDO::PARAM_INT);
+                $godkjent = $opprinneligTime->getGodkjent();
+                $stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
                 $stmt->execute();
                 
                 $kopiId = $this->db->lastInsertId();

@@ -18,6 +18,33 @@
         <h1>Opprett nytt prosjekt</h1>
     {% endif %}
 
+
+    {% if error == "ingenVerdi" %}
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Alle felter må fylles ut
+        </div>
+        {% elseif error == "stoppEtterStart" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Sluttdato må være etter startdato
+        </div>
+        {% elseif error == "ikkeInnlogget" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må være innlogget for å ha tilgang til siden
+        </div>
+        {% elseif error == "manglendeRettighet" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å vise denne siden
+        </div>
+    {% endif %}
+
         <form method="post" action="prosjektoppretting.php" class="col-md-4">
             {% if valgtProsjekt.getId() >= 0 %}
             <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">

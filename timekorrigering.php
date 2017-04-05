@@ -22,7 +22,7 @@ $twigs['bruker'] = $_SESSION['bruker'];
 $twigs['brukernavn'] = $_SESSION['bruker']->getNavn();
 $twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
 $twigs['oppgavereg'] = $OppgaveReg;
-$error = "";
+$error = "none";
 
 if (isset($_REQUEST['action'])) {
     $timeId = $_REQUEST['timeregId'];
@@ -58,24 +58,14 @@ if (isset($_REQUEST['action'])) {
     }
 } else if (isset($_POST['lagre'])) {
     $gammelTimeId = $_REQUEST['timeId'];
-    $timeregKopi = $TimeReg->kopierTimeregistrering($gammelTimeId);
-    $TimeReg->deaktiverTimeregistrering($gammelTimeId);
     
-    $timeId = $timeregKopi->getId();
-    $dato = $_REQUEST['dato'];
-    if($dato != $timeregKopi->getDato()){
-        header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=datoForandret");
-        return;
-    }
-    /* Legg inn funksjonalitet for å sjekke hvor lenge siden timeregistreringern er.
-    Må sjekke hvor langt tilbake det skal være lov å endre timeregistreringer. */
-
-    if(!isset($_REQUEST['starttid']) || !isset($_REQUEST['stopptid']) || !isset($_REQUEST['kommentar'])) {
+    //Valideringene ser ut til å funke, for jeg får opp linken med riktig feilmelding etter hva jeg gjør (dog når jeg har tatt bort header og return på linje 135 og 136), men
+    //siden (timekorrigering) lastes ikke, det kommer bare opp en tom side. Hvis linje 135 og 136 får stå, så lastes timeoversikt uansett hva man gjør. Jeg finner ikke ut av det. Ine
+    
+    if(!isset($_REQUEST['starttid']) || !isset($_REQUEST['stopptid'])) {
         header("Location: timekorrigering.php?timeregId=". $gammelTimeId . "error=ingenVerdi");
         return;
     }
-    
-    
     
     $fra = $_REQUEST['starttid'];
     if(strlen($fra) == 5) {
@@ -103,11 +93,34 @@ if (isset($_REQUEST['action'])) {
     
     
     $pause = $_REQUEST['pause'];
-    if( true/* pause må være mellom 0 og jobblengden */ ){
-
+    $differanse = $startTid->diff($stoppTid);
+    var_dump($differanse);
+    $arbeidsTid = $differanse->i;    //antall minutter
+    var_dump($arbeidsTid); 
+    if($pause < 0 || $pause > $arbeidsTid ){
+        header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=pauseForLang");
+        return;
     }
     
     $kommentar = $_REQUEST['kommentar'];
+    if (!isset($kommentar) || strcmp($kommentar, "") == 0) {
+        header("Location: timekorrigering.php?timeregId=". $gammelTimeId . "error=ingenKommentar");
+        return;
+    }
+
+
+    $timeregKopi = $TimeReg->kopierTimeregistrering($gammelTimeId);
+    $TimeReg->deaktiverTimeregistrering($gammelTimeId);
+    
+    $timeId = $timeregKopi->getId();    
+    $dato = $_REQUEST['dato'];
+    if($dato != $timeregKopi->getDato()){
+        header("Location: timekorrigering.php?timeregId=" . $gammelTimeId . "&error=datoForandret");
+        return;
+    }
+    /* Legg inn funksjonalitet for å sjekke hvor lenge siden timeregistreringern er.
+    Må sjekke hvor langt tilbake det skal være lov å endre timeregistreringer. */
+
     
     var_dump($timeId);
     var_dump($dato);
