@@ -8,26 +8,35 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $OppgaveReg = new OppgaveRegister($db);
+$ProsjektReg = new ProsjektRegister($db);
 $UserReg = new UserRegister($db);
 $FaseReg = new FaseRegister($db);
+$TeamReg = new TeamRegister($db);
 $estimatListe = array();
 $oppgave = "";
+$error="";
 
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=manglendeRettighet");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Du har ikke tilgang til oppgaveadministrering";
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 if(isset($_GET['oppgave'])) {
 
     $oppgave_id = $_GET['oppgave'];
     $oppgave = $OppgaveReg->hentOppgave($oppgave_id);
+    $brukerId = $_SESSION['bruker']->getId();
+    $teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
+    if ($brukerId != $teamLederId) {
+        header("Location: prosjektdetaljer.php?error=ugyldigOppgave&prosjekt=" . $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getId());
+        return;
+    }
     $estimatListe = $OppgaveReg->hentAlleEstimatForOppgave($oppgave_id);
 
     if(isset($_GET['accept'])){
@@ -48,10 +57,12 @@ if(isset($_GET['oppgave'])) {
 
     }
 }
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
 
 
 
 
 
-
-echo $twig->render('oppgavedetaljer.html', array('fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavedetaljer.html', array('fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));

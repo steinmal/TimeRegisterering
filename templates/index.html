@@ -25,6 +25,27 @@
 
         </div>
     {% else %}
+    {% if error == "ikkeInnlogget" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må være innlogget for å ha tilgang til siden
+        </div>
+        {% elseif error == "manglendeRettighet" %}
+            {% if side == "prosjektadm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektadministrering
+            </div>
+            {% else %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å vise siden
+            </div>
+            {% endif %}
+    {% endif %}
 
         <form method="post" action="index.php" class="col-md-4">
             <div class="form-group ">
