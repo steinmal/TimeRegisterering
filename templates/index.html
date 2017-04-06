@@ -32,11 +32,71 @@
             Du må være innlogget for å ha tilgang til siden
         </div>
         {% elseif error == "manglendeRettighet" %}
-            {% if side == "prosjektadm" %}
+            {% if side == "bradm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til brukeradministrering
+            </div>
+            {% elseif side == "brred" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til brukerredigering
+            </div>
+            {% elseif side == "oppgdet" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til oppgavedetaljer
+            </div>
+            {% elseif side == "oppgopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til oppgaveoppretting
+            </div>
+            {% elseif side == "optopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å opprette oppgavetyper
+            </div>
+            {% elseif side == "optred" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å redigere oppgavetyper
+            </div>
+            {% elseif side == "pradm" %}
             <div class="alert alert-error" role="alert">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span class="sr-only">Error:</span>
                 Du har ikke tilgang til prosjektadministrering
+            </div>
+            {% elseif side == "propp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektoppretting
+            </div>
+            {% elseif side == "prrapp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektrapporter
+            </div>
+            {% elseif side == "teamrapp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamrapport
+            </div>
+            {% elseif side == "timegod" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til timegodkjenning
             </div>
             {% else %}
             <div class="alert alert-error" role="alert">

@@ -16,12 +16,13 @@ $UserReg = new UserRegister($db);
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Kun teamleder har tilgang til TeamRapport";
+    header("Location: index.php?error=manglendeRettighet&side=teamrapp");
+    //echo "Kun teamleder har tilgang til TeamRapport";
     return;
 }
 

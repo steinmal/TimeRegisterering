@@ -22,7 +22,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true){
-    header("Location: index.php?error=manglendeRettighet");
+    header("Location: index.php?error=manglendeRettighet&side=propp");
     return;
 }
 /*if(isset($_REQUEST['prosjektId'])){

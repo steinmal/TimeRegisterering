@@ -19,12 +19,12 @@ $error="";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php?error=manglendeRettighet");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    header("Location: index.php?error=ikkeInnlogget");
+    header("Location: index.php?error=manglendeRettighet&side=oppgdet");
     return;
 }
 if(isset($_GET['oppgave'])) {

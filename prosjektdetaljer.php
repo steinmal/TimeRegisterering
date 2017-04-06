@@ -23,7 +23,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    header("Location: index.php?error=manglendeRettighet&side=prosjektadm");
+    header("Location: index.php?error=manglendeRettighet&side=pradm");
     //echo "Du har ikke tilgang til prosjektadministrering";
     return;
 }

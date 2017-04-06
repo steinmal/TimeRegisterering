@@ -14,13 +14,14 @@ $error = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
-    echo "Du har ikke tilgang til Brukerredigering";
+    header("Location: index.php?error=manglendeRettighet&side=brred");
+    //echo "Du har ikke tilgang til Brukerredigering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
