@@ -12,7 +12,12 @@
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">Prosjektdetaljer</a>
 
-        <h1>Prosjektrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
+        {% if type == "fremdrift" %}
+            <h1>Fremdriftsrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
+        {% else %}
+            <h1>Prosjektrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
+        {% endif %}
+
         <form method=get class="col-md-4">
             <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
             <div class="form-group">
@@ -21,14 +26,15 @@
                     <option value="team">Pr. Team</option>
                     <option value="prosjekt" {% if type == "prosjekt" %}selected{% endif %}>Pr. Delprosjekt</option>
                     <option value="oppgave"{% if type == "oppgave" %}selected{% endif %}>Pr. Oppgave</option>
+                    <option value="fremdrift"{% if type == "fremdrift" %}selected{% endif %}>Fremdriftsrapport</option>
                 </select>
             </div>
         </form>
-        
+
         <div class="rapport">
-            <table class="table table-striped">
             {% if type == "team" %}
             {% elseif type == "prosjekt" %}
+            <table class="table table-striped">
                 <tr>
                     <th>Prosjekt</th>
                     {% for oType in  oppgaveTyper %}
@@ -56,9 +62,40 @@
                     {% endfor %}
                     <td>{{ oversiktListe[0].TotalTimer }}</td>
                 </tr>
-            {% elseif type == "oppgave" %}
-            {% endif %}
             </table>
+            {% elseif type == "oppgave" %}
+            {% elseif type == "fremdrift" %}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                {% for fase in faseliste %}
+
+                    <h1>{{ fase.getNavn() }}</h1>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Oppgave</th>
+                            <th>Timer utført</th>
+                            <th>Estimat</th>
+                            <th>Gjenstående timer</th>
+                            <th>Prosent</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for oppgave in oppgaveliste %}
+                            {% if oppgave.getFaseId() == fase.getId() %}
+                            <tr>
+                                <td>{{ oppgave.getNavn() }}</td>
+                                <td>{{ oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.getId()) }}</td>
+                                <td>{{ oppgave.getTidsestimat() }}</td>
+                                <td>{{ oppgave.getTidsestimat() - oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.getId()) }}</td>
+                                <td>{{ oppgavereg.calculatePercent(oppgave.getId()) }}%</td>
+                                <td>Oppgaver har ingen status</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                {% endfor %}
+            {% endif %}
         </div>
         
     </div>

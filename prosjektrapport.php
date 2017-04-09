@@ -57,7 +57,12 @@ switch ($type) {
         $twigs['oppgaveTyper'] = $OppgaveReg->getAlleOppgavetyper();
         break;
     case 'oppgave':
-        
+        break;
+    case 'fremdrift':
+        $twigs['oppgaveliste'] = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
+        $twigs['faseliste'] = $FaseReg->hentAlleFaser($prosjekt->getId());
+        $twigs['oppgavereg'] = $OppgaveReg;
+        //var_dump($twigs['oppgaver']);
         break;
 }
 
