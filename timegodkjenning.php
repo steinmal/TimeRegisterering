@@ -23,7 +23,6 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
     header("Location: index.php?error=manglendeRettighet&side=timegod");
-    //echo "Kun teamleder har tilgang til timegodkjenning";
     return;
 }
 if(isset($_GET['visGodkjent'])){

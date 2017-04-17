@@ -37,6 +37,30 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til denne timeregistreringen
         </div>
+    {% elseif error == "ugyldigPause" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            For å kunne sette en timeregistrering på pause må det være en startet timeregistrering.
+        </div>
+    {% elseif error == "ugyldigFortsettelse" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            For å fortsette en timeregistreringen må den være satt på pause.
+        </div>
+    {% elseif error == "ugyldigStopp" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen er allerede stoppet, og kan derfor ikke stoppes.
+        </div>
+    {% elseif error == "alleredeAktivTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan kun ha en aktiv timeregistrering om gangen. Du må stoppe den aktive timeregistreringen før du starter en ny.
+        </div>
     {% endif %}
     {% if sendt %}
     <div class="alert alert-success" role="alert">
