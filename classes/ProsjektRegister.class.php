@@ -28,6 +28,22 @@
             }
             return $prosjekter;
         }
+        
+        public function hentUnderProsjekt($id){
+            $prosjektListe = array();
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE foreldre_prosjekt_id = :id AND prosjekt_id != 1");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                while($prosjekt = $stmt->fetchObject('Prosjekt')) {
+                    $prosjektListe[] = $prosjekt;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $prosjektListe;
+        }
 
         public function lagProsjekt($prosjekt) {
             try {
@@ -68,13 +84,14 @@
 
         public function redigerProsjekt($prosjekt) {
             try {
-                $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse WHERE prosjekt_id=:id");
+                $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse, team_id=:team WHERE prosjekt_id=:id");
                 
                 $stmt->bindParam(':navn', $prosjekt->getNavn(), PDO::PARAM_STR);
                 $stmt->bindParam(':leder', $prosjekt->getLeder(), PDO::PARAM_INT);
                 $stmt->bindParam(':startdato', $prosjekt->getStartDato());
                 $stmt->bindParam(':sluttdato', $prosjekt->getSluttDato());
                 $stmt->bindParam(':beskrivelse', $prosjekt->getBeskrivelse(), PDO::PARAM_STR);
+                $stmt->bindParam(':team', $prosjekt->getTeam(), PDO::PARAM_INT);
                 $stmt->bindParam(':id', $prosjekt->getId(), PDO::PARAM_STR);
                 $stmt->execute();
             } catch (Exception $e) {

@@ -15,7 +15,7 @@ $TeamReg = new TeamRegister($db);
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
@@ -27,7 +27,7 @@ if(!isset($_SESSION['brukerTilgang'])){
 
 $bruker = $_SESSION['bruker'];
 
-$brukerTypeID = $bruker->getBrukerType();
+$brukerTypeID = $bruker->getBrukertype();
 $brukerType = $UserReg->getBrukerType($brukerTypeID)->getNavn();
 
 $brukerID = $bruker->getId();
@@ -40,6 +40,6 @@ foreach ($teamIDs as $i) {
     $prosjekter = array_merge($prosjekter, $ProsjektReg->hentProsjekterFraTeam($i));
 }
 
-echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'UserReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'UserReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

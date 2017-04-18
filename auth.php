@@ -1,5 +1,6 @@
 <?php
 $dsn = "mysql:dbname=stud_v17_gruppe2;host=kark.hin.no";
+//$dsn = "mysql:dbname=stud_v17_gruppe2;host=85.167.98.174:3306";
 $user = "stud_v17_gruppe2";
 $pswd = "gruppe2";
 
@@ -10,6 +11,3 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
-
-
-

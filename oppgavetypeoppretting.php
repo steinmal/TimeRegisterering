@@ -9,19 +9,23 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
 $OppgaveTypeReg = new OppgaveRegister($db);
-
+$error = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
-    echo "Du har ikke tilgang til Brukerredigering";
+    header("Location: index.php?error=manglendeRettighet&side=optopp");
+    //echo "Du har ikke tilgang til Brukerredigering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
+}
+if(isset($_GET['error'])){
+    $error = $_GET['error'];
 }
 if(isset($_POST['lagre'])){
     $nyType = new Oppgavetype();
@@ -48,4 +52,4 @@ else {
     }
 }
 
-echo $twig->render('oppgavetypeoppretting.html', array('oppgavetype'=>$oppgavetype, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetypeoppretting.html', array('oppgavetype'=>$oppgavetype, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

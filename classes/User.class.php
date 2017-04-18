@@ -17,16 +17,18 @@
 		}
         
         public function getId() { return $this->bruker_id; }
-        public function getBrukerNavn() { return $this->bruker_navn; }
+        public function getNavn() { return $this->bruker_navn; }
         public function getPassord() { return $this->bruker_passord; }
         public function getBrukertype() { return $this->brukertype_id; }
         public function getTelefon() { return $this->bruker_telefon; }
         public function getEpost() { return $this->bruker_epost; }
-        public function isAktivert() { return $this->bruker_aktivert; }
+
+        public function isAktivert() { return $this->bruker_aktivert > 0; }
+        public function isAktivertTekst() { return $this->isAktivert() ? "Aktivert" : "Deaktivert"; }
         public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
-        public function setBrukerType($id) { $this->brukertype_id = $id; }
-        public function setBrukerNavn($navn) { $this->bruker_navn = $navn; }
+        public function setBrukertype($id) { $this->brukertype_id = $id; }
+        public function setNavn($navn) { $this->bruker_navn = $navn; }
         public function setEpost($epost) { $this->bruker_epost = $epost; }
         public function setTelefon($telefonnummer) { $this->bruker_telefon = $telefonnummer; }
     }

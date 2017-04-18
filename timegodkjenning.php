@@ -13,17 +13,20 @@ $UserReg = new UserRegister($db);
 $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
-
+$visGodkjent = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Kun teamleder har tilgang til timegodkjenning";
+    header("Location: index.php?error=manglendeRettighet&side=timegod");
     return;
+}
+if(isset($_GET['visGodkjent'])){
+    $visGodkjent = $_GET['visGodkjent'];
 }
 
 if(isset($_GET['action'])){
@@ -34,12 +37,11 @@ if(isset($_GET['action'])){
         $TimeReg->avvisTimeregistrering($_GET['timeregId']);
     }
     header('location: timegodkjenning.php');
-    
 }
 
 $bruker = $_SESSION['bruker'];
 $teamIDs = array();
-$teamIDs = $TeamReg->getTeamIdFraTeamleder($bruker->getID());
+$teamIDs = $TeamReg->getTeamIdFraTeamleder($bruker->getId());
 
 $teams = array();
 $brukerIds = array();
@@ -70,5 +72,5 @@ echo $twig->render(
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
-    'visGodkjent'=>$_GET['visGodkjent'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+    'visGodkjent'=>$visGodkjent, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

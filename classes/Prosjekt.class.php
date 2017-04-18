@@ -11,7 +11,7 @@
         private $prosjekt_product_owner;
         private $prosjekt_registrerings_dato;
         private $prosjekt_arkivert;
-        
+
         public function __construct() {
             
         }
@@ -29,6 +29,8 @@
         public function getRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
         public function getStatus() { return $this->isArkivert() ? "Arkivert" : "Aktiv"; }
         
+        public function getDelNivaa(){ return $this->delNivaa; }
+
         public function isArkivert() { return $this->prosjekt_arkivert; }
         
         public function setId($id) { $this->prosjekt_id = $id; }
@@ -41,7 +43,9 @@
         public function setBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
         public function setProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
         
+        public function setDelNivaa(int $nivaa){ $this->delNivaa = $nivaa; }
         
-        
-        
+        public function __toString() {
+            return $this->prosjekt_id . " " . $this->prosjekt_navn . " " . $this->prosjekt_leder;
+        }
     }

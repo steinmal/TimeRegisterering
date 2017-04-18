@@ -12,21 +12,6 @@
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ fasereg.hentFase(oppgave.getFaseId()).getProsjektId }}">Prosjektdetaljer</a>
     <h1>Oppgavedetaljer for {{ oppgave.getNavn }}</h1>
-    {% if error == "noRadio" %}
-    <div class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        Ingen prosjekt valgt
-    </div>
-    {% elseif error == "arkivert" %}
-    <div class="alert alert-success" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        Prosjekt arkivert
-    </div>
-    {% endif %}
-
-
 
     <div class="col-lg-4">
 
@@ -40,14 +25,14 @@
                 {% for forslag in estimatliste %}
                 <tr>
                     <td>{{ forslag.getEstimat() }}</td>
-                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getBrukerNavn() }}</td>
+                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getNavn() }}</td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&accept={{ forslag.getEstimatId() }}&estimat={{ forslag.getEstimat() }}">
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&accept={{ forslag.getId() }}&estimat={{ forslag.getEstimat() }}">
                             <button class="btn btn-success">Godkjenn</button>
                         </a>
                     </td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&reject={{ forslag.getEstimatId() }}">
+                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&reject={{ forslag.getId() }}">
                             <button class="btn btn-danger">Forkast</button>
                         </a></td>
                 </tr>

@@ -11,6 +11,7 @@
   ],
   "require": {
     "twig/twig": "1.6.5",
-    "twbs/bootstrap": "^3.3"
+    "twbs/bootstrap": "^3.3",
+    "phpoffice/phpexcel": "^1.8"
   }
 }

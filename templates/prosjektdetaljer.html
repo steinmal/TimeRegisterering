@@ -13,7 +13,20 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getNavn() }}</h1>
-        <a href="oppgavetyper.php">Endre oppgavetyper</a>
+        {% if brukerTilgang.isProsjektAdmin %}
+        <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
+        {% endif %}
+        <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
+        
+    {% if error == "ugyldigOppgave" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til oppgaven
+        </div>
+    {% endif %}
+        
+        
     <h1>Faser</h1>
     <table class="table table-striped">
         <tr>
@@ -49,7 +62,11 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.getFaseId() == fase.getId() %}
                 <tr>
+                    {% if brukerTilgang.isTeamleder() %}
                     <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}">{{ oppgave.getNavn() }}</a></td>
+                    {% else %}
+                    <td>{{ oppgave.getNavn() }}</td>
+                    {% endif %}
                     <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getNavn() }}</td>
                     <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getType()) }}</td>
                     <td>{{ oppgave.getPeriode() }}</td>

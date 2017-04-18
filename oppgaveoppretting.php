@@ -16,12 +16,13 @@ session_start();
 
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Du har ikke tilgang til oppgaveoppretting";
+    header("Location: index.php?error=manglendeRettighet&side=oppgopp");
+    //echo "Du har ikke tilgang til oppgaveoppretting";
     return;
 }
 
@@ -75,5 +76,5 @@ if(isset($_POST['opprettOppgave'])){
 }
 
 echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'error'=>$_GET['error'], 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

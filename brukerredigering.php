@@ -8,17 +8,20 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
+$mismatch = "";
+$error = "";
 
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
-    echo "Du har ikke tilgang til Brukerredigering";
+    header("Location: index.php?error=manglendeRettighet&side=brred");
+    //echo "Du har ikke tilgang til Brukerredigering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
@@ -34,8 +37,8 @@ if(isset($_REQUEST['action'])){
             break;
         case 'Lagre':
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
-                $bruker->setBrukerNavn($_POST['navn']);
-                $bruker->setBrukerType($_POST['type']);
+                $bruker->setNavn($_POST['navn']);
+                $bruker->setBrukertype($_POST['type']);
             }
             echo $bruker->getBrukertype();
             $bruker->setEpost($_POST['epost']);
@@ -60,13 +63,23 @@ if(isset($_REQUEST['action'])){
     }
 }
 
+if(isset($_REQUEST['deaktiver'])) {
+    $brukerID = $_REQUEST['brukerId'];
+    $UserReg->deaktiverBruker($brukerID);
+    if($_SESSION['brukerTilgang']->isBrukeradmin()){
+        header("Location: brukeradministrering.php?error=deaktivert");
+        return;
+    }
+}
+
 $typer = $UserReg->getAlleBrukertyper();
 if(isset($_GET['error'])){
     if($_GET['error'] == "mismatch"){
         $mismatch = 1;
     }
+    $error = $_GET['error'];
 }
 
-echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$_GET['error'], 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$bruker,  'error'=>$error, 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

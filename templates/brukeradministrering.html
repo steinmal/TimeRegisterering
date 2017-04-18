@@ -31,6 +31,8 @@
         <font color=red>Ingen bruker valgt</font>
     {% elseif error == "aktivert" %}
         <font color=green>Brukeren ble aktivert</font>
+    {% elseif error == "deaktivert" %}
+        <font color=green>Brukeren ble deaktivert</font>
     {% endif %}
     <h2></h2>
     <p>
@@ -40,8 +42,8 @@
                 <tr>
                     <th></th>
                     <th>ID</th>
-                    <th>Type</th>
                     <th>Navn</th>
+                    <th>Type</th>
                     <th>Epost</th>
                     <th>Telefon</th>
                     <th>Aktivert</th>
@@ -49,15 +51,15 @@
                     <th></th>
                 </tr>
                 {% for bruker in brukere %}
-                    {% if bruker.isAktivert() > 0 or visNye == true %}
+                    {% if bruker.isAktivert() != visNye %}
                     <tr>
                         <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
                         <td>{{ bruker.getId() }}</td>
+                        <td>{{ bruker.getNavn() }}</td>
                         <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
-                        <td>{{ bruker.getBrukerNavn() }}</td>
                         <td>{{ bruker.getEpost() }}</td>
                         <td>{{ bruker.getTelefon() }}</td>
-                        <td>{{ bruker.isAktivert() }}</td>
+                        <td>{{ bruker.isAktivertTekst() }}</td>
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
                         <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>

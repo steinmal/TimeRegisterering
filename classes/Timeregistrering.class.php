@@ -27,23 +27,27 @@
         public function getFra() { return $this->timereg_start; }
         public function getTil() { return $this->timereg_stopp; }
         public function getPause() { return $this->timereg_pause; }
-        public function getRegistreringsDato() { return $this->timereg_registreringdato; }
+        public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
+
+        // bool-metoder burde hete is... istedet for get...
         public function getAktiv() { return $this->timereg_aktiv; }
         public function getAutomatisk() { return $this->timereg_automatisk; }
         public function getGodkjent() { return $this->timereg_godkjent; }
+
         public function getKommentar() { return $this->timereg_kommentar; }
-        public function getHours() {
+        public function getHourAsDateInterval(){
             $starttid = DateTime::createFromFormat('H:i:s', $this->getFra());
             $stopptid = DateTime::createFromFormat('H:i:s', $this->getTil());
             $pause = DateInterval::createFromDateString($this->getPause() . " minutes");
             $stopptid->sub($pause);
-            $hours = "00:00";
-            if ($starttid && $stopptid)
-            {
-                $diff = $stopptid->diff($starttid);
-                $hours = $diff->format("%H:%I");
+            $diff = DateInterval::createFromDateString('0 seconds');
+            if($starttid && $starttid){
+                $diff = $starttid->diff($stopptid);
             }
-            return $hours;
+            return $diff;
+        }
+        public function getHourString() {
+            return $this->getHourAsDateInterval()->format("%H:%I");
         }
         
         public function getGodkjentTekst() {

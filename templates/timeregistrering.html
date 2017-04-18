@@ -12,32 +12,89 @@
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timeregistrering</h1>
+    
+    {% if error == "ugyldigId" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ugyldig ID
+        </div>
+    {% elseif error == "ugyldigProsjekt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til prosjektet
+        </div>
+    {% elseif error == "ugyldigOppgave" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til oppgaven
+        </div>
+    {% elseif error == "ugyldigTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til denne timeregistreringen
+        </div>
+    {% elseif error == "ugyldigPause" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            For å kunne sette en timeregistrering på pause må det være en startet timeregistrering.
+        </div>
+    {% elseif error == "ugyldigFortsettelse" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            For å fortsette en timeregistreringen må den være satt på pause.
+        </div>
+    {% elseif error == "ugyldigStopp" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen er allerede stoppet, og kan derfor ikke stoppes.
+        </div>
+    {% elseif error == "alleredeAktivTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan kun ha en aktiv timeregistrering om gangen. Du må stoppe den aktive timeregistreringen før du starter en ny.
+        </div>
+    {% endif %}
+    {% if sendt %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Forslag er sendt!
+    </div>
+    {% endif %}
         
-    <form method="post" action="timeregistrering.php" class="col-md-4">
+    <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <input type=hidden name=regId value="{{ registrering.getId() }}">
-            <select class="form-control" name="prosjekt" id="prosjekt" disabled onchange="submit()">
+            <select class="form-control" name="prosjekt" id="prosjekt" disabled>
                 <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
             </select>
         {% else %}
-            <select class="form-control" name="prosjekt" id="prosjekt" onchange="submit()">
+            <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                 {% for prosjekt in prosjektListe %}
                 <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getNavn() }}</option>
                 {% endfor %}
             </select>
             {% if valgtProsjekt <= 1 %}
             <small class="form-text text-muted">Velg prosjekt</small>
-            {% elseif oppgaver|length == 0 %}
+            {% elseif oppgaveListe|length == 0 %}
             <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
             {% endif %}
         {% endif %}
         </div>
-        {% if visSkjema %}
-
+    </form>
+    {% if visSkjema %}
+    <form method="post" action="timeregistrering.php" class="col-md-4">
+        <input type="hidden" name="regId" value="{{ registrering.getId() }}">
         <div class="form-group ">
-
             <label for="oppgave">Oppgave:</label>
             <div class="form-inline">
                 {% if aktiv %}
@@ -54,7 +111,7 @@
                     {% endfor %}
                 </select>
                 {% endif %}
-                <input type="submit" name="forslag" value="Foreslå tidsestimat">
+                <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
             </div>
         </div>
 
@@ -64,21 +121,21 @@
         </div>
         <div class="form-group">
             {% if aktiv %}
-                <input type="submit" name="submit" value="Start" disabled/>
+                <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
                 {% if registrering.getStatus() == 1 %}
-                <input type="submit" name="submit" value="Fortsett"/>
+                <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
                 {% else %}
-                <input type="submit" name="submit" value="Pause"/>
+                <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
                 {% endif %}
-                <input type="submit" name="submit" value="Stopp"/>
+                <input class="btn btn-danger btn-lg" type="submit" name="submit" value="Stopp"/>
             {% else %}
-                <input type="submit" name="submit" value="Start"/>
-                <input type="submit" name="submit" value="Pause" disabled/>
-                <input type="submit" name="submit" value="Stopp" disabled/>
+                <input class="btn btn-success btn-lg" type="submit" name="submit" value="Start"/>
+                <input class ="btn btn-lg" type="submit" name="submit" value="Pause" disabled/>
+                <input class="btn btn-lg" type="submit" name="submit" value="Stopp" disabled/>
             {% endif %}
         </div>
-        {% endif %}
     </form>
+    {% endif %}
 </div>
 </body>
 </html>

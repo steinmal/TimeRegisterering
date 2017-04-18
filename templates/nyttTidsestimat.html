@@ -10,8 +10,17 @@
 <body>
 <div class="container">
     {% include 'header.html' %}
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+
     <h1>Foreslå tidsestimat</h1>
-    <h2>Oppgave: {{ oppgave.getNavn() }}</h2>
+    <h2>Oppgave: {{ oppgave.getNavn() }} ({{oppgave.getTidsestimat() }} t)</h2>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Forslag må være et tall
+    </div>
+    {% endif %}
     <form method="post" action="nyttTidsestimat.php"  class="col-md-4">
         <input type="hidden" name="oppgaveId" value="{{ oppgave.getId() }}"/>
         <div class="form-group ">

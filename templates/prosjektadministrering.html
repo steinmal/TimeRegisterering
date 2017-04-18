@@ -24,6 +24,12 @@
             <span class="sr-only">Error:</span>
             Prosjekt arkivert
         </div>
+    {% elseif error == "ugyldigProsjekt" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ugyldig prosjektID
+        </div>
     {% endif %}
     <p>
         <form method="get">
@@ -47,12 +53,12 @@
                     <th class="col-lg-1">Status</th>
                 </tr>
                 {% for prosjekt in prosjektliste %}
-                    {% if (not prosjekt.isArkivert() > 0) or visArkivert == "on" %} 
+                    {% if (prosjekt.isArkivert() > 0) == (visArkivert == "on") %}
                     <tr>
                         <td><input type=radio  name="prosjektId" value={{ prosjekt.getId() }}></td>
                         <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getNavn() }}</a></td>
                         <td>{{ register.hentProsjekt(prosjekt.getParent()).getNavn() }}</td>
-                        <td>{{ userReg.hentBruker(prosjekt.getLeder()).getBrukerNavn()}}</td>
+                        <td>{{ userReg.hentBruker(prosjekt.getLeder()).getNavn()}}</td>
                         <td>{{ teamReg.hentTeam(prosjekt.getTeam()).getNavn() }}</td>
                         <td>{{ prosjekt.getStartDato() }}</td>
                         <td>{{ prosjekt.getSluttDato() }}</td>

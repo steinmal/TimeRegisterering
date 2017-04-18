@@ -17,7 +17,7 @@
 
     <h2>Brukeropplysninger</h2>
     
-    <p><b>Navn: </b> {{ bruker.getBrukerNavn() }}<br/>
+    <p><b>Navn: </b> {{ bruker.getNavn() }}<br/>
        <b>Epost: </b> {{ bruker.getEpost() }}<br/>
        <b>Telefon: </b> {{ bruker.getTelefon() }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
@@ -39,9 +39,9 @@
                 <tr>
                     <td>{{ p.getNavn() }}</td>
                     <td>{{ p.getBeskrivelse() }}</td>
-                    <td>{{ UserReg.hentBruker(p.getLeder()).getBrukerNavn() }}</td>
-                    <td>{{ p.getProductOwner() }}</td>
-                    <td>{{ p.getTeam() }}</td>
+                    <td>{{ UserReg.hentBruker(p.getLeder()).getNavn() }}</td>
+                    <td>{{ UserReg.hentBruker(p.getProductOwner()).getNavn() }}</td>
+                    <td>{{ TeamReg.hentTeam(p.getTeam()).getNavn() }}</td>
                     <td>{{ p.getStartDato() }}</td>
                     <td>{{ p.getSluttDato() }}</td>
                 </tr>
@@ -57,7 +57,7 @@
                 {% for t in teamliste %}
                     <tr>
                         <td>{{ t.getNavn() }}</td>
-                        <td>{{ UserReg.hentBruker(t.getLeder()).getBrukerNavn() }}</td>
+                        <td>{{ UserReg.hentBruker(t.getLeder()).getNavn() }}</td>
                     </tr>
                 {% endfor %}
             </table>
