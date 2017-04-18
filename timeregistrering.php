@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
     $timereg = $TimeReg->hentTimeregistrering($id);
     switch($_POST['submit']){
         case 'Start':
-            if ($timereg->getStatus() == 0) {   //status = start, allerede aktiv
+            if ($timereg != NULL && $timereg->getStatus() == 0) {   //status = start, allerede aktiv
                 header("Location: timeregistrering.php?error=alleredeAktivTimereg");
                 return;
             }
@@ -52,7 +52,7 @@ if(isset($_POST['submit'])){
             $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
-            if ($timereg->getStatus() == 0 )  { //status = start
+            if ($timereg->getStatus() == 0 || $timereg->getStatus() == 2)  { //status = start eller fortsett
                 $TimeReg->pauserTimeReg($id);
             } else {
                 header("Location: timeregistrering.php?error=ugyldigPause");
