@@ -27,6 +27,9 @@
 
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timeoversikt</h1>
+    <form method=get>
+        <input type="checkbox" name="visDeaktiverte" onClick="submit()" {% if visDeaktiverte %}checked{% endif %}/>Vis deaktiverte timeregistreringer
+    </form>
     <!-- // Twig har switch-syntax -->
     
         {% if error == "kanIkkeEndres" %}
@@ -41,11 +44,17 @@
             <span class="sr-only">Error:</span>
             Timeregistreringen ble deaktivert
         </div>
+        {% elseif error == "aktivert" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen er aktivert i en kopi og venter godkjenning
+        </div>
         {% elseif error == "lagret" %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            Korrigeringen er lagret i en ny timeregistrering. Den gamle er deaktivert
+            Korrigeringen er lagret i en ny timeregistrering som venter godkjenning. Den ordinære timeregistreringen er deaktivert.
         </div>
         {% elseif error == "ingenValgt" %}
         <div class="alert alert-info" role="alert">
@@ -142,34 +151,38 @@ $(function() {
                     <th data-field="task" data-sortable="true">Oppgave</th>
                     <th data-field="oppgavetype" data-sortable="true" data-filter-control="select">Oppgavetype</th>
                     <th data-field="godkjent" data-sortable="true">Godkjent</th>
+                    <th data-field="aktivert">Aktivert</th>
                     <th data-field="kommentar">Kommentar</th>
                 </tr>
             </thead>
             <tbody>
                 {% for timereg in timeregistreringer %}
-                <tr>
-                <!-- TODO: Refactor getAktiv-testen.
-                forslag: benytt en css-stil for aktiv og en annen for deaktiv
-                f.eks <tr class=aktiv> eller <tr class=inaktiv> -->
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} <input type=radio name="timeregId" value="{{ timereg.getId() }}" />{% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getDato() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getFra() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getTil() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getPause() }} min {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getHourString() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getGodkjentTekst() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getKommentar() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
-                </tr>
+                    {% if timereg.getAktiv() != visDeaktiverte %}
+                    <tr>
+                        <td><input type=radio name="timeregId" value="{{ timereg.getId() }}" /></td>
+                        <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
+                        <td>{{ timereg.getFra() }} </td>
+                        <td>{{ timereg.getTil() }} </td>
+                        <td>{{ timereg.getPause() }} min</td>
+                        <td>{{ timereg.getHourString() }} </td>
+                        <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
+                        <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }}</td>
+                        <td>{{ timereg.getGodkjentTekst() }} </td>
+                        <td>{{ timereg.getAktiv() }}</td>
+                        <td>{{ timereg.getKommentar() }}</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
 
         </table>
         <br/>
+        {% if visDeaktiverte %}
+        <input class="btn btn-primary btn-responsive" type="submit" name=action value="Aktiver">
+        {% else %}
         <input class="btn btn-primary btn-responsive" type="submit" name=action value="Korriger">
         <input class="btn btn-primary btn-responsive" type="submit" name=action value="Deaktiver">
-        
+        {% endif %}
     </form>
         <br/>
     <a href="index.php">Tilbake</a>
@@ -185,3 +198,20 @@ $(function() {
     </script>
 </body>
 </html>
+
+
+<!-- <tr>
+                <!-- TODO: Refactor getAktiv-testen.
+                forslag: benytt en css-stil for aktiv og en annen for deaktiv
+                f.eks <tr class=aktiv> eller <tr class=inaktiv> --
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} <input type=radio name="timeregId" value="{{ timereg.getId() }}" />{% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getDato() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getFra() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getTil() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getPause() }} min {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getHourString() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getGodkjentTekst() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                    <td>{% if timereg.getAktiv() == 0 %}<font color=grey><i> {% endif %} {{ timereg.getKommentar() }} {% if timereg.getAktiv() == 0%} </i></font> {% endif %}</td>
+                </tr> -->

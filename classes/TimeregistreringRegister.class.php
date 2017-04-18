@@ -193,8 +193,8 @@
         public function kopierTimeregistrering($timeregId) {
             $opprinneligTime = $this->hentTimeregistrering($timeregId);
             try {
-                $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_pause, timereg_aktiv, timereg_automatisk, timereg_godkjent) 
-                VALUES (:bID, :oID, :dato, :start, :stopp, :pause, :aktiv, :automatisk, :godkjent)");
+                $stmt = $this->db->prepare("INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_pause, timereg_aktiv, timereg_automatisk, timereg_godkjent, timereg_kommentar) 
+                VALUES (:bID, :oID, :dato, :start, :stopp, :pause, :aktiv, :automatisk, :godkjent, :kommentar)");
                 $oID = $opprinneligTime->getOppgaveId();
                 $stmt->bindParam(':oID', $oID, PDO::PARAM_INT);
                 $bID = $opprinneligTime->getBrukerId();
@@ -213,6 +213,8 @@
                 $stmt->bindParam(':automatisk', $automatisk, PDO::PARAM_INT);
                 $godkjent = $opprinneligTime->getGodkjent();
                 $stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
+                $kommentar = $opprinneligTime->getKommentar();
+                $stmt->bindParam(':kommentar', $kommentar, PDO::PARAM_STR);
                 $stmt->execute();
                 
                 $kopiId = $this->db->lastInsertId();
@@ -228,6 +230,18 @@
             try {
                 $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_aktiv=0, timereg_redigeringsdato=now() WHERE timereg_id=:id");
                 $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+                $stmt->execute();
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+        
+        public function endreAktivOgGodkjent($timeregId, $aktiv=0, $godkjent=0) {
+            try {
+                $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_aktiv=:aktiv, timereg_godkjent=:godkjent, timereg_redigeringsdato=now() WHERE timereg_id=:id");
+                $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+                $stmt->bindParam(':aktiv', $aktiv, PDO::PARAM_INT);
+                $stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
                 $stmt->execute();
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());

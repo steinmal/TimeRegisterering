@@ -54,6 +54,10 @@ if (isset($_REQUEST['action'])) {
                 $TimeReg->deaktiverTimeregistrering($timeId);
                 $error = "deaktivert";
                 break;
+            case 'Aktiver':
+                $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
+                $TimeReg->endreAktivOgGodkjent($timeregKopi->getId(), 1, 0); //kopien skal være aktiv og ikke godkjent
+                $error = "aktivert";
         }
     }
 } else if (isset($_POST['lagre'])) {
