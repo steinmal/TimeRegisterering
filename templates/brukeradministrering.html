@@ -67,6 +67,13 @@
             <span class="sr-only">Error:</span>
             Brukeren ble deaktivert
         </div>
+    
+    {% elseif error == "brukerHoyereNiva" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan ikke redigere en bruker med høyere rettighet enn deg selv.
+        </div>
 
     {% endif %}
     <h2></h2>

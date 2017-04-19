@@ -20,7 +20,6 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true){
     header("Location: index.php?error=manglendeRettighet&side=bradm");
-    //echo "Du har ikke tilgang til brukeradministrering";
     return;
 }
 if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
