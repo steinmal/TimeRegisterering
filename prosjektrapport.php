@@ -60,4 +60,33 @@ switch ($type) {
         break;
 }
 
-echo $twig->render('prosjektrapport.html', $twigs);
+$tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
+
+if(isset($_GET['download'])){
+    $filename = date('Y-m-d') . ' prosjektrapport.xlsx';
+ 
+    $objPHPExcel = new PHPExcel();
+    $tmpFile = tempnam('tempfolder', 'tmp');
+    
+    file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
+    
+    $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
+    //$excelHTMLReader->loadIntoExisting($testTemp, $objPHPExcel); //
+
+    $objPHPExcel = $excelHTMLReader->load($tmpFile);
+
+    unlink($tmpFile); 
+    //fclose($tmpFile);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename='.$filename);
+    header('Cache-Control: max-age=0');
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    ob_end_clean();
+    $objWriter->save('php://output');
+    exit;
+}
+
+echo $twig->render('prosjektrapporttopp.html', $twigs);
+echo $tabellRender;
+echo $twig->render('prosjektrapportbunn.html', $twigs);
