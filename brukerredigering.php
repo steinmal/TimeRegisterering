@@ -14,14 +14,13 @@ $error = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
-    echo "Du har ikke tilgang til Brukerredigering";
-    //Foreslår returnering til index.php?error=noAccess eller lignende
+    header("Location: index.php?error=manglendeRettighet&side=brred");
     return;
 }
 
@@ -33,10 +32,27 @@ if(isset($_REQUEST['action'])){
     $bruker = $UserReg->hentBruker($_REQUEST['brukerId']);
     switch ($_REQUEST['action']) {
         case 'Rediger':
+            // når man prøver å komme inn på redigeringssiden til en annen (skal kunne redigere egen) bruker som har høyere rettighet enn seg selv
+            if ($_REQUEST['brukerId'] != $_SESSION['bruker']->getId() && $_SESSION['bruker']->getBrukertype() > $UserReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
+                header("Location: brukeradministrering.php?error=brukerHoyereNiva");
+                return;
+            }
             break;
         case 'Lagre':
+            if($UserReg->brukernavnEksisterer($_POST['navn'])){
+                header("Location: brukerredigering.php?error=nameExists&brukerId=" . $_REQUEST['brukerId']);
+                return;
+            }
+            if($UserReg->emailEksisterer($_POST['epost'])){
+                header("Location: brukerredigering.php?error=mailExists&brukerId=" . $_REQUEST['brukerId']);
+                return;
+            }
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
                 $bruker->setNavn($_POST['navn']);
+                if($_SESSION['bruker']->getBrukertype() > $_POST['type']) { //brukeradmin skal ikke kunne gi andre brukere høyere rettighet enn seg selv
+                    header("Location: brukerredigering.php?brukerId=" . $_REQUEST['brukerId'] . "&error=forLavRettighet");
+                    return;
+                }
                 $bruker->setBrukertype($_POST['type']);
             }
             echo $bruker->getBrukertype();
@@ -63,6 +79,11 @@ if(isset($_REQUEST['action'])){
 }
 
 if(isset($_REQUEST['deaktiver'])) {
+    // kan ikke deaktivere brukere som har høyere/lik rettghet enn seg selv
+    if ($_SESSION['bruker']->getBrukertype() >= $UserReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
+        header("Location: brukerredigering.php?brukerId=" . $_REQUEST['brukerId'] . "&error=brukerHoyereNiva");
+        return;
+    }
     $brukerID = $_REQUEST['brukerId'];
     $UserReg->deaktiverBruker($brukerID);
     if($_SESSION['brukerTilgang']->isBrukeradmin()){

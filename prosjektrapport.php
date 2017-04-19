@@ -17,12 +17,13 @@ $rapportType = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin()){
-    echo "Du har ikke tilgang til prosjektrapporter<br/>";
+    header("Location: index.php?error=manglendeRettighet&side=prrapp");
+    //echo "Du har ikke tilgang til prosjektrapporter<br/>";
     //header-relokasjon med feilmelding eller en egen feilmeldingstemplate?
     return;
 }
@@ -56,7 +57,12 @@ switch ($type) {
         $twigs['oppgaveTyper'] = $OppgaveReg->getAlleOppgavetyper();
         break;
     case 'oppgave':
-        
+        break;
+    case 'fremdrift':
+        $twigs['oppgaveliste'] = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
+        $twigs['faseliste'] = $FaseReg->hentAlleFaser($prosjekt->getId());
+        $twigs['oppgavereg'] = $OppgaveReg;
+        //var_dump($twigs['oppgaver']);
         break;
 }
 

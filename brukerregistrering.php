@@ -8,8 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $userReg = new UserRegister($db);
-$mailExists = 0;
-$nameExists = 0;
+$error="";
 $innlogget = 0;
 $bruker = "";
 $brukerTilgang = "";
@@ -18,11 +17,11 @@ session_start();
 
 if(isset($_POST['opprettBruker'])){
     if($userReg->brukernavnEksisterer($_POST['navn'])){
-        header("Location: brukerregistrering.php?nameExists=1" );
+        header("Location: brukerregistrering.php?error=nameExists" );
         return;
     }
     if($userReg->emailEksisterer($_POST['epost'])){
-        header("Location: brukerregistrering.php?mailExists=1");
+        header("Location: brukerregistrering.php?error=mailExists");
         return;
     }
     $nyBruker = new User();
@@ -32,15 +31,8 @@ if(isset($_POST['opprettBruker'])){
     $nyBruker->setTelefon($_POST['telefonnummer']);
     $userReg->opprettBruker($nyBruker);
 }
-if(isset($_GET['mailexists'])){
-    if($_GET['mailExists'] == 1) {
-        $mailExists = 1;
-    }
-}
-if(isset($_GET['nameExists'])){
-    if($_GET['nameExists'] == 1) {
-        $nameExists = 1;
-    }
+if(isset($_GET['error'])){
+    $error=$_GET['error'];
 }
 if(isset($_SESSION['bruker'])){
     $bruker = $_SESSION['bruker'];
@@ -53,5 +45,5 @@ if(isset($_SESSION['burkerTilgang'])){
 }
 
 
-echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'mailExists'=>$mailExists, 'nameExists'=>$nameExists));
+echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error));
 ?>

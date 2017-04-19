@@ -33,9 +33,14 @@ if(isset($_POST['fail'])){
     $loginFail = $_POST['fail'];
 }
 
+if(isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
+
 echo $twig->render('index.html', array(
     'loginFail'=>$loginFail,
     'innlogget'=>$innlogget,
     'bruker'=>$bruker,
-    'brukerTilgang'=>$brukerTilgang));
+    'brukerTilgang'=>$brukerTilgang,
+    'error'=>$error));
 ?>

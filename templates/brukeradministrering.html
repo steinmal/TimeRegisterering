@@ -18,21 +18,63 @@
         </form>
     <!--TODO: Gjør om til av/på og ikke bare på, kanskje checkbox med form -->
     {% if venterGodkjenning > 0 %}
-    <font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning
+        </div>
+    <!--<font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>-->
     {% endif %}
     <!--</div>-->
     {% if error == "noRadio" %}
-        <font color=red>Ingen bruker valgt</font>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ingen bruker valgt
+        </div>
+
     {% elseif error == "lagret" %}
-        <font color=green>Endringer ble lagret</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Endringer ble lagret
+        </div>
+
     {% elseif error == "erAktivert" %}
-        <font color=red>Bruker allerede aktivert</font>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Bruker allerede aktivert
+        </div>
+
     {% elseif error == "noSelection" %}
-        <font color=red>Ingen bruker valgt</font>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Ingen bruker valgt
+        </div>
+
     {% elseif error == "aktivert" %}
-        <font color=green>Brukeren ble aktivert</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Brukeren ble aktivert
+        </div>
+
     {% elseif error == "deaktivert" %}
-        <font color=green>Brukeren ble deaktivert</font>
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Brukeren ble deaktivert
+        </div>
+    
+    {% elseif error == "brukerHoyereNiva" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan ikke redigere en bruker med høyere rettighet enn deg selv.
+        </div>
+
     {% endif %}
     <h2></h2>
     <p>
@@ -42,8 +84,8 @@
                 <tr>
                     <th></th>
                     <th>ID</th>
-                    <th>Type</th>
                     <th>Navn</th>
+                    <th>Type</th>
                     <th>Epost</th>
                     <th>Telefon</th>
                     <th>Aktivert</th>
@@ -55,11 +97,11 @@
                     <tr>
                         <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
                         <td>{{ bruker.getId() }}</td>
-                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getNavn() }}</td>
+                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
                         <td>{{ bruker.getEpost() }}</td>
                         <td>{{ bruker.getTelefon() }}</td>
-                        <td>{{ bruker.isAktivert() }}</td>
+                        <td>{{ bruker.isAktivertTekst() }}</td>
                         <td>{{ bruker.getRegistreringsdato() }}</td>
                         {% if not bruker.isAktivert %}
                         <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>

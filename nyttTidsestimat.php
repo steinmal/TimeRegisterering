@@ -15,7 +15,7 @@ session_start();
 
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 if(isset($_GET['error'])){

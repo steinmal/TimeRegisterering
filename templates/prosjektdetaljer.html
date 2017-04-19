@@ -17,6 +17,16 @@
         <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
         {% endif %}
         <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
+        
+    {% if error == "ugyldigOppgave" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til oppgaven
+        </div>
+    {% endif %}
+        
+        
     <h1>Faser</h1>
     <table class="table table-striped">
         <tr>

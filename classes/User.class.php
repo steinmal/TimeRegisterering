@@ -24,6 +24,7 @@
         public function getEpost() { return $this->bruker_epost; }
 
         public function isAktivert() { return $this->bruker_aktivert > 0; }
+        public function isAktivertTekst() { return $this->isAktivert() ? "Aktivert" : "Deaktivert"; }
         public function getRegistreringsdato() { return $this->bruker_registreringsdato; }
         
         public function setBrukertype($id) { $this->brukertype_id = $id; }

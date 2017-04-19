@@ -127,7 +127,7 @@
                 $this->oppgavetyper = $this->getAlleOppgavetyper();
 
             if (!isset($this->oppgavetyper[$oppgavetype_id]))
-                throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
+ //               throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
 
             return $this->oppgavetyper[$oppgavetype_id];
         }
@@ -209,6 +209,29 @@
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
             }
+        }
+        
+        public function hentAktiveTimerPrOppgaveDesimal($id) {
+            try {
+                $stmt = $this->db->prepare("SELECT SUM(TIME_TO_SEC(TIMEDIFF(`timereg_stopp`, `timereg_start`))) as sum FROM timeregistrering WHERE oppgave_id = :id AND timereg_aktiv = 1");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                $sum = $stmt->fetch(PDO::FETCH_ASSOC);
+                return round($sum["sum"] / 3600, 1); //hours, 1 decimal
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+        
+        public function calculatePercent($id) {
+            $arbeidet = $this->hentAktiveTimerPrOppgaveDesimal($id);
+            $estimat = $this->hentOppgave($id)->getTidsestimat();
+            $percent = -1;
+            if ($estimat > 0) {
+                $percent = round($arbeidet * 100 / $estimat);
+            }
+            return $percent;
         }
         
         public function hentGodkjenteTimerPrOppgave($id) {

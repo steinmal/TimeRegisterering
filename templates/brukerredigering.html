@@ -15,6 +15,32 @@
             <form method="post" action="brukerredigering.php" class="col-md-4">
             <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
 
+            {% if error == "brukerHoyereNiva" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Du kan ikke deaktivere en bruker med høyere rettighet enn deg selv.
+                </div>
+            {% elseif error == "forLavRettighet" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Du kan ikke gi en annen bruker høyere rettighet enn deg selv.
+                </div>
+            {% elseif error == "mailExists" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    E-post eksisterer allerede
+                </div>
+            {% elseif error == "nameExists" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Brukernavn eksisterer allerede
+                </div>
+            {% endif %}
+
             {% if brukerTilgang.isBrukeradmin() %}
             <div class="form-group ">
                 <label for="navn">Navn:</label>
@@ -85,8 +111,6 @@
         <form method="post" action="brukerredigering.php" class="col-md-4">
             <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
             <h4>Deaktiver bruker</h4>
-           <!-- <p>Ved å deaktivere en bruker vil denne ikke lenger ha tilgang til systemet.
-                Dette må kun gjøres når brukeren ikke lenger er ansatt. Er du sikker på at du vil deaktivere brukeren?</p> -->
             <div class="form-group ">
                 <input type="submit" name="deaktiver" value="Deaktiver bruker">
             </div>

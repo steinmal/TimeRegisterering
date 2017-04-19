@@ -17,7 +17,7 @@ $oppgaveListe= "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 if(isset($_GET['sendt'])) {
@@ -32,12 +32,17 @@ date_default_timezone_set('Europe/Oslo');
 if(isset($_POST['submit'])){
     $id = $_POST['regId'];
     if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
-        header("Location: timeregistrering.php?error=ugyldigId"); //SJEKKFØRLEVERING
+        header("Location: timeregistrering.php?error=ugyldigTimereg");
         return;
     }
-
+    
+    $timereg = $TimeReg->hentTimeregistrering($id);
     switch($_POST['submit']){
         case 'Start':
+            if ($timereg != NULL && $timereg->getStatus() == 0) {   //status = start, allerede aktiv
+                header("Location: timeregistrering.php?error=alleredeAktivTimereg");
+                return;
+            }
             $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
             if(!in_array($prosjekt->getTeam(), $teamListe)){
@@ -47,12 +52,26 @@ if(isset($_POST['submit'])){
             $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
-            $TimeReg->pauserTimeReg($id);
+            if ($timereg->getStatus() == 0 || $timereg->getStatus() == 2)  { //status = start eller fortsett
+                $TimeReg->pauserTimeReg($id);
+            } else {
+                header("Location: timeregistrering.php?error=ugyldigPause");
+                return;
+            }
             break;
         case 'Fortsett':
-            $TimeReg->fortsettTimeReg($id);
+            if ($timereg->getStatus() == 1) { //status = pause
+                $TimeReg->fortsettTimeReg($id);
+            } else {
+                header("Location: timeregistrering.php?error=ugyldigFortsettelse");
+                return;
+            }
             break;
         case 'Stopp':
+            if ($timereg->getStatus == 3) { //status = stopp
+                header("Location: timeregistrering.php?error=ugyldigStopp");
+                return;
+            }
             $TimeReg->stoppTimeReg($id);
             break;
     }

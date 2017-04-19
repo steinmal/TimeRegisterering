@@ -1,0 +1,60 @@
+<table class="table table-striped">
+    {% if type == "team" %}
+    {% elseif type == "prosjekt" %}
+        <tr>
+            <th>Prosjekt</th>
+            {% for oType in  oppgaveTyper %}
+                <th>{{ oType.Navn }}</th>
+            {% endfor %}
+            <th>Sum</th>
+        </tr>
+        {% for oversikt in oversiktListe %}
+        <tr>
+            <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ oversikt.getProsjekt().getId() }}">{{ oversikt.getNavnMedInnrykk()|raw }}</a></td>
+            {% for oType in  oppgaveTyper %}
+                <td>{{ oversikt.getTimer(oType.Id) }}</td>
+            {% endfor %}
+            <td>{{ oversikt.Timer }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td id="sum-linje">Totalt:</td>
+            {% for oType in  oppgaveTyper %}
+                <td>{{ oversiktListe[0].getTotalTimer(oType.Id) }}</td>
+            {% endfor %}
+            <td>{{ oversiktListe[0].TotalTimer }}</td>
+        </tr>
+    {% elseif type == "oppgave" %}
+    {% elseif type == "fremdrift" %}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        {% for fase in faseliste %}
+    
+            <h1>{{ fase.getNavn() }}</h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>Oppgave</th>
+                    <th>Timer utført</th>
+                    <th>Estimat</th>
+                    <th>Gjenstående timer</th>
+                    <th>Prosent</th>
+                    <th>Status</th>
+                </tr>
+                {% for oppgave in oppgaveliste %}
+                    {% if oppgave.getFaseId() == fase.getId() %}
+                    <tr>
+                        <td>{{ oppgave.getNavn() }}</td>
+                        <td>{{ oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.getId()) }}</td>
+                        <td>{{ oppgave.getTidsestimat() }}</td>
+                        <td>{{ oppgave.getTidsestimat() - oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.getId()) }}</td>
+                        <td>{{ oppgavereg.calculatePercent(oppgave.getId()) }}%</td>
+                        <td>Oppgaver har ingen status</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
+</table>

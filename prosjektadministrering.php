@@ -16,12 +16,13 @@ $visArkivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Du har ikke tilgang til prosjektadministrering";
+    header("Location: index.php?error=manglendeRettighet&side=pradm");
+    //echo "Du har ikke tilgang til prosjektadministrering";
     //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }

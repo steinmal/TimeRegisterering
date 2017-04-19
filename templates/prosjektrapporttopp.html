@@ -12,12 +12,7 @@
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">Prosjektdetaljer</a>
 
-        {% if type == "fremdrift" %}
-            <h1>Fremdriftsrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
-        {% else %}
-            <h1>Prosjektrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
-        {% endif %}
-
+        <h1>Prosjektrapport for prosjekt {{ prosjekt.getNavn() }}</h1>
         <form method=get class="col-md-4">
             <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
             <div class="form-group">
@@ -26,9 +21,8 @@
                     <option value="team">Pr. Team</option>
                     <option value="prosjekt" {% if type == "prosjekt" %}selected{% endif %}>Pr. Delprosjekt</option>
                     <option value="oppgave"{% if type == "oppgave" %}selected{% endif %}>Pr. Oppgave</option>
-                    <option value="fremdrift"{% if type == "fremdrift" %}selected{% endif %}>Fremdriftsrapport</option>
                 </select>
             </div>
         </form>
-
+        
         <div class="rapport">

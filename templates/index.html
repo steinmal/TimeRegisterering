@@ -22,9 +22,91 @@
             {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
             <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
             <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
+            {% if brukerTilgang.isBrukeradmin() %}<a href="DBdump.php"><button type="button" class="btn btn-default">Last ned backup av database.</button></a>{% endif %}
 
         </div>
     {% else %}
+    {% if error == "ikkeInnlogget" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må være innlogget for å ha tilgang til siden
+        </div>
+        {% elseif error == "manglendeRettighet" %}
+            {% if side == "bradm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til brukeradministrering
+            </div>
+            {% elseif side == "brred" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til brukerredigering
+            </div>
+            {% elseif side == "oppgdet" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til oppgavedetaljer
+            </div>
+            {% elseif side == "oppgopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til oppgaveoppretting
+            </div>
+            {% elseif side == "optopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å opprette oppgavetyper
+            </div>
+            {% elseif side == "optred" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å redigere oppgavetyper
+            </div>
+            {% elseif side == "pradm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektadministrering
+            </div>
+            {% elseif side == "propp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektoppretting
+            </div>
+            {% elseif side == "prrapp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til prosjektrapporter
+            </div>
+            {% elseif side == "teamrapp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamrapport
+            </div>
+            {% elseif side == "timegod" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til timegodkjenning
+            </div>
+            {% else %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Du har ikke tilgang til å vise siden
+            </div>
+            {% endif %}
+    {% endif %}
 
         <form method="post" action="index.php" class="col-md-4">
             <div class="form-group ">

@@ -13,16 +13,19 @@ $UserReg = new UserRegister($db);
 $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
+$FaseReg = new FaseRegister($db);
+$ProsjektReg = new ProsjektRegister($db);
 $visGodkjent = "";
+$error = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
-    echo "Kun teamleder har tilgang til timegodkjenning";
+    header("Location: index.php?error=manglendeRettighet&side=timegod");
     return;
 }
 if(isset($_GET['visGodkjent'])){
@@ -30,6 +33,12 @@ if(isset($_GET['visGodkjent'])){
 }
 
 if(isset($_GET['action'])){
+    //teamleder kan kun godkjenne timereg'er som er i oppgaver som tilhører prosjekter som teamet han er leder for har (timereg->oppgave->fase->prosjekt->team -> teamleder)
+    $teamlederId = $TeamReg->hentTeam($ProsjektReg->hentProsjekt($FaseReg->hentFase($OppgaveReg->hentOppgave($TimeReg->hentTimeregistrering($_GET['timeregId'])->getOppgaveId())->getFaseId())->getProsjektId())->getTeam())->getLeder();
+    if ($teamlederId != $_SESSION['bruker']->getId()) {
+        header("Location: timegodkjenning.php?error=ugyldigTimereg");
+        return;
+    }
     if($_GET['action'] == "godkjenn") {
         $TimeReg->godkjennTimeregistrering($_GET['timeregId']);
     }
@@ -61,6 +70,10 @@ foreach ($brukerIds as $brukerId) {
     }
 }
 
+if (isset($_GET['error'])) {
+    $error =$_GET['error'];
+}
+
 
 echo $twig->render(
     'timegodkjenning.html', 
@@ -72,5 +85,7 @@ echo $twig->render(
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
-    'visGodkjent'=>$visGodkjent, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+    'visGodkjent'=>$visGodkjent, 
+    'brukerTilgang'=>$_SESSION['brukerTilgang'],
+    'error'=>$error));
 ?>

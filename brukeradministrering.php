@@ -14,12 +14,12 @@ $visNye = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
-    header("Location: index.php");
+    header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true){
-    echo "Du har ikke tilgang til brukeradministrering";
+    header("Location: index.php?error=manglendeRettighet&side=bradm");
     return;
 }
 if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
