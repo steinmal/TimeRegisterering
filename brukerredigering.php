@@ -39,7 +39,14 @@ if(isset($_REQUEST['action'])){
             }
             break;
         case 'Lagre':
-            
+            if($UserReg->brukernavnEksisterer($_POST['navn'])){
+                header("Location: brukerredigering.php?error=nameExists&brukerId=" . $_REQUEST['brukerId']);
+                return;
+            }
+            if($UserReg->emailEksisterer($_POST['epost'])){
+                header("Location: brukerredigering.php?error=mailExists&brukerId=" . $_REQUEST['brukerId']);
+                return;
+            }
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
                 $bruker->setNavn($_POST['navn']);
                 if($_SESSION['bruker']->getBrukertype() > $_POST['type']) { //brukeradmin skal ikke kunne gi andre brukere høyere rettighet enn seg selv

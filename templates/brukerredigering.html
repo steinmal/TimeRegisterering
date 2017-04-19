@@ -27,6 +27,18 @@
                     <span class="sr-only">Error:</span>
                     Du kan ikke gi en annen bruker høyere rettighet enn deg selv.
                 </div>
+            {% elseif error == "mailExists" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    E-post eksisterer allerede
+                </div>
+            {% elseif error == "nameExists" %}
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    Brukernavn eksisterer allerede
+                </div>
             {% endif %}
 
             {% if brukerTilgang.isBrukeradmin() %}
