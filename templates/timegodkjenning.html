@@ -14,6 +14,14 @@
 
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timegodkjenning</h1>
+    
+    {% if error == "ugyldigTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å godkjenne/avvise denne timeregistreringen
+        </div>
+    {% endif %}
 
     <!--Teamleders team-->
     {% for team in teams %}
