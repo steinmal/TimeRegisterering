@@ -130,6 +130,13 @@
                 $stmt = $this->db->prepare("UPDATE `bruker` SET bruker_aktivert=1 WHERE bruker_id=:id");
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
+                
+                $bruker = $this->hentBruker($id);
+                $to = $bruker->getEpost();
+                $subject = 'Din bruker på timeregistrering har blitt aktivert';
+                $message = 'Din bruker på timeregistrering har blitt aktivert';
+                EmailHelper::sendEmail($to, $subject, $message);
+                
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
             }
