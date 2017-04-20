@@ -31,15 +31,24 @@
 
         public function opprettBruker($bruker) {
             try {
-                $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord, bruker_registreringsdato, brukertype_id, bruker_aktivert)
-                VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 0)");
+                $stmt = $this->db->prepare("INSERT INTO `bruker` (bruker_navn, bruker_epost, bruker_telefon, bruker_passord, bruker_registreringsdato, brukertype_id, bruker_aktivert, bruker_aktiveringskode)
+                VALUES (:navn, :epost, :telefonnummer, :passord, now(), 4, 0, :aktiveringskode)");
+                
+                $aktiveringskode = sha1(uniqid(rand(), 1));
       
                 $stmt->bindParam(':navn', $bruker->getNavn(), PDO::PARAM_STR);
                 $stmt->bindParam(':epost', $bruker->getEpost(), PDO::PARAM_STR);
                 $stmt->bindParam(':telefonnummer', $bruker->getTelefon(), PDO::PARAM_INT);
                 $stmt->bindParam(':passord', $bruker->getPassord(), PDO::PARAM_STR);
+                $stmt->bindParam(':aktiveringskode', $aktiveringskode, PDO::PARAM_STR);
                 
                 $stmt->execute();
+                
+                $to = $bruker->getEpost();
+                $subject = 'Aktiveringslink for din bruker på timeregistrering';
+                $message = 'Bruk denne linken: http://' . $_SERVER['HTTP_HOST'] . "/brukeraktivering.php?token=" . $aktiveringskode;
+                EmailHelper::sendEmail($to, $subject, $message);
+                
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
             }
@@ -127,8 +136,10 @@
         
         public function aktiverBruker($id){
             try {
-                $stmt = $this->db->prepare("UPDATE `bruker` SET bruker_aktivert=1 WHERE bruker_id=:id");
+                $stmt = $this->db->prepare("UPDATE `bruker` SET bruker_aktivert=1, bruker_aktiveringskode=:aktiveringskode WHERE bruker_id=:id");
+                $aktiveringskode = "";
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->bindParam(':aktiveringskode', $aktiveringskode);
                 $stmt->execute();
                 
                 $bruker = $this->hentBruker($id);
@@ -140,6 +151,25 @@
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
             }
+        }
+        
+        public function aktiverBrukerMedAktiveringskode($aktiveringskode){
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_aktiveringskode = :aktiveringskode");
+                $stmt->bindParam(':aktiveringskode', $aktiveringskode);
+                $stmt->execute();
+                
+                if($bruker = $stmt->fetchObject('User')){
+                    $id = $bruker->getId();
+                    $this->aktiverBruker($id);
+                    return true;
+                }
+                return false;
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+                return false;
+            }
+
         }
         
         public function deaktiverBruker($id){
