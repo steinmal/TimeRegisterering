@@ -122,14 +122,16 @@
             return $oppgavetyper;
         }
         
-        public function getOppgavetype($oppgavetype_id) {
+        public function getOppgavetypeTekst($oppgavetype_id) {
             if ($this->oppgavetyper == null)
                 $this->oppgavetyper = $this->getAlleOppgavetyper();
 
-            if (!isset($this->oppgavetyper[$oppgavetype_id]))
+            if (!isset($this->oppgavetyper[$oppgavetype_id])) {
+                //return "Feil ID " . $oppgavetype_id;
                 throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
+            }
 
-            return $this->oppgavetyper[$oppgavetype_id];
+            return $this->oppgavetyper[$oppgavetype_id]->getNavn();
         }
 
         

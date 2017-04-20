@@ -23,7 +23,7 @@
             <td>{{ timereg.getTil() }}</td>
             <td>{{ timereg.getHourString() }}</td>
             <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
-            <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }}</td>
+            <td>{{ oppgavereg.getOppgavetypeTekst(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()) }}</td>
 
         </tr>
         {% endif %}

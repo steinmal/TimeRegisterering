@@ -95,7 +95,7 @@ if(isset($_GET['download'])){
     }
     if ($oppgavetype){
         foreach($timeregistreringer as $key => $element) {
-            if ($OppgaveReg->getOppgavetype($OppgaveReg->hentOppgave($element->getOppgaveId())->getType())->getNavn() != $oppgavetype) {
+            if ($OppgaveReg->getOppgavetypeTekst($OppgaveReg->hentOppgave($element->getOppgaveId())->getType()) != $oppgavetype) {
                 unset($timeregistreringer[$key]);
             }
         }
