@@ -16,10 +16,10 @@ $mail->isSMTP();
 // 0 = off (for production use)
 // 1 = client messages
 // 2 = client and server messages
-$mail->SMTPDebug = 2;
+$mail->SMTPDebug = 0;
 
 //Ask for HTML-friendly debug output
-$mail->Debugoutput = 'html';
+//$mail->Debugoutput = 'html';
 
 //Set the hostname of the mail server
 $mail->Host = 'smtp.gmail.com';
@@ -65,7 +65,7 @@ $mail->AltBody = $body;
 if (!$mail->send()) {
     echo "Mailer Error: " . $mail->ErrorInfo;
 } else {
-    echo "Message sent!";
+    //echo "Message sent!";
 }
         }
 
