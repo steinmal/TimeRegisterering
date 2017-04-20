@@ -127,7 +127,7 @@
                 $this->oppgavetyper = $this->getAlleOppgavetyper();
 
             if (!isset($this->oppgavetyper[$oppgavetype_id]))
- //               throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
+                throw new InvalidArgumentException('Oppgavetype not defined: ' . $oppgavetype_id);
 
             return $this->oppgavetyper[$oppgavetype_id];
         }

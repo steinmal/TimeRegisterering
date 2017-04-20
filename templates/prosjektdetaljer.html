@@ -47,6 +47,8 @@
         {% endfor %}
     </table>
     <a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}">Legg til fase</a>
+    
+    
     {% for fase in faseliste %}
         <h1>{{ fase.getNavn() }}</h1>
         <table class="table table-striped">

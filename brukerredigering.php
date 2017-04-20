@@ -39,11 +39,11 @@ if(isset($_REQUEST['action'])){
             }
             break;
         case 'Lagre':
-            if($UserReg->brukernavnEksisterer($_POST['navn'])){
+            if($bruker->getNavn()!= $_POST['navn'] && $UserReg->brukernavnEksisterer($_POST['navn'])){
                 header("Location: brukerredigering.php?error=nameExists&brukerId=" . $_REQUEST['brukerId']);
                 return;
             }
-            if($UserReg->emailEksisterer($_POST['epost'])){
+            if($bruker->getEpost() != $_POST['epost'] && $UserReg->emailEksisterer($_POST['epost'])){
                 header("Location: brukerredigering.php?error=mailExists&brukerId=" . $_REQUEST['brukerId']);
                 return;
             }

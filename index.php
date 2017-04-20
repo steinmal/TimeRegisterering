@@ -12,6 +12,7 @@ $error = "";
 $loginFail="";
 $bruker="";
 $error="";
+$side = "";
 $brukerTilgang="";
 session_start();
 
@@ -35,6 +36,8 @@ if(isset($_POST['fail'])){
 
 if(isset($_GET['error'])) {
     $error = $_GET['error'];
+} if (isset($_GET['side'])) {
+    $side = $_GET['side'];
 }
 
 echo $twig->render('index.html', array(

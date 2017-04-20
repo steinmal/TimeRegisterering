@@ -44,6 +44,8 @@ if (isset($_GET['error'])) {
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 
+//var_dump($prosjekt);
+
 echo $twig->render('prosjektdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 
 ?>
