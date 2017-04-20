@@ -21,6 +21,12 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til å godkjenne/avvise denne timeregistreringen
         </div>
+    {% elseif error == "deaktivertTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan ikke godkjenne/avvise en deaktivert timeregistrering
+        </div>
     {% endif %}
 
     <!--Teamleders team-->
@@ -45,24 +51,26 @@
                     <th>Endre status</th>
                 </tr>
                     
-                <!--Alle timeoppføringer på teamet-->
+                <!--Alle aktive timeoppføringer på teamet-->
                 {% for timereg in timeregistreringer %}
                     {% if timereg.getGodkjent == (visGodkjent == "on") %}
-                    <tr>
-                        <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
-                        <td>{{ timereg.getDato() }}</td>
-                        <td>{{ timereg.getFra() }}</td>
-                        <td>{{ timereg.getTil() }}</td>
-                        <td>{{ timereg.getPause() }} min</td>
-                        <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
-                        <td>{{ timereg.getGodkjentTekst() }}</td>
-                        
-                        {% if timereg.getGodkjent() == false %}
-                        <td><a href="?action=godkjenn&timeregId={{ timereg.getId() }}">Godkjenn</a></td>
-                        {% else %}
-                        <td><a href="?action=avvis&timeregId={{ timereg.getId() }}">Avvis</a></td>
-                        {% endif %}
-                    </tr>
+                       {% if timereg.getAktiv() == 1 %} 
+                            <tr>
+                                <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
+                                <td>{{ timereg.getDato() }}</td>
+                                <td>{{ timereg.getFra() }}</td>
+                                <td>{{ timereg.getTil() }}</td>
+                                <td>{{ timereg.getPause() }} min</td>
+                                <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
+                                <td>{{ timereg.getGodkjentTekst() }}</td>
+                                
+                                {% if timereg.getGodkjent() == false %}
+                                <td><a href="?action=godkjenn&timeregId={{ timereg.getId() }}">Godkjenn</a></td>
+                                {% else %}
+                                <td><a href="?action=avvis&timeregId={{ timereg.getId() }}">Avvis</a></td>
+                                {% endif %}
+                            </tr>
+                       {% endif %}
                     {% endif %}
                 {% endfor %}
             </table>
