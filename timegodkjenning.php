@@ -39,7 +39,7 @@ if(isset($_GET['action'])){
         header("Location: timegodkjenning.php?error=ugyldigTimereg");
         return;
     }
-    if ($TimeReg->hentTimeregistrering($_GET['timeregId'])->getAktiv() == 0) {  //skal ikke kunne godkjenne deaktiverte timereg
+    if ($TimeReg->hentTimeregistrering($TimeReg->hentTimeregistrering($_GET['timeregId']))->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
         header("Location: timegodkjenning.php?error=deaktivertTimereg");
         return;
     }

@@ -34,7 +34,7 @@ if (isset($_REQUEST['action'])) {
     } else {
         switch ($_REQUEST['action']) {
             case 'Korriger':
-                if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
+                if ($TimeReg->hentTimeregistrering($timeId)->getTilstand() == 3) {
                     $error = "kanIkkeEndres";
                     
                 } else {
@@ -56,7 +56,7 @@ if (isset($_REQUEST['action'])) {
                 break;
             case 'Aktiver':
                 $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-                $TimeReg->endreAktivOgGodkjent($timeregKopi->getId(), 1, 0); //kopien skal være aktiv og ikke godkjent
+                $TimeReg->gjenopprettTimeregistrering($timeregKopi->getId());   //gir kopien tilstand gjenopprettet
                 $error = "aktivert";
         }
     }

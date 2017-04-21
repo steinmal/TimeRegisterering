@@ -45,6 +45,13 @@ if ($_SESSION['bruker']->getId != $lederID /*$TeamReg->hentTeam($ProsjektReg->he
 }
 
 if(isset($_POST['lagre'])){
+    if($_POST['faseStartdato'] < $prosjekt->getStartDato() || $_POST['faseSluttdato'] > $prosjekt->getSluttDato()) {
+        header("Location: faseoppretting.php?error=datoUtenforProsjekt");
+        return;
+    } if ($_POST['faseStartdato'] > $_POST['faseSluttdato']) {
+        header("Location: faseoppretting.php?error=sluttEtterStart");
+        return;
+    }
     $nyFase = new Fase();
     $nyFase->setProsjektId($prosjektId);
     $nyFase->setNavn($_POST['faseNavn']);
