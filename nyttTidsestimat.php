@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-
+$TeamReg = new TeamRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $error = "";
 
@@ -38,6 +38,6 @@ if (isset($_POST['submit'])) {
 }
 
 
-echo $twig->render('nyttTidsestimat.html', array('oppgave'=>$oppgave, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
+echo $twig->render('nyttTidsestimat.html', array('oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
                      'error'=>$error, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

@@ -8,6 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $userReg = new UserRegister($db);
+$TeamReg = new TeamRegister($db);
 $error="";
 $innlogget = 0;
 $bruker = "";
@@ -45,5 +46,5 @@ if(isset($_SESSION['burkerTilgang'])){
 }
 
 
-echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error));
+echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'TeamReg'=>$TeamReg, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error));
 ?>

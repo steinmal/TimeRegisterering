@@ -84,7 +84,7 @@ echo $twig->render(
     array('innlogget'=>$_SESSION['innlogget'], 
     'bruker'=>$_SESSION['bruker'],
     'userReg'=>$UserReg, 
-    'teamReg'=>$TeamReg, 
+    'TeamReg'=>$TeamReg,
     'timeReg'=>$TimeReg, 
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,

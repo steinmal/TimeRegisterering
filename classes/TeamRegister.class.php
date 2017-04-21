@@ -98,7 +98,23 @@
             }
             return $brukerIds;
         }
-        
+
+        public function harTeamlederEtTeam($bruker_id) {
+            try {
+                $stmt = $this->db->prepare("SELECT count(*) FROM team WHERE team_leder=:brukerId");
+                $stmt->bindParam('brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $num = $stmt->fetchColumn();
+                if($num > 0) {
+                    return true;
+                }
+                else return false;
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         
         private function Feil($feilmelding) {
             print "<h2>Oisann... Noe gikk galt</h2>";

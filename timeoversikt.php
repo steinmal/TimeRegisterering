@@ -9,6 +9,7 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
+$TeamReg = new TeamRegister($db);
 $error = "";
 $noRadio = "";
 $deaktivertError = "";
@@ -57,6 +58,6 @@ if (isset($_GET['visDeaktiverte'])) {
 
 $timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), $datefrom, $dateto);
 
-echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
+echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
     'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'datefrom'=>$datefrom, 'dateto'=>$dateto, 'error'=>$error, 'visDeaktiverte'=>$visDeaktiverte));
 ?>

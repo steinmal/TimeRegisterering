@@ -127,8 +127,10 @@ if(isset($_GET['download'])){
     $objWriter->save('php://output');
     exit;
 }
+$twigArray['TeamReg'] = $TeamReg;
 
 $tabellRender = $twig->render('rapportansatt.html', $twigArray);
+
 
 echo $twig->render('teamrapporttopp.html', $twigArray);
 echo $tabellRender;

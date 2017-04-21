@@ -7,6 +7,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
+$TeamReg = new TeamRegister($db);
 $innlogget = false;
 $error = "";
 $loginFail="";
@@ -45,5 +46,6 @@ echo $twig->render('index.html', array(
     'innlogget'=>$innlogget,
     'bruker'=>$bruker,
     'brukerTilgang'=>$brukerTilgang,
-    'error'=>$error));
+    'error'=>$error,
+    'TeamReg'=>$TeamReg));
 ?>

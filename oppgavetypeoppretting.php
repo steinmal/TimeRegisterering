@@ -9,6 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
 $OppgaveTypeReg = new OppgaveRegister($db);
+$TeamReg = new TeamRegister($db);
 $error = "";
 session_start();
 
@@ -52,4 +53,4 @@ else {
     }
 }
 
-echo $twig->render('oppgavetypeoppretting.html', array('oppgavetype'=>$oppgavetype, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetypeoppretting.html', array('oppgavetype'=>$oppgavetype, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

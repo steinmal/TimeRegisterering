@@ -23,7 +23,9 @@
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Teamadministrering <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="teamrapportansatt.php">Teamrapport Ansatt</a></li>
+                        {% if TeamReg.harTeamLederEtTeam(bruker.getId())%}
                         <li><a href="timegodkjenning.php">Timegodkjenning</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}

@@ -11,7 +11,7 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 //$UserReg = new UserRegister($db);
-//$TeamReg = new TeamRegister($db);
+$TeamReg = new TeamRegister($db);
 $rapportType = "";
 
 session_start();
@@ -92,6 +92,7 @@ if(isset($_GET['download'])){
     $objWriter->save('php://output');
     exit;
 }
+$twigs['TeamReg'] = $TeamReg;
 
 echo $twig->render('prosjektrapporttopp.html', $twigs);
 echo $tabellRender;

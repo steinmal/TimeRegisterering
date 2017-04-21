@@ -9,6 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $UserReg = new UserRegister($db);
 $OppgaveRegister = new OppgaveRegister($db);
+$TeamRegister = new TeamRegister($db);
 $error = "";
 session_start();
 
@@ -30,4 +31,4 @@ if(isset($_GET['error'])){
 $oppgavetyper= $OppgaveRegister->hentAlleOppgaveTyper();
 
 
-echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

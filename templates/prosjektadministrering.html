@@ -60,7 +60,7 @@
                         <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.getId() }}">{{ prosjekt.getNavn() }}</a></td>
                         <td>{{ register.hentProsjekt(prosjekt.getParent()).getNavn() }}</td>
                         <td>{{ userReg.hentBruker(prosjekt.getLeder()).getNavn()}}</td>
-                        <td>{{ teamReg.hentTeam(prosjekt.getTeam()).getNavn() }}</td>
+                        <td>{{ TeamReg.hentTeam(prosjekt.getTeam()).getNavn() }}</td>
                         <td>{{ prosjekt.getStartDato() }}</td>
                         <td>{{ prosjekt.getSluttDato() }}</td>
                         <td>{{ prosjekt.getBeskrivelse() }}</td>
