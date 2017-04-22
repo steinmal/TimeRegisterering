@@ -12,6 +12,15 @@
     <div class="container">
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+        {% if error == "ikkeTilgang" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til dette teamet
+        </div>
+        {% else %}
+
+
     <h1>Teamadministrering</h1>
         <div class="col-lg-4">
         <h2>{{team.getNavn()}}</h2>
@@ -39,6 +48,7 @@
             </form>
         </div>
     </div>
+    {% endif %}
     {% include 'footer.html' %}
 </body>
 </html>

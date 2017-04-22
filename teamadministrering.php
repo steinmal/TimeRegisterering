@@ -35,9 +35,16 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 if(isset($_GET['error'])){
     $error = $_GET['error'];
 }
+
 if(isset($_GET['teamId'])){
     $teamId = $_GET['teamId'];
     $team = $TeamReg->hentTeam($teamId);
+
+    if($team->getLeder() != $_SESSION['bruker']->getId()) { //Sjekk om innlogget bruker er leder av teamet man aksesserer.
+        header("Location: teamadministrering.php?error=ikkeTilgang");
+        return;
+    }
+
     $medlemsliste = $TeamReg->getTeamMedlemmerId($teamId);
 
     foreach($medlemsliste as $i) {
@@ -66,6 +73,8 @@ if(isset($_GET['teamId'])){
         header("Location: teamadministrering.php?teamId=" . $teamId);
 
     }
+
+
 }
 
 
