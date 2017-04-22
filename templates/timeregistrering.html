@@ -80,11 +80,14 @@
             </select>
         {% else %}
             <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                {% if valgtProsjekt < 1 %}
+                <option selected="selected"></option>
+                {% endif %}
                 {% for prosjekt in prosjektListe %}
                 <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getNavn() }}</option>
                 {% endfor %}
             </select>
-            {% if valgtProsjekt <= 1 %}
+            {% if valgtProsjekt < 1 %}
             <small class="form-text text-muted">Velg prosjekt</small>
             {% elseif oppgaveListe|length == 0 %}
             <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
