@@ -14,7 +14,7 @@ $dbHost = 'kark.hin.no';
 $dbUser = 'stud_v17_gruppe2';
 $dbPass = 'gruppe2';
 $dbName = 'stud_v17_gruppe2';
-$maxRuntime = 8; // less then your max script execution limit
+$maxRuntime = 16; // less then your max script execution limit
 
 
 $deadline = time()+$maxRuntime; 
