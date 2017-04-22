@@ -25,7 +25,7 @@ if(isset($_POST['opprettBruker'])){
         header("Location: brukerregistrering.php?error=mailExists");
         return;
     }
-    $nyBruker = new User();
+    $nyBruker = new Bruker();
     $nyBruker->setNavn($_POST['navn']);
     $nyBruker->setEpost($_POST['epost']);
     $nyBruker->setPassord($_POST['passord']);
