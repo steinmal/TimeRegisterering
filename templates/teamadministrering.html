@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teamadministrering</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    <h1>Teamadministrering</h1>
+        <div class="col-lg-4">
+        <h2>{{team.getNavn()}}</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th></th>
+                </tr>
+                {% for medlem in medlemmer %}
+                    <tr>
+                        <td>{{ medlem.getNavn() }}</td>
+                        <td><a href="teamadministrering.php?teamId={{team.getId()}}&fjern={{medlem.getId()}}">Fjern medlem</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <form method="post" action="">
+                <input type="hidden" name="teamId" value="{{team.getId()}}">
+                <label for="navn">Navn:</label>
+                <select name="navn" id="navn">
+                {% for brukerId in brukerliste %}
+                <option value="{{ brukerId }}">{{ userReg.hentBruker(brukerId).getNavn() }}</option>
+                {% endfor %}
+                </select>
+                <input class="btn btn-primary" type="submit" name="leggTilMedlem" value="Legg til medlem">
+            </form>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -115,6 +115,44 @@
                 $this->Feil($e->getMessage());
             }
         }
+
+        public function antallMedlemmerTeam($team_id) {
+            try {
+                $stmt = $this->db->prepare("SELECT count(*) FROM teammedlemskap WHERE team_id=:teamId");
+                $stmt->bindParam('teamId', $team_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $num = $stmt->fetchColumn();
+                return $num + 1; //Teamleder er ikke med i teammedlemskaptabell
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function slettMedlemskap($bruker_id, $team_id) {
+            try {
+                $stmt = $this->db->prepare("DELETE FROM teammedlemskap WHERE bruker_id = :brukerId and $team_id = :teamId");
+                $stmt->bindParam('teamId', $team_id, PDO::PARAM_INT);
+                $stmt->bindParam('brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function leggTilMedlem($bruker_id, $team_id) {
+            try {
+                $stmt = $this->db->prepare("INSERT INTO teammedlemskap (bruker_id, team_id) VALUES (:brukerId, :teamId)");
+                $stmt->bindParam(':teamId', $team_id, PDO::PARAM_INT);
+                $stmt->bindParam(':brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         
         private function Feil($feilmelding) {
             print "<h2>Oisann... Noe gikk galt</h2>";

@@ -48,8 +48,9 @@
                 </tr>
             {% endfor %}
         </table>
-
-    <h2>Team</h2>
+    <div class="row">
+        <div class="col-lg-6">
+    <h2>Medlem i team</h2>
             <table class="table table-striped col-md-6">
                 <tr>
                     <th>Navn</th>
@@ -62,8 +63,29 @@
                     </tr>
                 {% endfor %}
             </table>
-
-    
+        </div>
+        <div class="col-lg-6">
+        <h2>Leder for team</h2>
+        <table class="table table-striped col-md-6">
+            <tr>
+                <th>Navn</th>
+                <th>Antall medlemmer</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for lt in lederTeamListe %}
+            <tr>
+                <td>{{ lt.getNavn() }}</td>
+                <td>{{ TeamReg.antallMedlemmerTeam(lt.getId()) }}</td>
+                <td><a href="teamrapportansatt.php">Se rapporter</a></td>
+                <td><a href="timegodkjenning.php">Godkjenn timer</a></td>
+                <td><a href="teamadministrering.php?teamId={{ lt.getId() }}">Administrer</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
 </div>
     {% include 'footer.html' %}
 </body>
