@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$userReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $error="";
 $innlogget = 0;
 $bruker = "";
@@ -19,7 +19,7 @@ if (isset($_GET['token'])) {
     $aktiveringskode = $_GET['token'];
     if (strlen($aktiveringskode) == 40
             && ctype_alnum($aktiveringskode) //Kun bokstaver og tall
-            && $userReg->aktiverBrukerMedAktiveringskode($aktiveringskode)) {
+            && $BrukerReg->aktiverBrukerMedAktiveringskode($aktiveringskode)) {
         echo "Bruker aktivert";
         return;
     }

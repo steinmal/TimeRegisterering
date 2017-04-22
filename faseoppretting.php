@@ -10,7 +10,7 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $TeamReg = new TeamRegister($db);
-//$UserReg = new UserRegister($db);
+//$BrukerReg = new BrukerRegister($db);
 
 
 session_start();

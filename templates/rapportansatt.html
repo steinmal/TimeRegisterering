@@ -17,7 +17,7 @@
         {% for timereg in timeregistreringer %}
         {% if timereg.getGodkjent() %}
         <tr>
-            <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
+            <td>{{ brukerReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
             <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
             <td>{{ timereg.getFra() }}</td>
             <td>{{ timereg.getTil() }}</td>

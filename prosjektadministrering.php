@@ -8,7 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "";
 $visArkivert = "";
@@ -37,6 +37,6 @@ if(isset($_GET['error'])){
 $prosjektliste = $ProsjektReg->hentAlleProsjekt();
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
-echo $twig->render('prosjektadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'userReg'=>$UserReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$visArkivert, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('prosjektadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$visArkivert, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $OppgaveRegister = new OppgaveRegister($db);
 $TeamRegister = new TeamRegister($db);
 $error = "";
@@ -31,4 +31,4 @@ if(isset($_GET['error'])){
 $oppgavetyper= $OppgaveRegister->hentAlleOppgaveTyper();
 
 
-echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

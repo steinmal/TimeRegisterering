@@ -9,7 +9,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
@@ -83,7 +83,7 @@ echo $twig->render(
     'timegodkjenning.html', 
     array('innlogget'=>$_SESSION['innlogget'], 
     'bruker'=>$_SESSION['bruker'],
-    'userReg'=>$UserReg, 
+    'brukerReg'=>$BrukerReg,
     'TeamReg'=>$TeamReg,
     'timeReg'=>$TimeReg, 
     'oppgaveReg'=>$OppgaveReg, 

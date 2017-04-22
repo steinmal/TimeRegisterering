@@ -57,7 +57,7 @@
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.getTilstand() == 0 or timereg.getTilstand() == 2 %} 
                             <tr>
-                                <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
+                                <td>{{ brukerReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
                                 <td>{{ timereg.getDato() }}</td>
                                 <td>{{ timereg.getFra() }}</td>
                                 <td>{{ timereg.getTil() }}</td>
@@ -80,7 +80,7 @@
                     {% else %}  <!-- Viser de som kan godkjennes eller avvises, venter godkjenning (1) og gjenopprettet (4) --> 
                        {% if timereg.getTilstand == 1 or timereg.getTilstand() == 4 %} 
                             <tr>
-                                <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
+                                <td>{{ brukerReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
                                 <td>{{ timereg.getDato() }}</td>
                                 <td>{{ timereg.getFra() }}</td>
                                 <td>{{ timereg.getTil() }}</td>

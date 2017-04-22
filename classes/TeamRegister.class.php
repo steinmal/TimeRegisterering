@@ -96,7 +96,7 @@
             return $teamId;
         }
 
-        public function hentTeamMedlemmer($team_id, $UserReg) {
+        public function hentTeamMedlemmer($team_id, $BrukerReg) {
             $brukere = array();
             try {
                 $stmt = $this->db->prepare("SELECT bruker_id FROM teammedlemskap WHERE team_id=:team_id");
@@ -104,7 +104,7 @@
                 $stmt->execute();
                     
                 while($bruker = $stmt->fetch()) {
-                    $brukere[] = $UserReg->hentBruker($bruker['bruker_id']);
+                    $brukere[] = $BrukerReg->hentBruker($bruker['bruker_id']);
                 }
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());

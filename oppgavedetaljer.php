@@ -9,7 +9,7 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $OppgaveReg = new OppgaveRegister($db);
 $ProsjektReg = new ProsjektRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $FaseReg = new FaseRegister($db);
 $TeamReg = new TeamRegister($db);
 $estimatListe = array();
@@ -65,4 +65,4 @@ if (isset($_GET['error'])) {
 
 
 
-echo $twig->render('oppgavedetaljer.html', array('fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+echo $twig->render('oppgavedetaljer.html', array('fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));

@@ -10,7 +10,7 @@ $twig = new Twig_Environment($loader);
 
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
-//$UserReg = new UserRegister($db);
+//$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $rapportType = "";
 

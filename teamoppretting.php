@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "none";
 
@@ -26,7 +26,7 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjekta
 }
 
 
-$brukerliste = $UserReg->hentAlleBrukere();
+$brukerliste = $BrukerReg->hentAlleBrukere();
 $valgtTeam = new Team();
 
 if(!isset($_REQUEST['action'])){

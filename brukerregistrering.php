@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$userReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error="";
 $innlogget = 0;
@@ -17,11 +17,11 @@ session_start();
 
 
 if(isset($_POST['opprettBruker'])){
-    if($userReg->brukernavnEksisterer($_POST['navn'])){
+    if($BrukerReg->brukernavnEksisterer($_POST['navn'])){
         header("Location: brukerregistrering.php?error=nameExists" );
         return;
     }
-    if($userReg->emailEksisterer($_POST['epost'])){
+    if($BrukerReg->emailEksisterer($_POST['epost'])){
         header("Location: brukerregistrering.php?error=mailExists");
         return;
     }
@@ -30,7 +30,7 @@ if(isset($_POST['opprettBruker'])){
     $nyBruker->setEpost($_POST['epost']);
     $nyBruker->setPassord($_POST['passord']);
     $nyBruker->setTelefon($_POST['telefonnummer']);
-    $userReg->opprettBruker($nyBruker);
+    $BrukerReg->opprettBruker($nyBruker);
 }
 if(isset($_GET['error'])){
     $error=$_GET['error'];

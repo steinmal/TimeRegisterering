@@ -12,7 +12,7 @@ $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -77,7 +77,7 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'oppgavereg'=>$OppgaveReg,
     'teamReg'=>$TeamReg,
     'timeReg'=>$TimeReg,
-    'userReg'=>$UserReg,
+    'brukerReg'=>$BrukerReg,
     'brukerIds'=>$brukerIds,
     'teams'=>$teams,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
@@ -88,7 +88,7 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
 if(isset($_GET['download'])){
     if ($ansatt){
         foreach($timeregistreringer as $key => $element) {
-            if ($UserReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
+            if ($BrukerReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
                 unset($timeregistreringer[$key]);
             }
         }

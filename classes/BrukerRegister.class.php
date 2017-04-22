@@ -1,6 +1,6 @@
 <?php
 
-    class UserRegister {
+    class BrukerRegister {
         private $db;
         private $brukertyper;
 
@@ -14,7 +14,7 @@
                 $stmt->bindparam(':login', $login, PDO::PARAM_STR);
                 $stmt->execute();
                 
-                $bruker = $stmt->fetchObject('User');
+                $bruker = $stmt->fetchObject('Bruker');
                 
                 if($bruker != null && password_verify($passord, $bruker->getPassord())) {
                         $_SESSION['innlogget'] = true;
@@ -85,7 +85,7 @@
                 $stmt->execute();
                 
                 $i = 0;
-                while($bruker = $stmt->fetchObject('User')){
+                while($bruker = $stmt->fetchObject('Bruker')){
                     $brukere[$i] = $bruker;
                     $i++;
                 }
@@ -101,7 +101,7 @@
                 $stmt->bindparam(':id', $id, PDO::PARAM_STR);
                 $stmt->execute();
                 
-                if($bruker = $stmt->fetchObject('User')) {
+                if($bruker = $stmt->fetchObject('Bruker')) {
                     return $bruker;
                 }
             } catch (Exception $e) {
@@ -159,7 +159,7 @@
                 $stmt->bindParam(':aktiveringskode', $aktiveringskode);
                 $stmt->execute();
                 
-                if($bruker = $stmt->fetchObject('User')){
+                if($bruker = $stmt->fetchObject('Bruker')){
                     $id = $bruker->getId();
                     $this->aktiverBruker($id);
                     return true;

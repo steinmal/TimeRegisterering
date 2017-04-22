@@ -6,7 +6,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $innlogget = false;
 $error = "";
@@ -21,7 +21,7 @@ session_start();
 if(isset($_POST['login'])) {
     $brukernavn = $_POST['brukernavn'];
     $passord = $_POST['passord'];
-    $UserReg->login($brukernavn, $passord);
+    $BrukerReg->login($brukernavn, $passord);
     if(isset($_POST['fail'])){
         $loginfail = $_POST['fail'];
     }

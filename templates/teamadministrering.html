@@ -56,7 +56,7 @@
                 <tr>
                     <td><input type="radio"  name="teamId" value={{ team.getId() }}></td>
                     <td> {{ team.getNavn() }}</td>
-                    <td> {{ userReg.hentBruker(team.getLeder()).getNavn() }}</td>
+                    <td> {{ brukerReg.hentBruker(team.getLeder()).getNavn() }}</td>
                     <td> {{ TeamReg.antallMedlemmerTeam(team.getId()) }}</td>
                 </tr>
                 {% endfor %}
@@ -87,7 +87,7 @@
                 <label for="navn">Navn:</label>
                 <select name="navn" id="navn">
                 {% for brukerId in brukerliste %}
-                <option value="{{ brukerId }}">{{ userReg.hentBruker(brukerId).getNavn() }}</option>
+                <option value="{{ brukerId }}">{{ brukerReg.hentBruker(brukerId).getNavn() }}</option>
                 {% endfor %}
                 </select>
                 <input class="btn btn-primary" type="submit" name="leggTilMedlem" value="Legg til medlem">

@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $mismatch = "";
 $error = "";
@@ -30,21 +30,21 @@ if(!isset($_REQUEST['brukerId'])){
     return;
 }
 if(isset($_REQUEST['action'])){
-    $bruker = $UserReg->hentBruker($_REQUEST['brukerId']);
+    $bruker = $BrukerReg->hentBruker($_REQUEST['brukerId']);
     switch ($_REQUEST['action']) {
         case 'Rediger':
             // når man prøver å komme inn på redigeringssiden til en annen (skal kunne redigere egen) bruker som har høyere rettighet enn seg selv
-            if ($_REQUEST['brukerId'] != $_SESSION['bruker']->getId() && $_SESSION['bruker']->getBrukertype() > $UserReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
+            if ($_REQUEST['brukerId'] != $_SESSION['bruker']->getId() && $_SESSION['bruker']->getBrukertype() > $BrukerReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
                 header("Location: brukeradministrering.php?error=brukerHoyereNiva");
                 return;
             }
             break;
         case 'Lagre':
-            if($bruker->getNavn()!= $_POST['navn'] && $UserReg->brukernavnEksisterer($_POST['navn'])){
+            if($bruker->getNavn()!= $_POST['navn'] && $BrukerReg->brukernavnEksisterer($_POST['navn'])){
                 header("Location: brukerredigering.php?error=nameExists&brukerId=" . $_REQUEST['brukerId']);
                 return;
             }
-            if($bruker->getEpost() != $_POST['epost'] && $UserReg->emailEksisterer($_POST['epost'])){
+            if($bruker->getEpost() != $_POST['epost'] && $BrukerReg->emailEksisterer($_POST['epost'])){
                 header("Location: brukerredigering.php?error=mailExists&brukerId=" . $_REQUEST['brukerId']);
                 return;
             }
@@ -60,7 +60,7 @@ if(isset($_REQUEST['action'])){
             $bruker->setEpost($_POST['epost']);
             $bruker->setTelefon($_POST['telefon']);
             
-            $UserReg->redigerBruker($bruker);
+            $BrukerReg->redigerBruker($bruker);
             if($_SESSION['brukerTilgang']->isBrukeradmin()){
                 header("Location: brukeradministrering.php?error=lagret");
             }
@@ -74,26 +74,26 @@ if(isset($_REQUEST['action'])){
                 return;
             }
             $bruker->setPassord($_POST['nytt_pass']);
-            $UserReg->redigerBruker($bruker);
+            $BrukerReg->redigerBruker($bruker);
             break;
     }
 }
 
 if(isset($_REQUEST['deaktiver'])) {
     // kan ikke deaktivere brukere som har høyere/lik rettghet enn seg selv
-    if ($_SESSION['bruker']->getBrukertype() >= $UserReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
+    if ($_SESSION['bruker']->getBrukertype() >= $BrukerReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
         header("Location: brukerredigering.php?brukerId=" . $_REQUEST['brukerId'] . "&error=brukerHoyereNiva");
         return;
     }
     $brukerID = $_REQUEST['brukerId'];
-    $UserReg->deaktiverBruker($brukerID);
+    $BrukerReg->deaktiverBruker($brukerID);
     if($_SESSION['brukerTilgang']->isBrukeradmin()){
         header("Location: brukeradministrering.php?error=deaktivert");
         return;
     }
 }
 
-$typer = $UserReg->getAlleBrukertyper();
+$typer = $BrukerReg->getAlleBrukertyper();
 if(isset($_GET['error'])){
     if($_GET['error'] == "mismatch"){
         $mismatch = 1;
@@ -101,6 +101,6 @@ if(isset($_GET['error'])){
     $error = $_GET['error'];
 }
 
-echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$bruker,  'error'=>$error, 'typer'=>$typer, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$bruker,  'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

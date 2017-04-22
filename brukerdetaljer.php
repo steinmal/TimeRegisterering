@@ -8,7 +8,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 
 
@@ -28,7 +28,7 @@ if(!isset($_SESSION['brukerTilgang'])){
 $bruker = $_SESSION['bruker'];
 
 $brukerTypeID = $bruker->getBrukertype();
-$brukerType = $UserReg->getBrukerType($brukerTypeID)->getNavn();
+$brukerType = $BrukerReg->getBrukerType($brukerTypeID)->getNavn();
 
 $brukerID = $bruker->getId();
 $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
@@ -47,6 +47,6 @@ foreach ($lederTeamIDs as $i) {
 }
 
 
-echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'UserReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
