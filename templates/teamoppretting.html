@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prosjektoppretting</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+
+
+    <!--{% if error == "ingenVerdi" %}-->
+        <!--<div class="alert alert-warning" role="alert">-->
+            <!--<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>-->
+            <!--<span class="sr-only">Error:</span>-->
+            <!--Alle felter må fylles ut-->
+        <!--</div>-->
+        <!--{% elseif error == "stoppEtterStart" %}-->
+        <!--<div class="alert alert-error" role="alert">-->
+            <!--<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>-->
+            <!--<span class="sr-only">Error:</span>-->
+            <!--Sluttdato må være etter startdato-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+        <form method="post" action="teamoppretting.php" class="col-md-4">
+            {% if action != null %}
+            <input type="hidden" name=action value="{{ action }}"/>
+            {% endif %}
+            {% if valgtProsjekt.getId() >= 0 %}
+            <input type="hidden" name="teamId" value="{{ valgtTeam.getId() }}">
+            {% endif %}
+            <div class="form-group">
+                <label for="navn">Teamnavn:</label>
+                <input type="text" class="form-control" id="navn" name="teamNavn" value="{{ valgtTeam.getNavn() }}">
+            </div>
+            <div class="form-group ">
+                <label for="teamLeder">Teamleder:</label>
+                <select name="teamLeder" class="form-control" id="teamLeder">
+                    {% for bruker in brukere %}
+                    <option value="{{ bruker.getId() }}" {% if valgtTeam.getLeder()== bruker.getId() %} selected {%
+                            endif %}>{{ bruker.getNavn() }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group ">
+                <input type="submit" name="opprettTeam" {% if valgtTeam.getId()>= 0 %} value="Endre Team" {% else %}
+                value="Opprett Team" {% endif %}>
+                <a href="teamadministrering.php">Avbryt</a>
+            </div>
+        </form>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

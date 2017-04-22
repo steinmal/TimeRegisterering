@@ -12,14 +12,60 @@
     <div class="container">
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
-        {% if error == "ikkeTilgang" %}
+        {% if error == "feilTeam" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til dette teamet
         </div>
-        {% else %}
+        {% elseif error == "ikkeTilgang" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til denne siden
+        </div>
+        {% elseif admin %}
+        {% if adminerror == "lagret" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team opprettet
+        </div>
+        {% elseif adminerror == "redigert" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team endret
+        </div>
+        {% endif %}
+        <h1>Teamadministrering</h1>
+        <form action="teamoppretting.php" method="GET">
+            <div class="row">
+            <input class="btn-primary" type="submit" name="action" value="Opprett nytt team">
+            <input class="btn-primary" type="submit" name="action" value="Rediger">
+            </div>
+            <div class="row">
+                <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th>Teamnavn</th>
+                    <th>Teamleder</th>
+                    <th>Antall medlemmer</th>
+                </tr>
+                {% for team in alleteam %}
+                <tr>
+                    <td><input type="radio"  name="teamId" value={{ team.getId() }}></td>
+                    <td> {{ team.getNavn() }}</td>
+                    <td> {{ userReg.hentBruker(team.getLeder()).getNavn() }}</td>
+                    <td> {{ TeamReg.antallMedlemmerTeam(team.getId()) }}</td>
+                </tr>
+                {% endfor %}
 
+            </table>
+            </div>
+        </form>
+
+        {% else %}
 
     <h1>Teamadministrering</h1>
         <div class="col-lg-4">
@@ -47,8 +93,9 @@
                 <input class="btn btn-primary" type="submit" name="leggTilMedlem" value="Legg til medlem">
             </form>
         </div>
-    </div>
+
     {% endif %}
+    </div>
     {% include 'footer.html' %}
 </body>
 </html>

@@ -6,7 +6,36 @@
         public function __construct(PDO $db) {
             $this->db = $db;
         }
-        
+
+        public function lagTeam($team) {
+            $teamNavn = $team->getNavn();
+            $teamLeder = $team->getLeder();
+
+            try {
+             $stmt = $this->db->prepare("INSERT INTO team (team_navn, team_leder) VALUES (:teamNavn, :teamLeder)");
+             $stmt->bindParam(':teamNavn', $teamNavn, PDO::PARAM_STR);
+             $stmt->bindParam(':teamLeder', $teamLeder, PDO::PARAM_INT);
+             $stmt->execute();
+            }
+            catch(Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+        public function redigerTeam($team) {
+            $teamId = $team->getId();
+            $teamNavn = $team->getNavn();
+            $teamLeder = $team->getLeder();
+            try {
+                $stmt = $this->db->prepare("UPDATE team SET team_navn=:navn, team_leder=:leder WHERE team_id=:id");
+
+                $stmt->bindParam(':navn', $teamNavn, PDO::PARAM_STR);
+                $stmt->bindParam(':leder', $teamLeder, PDO::PARAM_INT);
+                $stmt->bindParam(':id', $teamId, PDO::PARAM_INT);
+                $stmt->execute();
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         public function hentAlleTeam() {
             $teamListe = array();
             try {
