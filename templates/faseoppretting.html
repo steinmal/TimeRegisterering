@@ -21,34 +21,34 @@
         </div>
     {% endif %}
     
-    <h2>Prosjekt: {{ prosjekt.getNavn() }}</h2>
+    <h2>Prosjekt: {{ prosjekt.Navn }}</h2>
     <form method="post" action="faseoppretting.php"  class="col-md-4">
-        <input type="hidden" name="prosjektId" value="{{ prosjekt.getId() }}"/>
-        {% if fase.getId() > -1 %}
-        <input type="hidden" name="faseId" value="{{ fase.getId() }}"/>
+        <input type="hidden" name="prosjektId" value="{{ prosjekt.Id }}"/>
+        {% if fase.Id > -1 %}
+        <input type="hidden" name="faseId" value="{{ fase.Id }}"/>
         {% endif %}
         <div class="form-group ">
             <label for="fasenavn">Fasenavn:</label>
-            <input type="text" class="form-control" id="fasenavn" name="faseNavn" value="{{ fase.getNavn() }}">
+            <input type="text" class="form-control" id="fasenavn" name="faseNavn" value="{{ fase.Navn }}">
         </div>
         <div class="form-group ">
             <label for="faseStartdato">Startdato:</label>
-            <input type="date" class="form-control" id="faseStartdato" name="faseStartdato" value="{{ fase.getStartDato() }}">
+            <input type="date" class="form-control" id="faseStartdato" name="faseStartdato" value="{{ fase.StartDato }}">
         </div>
         <div class="form-group ">
             <label for="faseSluttdato">Sluttdato:</label>
-            <input type="date" class="form-control" id="faseSluttdato" name="faseSluttdato" value="{{ fase.getSluttDato() }}">
+            <input type="date" class="form-control" id="faseSluttdato" name="faseSluttdato" value="{{ fase.SluttDato }}">
         </div>
         <div class="form-group ">
             <label for="faseTilstand">Tilstand:</label>
             <select name="faseTilstand" class="form control" id="faseTilstand">
             {% for tilstand in fasetilstander %}
-                <option value="{{ tilstand }}" {% if tilstand == fase.getTilstand() %}selected{% endif %}>{{ tilstand }}</option>
+                <option value="{{ tilstand }}" {% if tilstand == fase.Tilstand %}selected{% endif %}>{{ tilstand }}</option>
             {% endfor %}
             </select>
         </div>
         <div class="form-group ">
-            <input type="submit" name="lagre" {% if fase.getId() >= 0 %} value="Endre fase" {% else %} value="Opprett fase" {% endif %}>
+            <input type="submit" name="lagre" {% if fase.Id >= 0 %} value="Endre fase" {% else %} value="Opprett fase" {% endif %}>
         </div>
     </form>
 </div>

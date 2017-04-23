@@ -32,7 +32,7 @@
 
     <!--Teamleders team-->
     {% for team in teams %}
-        <h2>{{ team.getNavn() }}</h2>
+        <h2>{{ team.Navn }}</h2>
         <p>
             <form method="get">
                 <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente og avviste timer
@@ -55,50 +55,50 @@
                 <!--Alle aktive (godkjent, venter godkjenning, avvist og gjenopprettede) timeoppføringer på teamet-->
                 {% for timereg in timeregistreringer %}
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
-                       {% if timereg.getTilstand() == 0 or timereg.getTilstand() == 2 %} 
+                       {% if timereg.Tilstand == 0 or timereg.Tilstand == 2 %}
                             <tr>
-                                <td>{{ brukerReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
-                                <td>{{ timereg.getDato() }}</td>
-                                <td>{{ timereg.getFra() }}</td>
-                                <td>{{ timereg.getTil() }}</td>
-                                <td>{{ timereg.getPause() }} min</td>
-                                <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
-                                <td>{{ timereg.getTilstandTekst }}</td>
+                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }}</td>
+                                <td>{{ timereg.Til }}</td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
                                 
                                 
-                                {% if timereg.getTilstand() == 0 %}
-                                <td><a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.getId() }}&visGodkjent=on">
+                                {% if timereg.Tilstand == 0 %}
+                                <td><a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}&visGodkjent=on">
                                         <button class="btn btn-danger">Avvis</button>
                                     </a></td>
-                                {% elseif timereg.getTilstand == 2 %}
-                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.getId() }}">
+                                {% elseif timereg.Tilstand == 2 %}
+                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}">
                                         <button class="btn btn-success">Godkjenn</button>
                                     </a></td>
                                 {% endif %}
                             </tr>
                        {% endif %}
                     {% else %}  <!-- Viser de som kan godkjennes eller avvises, venter godkjenning (1) og gjenopprettet (4) --> 
-                       {% if timereg.getTilstand == 1 or timereg.getTilstand() == 4 %} 
+                       {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
                             <tr>
-                                <td>{{ brukerReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
-                                <td>{{ timereg.getDato() }}</td>
-                                <td>{{ timereg.getFra() }}</td>
-                                <td>{{ timereg.getTil() }}</td>
-                                <td>{{ timereg.getPause() }} min</td>
-                                <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
-                                <td>{{ timereg.getTilstandTekst }}</td>
+                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }}</td>
+                                <td>{{ timereg.Til }}</td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
                                 
                                 
                                 <td>
-                                    <a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.getId() }}">
+                                    <a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}">
                                         <button class="btn btn-success">Godkjenn</button>
                                     </a>
-                                    <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.getId() }}">
+                                    <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}">
                                         <button class="btn btn-danger">Avvis</button>
                                     </a></td>
-                               <!-- {% if timereg.getTilstand() == 0 %}
+                               <!-- {% if timereg.Tilstand == 0 %}
                                 <td><a href="">Avvis</a></td>
-                                {% elseif timereg.getTilstand == 2 %}
+                                {% elseif timereg.Tilstand == 2 %}
                                 <td><a href="">Godkjenn</a></td>
                                 {% endif %} -->
                             </tr>

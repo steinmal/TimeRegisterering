@@ -13,7 +13,7 @@
 
     {% include 'header.html' %}
     <div class="col-md-6 row">
-    {% if oppgavetype.getId() > 0 %}
+    {% if oppgavetype.Id > 0 %}
     <h1>Rediger oppgavetype</h1>
     {% else %}
     <h1>Opprett ny oppgavetype</h1>
@@ -21,12 +21,12 @@
 
     <div class="col-md-4 row">
     <form method="post" action="oppgavetypeoppretting.php">
-        {% if oppgavetype.getId() > -1 %}
-        <input type="hidden" name="oppgavetypeId" value="{{ oppgavetype.getId() }}"/>
+        {% if oppgavetype.Id > -1 %}
+        <input type="hidden" name="oppgavetypeId" value="{{ oppgavetype.Id }}"/>
         {% endif %}
         <div class="form-group ">
             <label for="oppgavenavn">Oppgavenavn:</label>
-            <input type="text" class="form-control" id="oppgavenavn" name="oppgaveNavn" value="{{ oppgavetype.getNavn() }}">
+            <input type="text" class="form-control" id="oppgavenavn" name="oppgaveNavn" value="{{ oppgavetype.Navn }}">
         </div>
         <div class="form-group ">
             <input type="submit" name="lagre" value="Lagre">

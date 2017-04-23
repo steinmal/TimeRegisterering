@@ -13,18 +13,18 @@
     <div class="container">
         {% include 'header.html' %}
     {% if innlogget %}
-        <h1>Velkommen {{ bruker.getNavn() }}</h1>
+        <h1>Velkommen {{ bruker.Navn }}</h1>
 
         <div class="btn-group">
             <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
             <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
-            {% if brukerTilgang.isTeamleder() and TeamReg.harTeamlederEtTeam(bruker.getId()) %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
+            {% if brukerTilgang.isTeamleder and TeamReg.harTeamlederEtTeam(bruker.Id) %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
             <!--<a href="brukerdetaljer.php"><button type="button" class="btn btn-primary">Brukerdetaljer</button></a>-->
-            {% if brukerTilgang.isTeamleder() %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
-            {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
+            {% if brukerTilgang.isTeamleder %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
             <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
-            <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
-            {% if brukerTilgang.isBrukeradmin() %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
+            <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
+            {% if brukerTilgang.isBrukeradmin %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
         </div>
     {% else %}
     {% if error == "ikkeInnlogget" %}

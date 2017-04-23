@@ -14,7 +14,7 @@
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
 
     <h1>Foreslå tidsestimat</h1>
-    <h2>Oppgave: {{ oppgave.getNavn() }} ({{oppgave.getTidsestimat() }} t)</h2>
+    <h2>Oppgave: {{ oppgave.Navn }} ({{oppgave.Tidsestimat }} t)</h2>
     {% if error %}
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -23,10 +23,10 @@
     </div>
     {% endif %}
     <form method="post" action="nyttTidsestimat.php"  class="col-md-4">
-        <input type="hidden" name="oppgaveId" value="{{ oppgave.getId() }}"/>
+        <input type="hidden" name="oppgaveId" value="{{ oppgave.Id }}"/>
         <div class="form-group ">
             <label for="estimat">Nytt estimat:</label>
-            <input type="text" class="form-control" id="estimat" name="estimat" value="{{ oppgave.getTidsestimat() }}">
+            <input type="text" class="form-control" id="estimat" name="estimat" value="{{ oppgave.Tidsestimat }}">
         </div>
         <div class="form-group ">
             <input type="submit" name="submit" value="Send forslag">

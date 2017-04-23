@@ -12,18 +12,18 @@
                 <ul class="dropdown-menu">
                     <li><a href="timeregistrering.php">Timeregistrering</a></li>
                     <li><a href="timeoversikt.php">Timeoversikt</a></li>
-                    {% if brukerTilgang.isTeamleder() %}<li><a href="timegodkjenning.php">Timegodkjenning</a></li>{% endif %}
+                    {% if brukerTilgang.isTeamleder %}<li><a href="timegodkjenning.php">Timegodkjenning</a></li>{% endif %}
                 </ul>
             </li>
             {% endif %}
-            {% if brukerTilgang.isTeamleder() %}<li><a href="prosjektadministrering.php">Prosjektadministrering</a></li>{% endif %}
-            {% if brukerTilgang.isBrukeradmin() %}<li><a href="brukeradministrering.php">Brukeradministrering</a></li>{% endif %}
+            {% if brukerTilgang.isTeamleder %}<li><a href="prosjektadministrering.php">Prosjektadministrering</a></li>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<li><a href="brukeradministrering.php">Brukeradministrering</a></li>{% endif %}
 
-            {% if brukerTilgang.isTeamleder() %}
+            {% if brukerTilgang.isTeamleder %}
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Teamadministrering <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="teamrapportansatt.php">Teamrapport Ansatt</a></li>
-                        {% if TeamReg.harTeamLederEtTeam(bruker.getId())%}
+                        {% if TeamReg.harTeamLederEtTeam(bruker.Id)%}
                         <li><a href="timegodkjenning.php">Timegodkjenning</a></li>
                         {% endif %}
                     </ul>

@@ -13,11 +13,11 @@
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
-    <h1>Prosjektdetaljer for prosjekt {{ prosjekt.getNavn() }}</h1>
+    <h1>Prosjektdetaljer for prosjekt {{ prosjekt.Navn }}</h1>
         {% if brukerTilgang.isProsjektAdmin %}
         <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
         {% endif %}
-        <a href="prosjektrapport.php?prosjektId={{ prosjekt.getId() }}">Vis prosjektrapport</a>
+        <a href="prosjektrapport.php?prosjektId={{ prosjekt.Id }}">Vis prosjektrapport</a>
         
     {% if error == "ugyldigOppgave" %}
         <div class="alert alert-danger" role="alert">
@@ -39,19 +39,19 @@
         </tr>
         {% for fase in faseliste %}
             <tr>
-                <td>{{ fase.getNavn() }}</td>
-                <td>{{ fase.getTilstand() }}</td>
-                <td>{{ fase.getStartDato() }}</td>
-                <td>{{ fase.getSluttDato() }}</td>
-                <td><a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}&faseId={{ fase.getId() }}">rediger</a></td>
+                <td>{{ fase.Navn }}</td>
+                <td>{{ fase.Tilstand }}</td>
+                <td>{{ fase.StartDato }}</td>
+                <td>{{ fase.SluttDato }}</td>
+                <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
             </tr>
         {% endfor %}
     </table>
-    <a href="faseoppretting.php?prosjektId={{ prosjekt.getId() }}">Legg til fase</a>
+    <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til fase</a>
     
     
     {% for fase in faseliste %}
-        <h1>{{ fase.getNavn() }}</h1>
+        <h1>{{ fase.Navn }}</h1>
         <table class="table table-striped">
             <tr>
                 <th>Oppgave</th>
@@ -63,26 +63,26 @@
                 <th>Godkjent tid</th>
             </tr>
             {% for oppgave in oppgaveliste %}
-                {% if oppgave.getFaseId() == fase.getId() %}
+                {% if oppgave.FaseId == fase.Id %}
                 <tr>
-                    {% if brukerTilgang.isTeamleder() %}
-                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}">{{ oppgave.getNavn() }}</a></td>
+                    {% if brukerTilgang.isTeamleder %}
+                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
                     {% else %}
-                    <td>{{ oppgave.getNavn() }}</td>
+                    <td>{{ oppgave.Navn }}</td>
                     {% endif %}
-                    <td>{{ oppgavereg.hentOppgave(oppgave.getParentId()).getNavn() }}</td>
-                    <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.getType()) }}</td>
-                    <td>{{ oppgave.getPeriode() }}</td>
-                    <td>{{ oppgave.getTidsestimat() }}</td>
-                    <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.getId()) }}</td>
-                    <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.getId()) }}</td>
+                    <td>{{ oppgavereg.hentOppgave(oppgave.ParentId).Navn }}</td>
+                    <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.Type) }}</td>
+                    <td>{{ oppgave.Periode }}</td>
+                    <td>{{ oppgave.Tidsestimat }}</td>
+                    <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.Id) }}</td>
+                    <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.Id) }}</td>
                 </tr>
                 {% endif %}
             {% endfor %}
         </table>
     {% endfor %}
 
-    <a href="oppgaveoppretting.php?prosjekt={{ prosjekt.getId() }}">Legg til ny oppgave</a>
+    <a href="oppgaveoppretting.php?prosjekt={{ prosjekt.Id }}">Legg til ny oppgave</a>
 </div>
     {% include 'footer.html' %}
 </body>

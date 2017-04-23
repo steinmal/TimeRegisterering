@@ -159,33 +159,33 @@ $(function() {
                 <!-- Gjerne refactor dette på noe vis -->
                 {% for timereg in timeregistreringer %}
                     {% if visDeaktiverte %} <!-- viser deaktiverte og avviste timereg -->
-                        {% if timereg.getTilstand() == 3 or timereg.getTilstand() == 2 %}
+                        {% if timereg.Tilstand == 3 or timereg.Tilstand == 2 %}
                             <tr>
-                                <td><input type=radio name="timeregId" value="{{ timereg.getId() }}" /></td>
-                                <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
-                                <td>{{ timereg.getFra() }} </td>
-                                <td>{{ timereg.getTil() }} </td>
-                                <td>{{ timereg.getPause() }} min</td>
-                                <td>{{ timereg.getHourString() }} </td>
-                                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
-                                <td>{{ oppgavereg.getOppgavetypeTekst(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()) }}</td>
-                                <td>{{ timereg.getTilstandTekst() }}</td>
-                                <td>{{ timereg.getKommentar() }}</td>
+                                <td><input type=radio name="timeregId" value="{{ timereg.Id }}" /></td>
+                                <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }} </td>
+                                <td>{{ timereg.Til }} </td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ timereg.HourString }} </td>
+                                <td>{{ oppgavereg.hentOppgave(timereg.OppgaveId).Navn }}</td>
+                                <td>{{ oppgavereg.OppgavetypeTekst(oppgavereg.hentOppgave(timereg.OppgaveId).Type) }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
+                                <td>{{ timereg.Kommentar }}</td>
                             </tr>
                         {% endif %}
                     {% else %} <!-- Viser godkjente, venter godkjenning og gjenopprettede timereg -->
-                        {% if timereg.getTilstand() != 3 and timereg.getTilstand() != 2 %}
+                        {% if timereg.Tilstand != 3 and timereg.Tilstand != 2 %}
                             <tr>
-                                <td><input type=radio name="timeregId" value="{{ timereg.getId() }}" /></td>
-                                <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
-                                <td>{{ timereg.getFra() }} </td>
-                                <td>{{ timereg.getTil() }} </td>
-                                <td>{{ timereg.getPause() }} min</td>
-                                <td>{{ timereg.getHourString() }} </td>
-                                <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
-                                <td>{{ oppgavereg.getOppgavetypeTekst(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()) }}</td>
-                                <td>{{ timereg.getTilstandTekst() }}</td>
-                                <td>{{ timereg.getKommentar() }}</td>
+                                <td><input type=radio name="timeregId" value="{{ timereg.Id }}" /></td>
+                                <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }} </td>
+                                <td>{{ timereg.Til }} </td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ timereg.HourString }} </td>
+                                <td>{{ oppgavereg.hentOppgave(timereg.OppgaveId).Navn }}</td>
+                                <td>{{ oppgavereg.OppgavetypeTekst(oppgavereg.hentOppgave(timereg.OppgaveId).Type) }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
+                                <td>{{ timereg.Kommentar }}</td>
                             </tr>
                         {% endif %}
                     {% endif %}

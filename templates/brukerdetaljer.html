@@ -14,15 +14,15 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
 
 
-    <h1>Detaljer for bruker {{ bruker.getNavn() }}</h1>
+    <h1>Detaljer for bruker {{ bruker.Navn }}</h1>
 
     <h2>Brukeropplysninger</h2>
     
-    <p><b>Navn: </b> {{ bruker.getNavn() }}<br/>
-       <b>Epost: </b> {{ bruker.getEpost() }}<br/>
-       <b>Telefon: </b> {{ bruker.getTelefon() }}<br/>
+    <p><b>Navn: </b> {{ bruker.Navn }}<br/>
+       <b>Epost: </b> {{ bruker.Epost }}<br/>
+       <b>Telefon: </b> {{ bruker.Telefon }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
-       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
         
     
     <h2>Prosjekter</h2>
@@ -38,13 +38,13 @@
             </tr>
             {% for p in prosjekter %}
                 <tr>
-                    <td>{{ p.getNavn() }}</td>
-                    <td>{{ p.getBeskrivelse() }}</td>
-                    <td>{{ brukerReg.hentBruker(p.getLeder()).getNavn() }}</td>
-                    <td>{{ brukerReg.hentBruker(p.getProductOwner()).getNavn() }}</td>
-                    <td>{{ TeamReg.hentTeam(p.getTeam()).getNavn() }}</td>
-                    <td>{{ p.getStartDato() }}</td>
-                    <td>{{ p.getSluttDato() }}</td>
+                    <td>{{ p.Navn }}</td>
+                    <td>{{ p.Beskrivelse }}</td>
+                    <td>{{ brukerReg.hentBruker(p.Leder).Navn }}</td>
+                    <td>{{ brukerReg.hentBruker(p.ProductOwner).Navn }}</td>
+                    <td>{{ TeamReg.hentTeam(p.Team).Navn }}</td>
+                    <td>{{ p.StartDato }}</td>
+                    <td>{{ p.SluttDato }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -58,8 +58,8 @@
                 </tr>
                 {% for t in teamliste %}
                     <tr>
-                        <td>{{ t.getNavn() }}</td>
-                        <td>{{ brukerReg.hentBruker(t.getLeder()).getNavn() }}</td>
+                        <td>{{ t.Navn }}</td>
+                        <td>{{ brukerReg.hentBruker(t.Leder).Navn }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -76,11 +76,11 @@
             </tr>
             {% for lt in lederTeamListe %}
             <tr>
-                <td>{{ lt.getNavn() }}</td>
-                <td>{{ TeamReg.antallMedlemmerTeam(lt.getId()) }}</td>
+                <td>{{ lt.Navn }}</td>
+                <td>{{ TeamReg.antallMedlemmerTeam(lt.Id) }}</td>
                 <td><a href="teamrapportansatt.php">Se rapporter</a></td>
                 <td><a href="timegodkjenning.php">Godkjenn timer</a></td>
-                <td><a href="teamadministrering.php?teamId={{ lt.getId() }}">Administrer</a></td>
+                <td><a href="teamadministrering.php?teamId={{ lt.Id }}">Administrer</a></td>
             </tr>
             {% endfor %}
         </table>

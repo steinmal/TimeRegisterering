@@ -95,18 +95,18 @@
                     <th></th>
                 </tr>
                 {% for bruker in brukere %}
-                    {% if bruker.isAktivert() != visNye %}
+                    {% if bruker.isAktivert != visNye %}
                     <tr>
-                        <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
-                        <td>{{ bruker.getId() }}</td>
-                        <td>{{ bruker.getNavn() }}</td>
-                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
-                        <td>{{ bruker.getEpost() }}</td>
-                        <td>{{ bruker.getTelefon() }}</td>
-                        <td>{{ bruker.isAktivertTekst() }}</td>
-                        <td>{{ bruker.getRegistreringsdato() }}</td>
+                        <td><input type=radio name=brukerId value="{{ bruker.Id }}" /></td>
+                        <td>{{ bruker.Id }}</td>
+                        <td>{{ bruker.Navn }}</td>
+                        <td>{{ brukerReg.Brukertype(bruker.Brukertype).Navn }}</td>
+                        <td>{{ bruker.Epost }}</td>
+                        <td>{{ bruker.Telefon }}</td>
+                        <td>{{ bruker.isAktivertTekst }}</td>
+                        <td>{{ bruker.Registreringsdato }}</td>
                         {% if not bruker.isAktivert %}
-                        <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>
+                        <td><a href="?action=aktiver&brukerId={{ bruker.Id }}">Aktiver</a></td>
                         {% else %}
                         <td>&nbsp;</td>
                         {% endif %}

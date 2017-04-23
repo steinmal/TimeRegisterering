@@ -54,10 +54,10 @@
                 </tr>
                 {% for team in alleteam %}
                 <tr>
-                    <td><input type="radio"  name="teamId" value={{ team.getId() }}></td>
-                    <td> {{ team.getNavn() }}</td>
-                    <td> {{ brukerReg.hentBruker(team.getLeder()).getNavn() }}</td>
-                    <td> {{ TeamReg.antallMedlemmerTeam(team.getId()) }}</td>
+                    <td><input type="radio"  name="teamId" value={{ team.Id }}></td>
+                    <td> {{ team.Navn }}</td>
+                    <td> {{ brukerReg.hentBruker(team.Leder).Navn }}</td>
+                    <td> {{ TeamReg.antallMedlemmerTeam(team.Id) }}</td>
                 </tr>
                 {% endfor %}
 
@@ -69,7 +69,7 @@
 
     <h1>Teamadministrering</h1>
         <div class="col-lg-4">
-        <h2>{{team.getNavn()}}</h2>
+        <h2>{{team.Navn}}</h2>
             <table class="table table-striped">
                 <tr>
                     <th>Navn</th>
@@ -77,17 +77,17 @@
                 </tr>
                 {% for medlem in medlemmer %}
                     <tr>
-                        <td>{{ medlem.getNavn() }}</td>
-                        <td><a href="teamadministrering.php?teamId={{team.getId()}}&fjern={{medlem.getId()}}">Fjern medlem</a></td>
+                        <td>{{ medlem.Navn }}</td>
+                        <td><a href="teamadministrering.php?teamId={{team.Id}}&fjern={{medlem.Id}}">Fjern medlem</a></td>
                     </tr>
                 {% endfor %}
             </table>
             <form method="post" action="">
-                <input type="hidden" name="teamId" value="{{team.getId()}}">
+                <input type="hidden" name="teamId" value="{{team.Id}}">
                 <label for="navn">Navn:</label>
                 <select name="navn" id="navn">
                 {% for brukerId in brukerliste %}
-                <option value="{{ brukerId }}">{{ brukerReg.hentBruker(brukerId).getNavn() }}</option>
+                <option value="{{ brukerId }}">{{ brukerReg.hentBruker(brukerId).Navn }}</option>
                 {% endfor %}
                 </select>
                 <input class="btn btn-primary" type="submit" name="leggTilMedlem" value="Legg til medlem">
