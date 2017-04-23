@@ -27,7 +27,8 @@ if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
             return;
         }
     }
-    echo $twig->render('DBrestore.html');
+    echo $twig->render('DBrestore.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
+    'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'error'=>$error));
 
 }
 else {
