@@ -30,15 +30,15 @@
         <form method="post" action="brukerregistrering.php" class="col-md-4">
             <div class="form-group ">
                 <label for="navn">Navn:</label>
-                <input type="text" class="form-control" id="navn" name="navn">
+                <input type="text" class="form-control" id="navn" name="navn" value="{{ navn }}">
             </div>
             <div class="form-group ">
                 <label for="epost">E-post:</label>
-                <input type="email" class="form-control" id="epost" name="epost">
+                <input type="email" class="form-control" id="epost" name="epost" value = {{ epost }}>
             </div>
             <div class="form-group ">
                 <label for="telefon">Telefonnummer:</label>
-                <input type="text" class="form-control" id="telefon" name="telefonnummer">
+                <input type="text" class="form-control" id="telefon" name="telefonnummer" value = {{ telefon }}>
             </div>
             <div class="form-group ">
                 <label for="passord">Passord:</label>

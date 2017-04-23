@@ -15,6 +15,7 @@ $bruker="";
 $error="";
 $side = "";
 $brukerTilgang="";
+$regSucc = "";
 session_start();
 
 
@@ -40,6 +41,9 @@ if(isset($_GET['error'])) {
 } if (isset($_GET['side'])) {
     $side = $_GET['side'];
 }
+if(isset($_GET['regSucc'])) {
+    $regSucc = $_GET['regSucc'];
+}
 
 echo $twig->render('index.html', array(
     'loginFail'=>$loginFail,
@@ -47,5 +51,6 @@ echo $twig->render('index.html', array(
     'bruker'=>$bruker,
     'brukerTilgang'=>$brukerTilgang,
     'error'=>$error,
-    'TeamReg'=>$TeamReg));
+    'TeamReg'=>$TeamReg,
+    'regSucc'=>$regSucc));
 ?>

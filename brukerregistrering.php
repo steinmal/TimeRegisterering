@@ -18,10 +18,16 @@ session_start();
 
 if(isset($_POST['opprettBruker'])){
     if($BrukerReg->brukernavnEksisterer($_POST['navn'])){
+        $_SESSION['regnavn'] = $_POST['navn'];
+        $_SESSION['regepost'] = $_POST['epost'];
+        $_SESSION['regtelefon'] = $_POST['telefonnummer'];
         header("Location: brukerregistrering.php?error=nameExists" );
         return;
     }
     if($BrukerReg->emailEksisterer($_POST['epost'])){
+        $_SESSION['regnavn'] = $_POST['navn'];
+        $_SESSION['regepost'] = $_POST['epost'];
+        $_SESSION['regtelefon'] = $_POST['telefonnummer'];
         header("Location: brukerregistrering.php?error=mailExists");
         return;
     }
@@ -31,6 +37,8 @@ if(isset($_POST['opprettBruker'])){
     $nyBruker->setPassord($_POST['passord']);
     $nyBruker->setTelefon($_POST['telefonnummer']);
     $BrukerReg->opprettBruker($nyBruker);
+
+    header("Location: index.php?regSucc=1");
 }
 if(isset($_GET['error'])){
     $error=$_GET['error'];
@@ -46,5 +54,7 @@ if(isset($_SESSION['burkerTilgang'])){
 }
 
 
-echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'TeamReg'=>$TeamReg, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error));
+
+
+echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'TeamReg'=>$TeamReg, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error, 'telefon'=>$_SESSION['regtelefon'], 'epost'=>$_SESSION['regepost'], 'navn'=>$_SESSION['regnavn']));
 ?>
