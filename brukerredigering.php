@@ -11,13 +11,14 @@ $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $mismatch = "";
 $error = "";
-
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
@@ -101,6 +102,6 @@ if(isset($_GET['error'])){
     $error = $_GET['error'];
 }
 
-echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'brukerRed'=>$bruker, 'bruker'=>$_SESSION['bruker'], 'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('aktivert'=>$aktivert, 'mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'brukerRed'=>$bruker, 'bruker'=>$_SESSION['bruker'], 'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

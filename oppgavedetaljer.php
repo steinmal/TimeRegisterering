@@ -15,6 +15,7 @@ $TeamReg = new TeamRegister($db);
 $estimatListe = array();
 $oppgave = "";
 $error="";
+$aktivert = "";
 
 session_start();
 
@@ -22,6 +23,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=oppgdet");
@@ -65,4 +67,4 @@ if (isset($_GET['error'])) {
 
 
 
-echo $twig->render('oppgavedetaljer.html', array('fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+echo $twig->render('oppgavedetaljer.html', array('aktivert'=>$aktivert, 'fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));

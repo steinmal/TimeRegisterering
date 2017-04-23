@@ -13,13 +13,14 @@ $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
 $BrukerReg = new BrukerRegister($db);
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=teamrapp");
     //echo "Kun teamleder har tilgang til TeamRapport";
@@ -128,7 +129,7 @@ if(isset($_GET['download'])){
     exit;
 }
 $twigArray['TeamReg'] = $TeamReg;
-
+$twigArray['aktivert'] = $aktivert;
 $tabellRender = $twig->render('rapportansatt.html', $twigArray);
 
 

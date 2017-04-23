@@ -11,13 +11,14 @@ $BrukerReg = new BrukerRegister($db);
 $OppgaveRegister = new OppgaveRegister($db);
 $TeamRegister = new TeamRegister($db);
 $error = "";
+$aktivert ="";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=optred");
@@ -31,4 +32,4 @@ if(isset($_GET['error'])){
 $oppgavetyper= $OppgaveRegister->hentAlleOppgaveTyper();
 
 
-echo $twig->render('oppgavetyper.html', array('oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetyper.html', array('aktivert'=>$aktivert, 'oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

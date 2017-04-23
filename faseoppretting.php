@@ -11,11 +11,11 @@ $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $TeamReg = new TeamRegister($db);
 //$BrukerReg = new BrukerRegister($db);
-
+$aktivert = "";
 
 session_start();
 
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
@@ -28,7 +28,7 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
     return;
 }
 
-if(!isset($_REQUEST['prosjektId'])){
+if(!isset($_GET['prosjektId'])){
     header("Location: prosjektadministrering.php?error=ingenProsjekt");
     return;
 }
@@ -87,5 +87,5 @@ else{
     }
 }
 
-echo $twig->render('faseoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('faseoppretting.html', array('aktivert'=>$aktivert,'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

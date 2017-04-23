@@ -10,6 +10,7 @@ $twig = new Twig_Environment($loader);
 $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "none";
+$aktivert = "";
 
 
 session_start();
@@ -19,7 +20,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=propp");
     return;
@@ -82,5 +83,5 @@ if(isset($_GET['error'])) {
     $error = $_GET['error'];
 }
 
-echo $twig->render('teamoppretting.html', array('error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtTeam'=>$valgtTeam, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('teamoppretting.html', array('aktivert'=>$aktivert, 'error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtTeam'=>$valgtTeam, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

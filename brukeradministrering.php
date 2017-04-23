@@ -11,6 +11,7 @@ $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "";
 $visNye = "";
+$aktivert  = "";
 
 session_start();
 
@@ -18,6 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=bradm");
@@ -52,6 +54,6 @@ foreach($brukere as $bruker){
     }
 }
 
-echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'],'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukeradministrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'],'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

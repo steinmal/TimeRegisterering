@@ -11,6 +11,7 @@ $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TeamReg = new TeamRegister($db);
+$aktivert = "";
 
 
 session_start();
@@ -20,7 +21,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=oppgopp");
     //echo "Du har ikke tilgang til oppgaveoppretting";
@@ -76,6 +77,6 @@ if(isset($_POST['opprettOppgave'])){
     }
 }
 
-echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
+echo $twig->render('oppgaveoppretting.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
                     'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

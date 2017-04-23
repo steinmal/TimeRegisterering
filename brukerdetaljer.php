@@ -20,6 +20,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
     return;
 }
 
+
 if(!isset($_SESSION['brukerTilgang'])){
     echo "Feil";
     return;

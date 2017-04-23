@@ -12,6 +12,7 @@ $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "";
 $visArkivert = "";
+$aktivert = "";
 
 session_start();
 
@@ -19,6 +20,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
@@ -37,6 +39,6 @@ if(isset($_GET['error'])){
 $prosjektliste = $ProsjektReg->hentAlleProsjekt();
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
-echo $twig->render('prosjektadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$visArkivert, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('prosjektadministrering.html', array('aktivert'=>$aktivert,'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$visArkivert, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

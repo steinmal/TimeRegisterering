@@ -10,12 +10,14 @@ $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=timeKorr");
     return;
@@ -28,6 +30,7 @@ $twigs['bruker'] = $_SESSION['bruker'];
 $twigs['brukernavn'] = $_SESSION['bruker']->getNavn();
 $twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
 $twigs['oppgavereg'] = $OppgaveReg;
+$twig['aktivert'] = $aktivert;
 $error = "none";
 
 if (isset($_REQUEST['action'])) {

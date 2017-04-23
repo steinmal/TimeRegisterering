@@ -10,6 +10,7 @@ $twig = new Twig_Environment($loader);
 $TeamReg = new TeamRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $error = "";
+$aktivert = "";
 
 session_start();
 
@@ -18,6 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=nyttEst");
     return;
@@ -42,6 +44,6 @@ if (isset($_POST['submit'])) {
 }
 
 
-echo $twig->render('nyttTidsestimat.html', array('oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
+echo $twig->render('nyttTidsestimat.html', array('aktivert'=>$aktivert, 'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
                      'error'=>$error, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

@@ -17,13 +17,14 @@ $FaseReg = new FaseRegister($db);
 $ProsjektReg = new ProsjektRegister($db);
 $visGodkjent = "";
 $error = "";
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=timegod");
     return;
@@ -91,5 +92,6 @@ echo $twig->render(
     'timeregistreringer'=>$timeregistreringer,
     'visGodkjent'=>$visGodkjent, 
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
-    'error'=>$error));
+    'error'=>$error,
+    'aktivert'=>$aktivert));
 ?>

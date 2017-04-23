@@ -20,6 +20,7 @@ $brukerliste = array();
 $allebrukere = array();
 $alleTeam = array();
 $admin = false;
+$aktivert = "";
 
 session_start();
 
@@ -27,7 +28,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
     //echo "Du har ikke tilgang til prosjektadministrering";
@@ -93,6 +94,6 @@ elseif(!isset($_GET['error'])){
 
 
 
-echo $twig->render('teamadministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'adminerror'=>$adminerror, 'alleteam'=>$alleTeam, 'admin'=>$admin, 'bruker'=>$_SESSION['bruker'], 'brukerliste'=>$brukerliste, 'team'=>$team, 'medlemmer'=>$medlemmer, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('teamadministrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'adminerror'=>$adminerror, 'alleteam'=>$alleTeam, 'admin'=>$admin, 'bruker'=>$_SESSION['bruker'], 'brukerliste'=>$brukerliste, 'team'=>$team, 'medlemmer'=>$medlemmer, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
