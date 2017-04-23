@@ -27,23 +27,24 @@ mysql_select_db($dbName) OR die('select db: '.$dbName.' failed: '.mysql_error())
 ($fp = fopen($filename, 'r')) OR die('failed to open file:'.$filename);
 
 // check for previous error
-if( file_exists($errorFilename) ){
-    die('<pre> previous error: '.file_get_contents($errorFilename));
-}
+//if( file_exists($errorFilename) ){
+//    die('<pre> previous error: '.file_get_contents($errorFilename));
+//}
 
 // activate automatic reload in browser
-echo '<html><head> <meta http-equiv="refresh" content="'.($maxRuntime+2).'"><pre>';
+//echo '<html><head> <meta http-equiv="refresh" content="'.($maxRuntime+2).'"><pre>';
 
 // go to previous file position
 $filePosition = 0;
-if( file_exists($progressFilename) ){
+/*if( file_exists($progressFilename) ){
     $filePosition = file_get_contents($progressFilename);
     fseek($fp, $filePosition);
-}
+}*/
 
 $queryCount = 0;
 $query = '';
-while( $deadline>time() AND ($line=fgets($fp, 1024000)) ){
+//while( $deadline>time() AND ($line=fgets($fp, 1024000)) ){
+while($line=fgets($fp, 1024000) ){
     if(substr($line,0,2)=='--' OR trim($line)=='' ){
         continue;
     }
@@ -62,11 +63,11 @@ while( $deadline>time() AND ($line=fgets($fp, 1024000)) ){
 }
 
 if( feof($fp) ){
-    echo 'dump successfully restored!';
+    //echo 'dump successfully restored!';
     unlink($progressFilename);
 }else{
-    echo ftell($fp).'/'.filesize($filename).' '.(round(ftell($fp)/filesize($filename), 2)*100).'%'."\n";
-    echo $queryCount.' queries processed! please reload or wait for automatic browser refresh!';
+    //echo ftell($fp).'/'.filesize($filename).' '.(round(ftell($fp)/filesize($filename), 2)*100).'%'."\n";
+    //echo $queryCount.' queries processed! please reload or wait for automatic browser refresh!';
 }
         }
     }
