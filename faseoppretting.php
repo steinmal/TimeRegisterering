@@ -39,7 +39,7 @@ $teamID = $ProsjektReg->hentProsjekt($prosjektId)->getTeam();
 var_dump($ProsjektReg->hentProsjekt($prosjektId));
 var_dump($teamID);
 $lederID = $TeamReg->hentTeam($teamID)->getLeder();
-if ($_SESSION['bruker']->getId != $lederID /*$TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder()*/) {
+if ($_SESSION['bruker']->getId() != $lederID /*$TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder()*/) {
     header("Location: faseoppretting.php?error=ugyldigProsjekt");
     return;
 }
