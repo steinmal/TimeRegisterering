@@ -30,6 +30,7 @@
         public function getPause() { return $this->timereg_pause; }
         public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
         public function getTilstand() { return $this->timereg_tilstand; }   // 0 = godkjent, 1 = venter godkj., 2 = avvist, 3 = deaktivert, 4 = gjenopprettet
+        public function isGodkjent() { return $this->timereg_tilstand == 0; }
 
         // bool-metoder burde hete is... istedet for get...
         //public function getAktiv() { return $this->timereg_aktiv; } //byttes ut med getTilstand

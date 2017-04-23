@@ -15,7 +15,7 @@
         <tbody>
 
         {% for timereg in timeregistreringer %}
-        {% if timereg.Godkjent %}
+        {% if timereg.isGodkjent() %}
         <tr>
             <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
             <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
