@@ -18,6 +18,10 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=nyttEst");
+    return;
+}
 if(isset($_GET['error'])){
     $error = $_GET['error'];
 }

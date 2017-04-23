@@ -16,6 +16,7 @@ $error="";
 $side = "";
 $brukerTilgang="";
 $regSucc = "";
+$aktivert = "";
 session_start();
 
 
@@ -31,6 +32,7 @@ if(isset($_SESSION['innlogget'])) {
     $innlogget = $_SESSION['innlogget'];
     $bruker = $_SESSION['bruker'];
     $brukerTilgang = $_SESSION['brukerTilgang'];
+    $aktivert = $_SESSION['bruker']->isAktivert();
 }
 if(isset($_POST['fail'])){
     $loginFail = $_POST['fail'];
@@ -52,5 +54,6 @@ echo $twig->render('index.html', array(
     'brukerTilgang'=>$brukerTilgang,
     'error'=>$error,
     'TeamReg'=>$TeamReg,
-    'regSucc'=>$regSucc));
+    'regSucc'=>$regSucc,
+    'aktivert'=>$aktivert));
 ?>

@@ -20,8 +20,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin()){
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin() || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=prrapp");
     //echo "Du har ikke tilgang til prosjektrapporter<br/>";
     //header-relokasjon med feilmelding eller en egen feilmeldingstemplate?

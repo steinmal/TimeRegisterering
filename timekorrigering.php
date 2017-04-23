@@ -16,6 +16,10 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeKorr");
+    return;
+}
 
 $twigs = array();
 $twigs['TeamReg'] = $TeamReg;

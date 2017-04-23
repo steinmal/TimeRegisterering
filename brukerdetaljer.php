@@ -10,6 +10,7 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
+$aktivert = "";
 
 
 session_start();
@@ -26,6 +27,8 @@ if(!isset($_SESSION['brukerTilgang'])){
 
 
 $bruker = $_SESSION['bruker'];
+
+$aktivert = $_SESSION['bruker']->isAktivert();
 
 $brukerTypeID = $bruker->getBrukertype();
 $brukerType = $BrukerReg->getBrukerType($brukerTypeID)->getNavn();
@@ -47,6 +50,6 @@ foreach ($lederTeamIDs as $i) {
 }
 
 
-echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'aktivert'=>$aktivert, 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

@@ -21,6 +21,10 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeOver");
+    return;
+}
 
 date_default_timezone_set('Europe/Oslo');
 $brukernavn = $_SESSION['bruker']->getNavn();

@@ -22,7 +22,9 @@
        <b>Epost: </b> {{ bruker.Epost }}<br/>
        <b>Telefon: </b> {{ bruker.Telefon }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
+        {% if aktivert %}
        <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+        {% endif %}
         
     
     <h2>Prosjekter</h2>
@@ -78,9 +80,11 @@
             <tr>
                 <td>{{ lt.Navn }}</td>
                 <td>{{ TeamReg.antallMedlemmerTeam(lt.Id) }}</td>
+                {% if aktivert %}
                 <td><a href="teamrapportansatt.php">Se rapporter</a></td>
                 <td><a href="timegodkjenning.php">Godkjenn timer</a></td>
                 <td><a href="teamadministrering.php?teamId={{ lt.Id }}">Administrer</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

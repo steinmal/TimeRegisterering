@@ -20,6 +20,10 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeReg");
+    return;
+}
 if(isset($_GET['sendt'])) {
     $sendt = $_GET['sendt'];
 }

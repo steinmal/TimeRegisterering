@@ -14,7 +14,7 @@
         {% include 'header.html' %}
     {% if innlogget %}
         <h1>Velkommen {{ bruker.Navn }}</h1>
-
+        {% if aktivert %}
         <div class="btn-group">
             <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
             <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
@@ -26,6 +26,12 @@
             <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
             {% if brukerTilgang.isBrukeradmin %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
         </div>
+        {% else %}
+        <h2>Brukeren din er deaktivert</h2>
+        <div class="btn-group">
+            <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+        </div>
+        {% endif %}
     {% else %}
     {% if error == "ikkeInnlogget" %}
         <div class="alert alert-error" role="alert">
