@@ -101,6 +101,6 @@ if(isset($_GET['error'])){
     $error = $_GET['error'];
 }
 
-echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$bruker,  'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerredigering.html', array('mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'brukerRed'=>$bruker, 'bruker'=>$_SESSION['bruker'], 'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>
