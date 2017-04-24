@@ -9,7 +9,6 @@ $twig = new Twig_Environment($loader);
 $BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $innlogget = false;
-$error = "";
 $loginFail="";
 $bruker="";
 $error="";
@@ -53,6 +52,7 @@ echo $twig->render('index.html', array(
     'bruker'=>$bruker,
     'brukerTilgang'=>$brukerTilgang,
     'error'=>$error,
+    'side'=>$side,
     'TeamReg'=>$TeamReg,
     'regSucc'=>$regSucc,
     'aktivert'=>$aktivert));
