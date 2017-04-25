@@ -71,7 +71,7 @@
                                         <button class="btn btn-danger">Avvis</button>
                                     </a></td>
                                 {% elseif timereg.Tilstand == 2 %}
-                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}">
+                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}&visGodkjent=on">
                                         <button class="btn btn-success">Godkjenn</button>
                                     </a></td>
                                 {% endif %}
@@ -96,22 +96,15 @@
                                     <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}">
                                         <button class="btn btn-danger">Avvis</button>
                                     </a></td>
-                               <!-- {% if timereg.Tilstand == 0 %}
-                                <td><a href="">Avvis</a></td>
-                                {% elseif timereg.Tilstand == 2 %}
-                                <td><a href="">Godkjenn</a></td>
-                                {% endif %} -->
                             </tr>
                        {% endif %}
                     
                     {% endif %}
                     
-                    
-                    
                 {% endfor %}
             </table>
-        {% endfor %}
         </form>
+    {% endfor %}
     </div>
     {% include 'footer.html' %}
 </body>

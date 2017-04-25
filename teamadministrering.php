@@ -31,8 +31,6 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 $aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
-    //echo "Du har ikke tilgang til prosjektadministrering";
-    //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
 
@@ -87,7 +85,8 @@ elseif(!isset($_GET['error'])){
         $alleTeam = $TeamReg->hentAlleTeam();
     }
     else {
-        Header("Location: teamadministrering.php?error=ikkeTilgang");
+        header("Location: teamadministrering.php?error=ikkeTilgang");
+        return;
     }
 }
 

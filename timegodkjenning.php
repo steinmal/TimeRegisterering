@@ -40,7 +40,7 @@ if(isset($_GET['action'])){
         header("Location: timegodkjenning.php?error=ugyldigTimereg");
         return;
     }
-    if ($TimeReg->hentTimeregistrering($TimeReg->hentTimeregistrering($_GET['timeregId']))->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
+    if ($TimeReg->hentTimeregistrering($_GET['timeregId'])->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
         header("Location: timegodkjenning.php?error=deaktivertTimereg");
         return;
     }
@@ -51,6 +51,10 @@ if(isset($_GET['action'])){
         $TimeReg->avvisTimeregistrering($_GET['timeregId']);
     }
     header('location: timegodkjenning.php');
+} else {
+    //header('Location: timegodkjenning.php?error=noAction');
+    echo "ingen action";
+    //return;
 }
 
 $bruker = $_SESSION['bruker'];
@@ -76,7 +80,7 @@ foreach ($brukerIds as $brukerId) {
 }
 
 if (isset($_GET['error'])) {
-    $error =$_GET['error'];
+    $error = $_GET['error'];
 }
 
 

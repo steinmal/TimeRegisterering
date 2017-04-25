@@ -22,7 +22,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
 
 
 if(!isset($_SESSION['brukerTilgang'])){
-    echo "Feil";
+    header('Location: index.php?error=feil');
     return;
 }
 

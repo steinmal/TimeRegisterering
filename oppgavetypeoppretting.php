@@ -22,8 +22,6 @@ $aktivert = $_SESSION['bruker']->isAktivert();
 if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=optopp");
-    //echo "Du har ikke tilgang til Brukerredigering";
-    //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
 if(isset($_GET['error'])){

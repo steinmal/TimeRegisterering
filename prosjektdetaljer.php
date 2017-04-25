@@ -47,7 +47,6 @@ $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 
 $aktivert = $_SESSION['bruker']->isAktivert();
 
-//var_dump($prosjekt);
 
 echo $twig->render('prosjektdetaljer.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 

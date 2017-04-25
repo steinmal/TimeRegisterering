@@ -36,8 +36,8 @@ if(isset($_GET['error'])) {
 date_default_timezone_set('Europe/Oslo');
 
 if(isset($_POST['submit'])){
-    $id = $_POST['regId'];
-    if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
+    $id = $_POST['timeregId'];
+    if($_POST['submit'] != "Start" && isset($_POST['timeregId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
         header("Location: timeregistrering.php?error=ugyldigTimereg");
         return;
     }

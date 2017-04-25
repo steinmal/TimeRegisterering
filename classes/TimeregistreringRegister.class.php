@@ -209,17 +209,17 @@
                 $stmt->bindParam(':stopp', $til);
                 $pause = $opprinneligTime->getPause();
                 $stmt->bindParam(':pause', $pause);
-                $aktiv = $opprinneligTime->getAktiv();
+                //$aktiv = $opprinneligTime->getAktiv();
                 //$stmt->bindParam(':aktiv', $aktiv);
-                //$status = $opprinneligTime->getStatus();
+                $status = $opprinneligTime->getStatus();
                 $stmt->bindParam(':status', $status, PDO::PARAM_INT);
                 $tilstand = 1;
                 $stmt->bindParam(':tilstand', $tilstand, PDO::PARAM_INT);
                 $automatisk = $opprinneligTime->getAutomatisk();
                 $stmt->bindParam(':automatisk', $automatisk, PDO::PARAM_INT);
-                $godkjent = $opprinneligTime->getGodkjent();
+                //$godkjent = $opprinneligTime->getGodkjent();
                 //$stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
-                //$kommentar = $opprinneligTime->getKommentar();
+                $kommentar = $opprinneligTime->getKommentar();
                 $stmt->bindParam(':kommentar', $kommentar, PDO::PARAM_STR);
                 $stmt->execute();
                 
