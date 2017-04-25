@@ -13,11 +13,17 @@
     {% include 'header.html' %}
     <h1>Opprett ny fase</h1>
     
-    {% if error == "ugyldigProsjekt" %}
+    {% if error == "sluttEtterStart" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            Ugyldig prosjekt
+            Startdatoen må være før sluttdatoen
+        </div>   
+    {% elseif error == "datoUtenforProsjekt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Start- og sluttdatoene for fasen må være innenfor start- og sluttdatoene for prosjektet, henholdsvis {{ prosjektStartSlutt }}
         </div>
     {% endif %}
     

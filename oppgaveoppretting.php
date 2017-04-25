@@ -51,7 +51,7 @@ $valgtOppgave = new Oppgave();
 
 if(isset($_POST['opprettOppgave'])){
     if(!isset($_POST['faseId']) && $_POST['faseId'] <= 0){
-        header("Location: oppgaveOppretting.php?prosjekt=" . $prosjektId . "&error=ingenFase");
+        header("Location: oppgaveOppretting.php?prosjektId=" . $prosjektId . "&error=ingenFase");
     }
     $faseId = $_POST['fase'];
     $foreldreId = null;
@@ -66,7 +66,7 @@ if(isset($_POST['opprettOppgave'])){
     
     if(!isset($_POST['oppgaveId'])){
         $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
-        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
     else{

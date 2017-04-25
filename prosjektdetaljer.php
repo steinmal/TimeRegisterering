@@ -30,9 +30,9 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 }
 
 $prosjektId = 0;
-if (isset($_REQUEST['prosjekt']))
-    $prosjektId = $_REQUEST['prosjekt'];
-    var_dump($prosjektId);
+if (isset($_REQUEST['prosjektId']))
+    $prosjektId = $_REQUEST['prosjektId'];
+   // var_dump($prosjektId);
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
     header("Location: prosjektadministrering.php?error=ugyldigProsjekt");

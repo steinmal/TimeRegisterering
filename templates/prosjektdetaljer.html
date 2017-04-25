@@ -25,6 +25,12 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til oppgaven
         </div>
+    {% elseif error == "ugyldigProsjekt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å legge til eller redigere faser på dette prosjektet
+        </div>
     {% endif %}
         
         
@@ -82,7 +88,7 @@
         </table>
     {% endfor %}
 
-    <a href="oppgaveoppretting.php?prosjekt={{ prosjekt.Id }}">Legg til ny oppgave</a>
+    <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til ny oppgave</a>
 </div>
     {% include 'footer.html' %}
 </body>

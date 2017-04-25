@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     {% include 'header.html' %}
-    <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ fasereg.hentFase(oppgave.FaseId).ProsjektId }}">Prosjektdetaljer</a>
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjektId={{ fasereg.hentFase(oppgave.FaseId).ProsjektId }}">Prosjektdetaljer</a>
     <h1>Oppgavedetaljer for {{ oppgave.Navn }}</h1>
 
     <div class="col-lg-4">

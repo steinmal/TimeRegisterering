@@ -26,7 +26,7 @@
             Prosjekt arkivert
         </div>
     {% elseif error == "ugyldigProsjekt" %}
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Ugyldig prosjektID
@@ -57,7 +57,7 @@
                     {% if (prosjekt.isArkivert > 0) == (visArkivert == "on") %}
                     <tr>
                         <td><input type=radio  name="prosjektId" value={{ prosjekt.Id }}></td>
-                        <td><a href="prosjektdetaljer.php?prosjekt={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
+                        <td><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
                         <td>{{ register.hentProsjekt(prosjekt.Parent).Navn }}</td>
                         <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
                         <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
