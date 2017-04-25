@@ -24,8 +24,6 @@ $aktivert = $_SESSION['bruker']->isAktivert();
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
-    //echo "Du har ikke tilgang til prosjektadministrering";
-    //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
 

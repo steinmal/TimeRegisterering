@@ -34,11 +34,16 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 
 //ProsjektId = 0 har lite hensikt, tror databasen gir feilmelding i slikt tilfelle pga foreign key-forventninger
 $prosjektId = 0;
-if (isset($_REQUEST['prosjekt']))
-    $prosjektId = $_REQUEST['prosjekt'];
+if (isset($_REQUEST['prosjektId']))
+    $prosjektId = $_REQUEST['prosjektId'];
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
-    echo "Ugyldig prosjektID";
+    header('Location: prosjektadministrering.php?error=ugyldigProsjekt');
+   // echo "Ugyldig prosjektID";
+    return;
+}
+if($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
+    header('Location: prosjektdetaljer.php?error=ugyldigOppgaveAct&prosjektId=' . $prosjektId);
     return;
 }
 $oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();

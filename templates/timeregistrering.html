@@ -75,11 +75,11 @@
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <select class="form-control" name="prosjekt" id="prosjekt" disabled>
+            <select class="form-control" name="prosjektId" id="prosjekt" disabled>
                 <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
             </select>
         {% else %}
-            <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+            <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                 {% if valgtProsjekt < 1 %}
                 <option selected="selected"></option>
                 {% endif %}

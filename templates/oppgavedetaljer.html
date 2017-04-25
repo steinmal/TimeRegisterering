@@ -28,12 +28,12 @@
                     <td>{{ forslag.Estimat }}</td>
                     <td>{{ brukerReg.hentBruker(forslag.BrukerId).Navn }}</td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.Id }}&accept={{ forslag.Id }}&estimat={{ forslag.Estimat }}">
+                        <a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}&accept={{ forslag.Id }}&estimat={{ forslag.Estimat }}">
                             <button class="btn btn-success">Godkjenn</button>
                         </a>
                     </td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.Id }}&reject={{ forslag.Id }}">
+                        <a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}&reject={{ forslag.Id }}">
                             <button class="btn btn-danger">Forkast</button>
                         </a></td>
                 </tr>

@@ -20,7 +20,7 @@
     {% endif %}
 
     <form method="post" action="oppgaveoppretting.php" class="col-md-4">
-        <input type="hidden" name="prosjekt" value="{{ valgtProsjekt.Id }}">
+        <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.Id }}">
         {% if valgtOppgave.Id > 0 %}
             <input type="hidden" name="oppgaveId" value="{{ valgtOppgave.Id }}">
         {% endif %}

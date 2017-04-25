@@ -37,7 +37,7 @@ if(!isset($_REQUEST['prosjektId'])){
 
 $prosjektId = $_REQUEST['prosjektId'];
 if ($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
-    header("Location: prosjektdetaljer.php?error=ugyldigProsjekt&prosjektId=" . $prosjektId);
+    header("Location: prosjektdetaljer.php?error=ugyldigFase&prosjektId=" . $prosjektId);
     return;
 }
 

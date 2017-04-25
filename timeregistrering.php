@@ -115,12 +115,12 @@ else{
 
     $prosjektListe = array_unique($alleProsjekter);
     
-    if(isset($_POST['prosjekt'])) {
-        if(!in_array($ProsjektReg->hentProsjekt($_POST['prosjekt']), $prosjektListe)) {
+    if(isset($_POST['prosjektId'])) {
+        if(!in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }
-        $prosjekt_id = $_POST['prosjekt'];
+        $prosjekt_id = $_POST['prosjektId'];
         $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     }
 

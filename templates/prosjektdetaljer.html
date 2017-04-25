@@ -25,7 +25,13 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til oppgaven
         </div>
-    {% elseif error == "ugyldigProsjekt" %}
+    {% elseif error == "ugyldigOppgaveAct" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å legge til eller redigere oppgaver på dette prosjektet
+        </div>
+    {% elseif error == "ugyldigFase" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
@@ -72,7 +78,7 @@
                 {% if oppgave.FaseId == fase.Id %}
                 <tr>
                     {% if brukerTilgang.isTeamleder %}
-                    <td><a href="oppgavedetaljer.php?oppgave={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
+                    <td><a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
                     {% else %}
                     <td>{{ oppgave.Navn }}</td>
                     {% endif %}

@@ -29,14 +29,15 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
     header("Location: index.php?error=manglendeRettighet&side=oppgdet");
     return;
 }
-if(isset($_GET['oppgave'])) {
+if(isset($_GET['oppgaveId'])) {
 
-    $oppgave_id = $_GET['oppgave'];
+    $oppgave_id = $_GET['oppgaveId'];
     $oppgave = $OppgaveReg->hentOppgave($oppgave_id);
     $brukerId = $_SESSION['bruker']->getId();
     $teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
-    if ($brukerId != $teamLederId) {
-        header("Location: prosjektdetaljer.php?error=ugyldigOppgave&prosjekt=" . $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getId());
+    $prosjektlederId = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getLeder();
+    if ($brukerId != $teamLederId && $brukerId != $prosjektlederId) {
+        header("Location: prosjektdetaljer.php?error=ugyldigOppgave&prosjektId=" . $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getId());
         return;
     }
     $estimatListe = $OppgaveReg->hentAlleEstimatForOppgave($oppgave_id);
@@ -47,14 +48,14 @@ if(isset($_GET['oppgave'])) {
             $estimat=$_GET['estimat'];
             $OppgaveReg->endreEstimatForOppgave($oppgave_id,$estimat);
             $OppgaveReg->slettEstimatForslag($estimatId);
-            header("Location: oppgavedetaljer.php?oppgave=" . $oppgave_id);
+            header("Location: oppgavedetaljer.php?oppgaveId=" . $oppgave_id);
             return;
         }
     }
     if(isset($_GET['reject'])){
         $estimatId=$_GET['reject'];
         $OppgaveReg->slettEstimatForslag($estimatId);
-        header("Location: oppgavedetaljer.php?oppgave=" . $oppgave_id);
+        header("Location: oppgavedetaljer.php?oppgaveId=" . $oppgave_id);
         return;
 
     }
