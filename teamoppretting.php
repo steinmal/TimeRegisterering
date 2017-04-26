@@ -22,7 +22,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 $aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true || !$_SESSION['bruker']->isAktivert()){
-    header("Location: index.php?error=manglendeRettighet&side=propp");
+    header("Location: index.php?error=manglendeRettighet&side=teamopp");
     return;
 }
 

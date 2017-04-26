@@ -31,6 +31,18 @@ if(isset($_POST['opprettBruker'])){
         header("Location: brukerregistrering.php?error=mailExists");
         return;
     }
+    if (!isset($_POST['telefonnummer']) || $_POST['telefonnummer'] == "") {
+        $_SESSION['regnavn'] = $_POST['navn'];
+        $_SESSION['regepost'] = $_POST['epost'];
+        header('Location: brukerregistrering.php?error=ingenVerdi');
+        return;
+    } if(!isset($_POST['passord']) || $_POST['passord'] == "") {
+        $_SESSION['regnavn'] = $_POST['navn'];
+        $_SESSION['regepost'] = $_POST['epost'];
+        $_SESSION['regtelefon'] = $_POST['telefonnummer'];
+        header('Location: brukerregistrering.php?error=ingenPass');
+        return;
+    }
     $nyBruker = new Bruker();
     $nyBruker->setNavn($_POST['navn']);
     $nyBruker->setEpost($_POST['epost']);

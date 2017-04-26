@@ -82,6 +82,18 @@
                 <span class="sr-only">Error:</span>
                 Du har ikke tilgang til prosjektrapporter
             </div>
+            {% elseif side == "teamadm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamadministrering
+            </div>
+            {% elseif side == "teamopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamoppretting
+            </div>
             {% elseif side == "teamrapp" %}
             <div class="alert alert-error" role="alert">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

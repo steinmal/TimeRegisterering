@@ -62,6 +62,12 @@
             <span class="sr-only">Error:</span>
             Du kan kun ha en aktiv timeregistrering om gangen. Du må stoppe den aktive timeregistreringen før du starter en ny.
         </div>
+    {% elseif error == "ugyldigTimeEst" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å foreslå tidsestimat på oppgaven.
+        </div>
     {% endif %}
     {% if sendt %}
     <div class="alert alert-success" role="alert">

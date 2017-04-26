@@ -25,6 +25,18 @@
             <span class="sr-only">Error:</span>
             Brukernavn eksisterer allerede
         </div>
+        {% elseif error == "ingenVerdi" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Skriv inn et telefonnummer
+        </div>
+        {% elseif error == "ingenPass" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Skriv inn passord
+        </div>
         {% endif %}
         
         <form method="post" action="brukerregistrering.php" class="col-md-4">
