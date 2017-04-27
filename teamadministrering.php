@@ -62,7 +62,8 @@ if(isset($_GET['teamId'])){
     $allebrukere = $BrukerReg->hentAlleBrukere();
     $a = array();
     foreach($allebrukere as $i) {
-        $a[] = $i->getId();
+        if ($i->isAktivert()) 
+            $a[] = $i->getId();
     }
     $loggetInn = [$_SESSION['bruker']->getId()];
     $brukerliste = array_diff($a, $medlemsliste); //Alle brukere minus de som allerede er i team.

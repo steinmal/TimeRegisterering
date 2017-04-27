@@ -30,7 +30,7 @@ $twigs['bruker'] = $_SESSION['bruker'];
 $twigs['brukernavn'] = $_SESSION['bruker']->getNavn();
 $twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
 $twigs['oppgavereg'] = $OppgaveReg;
-$twig['aktivert'] = $aktivert;
+$twigs['aktivert'] = $aktivert;
 $error = "none";
 
 if (isset($_REQUEST['action'])) {
@@ -64,6 +64,10 @@ if (isset($_REQUEST['action'])) {
                 $error = "deaktivert";
                 break;
             case 'Aktiver':
+                if ($TimeReg->hentTimeregistrering($timeId)->getTilstand() == 2) {
+                    header('Location: timeoversikt.php?error=avvist&visDeaktiverte=on');
+                    return;
+                }
                 $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
                 $TimeReg->gjenopprettTimeregistrering($timeregKopi->getId());   //gir kopien tilstand gjenopprettet
                 $error = "aktivert";
