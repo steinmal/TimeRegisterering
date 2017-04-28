@@ -166,7 +166,44 @@
             }
             return $timeregistreringer;
         }
-        
+
+        public function hentTimeregistreringerFraTeam($team_id, $datefrom = "", $dateto = "") {
+            $timeregistreringer = array();
+            try {
+                if ($datefrom && $dateto) {
+                    $stmt = $this->db->prepare("SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
+                        . " FROM timeregistrering t"
+                        . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
+                        . " INNER JOIN oppgavetype ot on ot.oppgavetype_id=o.oppgavetype_id"
+                        . " INNER JOIN bruker b on b.bruker_id=t.bruker_id"
+                        . " INNER JOIN fase f on f.fase_id=o.fase_id"
+                        . " INNER JOIN prosjekt p on p.prosjekt_id=f.prosjekt_id"
+                        . " WHERE p.team_id = :id AND (t.timereg_dato BETWEEN :datefrom AND :dateto)");
+                    $stmt->bindParam(':id', $team_id, PDO::PARAM_INT);
+                    $stmt->bindParam(':datefrom', $datefrom, PDO::PARAM_STR);
+                    $stmt->bindParam(':dateto', $dateto, PDO::PARAM_STR);
+                } else {
+                    $stmt = $this->db->prepare("SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
+                        . " FROM timeregistrering t"
+                        . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
+                        . " INNER JOIN oppgavetype ot on ot.oppgavetype_id=o.oppgavetype_id"
+                        . " INNER JOIN bruker b on b.bruker_id=t.bruker_id"
+                        . " INNER JOIN fase f on f.fase_id=o.fase_id"
+                        . " INNER JOIN prosjekt p on p.prosjekt_id=f.prosjekt_id"
+                        . " WHERE p.team_id = :id");
+                    $stmt->bindParam(':id', $team_id, PDO::PARAM_INT);
+                }
+                $stmt->execute();
+                    
+                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+                    $timeregistreringer[] = $timereg;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $timeregistreringer;
+        }
+
         public function hentTimeregistreringerFraProsjekt($prosjekt_id){
           $timeregistreringer = array();
             try {
@@ -186,28 +223,7 @@
             }
             return $timeregistreringer;
         }
-        
-        public function hentTimeregistreringerFraTeam($team_id){
-          $timeregistreringer = array();
-            try {
-                $stmt = $this->db->prepare("
-                        SELECT * FROM timeregistrering WHERE oppgave_id IN (
-                        SELECT `oppgave_id` FROM `oppgave` WHERE `oppgave`.`fase_id` IN (
-                        SELECT `fase_id` FROM `fase` WHERE `fase`.`prosjekt_id` IN (
-                        SELECT `prosjekt_id` FROM `prosjekt` WHERE `prosjekt`.`team_id`=:tId)))
-                        ");
-                $stmt->bindParam(':tId', $team_id, PDO::PARAM_INT);
-                $stmt->execute();
-                    
-                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
-                    $timeregistreringer[] = $timereg;
-                }
-            } catch (Exception $e) {
-                $this->Feil($e->getMessage());
-            }
-            return $timeregistreringer;
-        }
-        
+
         public function hentAktiveTimeregistreringer($bruker_id){       // endring: henter alle som ikke er deaktivert (dvs godkjente, venter godkjenning, avviste og gjenopprettede)
             $registreringer = array();
             try {
