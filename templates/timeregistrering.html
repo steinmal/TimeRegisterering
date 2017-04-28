@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
 <div class="container">
@@ -61,6 +62,12 @@
             <span class="sr-only">Error:</span>
             Du kan kun ha en aktiv timeregistrering om gangen. Du må stoppe den aktive timeregistreringen før du starter en ny.
         </div>
+    {% elseif error == "ugyldigTimeEst" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til å foreslå tidsestimat på oppgaven.
+        </div>
     {% endif %}
     {% if sendt %}
     <div class="alert alert-success" role="alert">
@@ -74,16 +81,19 @@
         <div class="form-group">
             <label for="prosjekt">Prosjekt:</label>
         {% if aktiv %}
-            <select class="form-control" name="prosjekt" id="prosjekt" disabled>
-                <option value="{{ prosjekt.getId() }}" selected>{{ prosjekt.getNavn() }}</option>
+            <select class="form-control" name="prosjektId" id="prosjekt" disabled>
+                <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
             </select>
         {% else %}
-            <select class="form-control" name="prosjekt" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+            <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                {% if valgtProsjekt < 1 %}
+                <option selected="selected"></option>
+                {% endif %}
                 {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.getId() }}"{% if prosjekt.getId() == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.getNavn() }}</option>
+                <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
                 {% endfor %}
             </select>
-            {% if valgtProsjekt <= 1 %}
+            {% if valgtProsjekt < 1 %}
             <small class="form-text text-muted">Velg prosjekt</small>
             {% elseif oppgaveListe|length == 0 %}
             <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
@@ -93,20 +103,20 @@
     </form>
     {% if visSkjema %}
     <form method="post" action="timeregistrering.php" class="col-md-4">
-        <input type="hidden" name="regId" value="{{ registrering.getId() }}">
+        <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
         <div class="form-group ">
             <label for="oppgave">Oppgave:</label>
             <div class="form-inline">
                 {% if aktiv %}
                 <select name="oppgave" class="form-control" disabled id="oppgave">
-                    <option value="{{ oppgave.getId() }}" selected="selected">{{ oppgave.getNavn() }}
+                    <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}
                     </option>
                 </select>
                 {% else %}
                 <select name="oppgave" class="form-control" id="oppgave">
                     {% for oppgave in oppgaveListe %}
-                    <option value="{{ oppgave.getId() }}" {% if oppgave.getId()== valgtOppgave %}
-                            selected="selected" {% endif %}>{{ oppgave.getNavn() }}
+                    <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
+                            selected="selected" {% endif %}>{{ oppgave.Navn }}
                     </option>
                     {% endfor %}
                 </select>
@@ -122,7 +132,7 @@
         <div class="form-group">
             {% if aktiv %}
                 <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
-                {% if registrering.getStatus() == 1 %}
+                {% if registrering.Status == 1 %}
                 <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
                 {% else %}
                 <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
@@ -137,5 +147,6 @@
     </form>
     {% endif %}
 </div>
+{% include 'footer.html' %}
 </body>
 </html>

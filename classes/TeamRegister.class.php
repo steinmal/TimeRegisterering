@@ -6,7 +6,36 @@
         public function __construct(PDO $db) {
             $this->db = $db;
         }
-        
+
+        public function lagTeam($team) {
+            $teamNavn = $team->getNavn();
+            $teamLeder = $team->getLeder();
+
+            try {
+             $stmt = $this->db->prepare("INSERT INTO team (team_navn, team_leder) VALUES (:teamNavn, :teamLeder)");
+             $stmt->bindParam(':teamNavn', $teamNavn, PDO::PARAM_STR);
+             $stmt->bindParam(':teamLeder', $teamLeder, PDO::PARAM_INT);
+             $stmt->execute();
+            }
+            catch(Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+        public function redigerTeam($team) {
+            $teamId = $team->getId();
+            $teamNavn = $team->getNavn();
+            $teamLeder = $team->getLeder();
+            try {
+                $stmt = $this->db->prepare("UPDATE team SET team_navn=:navn, team_leder=:leder WHERE team_id=:id");
+
+                $stmt->bindParam(':navn', $teamNavn, PDO::PARAM_STR);
+                $stmt->bindParam(':leder', $teamLeder, PDO::PARAM_INT);
+                $stmt->bindParam(':id', $teamId, PDO::PARAM_INT);
+                $stmt->execute();
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         public function hentAlleTeam() {
             $teamListe = array();
             try {
@@ -67,7 +96,7 @@
             return $teamId;
         }
 
-        public function hentTeamMedlemmer($team_id, $UserReg) {
+        public function hentTeamMedlemmer($team_id, $BrukerReg) {
             $brukere = array();
             try {
                 $stmt = $this->db->prepare("SELECT bruker_id FROM teammedlemskap WHERE team_id=:team_id");
@@ -75,7 +104,7 @@
                 $stmt->execute();
                     
                 while($bruker = $stmt->fetch()) {
-                    $brukere[] = $UserReg->hentBruker($bruker['bruker_id']);
+                    $brukere[] = $BrukerReg->hentBruker($bruker['bruker_id']);
                 }
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
@@ -98,7 +127,61 @@
             }
             return $brukerIds;
         }
-        
+
+        public function harTeamlederEtTeam($bruker_id) {
+            try {
+                $stmt = $this->db->prepare("SELECT count(*) FROM team WHERE team_leder=:brukerId");
+                $stmt->bindParam('brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $num = $stmt->fetchColumn();
+                if($num > 0) {
+                    return true;
+                }
+                else return false;
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function antallMedlemmerTeam($team_id) {
+            try {
+                $stmt = $this->db->prepare("SELECT count(*) FROM teammedlemskap WHERE team_id=:teamId");
+                $stmt->bindParam('teamId', $team_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $num = $stmt->fetchColumn();
+                return $num + 1; //Teamleder er ikke med i teammedlemskaptabell
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function slettMedlemskap($bruker_id, $team_id) {
+            try {
+                $stmt = $this->db->prepare("DELETE FROM teammedlemskap WHERE bruker_id = :brukerId and $team_id = :teamId");
+                $stmt->bindParam('teamId', $team_id, PDO::PARAM_INT);
+                $stmt->bindParam('brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+            catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
+
+        public function leggTilMedlem($bruker_id, $team_id) {
+            try {
+                $stmt = $this->db->prepare("INSERT INTO teammedlemskap (bruker_id, team_id) VALUES (:brukerId, :teamId)");
+                $stmt->bindParam(':teamId', $team_id, PDO::PARAM_INT);
+                $stmt->bindParam(':brukerId', $bruker_id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+        }
         
         private function Feil($feilmelding) {
             print "<h2>Oisann... Noe gikk galt</h2>";

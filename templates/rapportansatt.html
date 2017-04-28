@@ -15,15 +15,15 @@
         <tbody>
 
         {% for timereg in timeregistreringer %}
-        {% if timereg.getGodkjent() %}
+        {% if timereg.isGodkjent() %}
         <tr>
-            <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
-            <td data-datoklokkeslett="{{ timereg.getDato() }} {{ timereg.getFra() }}">{{ timereg.getDato() }}</td>
-            <td>{{ timereg.getFra() }}</td>
-            <td>{{ timereg.getTil() }}</td>
-            <td>{{ timereg.getHourString() }}</td>
-            <td>{{ oppgavereg.hentOppgave(timereg.getOppgaveId()).getNavn() }}</td>
-            <td>{{ oppgavereg.getOppgavetype(oppgavereg.hentOppgave(timereg.getOppgaveId()).getType()).getNavn() }}</td>
+            <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+            <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
+            <td>{{ timereg.Fra }}</td>
+            <td>{{ timereg.Til }}</td>
+            <td>{{ timereg.HourString }}</td>
+            <td>{{ oppgavereg.hentOppgave(timereg.OppgaveId).Navn }}</td>
+            <td>{{ oppgavereg.OppgavetypeTekst(oppgavereg.hentOppgave(timereg.OppgaveId).Type) }}</td>
 
         </tr>
         {% endif %}

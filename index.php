@@ -6,20 +6,23 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
+$TeamReg = new TeamRegister($db);
 $innlogget = false;
-$error = "";
 $loginFail="";
 $bruker="";
 $error="";
+$side = "";
 $brukerTilgang="";
+$regSucc = "";
+$aktivert = "";
 session_start();
 
 
 if(isset($_POST['login'])) {
     $brukernavn = $_POST['brukernavn'];
     $passord = $_POST['passord'];
-    $UserReg->login($brukernavn, $passord);
+    $BrukerReg->login($brukernavn, $passord);
     if(isset($_POST['fail'])){
         $loginfail = $_POST['fail'];
     }
@@ -28,6 +31,7 @@ if(isset($_SESSION['innlogget'])) {
     $innlogget = $_SESSION['innlogget'];
     $bruker = $_SESSION['bruker'];
     $brukerTilgang = $_SESSION['brukerTilgang'];
+    $aktivert = $_SESSION['bruker']->isAktivert();
 }
 if(isset($_POST['fail'])){
     $loginFail = $_POST['fail'];
@@ -35,6 +39,11 @@ if(isset($_POST['fail'])){
 
 if(isset($_GET['error'])) {
     $error = $_GET['error'];
+} if (isset($_GET['side'])) {
+    $side = $_GET['side'];
+}
+if(isset($_GET['regSucc'])) {
+    $regSucc = $_GET['regSucc'];
 }
 
 echo $twig->render('index.html', array(
@@ -42,5 +51,9 @@ echo $twig->render('index.html', array(
     'innlogget'=>$innlogget,
     'bruker'=>$bruker,
     'brukerTilgang'=>$brukerTilgang,
-    'error'=>$error));
+    'error'=>$error,
+    'side'=>$side,
+    'TeamReg'=>$TeamReg,
+    'regSucc'=>$regSucc,
+    'aktivert'=>$aktivert));
 ?>

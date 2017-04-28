@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+
 </head>
 <body>
     <div class="container">
@@ -26,6 +28,7 @@
     <!--<font color=red>{{ venterGodkjenning }} bruker{% if venterGodkjenning > 1 %}e{% endif %} venter på godkjenning</font>-->
     {% endif %}
     <!--</div>-->
+
     {% if error == "noRadio" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -93,18 +96,18 @@
                     <th></th>
                 </tr>
                 {% for bruker in brukere %}
-                    {% if bruker.isAktivert() != visNye %}
+                    {% if bruker.isAktivert != visNye %}
                     <tr>
-                        <td><input type=radio name=brukerId value="{{ bruker.getId() }}" /></td>
-                        <td>{{ bruker.getId() }}</td>
-                        <td>{{ bruker.getNavn() }}</td>
-                        <td>{{ brukerReg.getBrukertype(bruker.getBrukertype()).getNavn() }}</td>
-                        <td>{{ bruker.getEpost() }}</td>
-                        <td>{{ bruker.getTelefon() }}</td>
-                        <td>{{ bruker.isAktivertTekst() }}</td>
-                        <td>{{ bruker.getRegistreringsdato() }}</td>
+                        <td><input type=radio name=brukerId value="{{ bruker.Id }}" /></td>
+                        <td>{{ bruker.Id }}</td>
+                        <td>{{ bruker.Navn }}</td>
+                        <td>{{ brukerReg.Brukertype(bruker.Brukertype).Navn }}</td>
+                        <td>{{ bruker.Epost }}</td>
+                        <td>{{ bruker.Telefon }}</td>
+                        <td>{{ bruker.isAktivertTekst }}</td>
+                        <td>{{ bruker.Registreringsdato }}</td>
                         {% if not bruker.isAktivert %}
-                        <td><a href="?action=aktiver&brukerId={{ bruker.getId() }}">Aktiver</a></td>
+                        <td><a href="?action=aktiver&brukerId={{ bruker.Id }}">Aktiver</a></td>
                         {% else %}
                         <td>&nbsp;</td>
                         {% endif %}
@@ -118,4 +121,7 @@
 
     </p>
     </div>
+
+    {% include 'footer.html' %}
 </body>
+</html>

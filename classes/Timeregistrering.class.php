@@ -10,9 +10,10 @@
         private $timereg_pause;
         private $timereg_registreringsdato;
         private $timereg_status;
-        private $timereg_aktiv;
+        private $timereg_tilstand;
+        //private $timereg_aktiv;
         private $timereg_automatisk;
-        private $timereg_godkjent;
+        //private $timereg_godkjent;
         private $timereg_kommentar;
         
         function __construct() {
@@ -28,11 +29,13 @@
         public function getTil() { return $this->timereg_stopp; }
         public function getPause() { return $this->timereg_pause; }
         public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
+        public function getTilstand() { return $this->timereg_tilstand; }   // 0 = godkjent, 1 = venter godkj., 2 = avvist, 3 = deaktivert, 4 = gjenopprettet
+        public function isGodkjent() { return $this->timereg_tilstand == 0; }
 
         // bool-metoder burde hete is... istedet for get...
-        public function getAktiv() { return $this->timereg_aktiv; }
+        //public function getAktiv() { return $this->timereg_aktiv; } //byttes ut med getTilstand
         public function getAutomatisk() { return $this->timereg_automatisk; }
-        public function getGodkjent() { return $this->timereg_godkjent; }
+        //public function getGodkjent() { return $this->timereg_godkjent; } //byttes ut med getTilstand
 
         public function getKommentar() { return $this->timereg_kommentar; }
         public function getHourAsDateInterval(){
@@ -50,11 +53,33 @@
             return $this->getHourAsDateInterval()->format("%H:%I");
         }
         
-        public function getGodkjentTekst() {
+       /* public function getGodkjentTekst() {    //byttes ut med getTilstandTekst
             if ($this->timereg_godkjent) {
                 return "Godkjent";
             } else {
                 return "Ikke godkjent";
+            }
+        }*/
+        
+        public function getTilstandTekst() {
+            switch ($this->timereg_tilstand) {
+                case 0:
+                    return "Godkjent";
+                    break;
+                case 1:
+                    return "Venter godkjenning";
+                    break;
+                case 2:
+                    return "Avvist";
+                    break;
+                case 3:
+                    return "Deaktivert";
+                    break;
+                case 4:
+                    return "Gjenopprettet";
+                    break;
+                default:
+                    break;
             }
         }
     }

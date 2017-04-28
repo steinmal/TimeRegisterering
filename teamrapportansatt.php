@@ -12,15 +12,16 @@ $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=teamrapp");
     //echo "Kun teamleder har tilgang til TeamRapport";
     return;
@@ -77,7 +78,7 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'oppgavereg'=>$OppgaveReg,
     'teamReg'=>$TeamReg,
     'timeReg'=>$TimeReg,
-    'userReg'=>$UserReg,
+    'brukerReg'=>$BrukerReg,
     'brukerIds'=>$brukerIds,
     'teams'=>$teams,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
@@ -88,14 +89,14 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
 if(isset($_GET['download'])){
     if ($ansatt){
         foreach($timeregistreringer as $key => $element) {
-            if ($UserReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
+            if ($BrukerReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
                 unset($timeregistreringer[$key]);
             }
         }
     }
     if ($oppgavetype){
         foreach($timeregistreringer as $key => $element) {
-            if ($OppgaveReg->getOppgavetype($OppgaveReg->hentOppgave($element->getOppgaveId())->getType())->getNavn() != $oppgavetype) {
+            if ($OppgaveReg->getOppgavetypeTekst($OppgaveReg->hentOppgave($element->getOppgaveId())->getType()) != $oppgavetype) {
                 unset($timeregistreringer[$key]);
             }
         }
@@ -127,8 +128,10 @@ if(isset($_GET['download'])){
     $objWriter->save('php://output');
     exit;
 }
-
+$twigArray['TeamReg'] = $TeamReg;
+$twigArray['aktivert'] = $aktivert;
 $tabellRender = $twig->render('rapportansatt.html', $twigArray);
+
 
 echo $twig->render('teamrapporttopp.html', $twigArray);
 echo $tabellRender;

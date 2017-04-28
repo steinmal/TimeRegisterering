@@ -7,21 +7,21 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $OppgaveTypeReg = new OppgaveRegister($db);
+$TeamReg = new TeamRegister($db);
 $error = "";
+$aktivert ="";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true)
+$aktivert = $_SESSION['bruker']->isAktivert();
+if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=optopp");
-    //echo "Du har ikke tilgang til Brukerredigering";
-    //Foreslår returnering til index.php?error=noAccess eller lignende
     return;
 }
 if(isset($_GET['error'])){
@@ -52,4 +52,4 @@ else {
     }
 }
 
-echo $twig->render('oppgavetypeoppretting.html', array('oppgavetype'=>$oppgavetype, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'userReg'=>$UserReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetypeoppretting.html', array('aktivert'=>$aktivert, 'oppgavetype'=>$oppgavetype, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

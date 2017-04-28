@@ -6,15 +6,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
-    {% if valgtProsjekt.getId() > 0 %}
+    {% if valgtProsjekt.Id > 0 %}
         <h1>Rediger prosjekt</h1>
-    {% elseif valgtprosjekt.getParent() > 0 %}
+    {% elseif valgtprosjekt.Parent > 0 %}
         <h1>Opprett nytt underprosjekt</h1>
-    {% elseif valgtprosjekt.getParent() == 0 %}
+    {% elseif valgtprosjekt.Parent == 0 %}
         <h1>Opprett nytt prosjekt</h1>
     {% endif %}
 
@@ -37,19 +38,19 @@
             {% if action != null %}
             <input type="hidden" name=action value="{{ action }}"/>
             {% endif %}
-            {% if valgtProsjekt.getId() >= 0 %}
-            <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.getId() }}">
+            {% if valgtProsjekt.Id >= 0 %}
+            <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.Id }}">
             {% endif %}
             <div class="form-group ">
                 <label for="navn">Prosjektnavn:</label>
-                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtProsjekt.getNavn() }}">
+                <input type="text" class="form-control" id="navn" name="prosjektNavn" value="{{ valgtProsjekt.Navn }}">
             </div>
             {% if brukParent %}
             <div class="form-group ">
                 <label for="foreldreProsjekt">Foreledreprosjekt:</label>
                 <select name="foreldreProsjekt" class="form-control" id="foreldreProsjekt">
                     {% for prosjekt in prosjekter %}
-                    <option value="{{ prosjekt.getId() }}" {% if valgtProsjekt.getParent() == prosjekt.getId() %} selected {% endif %}>{{ prosjekt.getNavn() }}</option>
+                    <option value="{{ prosjekt.Id }}" {% if valgtProsjekt.Parent == prosjekt.Id %} selected {% endif %}>{{ prosjekt.Navn }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -58,7 +59,7 @@
                 <label for="prosjektLeder">Prosjektleder:</label>
                 <select name="prosjektLeder" class="form-control" id="prosjektLeder">
                     {% for bruker in brukere %}
-                        <option value="{{ bruker.getId() }}" {% if valgtProsjekt.getLeder() == bruker.getId() %} selected {% endif %}>{{ bruker.getNavn() }}</option>
+                        <option value="{{ bruker.Id }}" {% if valgtProsjekt.Leder == bruker.Id %} selected {% endif %}>{{ bruker.Navn }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -66,26 +67,28 @@
                 <label for="team">Team:</label>
                 <select name="team" class="form-control" id="team">
                     {% for team in teamListe %}
-                        <option value="{{ team.getId() }}" {% if valgtProsjekt.getTeam() == team.getId() %} selected {% endif %}>{{ team.getNavn() }}</option>
+                        <option value="{{ team.Id }}" {% if valgtProsjekt.Team == team.Id %} selected {% endif %}>{{ team.Navn }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group ">
                 <label for="prosjektBeskrivelse">Prosjektbeskrivelse:</label>
-                <input type="text" class="form-control" id="prosjektBeskrivelse" name="prosjektBeskrivelse" value="{{ valgtProsjekt.getBeskrivelse() }}">
+                <input type="text" class="form-control" id="prosjektBeskrivelse" name="prosjektBeskrivelse" value="{{ valgtProsjekt.Beskrivelse }}">
             </div>
             <div class="form-group ">
                 <label for="startDato">Startdato:</label>
-                <input type="date" class="form-control" id="startDato" name="startDato" value="{{ valgtProsjekt.getStartDato() }}">
+                <input type="date" class="form-control" id="startDato" name="startDato" value="{{ valgtProsjekt.StartDato }}">
             </div>
             <div class="form-group ">
                 <label for="sluttDato">Sluttdato:</label>
-                <input type="date" class="form-control" id="sluttDato" name="sluttDato" value="{{ valgtProsjekt.getSluttDato() }}">
+                <input type="date" class="form-control" id="sluttDato" name="sluttDato" value="{{ valgtProsjekt.SluttDato }}">
             </div>
             <div class="form-group ">
-                <input type="submit" name="opprettProsjekt" {% if valgtProsjekt.getId() >= 0 %} value="Endre prosjekt" {% else %} value="Opprett prosjekt" {% endif %}>
+                <input type="submit" name="opprettProsjekt" {% if valgtProsjekt.Id >= 0 %} value="Endre prosjekt" {% else %} value="Opprett prosjekt" {% endif %}>
                 <a href="prosjektadministrering.php">Avbryt</a>
             </div>
         </form>
     </div>
+    {% include 'footer.html' %}
 </body>
+</html>

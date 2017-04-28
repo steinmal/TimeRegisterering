@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
@@ -13,15 +14,17 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
 
 
-    <h1>Detaljer for bruker {{ bruker.getNavn() }}</h1>
+    <h1>Detaljer for bruker {{ bruker.Navn }}</h1>
 
     <h2>Brukeropplysninger</h2>
     
-    <p><b>Navn: </b> {{ bruker.getNavn() }}<br/>
-       <b>Epost: </b> {{ bruker.getEpost() }}<br/>
-       <b>Telefon: </b> {{ bruker.getTelefon() }}<br/>
+    <p><b>Navn: </b> {{ bruker.Navn }}<br/>
+       <b>Epost: </b> {{ bruker.Epost }}<br/>
+       <b>Telefon: </b> {{ bruker.Telefon }}<br/>
        <b>Brukertype: </b> {{ brukerType }}<br/></p>
-       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+        {% if aktivert %}
+       <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+        {% endif %}
         
     
     <h2>Prosjekter</h2>
@@ -37,18 +40,19 @@
             </tr>
             {% for p in prosjekter %}
                 <tr>
-                    <td>{{ p.getNavn() }}</td>
-                    <td>{{ p.getBeskrivelse() }}</td>
-                    <td>{{ UserReg.hentBruker(p.getLeder()).getNavn() }}</td>
-                    <td>{{ UserReg.hentBruker(p.getProductOwner()).getNavn() }}</td>
-                    <td>{{ TeamReg.hentTeam(p.getTeam()).getNavn() }}</td>
-                    <td>{{ p.getStartDato() }}</td>
-                    <td>{{ p.getSluttDato() }}</td>
+                    <td>{{ p.Navn }}</td>
+                    <td>{{ p.Beskrivelse }}</td>
+                    <td>{{ brukerReg.hentBruker(p.Leder).Navn }}</td>
+                    <td>{{ brukerReg.hentBruker(p.ProductOwner).Navn }}</td>
+                    <td>{{ TeamReg.hentTeam(p.Team).Navn }}</td>
+                    <td>{{ p.StartDato }}</td>
+                    <td>{{ p.SluttDato }}</td>
                 </tr>
             {% endfor %}
         </table>
-
-    <h2>Team</h2>
+    <div class="row">
+        <div class="col-lg-6">
+    <h2>Medlem i team</h2>
             <table class="table table-striped col-md-6">
                 <tr>
                     <th>Navn</th>
@@ -56,12 +60,37 @@
                 </tr>
                 {% for t in teamliste %}
                     <tr>
-                        <td>{{ t.getNavn() }}</td>
-                        <td>{{ UserReg.hentBruker(t.getLeder()).getNavn() }}</td>
+                        <td>{{ t.Navn }}</td>
+                        <td>{{ brukerReg.hentBruker(t.Leder).Navn }}</td>
                     </tr>
                 {% endfor %}
             </table>
-
-    
+        </div>
+        <div class="col-lg-6">
+        <h2>Leder for team</h2>
+        <table class="table table-striped col-md-6">
+            <tr>
+                <th>Navn</th>
+                <th>Antall medlemmer</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for lt in lederTeamListe %}
+            <tr>
+                <td>{{ lt.Navn }}</td>
+                <td>{{ TeamReg.antallMedlemmerTeam(lt.Id) }}</td>
+                {% if aktivert %}
+                <td><a href="teamrapportansatt.php">Se rapporter</a></td>
+                <td><a href="timegodkjenning.php">Godkjenn timer</a></td>
+                <td><a href="teamadministrering.php?teamId={{ lt.Id }}">Administrer</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
 </div>
+    {% include 'footer.html' %}
 </body>
+</html>

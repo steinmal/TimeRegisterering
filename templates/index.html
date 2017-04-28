@@ -6,31 +6,26 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
     {% if innlogget %}
-        <h1>Velkommen {{ bruker.getNavn() }}</h1>
-
-        <div class="btn-group">
-            <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
-            <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
-            {% if brukerTilgang.isTeamleder() %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
-            <!--<a href="brukerdetaljer.php"><button type="button" class="btn btn-primary">Brukerdetaljer</button></a>-->
-            {% if brukerTilgang.isTeamleder() %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
-            {% if brukerTilgang.isBrukeradmin() %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
-            <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
-            <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.getId() }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
-            {% if brukerTilgang.isBrukeradmin() %}<a href="DBdump.php"><button type="button" class="btn btn-default">Last ned backup av database.</button></a>{% endif %}
-
-        </div>
-    {% else %}
-    {% if error == "ikkeInnlogget" %}
+        <h1>Velkommen {{ bruker.Navn }}</h1>
+        
+        {% if error == "ikkeInnlogget" %}
         <div class="alert alert-error" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Du må være innlogget for å ha tilgang til siden
+        </div>
+        {% elseif error == "feil" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Det oppsto en feil
         </div>
         {% elseif error == "manglendeRettighet" %}
             {% if side == "bradm" %}
@@ -87,6 +82,18 @@
                 <span class="sr-only">Error:</span>
                 Du har ikke tilgang til prosjektrapporter
             </div>
+            {% elseif side == "teamadm" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamadministrering
+            </div>
+            {% elseif side == "teamopp" %}
+            <div class="alert alert-error" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Kun teamleder har tilgang til teamoppretting
+            </div>
             {% elseif side == "teamrapp" %}
             <div class="alert alert-error" role="alert">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -106,8 +113,43 @@
                 Du har ikke tilgang til å vise siden
             </div>
             {% endif %}
-    {% endif %}
+        {% endif %}
+        
+        {% if aktivert %}
+        <div class="btn-group">
+            <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
+            <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+            {% if brukerTilgang.isTeamleder and TeamReg.harTeamlederEtTeam(bruker.Id) %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
+            <!--<a href="brukerdetaljer.php"><button type="button" class="btn btn-primary">Brukerdetaljer</button></a>-->
+            {% if brukerTilgang.isTeamleder %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
+            <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
+            <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
+            {% if brukerTilgang.isBrukeradmin %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
+        </div>
+        {% else %}
+        <h2>Brukeren din er deaktivert</h2>
+        <div class="btn-group">
+            <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+        </div>
+        {% endif %}
 
+        {% if regSucc %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Registreringen var vellykket!
+        </div>
+        {% endif %}
+        
+    {% else %} <!-- ikke innlogget -->
+        {% if error == "ikkeInnlogget" %}
+        <div class="alert alert-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må være innlogget for å ha tilgang til siden
+        </div>
+        {% endif %}
         <form method="post" action="index.php" class="col-md-4">
             <div class="form-group ">
                 <label for="emailAdresse">Epost-adresse eller brukernavn:</label>
@@ -131,5 +173,8 @@
         </form>
     {% endif %}
     </div>
+
+    {% include 'footer.html' %}
+
 </body>
 </html>

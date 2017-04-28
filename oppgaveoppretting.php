@@ -10,6 +10,8 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
+$TeamReg = new TeamRegister($db);
+$aktivert = "";
 
 
 session_start();
@@ -19,10 +21,9 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=oppgopp");
-    //echo "Du har ikke tilgang til oppgaveoppretting";
     return;
 }
 
@@ -32,11 +33,16 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 
 //ProsjektId = 0 har lite hensikt, tror databasen gir feilmelding i slikt tilfelle pga foreign key-forventninger
 $prosjektId = 0;
-if (isset($_REQUEST['prosjekt']))
-    $prosjektId = $_REQUEST['prosjekt'];
+if (isset($_REQUEST['prosjektId']))
+    $prosjektId = $_REQUEST['prosjektId'];
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
-    echo "Ugyldig prosjektID";
+    header('Location: prosjektadministrering.php?error=ugyldigProsjekt');
+   // echo "Ugyldig prosjektID";
+    return;
+}
+if($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
+    header('Location: prosjektdetaljer.php?error=ugyldigOppgaveAct&prosjektId=' . $prosjektId);
     return;
 }
 $oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();
@@ -49,7 +55,7 @@ $valgtOppgave = new Oppgave();
 
 if(isset($_POST['opprettOppgave'])){
     if(!isset($_POST['faseId']) && $_POST['faseId'] <= 0){
-        header("Location: oppgaveOppretting.php?prosjekt=" . $prosjektId . "&error=ingenFase");
+        header("Location: oppgaveOppretting.php?prosjektId=" . $prosjektId . "&error=ingenFase");
     }
     $faseId = $_POST['fase'];
     $foreldreId = null;
@@ -64,7 +70,7 @@ if(isset($_POST['opprettOppgave'])){
     
     if(!isset($_POST['oppgaveId'])){
         $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
-        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
     else{
@@ -75,6 +81,6 @@ if(isset($_POST['opprettOppgave'])){
     }
 }
 
-echo $twig->render('oppgaveoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
+echo $twig->render('oppgaveoppretting.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
                     'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

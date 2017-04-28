@@ -9,19 +9,28 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
+$TeamReg = new TeamRegister($db);
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeKorr");
+    return;
+}
 
 $twigs = array();
+$twigs['TeamReg'] = $TeamReg;
 $twigs['innlogget'] = $_SESSION['innlogget'];
 $twigs['bruker'] = $_SESSION['bruker'];
 $twigs['brukernavn'] = $_SESSION['bruker']->getNavn();
 $twigs['brukerTilgang'] = $_SESSION['brukerTilgang'];
 $twigs['oppgavereg'] = $OppgaveReg;
+$twig['aktivert'] = $aktivert;
 $error = "none";
 
 if (isset($_REQUEST['action'])) {
@@ -34,7 +43,7 @@ if (isset($_REQUEST['action'])) {
     } else {
         switch ($_REQUEST['action']) {
             case 'Korriger':
-                if ($TimeReg->hentTimeregistrering($timeId)->getAktiv() == 0) {
+                if ($TimeReg->hentTimeregistrering($timeId)->getTilstand() == 3) {
                     $error = "kanIkkeEndres";
                     
                 } else {
@@ -56,7 +65,7 @@ if (isset($_REQUEST['action'])) {
                 break;
             case 'Aktiver':
                 $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-                $TimeReg->endreAktivOgGodkjent($timeregKopi->getId(), 1, 0); //kopien skal være aktiv og ikke godkjent
+                $TimeReg->gjenopprettTimeregistrering($timeregKopi->getId());   //gir kopien tilstand gjenopprettet
                 $error = "aktivert";
         }
     }

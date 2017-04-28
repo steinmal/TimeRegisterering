@@ -9,15 +9,22 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
+$TeamReg = new TeamRegister($db);
 $error = "";
 $noRadio = "";
 $deaktivertError = "";
 $visDeaktiverte = 0;
+$aktivert = "";
 
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
+    return;
+}
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeOver");
     return;
 }
 
@@ -57,6 +64,6 @@ if (isset($_GET['visDeaktiverte'])) {
 
 $timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), $datefrom, $dateto);
 
-echo $twig->render('timeoversikt.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
+echo $twig->render('timeoversikt.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
     'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'datefrom'=>$datefrom, 'dateto'=>$dateto, 'error'=>$error, 'visDeaktiverte'=>$visDeaktiverte));
 ?>

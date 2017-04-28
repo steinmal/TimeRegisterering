@@ -10,9 +10,10 @@ $twig = new Twig_Environment($loader);
 
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
-//$UserReg = new UserRegister($db);
-//$TeamReg = new TeamRegister($db);
+//$BrukerReg = new BrukerRegister($db);
+$TeamReg = new TeamRegister($db);
 $rapportType = "";
+$aktivert = "";
 
 session_start();
 
@@ -20,8 +21,8 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin()){
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin() || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=prrapp");
     //echo "Du har ikke tilgang til prosjektrapporter<br/>";
     //header-relokasjon med feilmelding eller en egen feilmeldingstemplate?
@@ -92,6 +93,8 @@ if(isset($_GET['download'])){
     $objWriter->save('php://output');
     exit;
 }
+$twigs['TeamReg'] = $TeamReg;
+$twigs['aktivert'] = $aktivert;
 
 echo $twig->render('prosjektrapporttopp.html', $twigs);
 echo $tabellRender;

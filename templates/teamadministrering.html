@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teamadministrering</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+        {% if error == "feilTeam" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til dette teamet
+        </div>
+        {% elseif error == "ikkeTilgang" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du har ikke tilgang til denne siden
+        </div>
+        {% elseif admin %}
+        {% if adminerror == "lagret" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team opprettet
+        </div>
+        {% elseif adminerror == "redigert" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team endret
+        </div>
+        {% endif %}
+        <h1>Teamadministrering</h1>
+        <form action="teamoppretting.php" method="GET">
+            <div class="row">
+            <input class="btn-primary" type="submit" name="action" value="Opprett nytt team">
+            <input class="btn-primary" type="submit" name="action" value="Rediger">
+            </div>
+            <div class="row">
+                <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th>Teamnavn</th>
+                    <th>Teamleder</th>
+                    <th>Antall medlemmer</th>
+                </tr>
+                {% for team in alleteam %}
+                <tr>
+                    <td><input type="radio"  name="teamId" value={{ team.Id }}></td>
+                    <td> {{ team.Navn }}</td>
+                    <td> {{ brukerReg.hentBruker(team.Leder).Navn }}</td>
+                    <td> {{ TeamReg.antallMedlemmerTeam(team.Id) }}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            </div>
+        </form>
+
+        {% else %}
+
+    <h1>Teamadministrering</h1>
+        <div class="col-lg-4">
+        <h2>{{team.Navn}}</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th></th>
+                </tr>
+                {% for medlem in medlemmer %}
+                    <tr>
+                        <td>{{ medlem.Navn }}</td>
+                        <td><a href="teamadministrering.php?teamId={{team.Id}}&fjern={{medlem.Id}}">Fjern medlem</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <form method="post" action="">
+                <input type="hidden" name="teamId" value="{{team.Id}}">
+                <label for="navn">Navn:</label>
+                <select name="navn" id="navn">
+                {% for brukerId in brukerliste %}
+                <option value="{{ brukerId }}">{{ brukerReg.hentBruker(brukerId).Navn }}</option>
+                {% endfor %}
+                </select>
+                <input class="btn btn-primary" type="submit" name="leggTilMedlem" value="Legg til medlem">
+            </form>
+        </div>
+
+    {% endif %}
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

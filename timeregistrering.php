@@ -14,10 +14,16 @@ $sendt = "";
 $error = "";
 $oppgave_id = "";
 $oppgaveListe= "";
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
+    return;
+}
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=timeReg");
     return;
 }
 if(isset($_GET['sendt'])) {
@@ -30,8 +36,8 @@ if(isset($_GET['error'])) {
 date_default_timezone_set('Europe/Oslo');
 
 if(isset($_POST['submit'])){
-    $id = $_POST['regId'];
-    if($_POST['submit'] != "Start" && isset($_POST['regId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
+    $id = $_POST['timeregId'];
+    if($_POST['submit'] != "Start" && isset($_POST['timeregId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
         header("Location: timeregistrering.php?error=ugyldigTimereg");
         return;
     }
@@ -92,7 +98,7 @@ if($registrering != null && sizeof($registrering) > 0){
     $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
     $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
     $prosjekt_id = $prosjekt->getId();
-    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'aktiv'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
@@ -109,18 +115,18 @@ else{
 
     $prosjektListe = array_unique($alleProsjekter);
     
-    if(isset($_POST['prosjekt'])) {
-        if(!in_array($ProsjektReg->hentProsjekt($_POST['prosjekt']), $prosjektListe)) {
+    if(isset($_POST['prosjektId'])) {
+        if(!in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }
-        $prosjekt_id = $_POST['prosjekt'];
+        $prosjekt_id = $_POST['prosjektId'];
         $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     }
 
 
     $visSkjema = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0) ? true : false;
-    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'sendt'=>$sendt, 'bruker'=>$_SESSION['bruker'], 'aktiv'=>false, 'visSkjema'=>$visSkjema, 'prosjektListe'=>$prosjektListe, 'oppgaveListe'=>$oppgaveListe, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+    echo $twig->render('timeregistrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'sendt'=>$sendt, 'bruker'=>$_SESSION['bruker'], 'aktiv'=>false, 'visSkjema'=>$visSkjema, 'prosjektListe'=>$prosjektListe, 'oppgaveListe'=>$oppgaveListe, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 }
 
 

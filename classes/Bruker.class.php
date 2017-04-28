@@ -1,5 +1,5 @@
 <?php
-    class User {
+    class Bruker {
         private $bruker_navn;
         private $bruker_passord;
         private $bruker_id;

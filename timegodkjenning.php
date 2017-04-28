@@ -9,7 +9,7 @@ include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
@@ -17,14 +17,15 @@ $FaseReg = new FaseRegister($db);
 $ProsjektReg = new ProsjektRegister($db);
 $visGodkjent = "";
 $error = "";
+$aktivert = "";
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=timegod");
     return;
 }
@@ -39,6 +40,10 @@ if(isset($_GET['action'])){
         header("Location: timegodkjenning.php?error=ugyldigTimereg");
         return;
     }
+    if ($TimeReg->hentTimeregistrering($_GET['timeregId'])->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
+        header("Location: timegodkjenning.php?error=deaktivertTimereg");
+        return;
+    }
     if($_GET['action'] == "godkjenn") {
         $TimeReg->godkjennTimeregistrering($_GET['timeregId']);
     }
@@ -46,6 +51,10 @@ if(isset($_GET['action'])){
         $TimeReg->avvisTimeregistrering($_GET['timeregId']);
     }
     header('location: timegodkjenning.php');
+} else {
+    //header('Location: timegodkjenning.php?error=noAction');
+    echo "ingen action";
+    //return;
 }
 
 $bruker = $_SESSION['bruker'];
@@ -71,7 +80,7 @@ foreach ($brukerIds as $brukerId) {
 }
 
 if (isset($_GET['error'])) {
-    $error =$_GET['error'];
+    $error = $_GET['error'];
 }
 
 
@@ -79,13 +88,14 @@ echo $twig->render(
     'timegodkjenning.html', 
     array('innlogget'=>$_SESSION['innlogget'], 
     'bruker'=>$_SESSION['bruker'],
-    'userReg'=>$UserReg, 
-    'teamReg'=>$TeamReg, 
+    'brukerReg'=>$BrukerReg,
+    'TeamReg'=>$TeamReg,
     'timeReg'=>$TimeReg, 
     'oppgaveReg'=>$OppgaveReg, 
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
     'visGodkjent'=>$visGodkjent, 
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
-    'error'=>$error));
+    'error'=>$error,
+    'aktivert'=>$aktivert));
 ?>

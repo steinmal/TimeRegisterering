@@ -9,30 +9,47 @@ $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
-//$UserReg = new UserRegister($db);
-
+$TeamReg = new TeamRegister($db);
+//$BrukerReg = new BrukerRegister($db);
+$aktivert = "";
+$prosjektStartSlutt = "";
+$error = "";
 
 session_start();
 
-
+$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
     echo "Du har ikke tilgang til faseoppretting";
+    header("Location: index.php?error=manglendeRettighet&side=fasopp");
     return;
 }
 
 if(!isset($_REQUEST['prosjektId'])){
-    header("Location: faseadministrering.php");
+    header("Location: prosjektadministrering.php?error=ingenProsjekt");
     return;
 }
+
 $prosjektId = $_REQUEST['prosjektId'];
+if ($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
+    header("Location: prosjektdetaljer.php?error=ugyldigFase&prosjektId=" . $prosjektId);
+    return;
+}
 
 if(isset($_POST['lagre'])){
+    $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
+    if($_POST['faseStartdato'] < $prosjekt->getStartDato() || $_POST['faseSluttdato'] > $prosjekt->getSluttDato()) {
+        header("Location: faseoppretting.php?error=datoUtenforProsjekt&prosjektId=" . $prosjektId . "&prosjektDatoer=true");
+        return;
+    } if ($_POST['faseStartdato'] > $_POST['faseSluttdato']) {
+        header("Location: faseoppretting.php?error=sluttEtterStart&prosjektId=" . $prosjektId);
+        return;
+    }
     $nyFase = new Fase();
     $nyFase->setProsjektId($prosjektId);
     $nyFase->setNavn($_POST['faseNavn']);
@@ -43,13 +60,13 @@ if(isset($_POST['lagre'])){
         $nyFase->setId($_POST['faseId']);
         $FaseReg->redigerFase($nyFase);
         //header("Location: faseadministrering.php");
-        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
     else{
         $FaseReg->lagFase($nyFase);
         //header("Location: faseadministrering.php");
-        header("Location: prosjektdetaljer.php?prosjekt=" . $prosjektId);
+        header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
     }
 }
 else{
@@ -68,5 +85,12 @@ else{
     }
 }
 
-echo $twig->render('faseoppretting.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
+if (isset($_GET['prosjektDatoer'])) {
+    $prosjektStartSlutt = " " . $prosjekt->getStartDato() . " og " . $prosjekt->getSluttDato();
+}
+
+echo $twig->render('faseoppretting.html', array('aktivert'=>$aktivert,'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error, 'prosjektStartSlutt'=>$prosjektStartSlutt));
 ?>

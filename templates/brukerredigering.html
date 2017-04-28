@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
@@ -13,7 +14,7 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Rediger bruker</h1>
             <form method="post" action="brukerredigering.php" class="col-md-4">
-            <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
+            <input type="hidden" name="brukerId" value="{{ brukerRed.Id }}">
 
             {% if error == "brukerHoyereNiva" %}
                 <div class="alert alert-danger" role="alert">
@@ -41,40 +42,40 @@
                 </div>
             {% endif %}
 
-            {% if brukerTilgang.isBrukeradmin() %}
+            {% if brukerTilgang.isBrukeradmin %}
             <div class="form-group ">
                 <label for="navn">Navn:</label>
-                <input type="text" class="form-control" id="navn" name="navn" value="{{ bruker.getNavn() }}">
+                <input type="text" class="form-control" id="navn" name="navn" value="{{ brukerRed.Navn }}">
             </div>
             <div class="form-group ">
                 <label for="type">Brukertype:</label>
                 <select name="type" class="form-control" id="type">
                     {% for type in typer %}
-                    <option value="{{ type.getId() }}" {% if bruker.getBrukertype() == type.getId() %} selected {% endif %}>{{ type.getNavn() }}</option>
+                    <option value="{{ type.Id }}" {% if brukerRed.Brukertype == type.Id %} selected {% endif %}>{{ type.Navn }}</option>
                     {% endfor %}
                 </select>
             </div>
             {% else %}
             <div class="form-group ">
                 <label for="navn2">Navn:</label>
-                <input type="text" class="form-control" id="navn2" name="navn" disabled value="{{ bruker.getNavn() }}">
+                <input type="text" class="form-control" id="navn2" name="navn" disabled value="{{ brukerRed.Navn }}">
             </div>
             <div class="form-group ">
                 <label for="type2">Brukertype:</label>
-                <input type="text" class="form-control" id="type2" name="type" disabled value="{{ userReg.getBrukertype(bruker.getBrukertype()).getNavn() }}">
+                <input type="text" class="form-control" id="type2" name="type" disabled value="{{ brukerReg.Brukertype(brukerRed.Brukertype).Navn }}">
             </div>
             {% endif %}
             <div class="form-group ">
                 <label for="epost">Epost:</label>
-                <input type="text" class="form-control" id="epost" name="epost" value="{{ bruker.getEpost() }}">
+                <input type="text" class="form-control" id="epost" name="epost" value="{{ brukerRed.Epost }}">
             </div>
             <div class="form-group ">
                 <label for="telefon">Telefon:</label>
-                <input type="text" class="form-control" id="telefon" name="telefon" value="{{ bruker.getTelefon() }}">
+                <input type="text" class="form-control" id="telefon" name="telefon" value="{{ brukerRed.Telefon }}">
             </div>
             <div class="form-group ">
                 <input type="submit" name="action" value="Lagre">
-                {% if brukerTilgang.isBrukeradmin() %}
+                {% if brukerTilgang.isBrukeradmin %}
                 <a href="brukeradministrering.php">Avbryt</a>
                 {% else %}
                 <a href="index.php">Avbryt</a>
@@ -83,7 +84,7 @@
         </form>
 
         <form method="post" action="brukerredigering.php" class="col-md-4">
-            <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
+            <input type="hidden" name="brukerId" value="{{ brukerRed.Id }}">
             <div class="form-group ">
                 <label for="nyttPassord">Nytt passord:</label>
                 <input type="password" class="form-control" id="nyttPassord" name="nytt_pass">
@@ -94,7 +95,7 @@
             </div>
             <div class="form-group ">
                 <input type="submit" name="action" value="Bekreft">
-                {% if brukerTilgang.isBrukeradmin() %}
+                {% if brukerTilgang.isBrukeradmin %}
                 <a href="brukeradministrering.php">Avbryt</a>
                 {% else %}
                 <a href="index.php">Avbryt</a>
@@ -109,7 +110,7 @@
             {% endif %}
         </form>
         <form method="post" action="brukerredigering.php" class="col-md-4">
-            <input type="hidden" name="brukerId" value="{{ bruker.getId() }}">
+            <input type="hidden" name="brukerId" value="{{ brukerRed.Id }}">
             <h4>Deaktiver bruker</h4>
             <div class="form-group ">
                 <input type="submit" name="deaktiver" value="Deaktiver bruker">
@@ -117,4 +118,6 @@
         </form>
 
     </div>
+    {% include 'footer.html' %}
 </body>
+</html>

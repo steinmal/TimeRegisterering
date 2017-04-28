@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 
 <body>
@@ -21,14 +22,20 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til å godkjenne/avvise denne timeregistreringen
         </div>
+    {% elseif error == "deaktivertTimereg" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan ikke godkjenne/avvise en deaktivert timeregistrering
+        </div>
     {% endif %}
 
     <!--Teamleders team-->
     {% for team in teams %}
-        <h2>{{ team.getNavn() }}</h2>
+        <h2>{{ team.Navn }}</h2>
         <p>
             <form method="get">
-                <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente timer
+                <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente og avviste timer
             </form>
         </p>
             
@@ -41,33 +48,64 @@
                     <th>Til</th>
                     <th>Pause</th>
                     <th>Oppgave</th>
-                    <th>Status</th>
+                    <th>Status</th> 
                     <th>Endre status</th>
                 </tr>
                     
-                <!--Alle timeoppføringer på teamet-->
+                <!--Alle aktive (godkjent, venter godkjenning, avvist og gjenopprettede) timeoppføringer på teamet-->
                 {% for timereg in timeregistreringer %}
-                    {% if timereg.getGodkjent == (visGodkjent == "on") %}
-                    <tr>
-                        <td>{{ userReg.hentBruker(timereg.getBrukerId()).getNavn() }}</td>
-                        <td>{{ timereg.getDato() }}</td>
-                        <td>{{ timereg.getFra() }}</td>
-                        <td>{{ timereg.getTil() }}</td>
-                        <td>{{ timereg.getPause() }} min</td>
-                        <td>{{ (oppgaveReg.hentOppgave(timereg.getOppgaveId())).getNavn() }}</td>
-                        <td>{{ timereg.getGodkjentTekst() }}</td>
-                        
-                        {% if timereg.getGodkjent() == false %}
-                        <td><a href="?action=godkjenn&timeregId={{ timereg.getId() }}">Godkjenn</a></td>
-                        {% else %}
-                        <td><a href="?action=avvis&timeregId={{ timereg.getId() }}">Avvis</a></td>
-                        {% endif %}
-                    </tr>
+                    {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
+                       {% if timereg.Tilstand == 0 or timereg.Tilstand == 2 %}
+                            <tr>
+                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }}</td>
+                                <td>{{ timereg.Til }}</td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
+                                
+                                
+                                {% if timereg.Tilstand == 0 %}
+                                <td><a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}&visGodkjent=on">
+                                        <button class="btn btn-danger">Avvis</button>
+                                    </a></td>
+                                {% elseif timereg.Tilstand == 2 %}
+                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}&visGodkjent=on">
+                                        <button class="btn btn-success">Godkjenn</button>
+                                    </a></td>
+                                {% endif %}
+                            </tr>
+                       {% endif %}
+                    {% else %}  <!-- Viser de som kan godkjennes eller avvises, venter godkjenning (1) og gjenopprettet (4) --> 
+                       {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
+                            <tr>
+                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }}</td>
+                                <td>{{ timereg.Til }}</td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
+                                
+                                
+                                <td>
+                                    <a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}">
+                                        <button class="btn btn-success">Godkjenn</button>
+                                    </a>
+                                    <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}">
+                                        <button class="btn btn-danger">Avvis</button>
+                                    </a></td>
+                            </tr>
+                       {% endif %}
+                    
                     {% endif %}
+                    
                 {% endfor %}
             </table>
-        {% endfor %}
         </form>
+    {% endfor %}
     </div>
+    {% include 'footer.html' %}
 </body>
 </html>

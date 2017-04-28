@@ -7,9 +7,11 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
+$TeamReg = new TeamRegister($db);
 $error = "";
 $visNye = "";
+$aktivert  = "";
 
 session_start();
 
@@ -17,8 +19,9 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$aktivert = $_SESSION['bruker']->isAktivert();
 
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true){
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=bradm");
     return;
 }
@@ -26,10 +29,10 @@ if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
     if(!isset($_GET['brukerId'])){
         $error = "noSelection";
     } else {
-        if($UserReg->hentBruker($_GET['brukerId'])->isAktivert()){
+        if($BrukerReg->hentBruker($_GET['brukerId'])->isAktivert()){
             $error = "erAktivert";
         } else {
-            $UserReg->aktiverBruker($_GET['brukerId']);
+            $BrukerReg->aktiverBruker($_GET['brukerId']);
             $error = "aktivert";
         }
     }
@@ -43,7 +46,7 @@ if(isset($_GET['visNye'])){
     $visNye = 'on';
 }
 
-$brukere = $UserReg->hentAlleBrukere();
+$brukere = $BrukerReg->hentAlleBrukere();
 $venterGodkjenning = 0;
 foreach($brukere as $bruker){
     if(!$bruker->isAktivert()){
@@ -51,6 +54,6 @@ foreach($brukere as $bruker){
     }
 }
 
-echo $twig->render('brukeradministrering.html', array('innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$UserReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukeradministrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'],'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

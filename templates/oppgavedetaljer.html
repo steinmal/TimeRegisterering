@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
 <div class="container">
     {% include 'header.html' %}
-    <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjekt={{ fasereg.hentFase(oppgave.getFaseId()).getProsjektId }}">Prosjektdetaljer</a>
-    <h1>Oppgavedetaljer for {{ oppgave.getNavn }}</h1>
+    <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjektId={{ fasereg.hentFase(oppgave.FaseId).ProsjektId }}">Prosjektdetaljer</a>
+    <h1>Oppgavedetaljer for {{ oppgave.Navn }}</h1>
 
     <div class="col-lg-4">
 
@@ -24,15 +25,15 @@
                 </tr>
                 {% for forslag in estimatliste %}
                 <tr>
-                    <td>{{ forslag.getEstimat() }}</td>
-                    <td>{{ userReg.hentBruker(forslag.getBrukerId()).getNavn() }}</td>
+                    <td>{{ forslag.Estimat }}</td>
+                    <td>{{ brukerReg.hentBruker(forslag.BrukerId).Navn }}</td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&accept={{ forslag.getId() }}&estimat={{ forslag.getEstimat() }}">
+                        <a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}&accept={{ forslag.Id }}&estimat={{ forslag.Estimat }}">
                             <button class="btn btn-success">Godkjenn</button>
                         </a>
                     </td>
                     <td>
-                        <a href="oppgavedetaljer.php?oppgave={{ oppgave.getId() }}&reject={{ forslag.getId() }}">
+                        <a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}&reject={{ forslag.Id }}">
                             <button class="btn btn-danger">Forkast</button>
                         </a></td>
                 </tr>
@@ -41,4 +42,6 @@
 
     </div>
 </div>
+{% include 'footer.html' %}
 </body>
+</html>

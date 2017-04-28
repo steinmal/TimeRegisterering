@@ -10,9 +10,10 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $FaseReg = new FaseRegister($db);
-$UserReg = new UserRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $TeamReg = new TeamRegister($db);
 $error = "";
+$aktivert = "";
 
 
 session_start();
@@ -22,16 +23,16 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
     return;
 }
 
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true){
+if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
     //echo "Du har ikke tilgang til prosjektadministrering";
     return;
 }
 
 $prosjektId = 0;
-if (isset($_REQUEST['prosjekt']))
-    $prosjektId = $_REQUEST['prosjekt'];
-    var_dump($prosjektId);
+if (isset($_REQUEST['prosjektId']))
+    $prosjektId = $_REQUEST['prosjektId'];
+   // var_dump($prosjektId);
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
     header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
@@ -44,6 +45,9 @@ if (isset($_GET['error'])) {
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 
-echo $twig->render('prosjektdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+$aktivert = $_SESSION['bruker']->isAktivert();
+
+
+echo $twig->render('prosjektdetaljer.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 
 ?>

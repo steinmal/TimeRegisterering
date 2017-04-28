@@ -30,9 +30,9 @@ class RapportProsjekt {
 
         $this->oppgaver = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
         
-        echo "<font color=red>Nivå: " . $this->delNivaa . "</font>";
+       // echo "<font color=red>Nivå: " . $this->delNivaa . "</font>";
         if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
+            //var_dump($grunnRapport->getTid());
         }
         $this->tid = DateTime::createFromFormat('!', "");
         $this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
@@ -41,7 +41,7 @@ class RapportProsjekt {
             $this->tid->add($reg->getHourAsDateInterval());
         }
         if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
+            //var_dump($grunnRapport->getTid());
         }
         $this->totaltid = $this->tid;
 
@@ -58,7 +58,7 @@ class RapportProsjekt {
             }
         }
         if($grunnRapport != null){
-            var_dump($grunnRapport->getTid());
+            //var_dump($grunnRapport->getTid());
         }
         //var_dump($this);
     }
