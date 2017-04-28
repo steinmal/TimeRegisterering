@@ -40,6 +40,43 @@
     {% endif %}
         
         
+    <h1>Prosjekthierarki</h1>
+    <table class="table table-striped">
+        <tr>
+            <th class="col-lg-2">Prosjekt</th>
+            <th class="col-lg-2">Prosjektleder</th>
+            <th class="col-lg-1">Team</th>
+            <th class="col-lg-2">Startdato</th>
+            <th class="col-lg-2">Sluttdato</th>
+            <th class="col-lg-2">Beskrivelse</th>
+            <th class="col-lg-1">Status</th>
+        </tr>
+        {% if parentProsjekt and parentProsjekt.Id > 1 %}
+            <tr>
+                <td><a href="prosjektdetaljer.php?prosjektId={{ parentProsjekt.Id }}">[{{ parentProsjekt.Navn }}]</a></td>
+                <td>{{ brukerReg.hentBruker(parentProsjekt.Leder).Navn}}</td>
+                <td>{{ TeamReg.hentTeam(parentProsjekt.Team).Navn }}</td>
+                <td>{{ parentProsjekt.StartDato }}</td>
+                <td>{{ parentProsjekt.SluttDato }}</td>
+                <td>{{ parentProsjekt.Beskrivelse }}</td>
+                <td>{{ parentProsjekt.Status }}</td>
+            </tr>
+        {% endif %}
+
+        {% for prosjektoversikt in prosjektOversiktRoot %}
+            <tr>
+                <td><a href="prosjektdetaljer.php?prosjektId={{ prosjektoversikt.Prosjekt.Id }}">{{ prosjektoversikt.NavnMedInnrykk|raw }}</a></td>
+                <td>{{ brukerReg.hentBruker(prosjektoversikt.Prosjekt.Leder).Navn}}</td>
+                <td>{{ TeamReg.hentTeam(prosjektoversikt.Prosjekt.Team).Navn }}</td>
+                <td>{{ prosjektoversikt.Prosjekt.StartDato }}</td>
+                <td>{{ prosjektoversikt.Prosjekt.SluttDato }}</td>
+                <td>{{ prosjektoversikt.Prosjekt.Beskrivelse }}</td>
+                <td>{{ prosjektoversikt.Prosjekt.Status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
     <h1>Faser</h1>
     <table class="table table-striped">
         <tr>

@@ -29,6 +29,9 @@
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timeoversikt</h1>
     <form method=get>
+        <input type="checkbox" name="visVentende" onClick="submit()" {% if visVentende %}checked{% endif %}/>Vis timeregistreringer som venter godkjenning
+    </form>
+    <form method=get>
         <input type="checkbox" name="visDeaktiverte" onClick="submit()" {% if visDeaktiverte %}checked{% endif %}/>Vis deaktiverte og avviste timeregistreringer
     </form>
     <!-- // Twig har switch-syntax -->
@@ -56,6 +59,12 @@
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Korrigeringen er lagret i en ny timeregistrering som venter godkjenning. Den ordinære timeregistreringen er deaktivert.
+        </div>
+        {% elseif error == "avvist" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            En avvist timeregistrering kan ikke gjenopprettes
         </div>
         {% elseif error == "ingenValgt" %}
         <div class="alert alert-info" role="alert">
@@ -173,8 +182,23 @@ $(function() {
                                 <td>{{ timereg.Kommentar }}</td>
                             </tr>
                         {% endif %}
-                    {% else %} <!-- Viser godkjente, venter godkjenning og gjenopprettede timereg -->
-                        {% if timereg.Tilstand != 3 and timereg.Tilstand != 2 %}
+                    {% elseif visVentende %} <!-- viser gjenopprettede og venter godkjenning-->
+                        {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
+                            <tr>
+                                <td><input type=radio name="timeregId" value="{{ timereg.Id }}" /></td>
+                                <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
+                                <td>{{ timereg.Fra }} </td>
+                                <td>{{ timereg.Til }} </td>
+                                <td>{{ timereg.Pause }} min</td>
+                                <td>{{ timereg.HourString }} </td>
+                                <td>{{ oppgavereg.hentOppgave(timereg.OppgaveId).Navn }}</td>
+                                <td>{{ oppgavereg.OppgavetypeTekst(oppgavereg.hentOppgave(timereg.OppgaveId).Type) }}</td>
+                                <td>{{ timereg.TilstandTekst }}</td>
+                                <td>{{ timereg.Kommentar }}</td>
+                            </tr>
+                        {% endif %}
+                    {% else %} <!-- Viser godkjente -->
+                        {% if timereg.Tilstand == 0 %}
                             <tr>
                                 <td><input type=radio name="timeregId" value="{{ timereg.Id }}" /></td>
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>

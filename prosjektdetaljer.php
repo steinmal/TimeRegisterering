@@ -44,10 +44,17 @@ if (isset($_GET['error'])) {
 }
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
+$TimeregReg = new TimeregistreringRegister($db);
+
+$prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg);
+$parentProsjekt = null;
+if ($prosjekt->getParent()) {
+    $parentProsjekt = $ProsjektReg->hentProsjekt($prosjekt->getParent());
+}
 
 $aktivert = $_SESSION['bruker']->isAktivert();
 
 
-echo $twig->render('prosjektdetaljer.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+echo $twig->render('prosjektdetaljer.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error, "prosjektOversiktRoot"=>$prosjektOversiktRoot->getOversiktListe(), 'parentProsjekt'=>$parentProsjekt));
 
 ?>
