@@ -65,7 +65,13 @@
 
         {% for prosjektoversikt in prosjektOversiktRoot %}
             <tr>
-                <td><a href="prosjektdetaljer.php?prosjektId={{ prosjektoversikt.Prosjekt.Id }}">{{ prosjektoversikt.NavnMedInnrykk|raw }}</a></td>
+                <td>
+                    {% if prosjektoversikt.Prosjekt.Id != prosjekt.Id %}
+                    <a href="prosjektdetaljer.php?prosjektId={{ prosjektoversikt.Prosjekt.Id }}">{{ prosjektoversikt.NavnMedInnrykk|raw }}</a>
+                    {% else %}
+                    {{ prosjektoversikt.NavnMedInnrykk|raw }}
+                    {% endif %}
+                </td>
                 <td>{{ brukerReg.hentBruker(prosjektoversikt.Prosjekt.Leder).Navn}}</td>
                 <td>{{ TeamReg.hentTeam(prosjektoversikt.Prosjekt.Team).Navn }}</td>
                 <td>{{ prosjektoversikt.Prosjekt.StartDato }}</td>
