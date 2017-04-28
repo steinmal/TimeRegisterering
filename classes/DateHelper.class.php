@@ -55,6 +55,16 @@ class DateHelper{
     public function getTimer(){
         return DateHelper::intervallTilTimer($this->getInterval());
     }
+    
+    public static function dateCompare($date1, $date2){
+        $dt1 = (new DateTime($date1))->getTimestamp();
+        $dt2 = (new DateTime($date2))->getTimestamp();
+        return $dt1 < $dt2 ? 1 : ($dt1 > $dt2 ? -1 : 0);
+    }
+    
+    /*public static function dateInside(DateTime $startOuter, DateTime $stopOuter, DateTime $startInner, DateTime $stopInner){
+        if()
+    }*/
 }
 
 ?>

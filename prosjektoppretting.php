@@ -37,8 +37,8 @@ $teamListe = $TeamReg->hentAlleTeam();
 $brukParent = true;
 $valgtProsjekt = new Prosjekt();
 if(!isset($_REQUEST['action'])){
-    //header("Location: prosjektadministrering.php?error=ingenAction");
-    echo "Ingen Action";
+    header("Location: prosjektadministrering.php?error=ingenAction");
+    //echo "Ingen Action";
     return;
 }
 $action =  $_REQUEST['action'];
@@ -52,6 +52,7 @@ if(isset($_POST['opprettProsjekt'])){
             return;
         }
     }
+    $inputOk = true;
     
     $nyttProsjekt->setNavn($_POST['prosjektNavn']);
     $nyttProsjekt->setParent($_POST['foreldreProsjekt']);
@@ -61,59 +62,86 @@ if(isset($_POST['opprettProsjekt'])){
     
     $start = $_REQUEST['startDato'];
     $slutt = $_REQUEST['sluttDato'];
-    $idString = isset($_POST['prosjektId']) ? ("&prosjektId=" . $_POST['prosjektId']) : "";
+    if($nyttProsjekt->getParent() != 1){
+        $parent = $ProsjektReg->hentProsjekt($nyttProsjekt->getParent());
+        if(DateHelper::dateCompare($parent->getStartDato(), $start) < 1){
+            $inputOk = false;
+            $error = "ugyldigStart";
+        }
+        if(DateHelper::dateCompare($slutt, $parent->getSluttDato()) < 1){
+            $inputOk = false;
+            $error = "ugyldigStopp";
+        }
+    }
+    //$idString = isset($_POST['prosjektId']) ? ("&prosjektId=" . $_POST['prosjektId']) : "";
     if($start > $slutt){
-        header("Location: prosjektoppretting.php?error=stoppEtterStart&action=" . $action . $idString);
-        // REFACTOR: Ikke bruk header for reload, men sett $error og fiks if-else-logikk slik at skjemaet vises på nytt men med feilmelding
-        return;
+        $inputOk = false;
+        $error = "stoppEtterStart";
     }
     $nyttProsjekt->setStartDato($start);
     $nyttProsjekt->setSluttDato($slutt);
-    if(!isset($_POST['prosjektId'])){
-        $ProsjektReg->lagProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php?error=lagret");
-        return;
-    }
-    else{
+    
+    if($inputOk){
+        if(!isset($_POST['prosjektId'])){
+            $ProsjektReg->lagProsjekt($nyttProsjekt);
+            header("Location: prosjektadministrering.php?error=lagret");
+            return;
+        }
+        else{
+            $nyttProsjekt->setId($_POST['prosjektId']);
+            $ProsjektReg->redigerProsjekt($nyttProsjekt);
+            header("Location: prosjektadministrering.php?error=redigert");
+            return;
+        }
+    } elseif (isset($_POST['prosjektId'])) {
         $nyttProsjekt->setId($_POST['prosjektId']);
-        $ProsjektReg->redigerProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php?error=redigert");
-        return;
+    }
+} else {
+    switch($action){
+        case 'Opprett grunnprosjekt':
+            $brukParent = false;
+            break;
+        case 'Rediger':
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
+            break;
+        case 'Opprett underprosjekt':
+            $parent = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+            $valgtProsjekt->setParent($parent->getId());
+            $valgtProsjekt->setStartDato($parent->getStartDato());
+            $valgtProsjekt->setSluttDato($parent->getSluttDato());
+            //$valgtProsjekt->setId(-1);
+            //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getLeder());
+            //$valgtProsjekt->setProsjektId();
+            break;
+        case 'Arkiver':
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $error = $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            header("Location: prosjektadministrering.php?error=$error");
+            return;
+        default:
+            break;
     }
 }
-switch($_GET['action']){
-    case 'Opprett grunnprosjekt':
-        $brukParent = false;
-        $valgtProsjekt->setId(-1); // verdier < 0 tas ikke med videre
-        break;
-    case 'Rediger':
-        if(!isset($_GET['prosjektId'])){
-            header("Location: prosjektadministrering.php?error=noRadio");
-            return;
-        }
-        $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
-        break;
-    case 'Opprett underprosjekt':
-        $valgtProsjekt->setParent($_GET['prosjektId']);
-        $valgtProsjekt->setId(-1);
-        //$valgtProsjekt->setProsjektLeder($prosjektReg->hentProsjekt($_GET['prosjektId']).getLeder());
-        //$valgtProsjekt->setProsjektId();
-        break;
-    case 'Arkiver':
-        if(!isset($_GET['prosjektId'])){
-            header("Location: prosjektadministrering.php?error=noRadio");
-            return;
-        }
-        $error = $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
-        header("Location: prosjektadministrering.php?error=$error");
-        return;
-    default:
-        break;
+
+if(isset($nyttProsjekt)){
+    $valgtProsjekt = $nyttProsjekt;
 }
 
 if(isset($_GET['error'])) {
     $error = $_GET['error'];
 }
 
-echo $twig->render('prosjektoppretting.html', array('aktivert'=>$aktivert, 'error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+$twigs = array('aktivert'=>$aktivert, 'error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'brukParent'=>$brukParent, 'valgtProsjekt'=>$valgtProsjekt, 'prosjekter'=>$prosjektliste, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']);
+if(isset($parent)){
+    $twigs['parent'] = $parent;
+}
+
+echo $twig->render('prosjektoppretting.html', $twigs);
 ?>

@@ -17,11 +17,11 @@
                 $bruker = $stmt->fetchObject('Bruker');
                 
                 if($bruker != null && password_verify($passord, $bruker->getPassord())) {
-                        $_SESSION['innlogget'] = true;
-                        $_SESSION['bruker'] = $bruker;
-                        $_SESSION['brukerTilgang'] = $this->getBrukertype($bruker->getBrukertype());
-                        return true;
-                    }
+                    $_SESSION['innlogget'] = true;
+                    $_SESSION['bruker'] = $bruker;
+                    $_SESSION['brukerTilgang'] = $this->getBrukertype($bruker->getBrukertype());
+                    return true;
+                }
                 $_POST['fail'] = true;
                 return false;
             } catch (Exception $e) {
