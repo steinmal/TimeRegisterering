@@ -174,7 +174,29 @@
             } catch (Exception $e) {
                 $this->Feil($e->getMessage());
             }
-            return $timeregistreringer;        }
+            return $timeregistreringer;
+        }
+        
+        public function hentTimeregistreringerFraTeam($team_id){
+          $timeregistreringer = array();
+            try {
+                $stmt = $this->db->prepare("
+                        SELECT * FROM timeregistrering WHERE oppgave_id IN (
+                        SELECT `oppgave_id` FROM `oppgave` WHERE `oppgave`.`fase_id` IN (
+                        SELECT `fase_id` FROM `fase` WHERE `fase`.`prosjekt_id` IN (
+                        SELECT `prosjekt_id` FROM `prosjekt` WHERE `prosjekt`.`team_id`=:tId)))
+                        ");
+                $stmt->bindParam(':tId', $team_id, PDO::PARAM_INT);
+                $stmt->execute();
+                    
+                while ($timereg = $stmt->fetchObject('Timeregistrering')) {
+                    $timeregistreringer[] = $timereg;
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $timeregistreringer;
+        }
         
         public function hentAktiveTimeregistreringer($bruker_id){       // endring: henter alle som ikke er deaktivert (dvs godkjente, venter godkjenning, avviste og gjenopprettede)
             $registreringer = array();

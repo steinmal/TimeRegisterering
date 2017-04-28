@@ -50,9 +50,9 @@
                     <th>Status</th> 
                     <th>Endre status</th>
                 </tr>
-                    
+                
                 <!--Alle aktive (godkjent, venter godkjenning, avvist og gjenopprettede) timeoppføringer på teamet-->
-                {% for timereg in timeregistreringer %}
+                {% for timereg in timeReg.hentTimeregistreringerFraTeam(team.Id) %}
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.Tilstand == 0 or timereg.Tilstand == 2 %}
                             <tr>
