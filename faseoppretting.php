@@ -25,7 +25,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
-    echo "Du har ikke tilgang til faseoppretting";
+    //echo "Du har ikke tilgang til faseoppretting";
     header("Location: index.php?error=manglendeRettighet&side=fasopp");
     return;
 }

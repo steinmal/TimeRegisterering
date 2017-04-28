@@ -109,8 +109,9 @@ else{
         $grunnProsjekter = array_merge($grunnProsjekter, $ProsjektReg->hentProsjekterFraTeam($i));
     }
     foreach ($grunnProsjekter as $p) {
-        $rProsjekt = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeReg, $p);
-        $alleProsjekter = array_merge($alleProsjekter, $rProsjekt->getProsjektOgUnderProsjekt());
+        $alleProsjekter[] = $p;
+        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg);
+        $alleProsjekter = array_merge($alleProsjekter, $prosjektOversikt->getAlleUnderProsjekt());
     }
 
     $prosjektListe = array_unique($alleProsjekter);

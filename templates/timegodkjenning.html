@@ -15,7 +15,11 @@
 
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timegodkjenning</h1>
-    
+    <p>
+        <form method="get">
+            <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente og avviste timer
+        </form>
+    </p>    
     {% if error == "ugyldigTimereg" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -33,12 +37,7 @@
     <!--Teamleders team-->
     {% for team in teams %}
         <h2>{{ team.Navn }}</h2>
-        <p>
-            <form method="get">
-                <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente og avviste timer
-            </form>
-        </p>
-            
+
         <form action=timegodkjenning.php method=GET>
             <table class="table table-striped">
                 <tr>
@@ -65,14 +64,13 @@
                                 <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
                                 <td>{{ timereg.TilstandTekst }}</td>
                                 
-                                
                                 {% if timereg.Tilstand == 0 %}
-                                <td><a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}&visGodkjent=on">
-                                        <button class="btn btn-danger">Avvis</button>
+                                <td><a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}&visGodkjent=on" class="btn btn-danger">
+                                        Avvis
                                     </a></td>
                                 {% elseif timereg.Tilstand == 2 %}
-                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}&visGodkjent=on">
-                                        <button class="btn btn-success">Godkjenn</button>
+                                <td><a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}&visGodkjent=on"  class="btn btn-success">
+                                    Godkjenn
                                     </a></td>
                                 {% endif %}
                             </tr>
@@ -90,11 +88,11 @@
                                 
                                 
                                 <td>
-                                    <a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}">
-                                        <button class="btn btn-success">Godkjenn</button>
+                                    <a href="timegodkjenning.php?action=godkjenn&timeregId={{ timereg.Id }}" class="btn btn-success">
+                                        Godkjenn
                                     </a>
-                                    <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}">
-                                        <button class="btn btn-danger">Avvis</button>
+                                    <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}" class="btn btn-danger">
+                                        Avvis
                                     </a></td>
                             </tr>
                        {% endif %}

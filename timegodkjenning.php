@@ -48,12 +48,14 @@ if(isset($_GET['action'])){
         $TimeReg->godkjennTimeregistrering($_GET['timeregId']);
     }
     else if($_GET['action'] == "avvis") {
+        echo "Avvis timereg " . $_GET['timeregId'];
         $TimeReg->avvisTimeregistrering($_GET['timeregId']);
     }
-    header('location: timegodkjenning.php');
+    //header('location: timegodkjenning.php');
 } else {
+    //Koden skal kjøre selv om ingen action er etterspurt
     //header('Location: timegodkjenning.php?error=noAction');
-    echo "ingen action";
+    //echo "ingen action";
     //return;
 }
 
@@ -84,17 +86,16 @@ if (isset($_GET['error'])) {
 }
 
 
-echo $twig->render(
-    'timegodkjenning.html', 
-    array('innlogget'=>$_SESSION['innlogget'], 
+echo $twig->render('timegodkjenning.html', array(
+    'innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
     'brukerReg'=>$BrukerReg,
     'TeamReg'=>$TeamReg,
-    'timeReg'=>$TimeReg, 
-    'oppgaveReg'=>$OppgaveReg, 
+    'timeReg'=>$TimeReg,
+    'oppgaveReg'=>$OppgaveReg,
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
-    'visGodkjent'=>$visGodkjent, 
+    'visGodkjent'=>$visGodkjent,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
     'error'=>$error,
     'aktivert'=>$aktivert));
