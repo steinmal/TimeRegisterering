@@ -138,12 +138,22 @@
             $timeregistreringer = array();
             try {
                 if ($datefrom && $dateto) {
-                    $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id AND (timereg_dato BETWEEN :datefrom AND :dateto)");
+                    $stmt = $this->db->prepare("SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
+                        . " FROM timeregistrering t"
+                        . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
+                        . " INNER JOIN oppgavetype ot on ot.oppgavetype_id=o.oppgavetype_id"
+                        . " INNER JOIN bruker b on b.bruker_id=t.bruker_id"
+                        . " WHERE t.bruker_id = :id AND (t.timereg_dato BETWEEN :datefrom AND :dateto)");
                     $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
                     $stmt->bindParam(':datefrom', $datefrom, PDO::PARAM_STR);
                     $stmt->bindParam(':dateto', $dateto, PDO::PARAM_STR);
                 } else {
-                    $stmt = $this->db->prepare("SELECT * FROM timeregistrering WHERE bruker_id = :id");
+                    $stmt = $this->db->prepare("SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
+                        . " FROM timeregistrering t"
+                        . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
+                        . " INNER JOIN oppgavetype ot on ot.oppgavetype_id=o.oppgavetype_id"
+                        . " INNER JOIN bruker b on b.bruker_id=t.bruker_id"
+                        . " WHERE t.bruker_id = :id");
                     $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
                 }
                 $stmt->execute();

@@ -16,6 +16,12 @@
         //private $timereg_godkjent;
         private $timereg_kommentar;
         
+        //Fra andre tabeller:
+        private $oppgave_navn;
+        private $oppgavetype_navn;
+        private $bruker_navn;
+
+        
         function __construct() {
             
         }
@@ -31,6 +37,10 @@
         public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
         public function getTilstand() { return $this->timereg_tilstand; }   // 0 = godkjent, 1 = venter godkj., 2 = avvist, 3 = deaktivert, 4 = gjenopprettet
         public function isGodkjent() { return $this->timereg_tilstand == 0; }
+        public function getOppgaveNavn() { return $this->oppgave_navn; }
+        public function getOppgavetypeNavn() { return $this->oppgavetype_navn; }
+        public function getBrukerNavn() { return $this->bruker_navn; }
+
 
         // bool-metoder burde hete is... istedet for get...
         //public function getAktiv() { return $this->timereg_aktiv; } //byttes ut med getTilstand

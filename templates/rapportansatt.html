@@ -17,13 +17,13 @@
         {% for timereg in timeregistreringer %}
         {% if timereg.isGodkjent() %}
         <tr>
-            <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+            <td>{{ timereg.BrukerNavn }}</td>
             <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
             <td>{{ timereg.Fra }}</td>
             <td>{{ timereg.Til }}</td>
             <td>{{ timereg.HourString }}</td>
-            <td>{{ oppgavereg.hentOppgave(timereg.OppgaveId).Navn }}</td>
-            <td>{{ oppgavereg.OppgavetypeTekst(oppgavereg.hentOppgave(timereg.OppgaveId).Type) }}</td>
+            <td>{{ timereg.OppgaveNavn }}</td>
+            <td>{{ timereg.OppgavetypeNavn }}</td>
 
         </tr>
         {% endif %}

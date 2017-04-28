@@ -56,12 +56,12 @@
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.Tilstand == 0 or timereg.Tilstand == 2 %}
                             <tr>
-                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.BrukerNavn }}</td>
                                 <td>{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
                                 <td>{{ timereg.Til }}</td>
                                 <td>{{ timereg.Pause }} min</td>
-                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.OppgaveNavn }}</td>
                                 <td>{{ timereg.TilstandTekst }}</td>
                                 
                                 {% if timereg.Tilstand == 0 %}
@@ -78,12 +78,12 @@
                     {% else %}  <!-- Viser de som kan godkjennes eller avvises, venter godkjenning (1) og gjenopprettet (4) --> 
                        {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
                             <tr>
-                                <td>{{ brukerReg.hentBruker(timereg.BrukerId).Navn }}</td>
+                                <td>{{ timereg.BrukerNavn }}</td>
                                 <td>{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
                                 <td>{{ timereg.Til }}</td>
                                 <td>{{ timereg.Pause }} min</td>
-                                <td>{{ (oppgaveReg.hentOppgave(timereg.OppgaveId)).Navn }}</td>
+                                <td>{{ timereg.OppgaveNavn }}</td>
                                 <td>{{ timereg.TilstandTekst }}</td>
                                 
                                 
