@@ -111,6 +111,21 @@
             }
             return $brukere;
         }
+
+        public function hentAlleTeamledere($BrukerReg) {
+            $brukere = array();
+            try {
+                $stmt = $this->db->prepare("SELECT * FROM bruker WHERE brukertype_id=3");
+                $stmt->execute();
+
+                while($bruker = $stmt->fetch()) {
+                    $brukere[] = $BrukerReg->hentBruker($bruker['bruker_id']);
+                }
+            } catch (Exception $e) {
+                $this->Feil($e->getMessage());
+            }
+            return $brukere;
+        }
         
         public function getTeamMedlemmerId($team_id) {
             $brukerIds = array();
