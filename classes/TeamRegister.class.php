@@ -152,7 +152,7 @@
                 $stmt->execute();
 
                 $num = $stmt->fetchColumn();
-                return $num + 1; //Teamleder er ikke med i teammedlemskaptabell
+                return $num;
             }
             catch (Exception $e) {
                 $this->Feil($e->getMessage());

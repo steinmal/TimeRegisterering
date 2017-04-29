@@ -29,7 +29,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 $aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
+if(!isset($_SESSION['brukerTilgang']) || ($_SESSION['brukerTilgang']->isProsjektadmin() != true && !isset($_GET['teamId'])) || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=teamadm");
     return;
 }

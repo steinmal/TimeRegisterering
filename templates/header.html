@@ -27,7 +27,9 @@
                         {% if TeamReg.harTeamLederEtTeam(bruker.Id)%}
                         <li><a href="timegodkjenning.php">Timegodkjenning</a></li>
                         {% endif %}
+                        {% if brukerTilgang.isProsjektadmin %}
                         <li><a href="teamadministrering.php">Administrer team</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}
