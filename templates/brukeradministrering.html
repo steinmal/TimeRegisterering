@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Brukeradministrering</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
-
 </head>
 <body>
     <div class="container">
@@ -83,40 +91,41 @@
     <p>
         <a href="brukerregistrering.php"><button class="btn-primary">Opprett bruker</button></a>
         <form action="brukerredigering.php" method=get>
-            <table class="table table-striped">
-                <tr>
-                    <th></th>
-                    <th>ID</th>
-                    <th>Navn</th>
-                    <th>Type</th>
-                    <th>Epost</th>
-                    <th>Telefon</th>
-                    <th>Aktivert</th>
-                    <th>Registreringsdato</th>
-                    <th></th>
-                </tr>
-                {% for bruker in brukere %}
-                    {% if bruker.isAktivert != visNye %}
+            <table id="table" class="table table-striped" data-toggle="table" data-sort-name="id" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+                <thead>
                     <tr>
-                        <td><input type=radio name=brukerId value="{{ bruker.Id }}" /></td>
-                        <td>{{ bruker.Id }}</td>
-                        <td>{{ bruker.Navn }}</td>
-                        <td>{{ brukerReg.Brukertype(bruker.Brukertype).Navn }}</td>
-                        <td>{{ bruker.Epost }}</td>
-                        <td>{{ bruker.Telefon }}</td>
-                        <td>{{ bruker.isAktivertTekst }}</td>
-                        <td>{{ bruker.Registreringsdato }}</td>
-                        {% if not bruker.isAktivert %}
-                        <td><a href="?action=aktiver&brukerId={{ bruker.Id }}">Aktiver</a></td>
-                        {% else %}
-                        <td>&nbsp;</td>
-                        {% endif %}
+                        <th data-field="id" data-sortable="true">ID</th>
+                        <th data-field="name" data-sortable="true">Navn</th>
+                        <th data-field="type" data-sortable="true">Type</th>
+                        <th data-field="email" data-sortable="true">Epost</th>
+                        <th data-field="phone" data-sortable="true">Telefon</th>
+                        <th data-field="activated" data-sortable="true">Aktivert</th>
+                        <th data-field="registrationdate" data-sortable="true">Registreringsdato</th>
+                        <th data-field="buttons"></th>
                     </tr>
-                    {% endif %}
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for bruker in brukere %}
+                        {% if bruker.isAktivert != visNye %}
+                        <tr>
+                            <td>{{ bruker.Id }}</td>
+                            <td>{{ bruker.Navn }}</td>
+                            <td>{{ brukerReg.Brukertype(bruker.Brukertype).Navn }}</td>
+                            <td>{{ bruker.Epost }}</td>
+                            <td>{{ bruker.Telefon }}</td>
+                            <td>{{ bruker.isAktivertTekst }}</td>
+                            <td>{{ bruker.Registreringsdato }}</td>
+                            <td>
+                                <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}" class="btn btn-default" aria-label="Rediger"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                {% if not bruker.isAktivert %}
+                                    <a href="brukeradministrering.php?action=aktiver&brukerId={{ bruker.Id }}" class="btn btn-success" aria-label="Aktiver"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
             </table>
-            <input class="btn-primary" type="submit" name="action" value="Rediger"/>
-
         </form>
 
     </p>

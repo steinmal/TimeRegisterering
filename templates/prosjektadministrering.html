@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektadministrering</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
@@ -41,34 +50,38 @@
 
     <p>
         <form action=prosjektoppretting.php method=GET>
-            <table class="table table-striped">
-                <tr>
-                    <th></th>
-                    <th class="col-lg-2">Prosjekt</th>
-                    <th class="col-lg-1">Parent</th>
-                    <th class="col-lg-1">Prosjektleder</th>
-                    <th class="col-lg-1">Team</th>
-                    <th class="col-lg-2">Startdato</th>
-                    <th class="col-lg-2">Sluttdato</th>
-                    <th class="col-lg-2">Beskrivelse</th>
-                    <th class="col-lg-1">Status</th>
-                </tr>
-                {% for prosjekt in prosjektliste %}
-                    {% if (prosjekt.isArkivert > 0) == (visArkivert == "on") %}
+            <table id="table" class="table table-striped" data-toggle="table" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+                <thead>
                     <tr>
-                        <td><input type=radio  name="prosjektId" value={{ prosjekt.Id }}></td>
-                        <td><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
-                        <td>{{ register.hentProsjekt(prosjekt.Parent).Navn }}</td>
-                        <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
-                        <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
-                        <td>{{ prosjekt.StartDato }}</td>
-                        <td>{{ prosjekt.SluttDato }}</td>
-                        <td>{{ prosjekt.Beskrivelse }}</td>
-                        <td>{{ prosjekt.Status }}</td>
-                        <!--<td><a href="prosjektadministrering.php?action=arkiver&id={{ prosjekt.Id }}">Arkiver</a></td>-->
+                        <th data-field="checkbox"></th>
+                        <th class="col-lg-1" data-order="desc" data-field="project" data-sortable="true" data-sort-name="_project_data" data-sorter="projectSorter">Prosjekt</th>
+                        <th class="col-lg-1" data-order="desc" data-field="parent" data-sortable="true">Parent</th>
+                        <th class="col-lg-1" data-order="desc" data-field="projectleader" data-sortable="true">Prosjektleder</th>
+                        <th class="col-lg-1" data-order="desc" data-field="team" data-sortable="true">Team</th>
+                        <th class="col-lg-2" data-order="desc" data-field="startdate" data-sortable="true">Startdato</th>
+                        <th class="col-lg-2" data-order="desc" data-field="enddate" data-sortable="true">Sluttdato</th>
+                        <th class="col-lg-2" data-order="desc" data-field="description" data-sortable="true">Beskrivelse</th>
+                        <th class="col-lg-1" data-order="desc" data-field="status" data-sortable="true">Status</th>
                     </tr>
-                    {% endif %}
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for prosjekt in prosjektliste %}
+                        {% if (prosjekt.isArkivert > 0) == (visArkivert == "on") %}
+                        <tr>
+                            <td><input type=radio  name="prosjektId" value={{ prosjekt.Id }}></td>
+                            <td data-projectname="{{ prosjekt.Navn|lower }}"><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
+                            <td>{{ register.hentProsjekt(prosjekt.Parent).Navn }}</td>
+                            <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
+                            <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
+                            <td>{{ prosjekt.StartDato }}</td>
+                            <td>{{ prosjekt.SluttDato }}</td>
+                            <td>{{ prosjekt.Beskrivelse }}</td>
+                            <td>{{ prosjekt.Status }}</td>
+                            <!--<td><a href="prosjektadministrering.php?action=arkiver&id={{ prosjekt.Id }}">Arkiver</a></td>-->
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
             </table>
             <input class ="btn-primary" type=submit name=action value=Arkiver>
             <input class ="btn-primary" type=submit name=action value=Rediger>
@@ -77,6 +90,16 @@
         </form>
     </p>
     </div>
+    <script type="text/javascript">
+        //<!--
+        function projectSorter(a, b) {
+            if (a.projectname < b.projectname) return -1;
+            if (a.projectname > b.projectname) return 1;
+            return 0;
+        }
+        //-->
+    </script>
+
     {% include 'footer.html' %}
 </body>
 </html>
