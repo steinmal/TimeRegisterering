@@ -69,7 +69,7 @@
                         {% if (prosjekt.isArkivert > 0) == (visArkivert == "on") %}
                         <tr>
                             <td><input type=radio  name="prosjektId" value={{ prosjekt.Id }}></td>
-                            <td data-projectname="{{ prosjekt.Navn }}"><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
+                            <td data-projectname="{{ prosjekt.Navn|lower }}"><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
                             <td>{{ register.hentProsjekt(prosjekt.Parent).Navn }}</td>
                             <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
                             <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
