@@ -24,7 +24,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 $aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+if(!isset($_SESSION['brukerTilgang'])){
     header("Location: index.php?error=manglendeRettighet&side=timeOver");
     return;
 }
