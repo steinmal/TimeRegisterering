@@ -88,7 +88,7 @@ class BrukerRegister {
     
     public function getAlleBrukertyper() {
         $stmt = $this->db->prepare("SELECT * FROM brukertype");
-        return getAlle($stmt, "BrukerType", true);
+        return getAlle($stmt, "Brukertype", true);
     }
     
     public function getBrukertype($brukertype_id) {
