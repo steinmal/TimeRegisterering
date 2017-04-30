@@ -58,7 +58,37 @@ class TeamRegister {
         }
         return $teamId;
     }
+    public function hentAlleTeamledere($BrukerReg) {
+        $brukere = array();
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE brukertype_id=3");
+            $stmt->execute();
+
+            while($bruker = $stmt->fetch()) {
+                $brukere[] = $BrukerReg->hentBruker($bruker['bruker_id']);
+            }
+        } catch (Exception $e) {
+            feil($e->getMessage());
+        }
+        return $brukere;
+    }
     
+    public function getTeamMedlemmerId($team_id) {
+        $brukerIds = array();
+        try {
+            $stmt = $this->db->prepare("SELECT bruker_id FROM teammedlemskap WHERE team_id=:teamId");
+            $stmt->bindparam(':teamId', $team_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            while($bruker_id = $stmt->fetch()) {
+                $brukerIds[] = $bruker_id['bruker_id'];
+            }
+        } catch (Exception $e) {
+            feil($e->getMessage());
+        }
+        return $brukerIds;
+    }
+
     public function getTeamIdFraTeamleder($brukerId) {
         $teamId = array();
         try {
@@ -82,21 +112,6 @@ class TeamRegister {
         return getAlle($stms, "Bruker");
     }
     
-    public function getTeamMedlemmerId($team_id) {
-        $brukerIds = array();
-        try {
-            $stmt = $this->db->prepare("SELECT bruker_id FROM teammedlemskap WHERE team_id=:teamId");
-            $stmt->bindparam(':teamId', $team_id, PDO::PARAM_INT);
-            $stmt->execute();
-            
-            while($bruker_id = $stmt->fetch()) {
-                $brukerIds[] = $bruker_id['bruker_id'];
-            }
-        } catch (Exception $e) {
-            feil($e->getMessage());
-        }
-        return $brukerIds;
-    }
 
     public function harTeamlederEtTeam($bruker_id) {
         try {
@@ -105,10 +120,7 @@ class TeamRegister {
             $stmt->execute();
 
             $num = $stmt->fetchColumn();
-            if($num > 0) {
-                return true;
-            }
-            else return false;
+            return $num;
         }
         catch (Exception $e) {
             feil($e->getMessage());
