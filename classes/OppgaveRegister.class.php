@@ -155,7 +155,7 @@ class OppgaveRegister {
         $stmt->bindParam(':oppgaveId', $oppgave_id, PDO::PARAM_INT);
         $stmt->bindParam(':brukerId', $bruker->getId(), PDO::PARAM_INT);
         $stmt->bindParam(':estimat', $estimat);
-        execStmt($stms);
+        execStmt($stmt);
     }
     
     public function hentAlleEstimatForOppgave($oppgave_id) {

@@ -33,7 +33,7 @@ if(isset($_GET['error'])){
 $oppgaveId = $_REQUEST['oppgaveId'];
 $oppgave = $OppgaveReg->hentOppgave($oppgaveId);
 
-$teamID = $ProsjektReg->hentProsjektFraFase($FaseReg->hentFase($oppgave->getId())->getId())->getTeam();
+$teamID = $ProsjektReg->hentProsjektFraFase($FaseReg->hentFase($oppgave->getFaseId())->getId())->getTeam();
 $brukerTeamIds = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
 $tilgang = false;
 foreach ($brukerTeamIds as $tID) {
