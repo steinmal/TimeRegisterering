@@ -21,7 +21,6 @@
         private $oppgavetype_navn;
         private $bruker_navn;
 
-        
         function __construct() {
             
         }

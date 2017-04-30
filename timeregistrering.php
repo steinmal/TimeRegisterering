@@ -49,7 +49,7 @@ if(isset($_POST['submit'])){
                 header("Location: timeregistrering.php?error=alleredeAktivTimereg");
                 return;
             }
-            $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);
+            $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
             if(!in_array($prosjekt->getTeam(), $teamListe)){
                 header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
