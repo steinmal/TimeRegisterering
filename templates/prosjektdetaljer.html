@@ -95,21 +95,11 @@
     <table id="fasetabell" class="table table-striped" data-toggle="table" data-sort-name="startdate" data-sort-order="asc" data-id-field="id">
         <thead>
             <tr>
-<<<<<<< HEAD
-                <td>{{ fase.Navn }}</td>
-                <td>{{ fase.Tilstand }}</td>
-                <td>{{ fase.StartDato }}</td>
-                <td>{{ fase.SluttDato }}</td>
-                {% if brukerKanRedigere %}
-                    <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
-                {% endif %}
-=======
                 <th data-order="desc" data-field="name" data-sortable="true">Navn</th>
                 <th data-order="desc" data-field="state" data-sortable="true">Tilstand</th>
                 <th data-order="desc" data-field="startdate" data-sortable="true">Startdato</th>
                 <th data-order="desc" data-field="enddate" data-sortable="true">Sluttdato</th>
                 <th data-order="desc" data-field="edit"></th>
->>>>>>> bf188e4c5e496de331c6e540642a8b8c086f006e
             </tr>
         </thead>
         <tbody>
