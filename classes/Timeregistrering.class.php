@@ -34,12 +34,26 @@
         public function getTil() { return $this->timereg_stopp; }
         public function getPause() { return $this->timereg_pause; }
         public function getRegistreringsDato() { return $this->timereg_registreringsdato; }
-        public function getTilstand() { return $this->timereg_tilstand; }   // 0 = godkjent, 1 = venter godkj., 2 = avvist, 3 = deaktivert, 4 = gjenopprettet
+        public function getTilstand() { return $this->timereg_tilstand; }   // 0 = godkjent, 1 = venter godkj., 2 = avvist, 3 = deaktivert, 4 = gjenopprettet, 5 = gjenopprettet, venter godkjenning
         public function isGodkjent() { return $this->timereg_tilstand == 0; }
         public function getOppgaveNavn() { return $this->oppgave_navn; }
         public function getOppgavetypeNavn() { return $this->oppgavetype_navn; }
         public function getBrukerNavn() { return $this->bruker_navn; }
 
+        public function isIkkeGodkjent() { //deaktive, avviste og gjenopprettede (den deaktiverte som ble gjenopprettet)
+            if ($this->timereg_tilstand == 2 || $this->timereg_tilstand == 3 || $this->timereg_tilstand == 4) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        public function isVentende() { //venter godkjenning og gjenopprettet, venter godkjenning
+            if ($this->timereg_tilstand == 1 || $this->timereg_tilstand == 5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         // bool-metoder burde hete is... istedet for get...
         //public function getAktiv() { return $this->timereg_aktiv; } //byttes ut med getTilstand
@@ -62,13 +76,6 @@
             return $this->getHourAsDateInterval()->format("%H:%I");
         }
         
-       /* public function getGodkjentTekst() {    //byttes ut med getTilstandTekst
-            if ($this->timereg_godkjent) {
-                return "Godkjent";
-            } else {
-                return "Ikke godkjent";
-            }
-        }*/
         
         public function getTilstandTekst() {
             switch ($this->timereg_tilstand) {
@@ -87,7 +94,17 @@
                 case 4:
                     return "Gjenopprettet";
                     break;
+                case 5:
+                    return "Gjenopprettet, venter godkjenning";
+                    break;
+                case 6:
+                    return "Gjenopprettet, godkjent";
+                    break;
+                case 7:
+                    return "Gjenopprettet, avvist";
+                    break;
                 default:
+                    return "Feil";
                     break;
             }
         }

@@ -35,7 +35,7 @@
         <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            Timeregistreringen er deaktivert og kan ikke korrigeres
+            Timeregistreringer som er deaktivert eller avvist kan ikke korrigeres
         </div>
         {% elseif error == "deaktivert" %}
         <div class="alert alert-success" role="alert">
@@ -60,6 +60,12 @@
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             En avvist timeregistrering kan ikke gjenopprettes
+        </div>
+        {% elseif error == "gjenopprettet" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Timeregistreringen er allerede gjenopprettet
         </div>
         {% elseif error == "ingenValgt" %}
         <div class="alert alert-info" role="alert">
@@ -162,8 +168,8 @@ $(function() {
             <tbody>
                 <!-- Gjerne refactor dette på noe vis -->
                 {% for timereg in timeregistreringer %}
-                    {% if visDeaktiverte %} <!-- viser deaktiverte og avviste timereg -->
-                        {% if timereg.Tilstand == 3 or timereg.Tilstand == 2 %}
+                    {% if visDeaktiverte %} <!-- viser deaktiverte, avviste og (deaktive) gjenopprettede timereg -->
+                        {% if timereg.isIkkeGodkjent() %}
                             <tr>
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }} </td>
@@ -175,13 +181,13 @@ $(function() {
                                 <td>{{ timereg.TilstandTekst }}</td>
                                 <td>{{ timereg.Kommentar }}</td>
                                 <td>
-                                    <a href="timekorrigering.php?action=Korriger&timeregId={{ timereg.Id }}" class="btn btn-default" aria-label="Korriger"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                <!--    <a href="timekorrigering.php?action=Korriger&timeregId={{ timereg.Id }}" class="btn btn-default" aria-label="Korriger"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a> -->
                                     <a href="timekorrigering.php?action=Aktiver&timeregId={{ timereg.Id }}" class="btn btn-success" aria-label="Aktiver"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a>
                                 </td>
                             </tr>
                         {% endif %}
-                    {% elseif visVentende %} <!-- viser gjenopprettede og venter godkjenning-->
-                        {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
+                    {% elseif visVentende %} <!-- viser venter godkjenning og gjenopprettet, venter godkjenning-->
+                        {% if timereg.isVentende() %}
                             <tr>
                                 <!--<td><input type=radio name="timeregId" value="{{ timereg.Id }}" /></td>-->
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
@@ -200,7 +206,7 @@ $(function() {
                             </tr>
                         {% endif %}
                     {% else %} <!-- Viser godkjente -->
-                        {% if timereg.Tilstand == 0 %}
+                        {% if timereg.isGodkjent() %}
                             <tr>
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }} </td>

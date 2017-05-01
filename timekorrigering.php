@@ -43,8 +43,8 @@ if (isset($_REQUEST['action'])) {
     } else {
         switch ($_REQUEST['action']) {
             case 'Korriger':
-                if ($TimeReg->hentTimeregistrering($timeId)->getTilstand() == 3) {
-                    $error = "kanIkkeEndres";
+                if ($TimeReg->hentTimeregistrering($timeId)->getTilstandTekst() == "Deaktivert" || $TimeReg->hentTimeregistrering($timeId)->getTilstandTekst() == "Avvist" ) {
+                    $error = "kanIkkeEndres&visDeaktiverte=on";
                     
                 } else {
                     $timereg = $TimeReg->hentTimeregistrering($timeId);
@@ -64,12 +64,16 @@ if (isset($_REQUEST['action'])) {
                 $error = "deaktivert";
                 break;
             case 'Aktiver':
-                if ($TimeReg->hentTimeregistrering($timeId)->getTilstand() == 2) {
+                if ($TimeReg->hentTimeregistrering($timeId)->getTilstandTekst() == "Avvist") {
                     header('Location: timeoversikt.php?error=avvist&visDeaktiverte=on');
+                    return;
+                } else if ($TimeReg->hentTimeregistrering($timeId)->getTilstandTekst() == "Gjenopprettet") {
+                    header('Location: timeoversikt.php?error=gjenopprettet&visDeaktiverte=on');
                     return;
                 }
                 $timeregKopi = $TimeReg->kopierTimeregistrering($timeId);
-                $TimeReg->gjenopprettTimeregistrering($timeregKopi->getId());   //gir kopien tilstand gjenopprettet
+                $TimeReg->gjenopprettTimeregistrering($timeregKopi->getId());   //gir kopien tilstand gjenopprettet, venter godkjenning
+                $TimeReg->gjenopprettTimeregistrering($timeId, true); //gir den opprinnelige (deaktiverte) timen status gjenopprettet, -> kan ikke gjenopprettes flere ganger
                 $error = "aktivert";
         }
     }
