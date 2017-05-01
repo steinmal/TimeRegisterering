@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektdetaljer</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
@@ -38,7 +47,6 @@
             Du har ikke tilgang til å legge til eller redigere faser på dette prosjektet
         </div>
     {% endif %}
-        
         
     <h1>Prosjekthierarki</h1>
     <table class="table table-striped">
@@ -84,16 +92,10 @@
 
 
     <h1>Faser</h1>
-    <table class="table table-striped">
-        <tr>
-            <th>Navn</th>
-            <th>Tilstand</th>
-            <th>Startdato</th>
-            <th>Sluttdato</th>
-            <th></th>
-        </tr>
-        {% for fase in faseliste %}
+    <table id="fasetabell" class="table table-striped" data-toggle="table" data-sort-name="startdate" data-sort-order="asc" data-id-field="id">
+        <thead>
             <tr>
+<<<<<<< HEAD
                 <td>{{ fase.Navn }}</td>
                 <td>{{ fase.Tilstand }}</td>
                 <td>{{ fase.StartDato }}</td>
@@ -101,48 +103,82 @@
                 {% if brukerKanRedigere %}
                     <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
                 {% endif %}
+=======
+                <th data-order="desc" data-field="name" data-sortable="true">Navn</th>
+                <th data-order="desc" data-field="state" data-sortable="true">Tilstand</th>
+                <th data-order="desc" data-field="startdate" data-sortable="true">Startdato</th>
+                <th data-order="desc" data-field="enddate" data-sortable="true">Sluttdato</th>
+                <th data-order="desc" data-field="edit"></th>
+>>>>>>> bf188e4c5e496de331c6e540642a8b8c086f006e
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for fase in faseliste %}
+                <tr>
+                    <td>{{ fase.Navn }}</td>
+                    <td>{{ fase.Tilstand }}</td>
+                    <td>{{ fase.StartDato }}</td>
+                    <td>{{ fase.SluttDato }}</td>
+                    <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
     {% if brukerKanRedigere %}
         <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til fase</a>
     {% endif %}
-    
+
     {% for fase in faseliste %}
         <h1>{{ fase.Navn }}</h1>
-        <table class="table table-striped">
-            <tr>
-                <th>Oppgave</th>
-                <th>Parent</th>
-                <th>Oppgavetype</th>
-                <th>Periode</th>
-                <th>Estimert tid</th>
-                <th>Registrert tid</th>
-                <th>Godkjent tid</th>
-            </tr>
-            {% for oppgave in oppgaveliste %}
-                {% if oppgave.FaseId == fase.Id %}
+        <table id="table_{{ loop.index0 }}" class="table table-striped" data-toggle="table" data-id-field="id">
+            <thead>
                 <tr>
-                    {% if brukerTilgang.isTeamleder and brukerKanRedigere %}
-                    <td><a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
-                    {% else %}
-                    <td>{{ oppgave.Navn }}</td>
-                    {% endif %}
-                    <td>{{ oppgavereg.hentOppgave(oppgave.ParentId).Navn }}</td>
-                    <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.Type) }}</td>
-                    <td>{{ oppgave.Periode }}</td>
-                    <td>{{ oppgave.Tidsestimat }}</td>
-                    <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.Id) }}</td>
-                    <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.Id) }}</td>
+                    <th data-order="desc" data-field="task" data-sortable="true" data-sort-name="_task_data" data-sorter="taskSorter">Oppgave</th>
+                    <th data-order="desc" data-field="parent" data-sortable="true">Parent</th>
+                    <th data-order="desc" data-field="tasktype" data-sortable="true">Oppgavetype</th>
+                    <th data-order="desc" data-field="period" data-sortable="true">Periode</th>
+                    <th data-order="desc" data-field="estimatedtime" data-sortable="true">Estimert tid</th>
+                    <th data-order="desc" data-field="registeredtime" data-sortable="true">Registrert tid</th>
+                    <th data-order="desc" data-field="approvedtime" data-sortable="true">Godkjent tid</th>
                 </tr>
-                {% endif %}
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for oppgave in oppgaveliste %}
+                    {% if oppgave.FaseId == fase.Id %}
+                    <tr>
+                        {% if brukerTilgang.isTeamleder and brukerKanRedigere %}
+                        <td data-taskname="{{ oppgave.Navn|lower }}"><a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
+                        {% else %}
+                        <td data-taskname="{{ oppgave.Navn|lower }}">{{ oppgave.Navn }}</td>
+                        {% endif %}
+                        <td>{{ oppgavereg.hentOppgave(oppgave.ParentId).Navn }}</td>
+                        <td>{{ oppgavereg.hentOppgaveTypeTekst(oppgave.Type) }}</td>
+                        <td>{{ oppgave.Periode }}</td>
+                        <td>{{ oppgave.Tidsestimat }}</td>
+                        <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.Id) }}</td>
+                        <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.Id) }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
         </table>
     {% endfor %}
+
     {% if brukerKanRedigere %}
         <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til ny oppgave</a>
     {% endif %}
+
 </div>
+    <script type="text/javascript">
+        //<!--
+        function taskSorter(a, b) {
+            if (a.taskname < b.taskname) return -1;
+            if (a.taskname > b.taskname) return 1;
+            return 0;
+        }
+        //-->
+    </script>
     {% include 'footer.html' %}
 </body>
 </html>

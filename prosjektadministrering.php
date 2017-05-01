@@ -34,7 +34,7 @@ if(isset($_GET['visArkivert'])){
 if(isset($_GET['error'])){
     $error = $_GET['error'];
 }
-$prosjektliste = $ProsjektReg->hentAlleProsjekt();
+$prosjektliste = $ProsjektReg->hentUnderProsjekt(1);
 unset($prosjektliste[0]); // Skjul abstrakt rot-prosjekt
 
 echo $twig->render('prosjektadministrering.html', array('aktivert'=>$aktivert,'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],'register'=>$ProsjektReg, 'prosjektliste'=>$prosjektliste, 'brukerReg'=>$BrukerReg, 'TeamReg'=>$TeamReg, 'error'=>$error, 'visArkivert'=>$visArkivert, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

@@ -31,7 +31,7 @@
             {% if action != null %}
             <input type="hidden" name=action value="{{ action }}"/>
             {% endif %}
-            {% if valgtProsjekt.Id >= 0 %}
+            {% if valgtTeam.Id >= 0 %}
             <input type="hidden" name="teamId" value="{{ valgtTeam.Id }}">
             {% endif %}
             <div class="form-group">

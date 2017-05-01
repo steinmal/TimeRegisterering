@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Timegodkjenning</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 
@@ -39,25 +48,28 @@
         <h2>{{ team.Navn }}</h2>
 
         <form action=timegodkjenning.php method=GET>
-            <table class="table table-striped">
-                <tr>
-                    <th>Navn</th>
-                    <th>Dato</th>
-                    <th>Fra</th>
-                    <th>Til</th>
-                    <th>Pause</th>
-                    <th>Oppgave</th>
-                    <th>Status</th> 
-                    <th>Endre status</th>
-                </tr>
-                    
+            <table id="table" class="table table-striped" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+                <thead>
+                    <tr>
+                        <th data-field="name" data-sortable="true">Navn</th>
+                        <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
+                        <th data-field="from">Fra</th>
+                        <th data-field="to">Til</th>
+                        <th data-field="pause">Pause</th>
+                        <th data-field="task" data-sortable="true">Oppgave</th>
+                        <th data-fielt="status" data-sortable="true">Status</th>
+                        <th data-field="changeStatus">Endre status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
                 <!--Alle aktive (godkjent, venter godkjenning, avvist og gjenopprettede) timeoppføringer på teamet-->
-                {% for timereg in timeregistreringer %}
+                {% for timereg in timeReg.hentTimeregistreringerFraTeam(team.Id) %}
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.Tilstand == 0 or timereg.Tilstand == 2 %}
                             <tr>
                                 <td>{{ timereg.BrukerNavn }}</td>
-                                <td>{{ timereg.Dato }}</td>
+                                <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
                                 <td>{{ timereg.Til }}</td>
                                 <td>{{ timereg.Pause }} min</td>
@@ -79,7 +91,7 @@
                        {% if timereg.Tilstand == 1 or timereg.Tilstand == 4 %}
                             <tr>
                                 <td>{{ timereg.BrukerNavn }}</td>
-                                <td>{{ timereg.Dato }}</td>
+                                <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
                                 <td>{{ timereg.Til }}</td>
                                 <td>{{ timereg.Pause }} min</td>
@@ -100,10 +112,20 @@
                     {% endif %}
                     
                 {% endfor %}
+                </tbody>
             </table>
         </form>
     {% endfor %}
     </div>
+    <script type="text/javascript">
+        //<!--
+        function dateSorter(a, b) {
+            if (a.datoklokkeslett < b.datoklokkeslett) return -1;
+            if (a.datoklokkeslett > b.datoklokkeslett) return 1;
+            return 0;
+        }
+        //-->
+    </script>
     {% include 'footer.html' %}
 </body>
 </html>

@@ -37,6 +37,7 @@ date_default_timezone_set('Europe/Oslo');
 
 if(isset($_POST['submit'])){
     $id = $_POST['timeregId'];
+    // TODO: Valider timeregId vs om det eksisterer en aktiv timereg
     if($_POST['submit'] != "Start" && isset($_POST['timeregId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
         header("Location: timeregistrering.php?error=ugyldigTimereg");
         return;
@@ -49,7 +50,7 @@ if(isset($_POST['submit'])){
                 header("Location: timeregistrering.php?error=alleredeAktivTimereg");
                 return;
             }
-            $prosjekt = $OppgaveReg->hentProsjektFraOppgave($_POST['oppgave']);
+            $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
             if(!in_array($prosjekt->getTeam(), $teamListe)){
                 header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
