@@ -25,14 +25,12 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
 
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
-    //echo "Du har ikke tilgang til prosjektadministrering";
     return;
 }
 
 $prosjektId = 0;
 if (isset($_REQUEST['prosjektId']))
     $prosjektId = $_REQUEST['prosjektId'];
-   // var_dump($prosjektId);
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
     header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
@@ -54,7 +52,21 @@ if ($prosjekt->getParent()) {
 
 $aktivert = $_SESSION['bruker']->isAktivert();
 
+$brukerKanRedigere = ($_SESSION['bruker']->getId() == $prosjekt->getLeder() || $_SESSION['bruker']->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getLeder()); //hvis brukerID == prosjekt->getLeder eller prosjekt->getTeam->getLeder
 
-echo $twig->render('prosjektdetaljer.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'prosjekt'=>$prosjekt, 'oppgavereg'=>$OppgaveReg, 'faseliste'=>$FaseListe, 'oppgaveliste'=>$OppgaveListe, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error, "prosjektOversiktRoot"=>$prosjektOversiktRoot->getOversiktListe(), 'parentProsjekt'=>$parentProsjekt));
+echo $twig->render('prosjektdetaljer.html', 
+                   array('aktivert'=>$aktivert, 
+                   'innlogget'=>$_SESSION['innlogget'], 
+                   'TeamReg'=>$TeamReg, 
+                   'bruker'=>$_SESSION['bruker'], 
+                   'prosjekt'=>$prosjekt, 
+                   'oppgavereg'=>$OppgaveReg, 
+                   'faseliste'=>$FaseListe, 
+                   'oppgaveliste'=>$OppgaveListe, 
+                   'brukerTilgang'=>$_SESSION['brukerTilgang'], 
+                   'error'=>$error, 
+                   "prosjektOversiktRoot"=>$prosjektOversiktRoot->getOversiktListe(), 
+                   'parentProsjekt'=>$parentProsjekt,
+                   'brukerKanRedigere'=>$brukerKanRedigere));
 
 ?>

@@ -98,12 +98,15 @@
                 <td>{{ fase.Tilstand }}</td>
                 <td>{{ fase.StartDato }}</td>
                 <td>{{ fase.SluttDato }}</td>
-                <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
+                {% if brukerKanRedigere %}
+                    <td><a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}&faseId={{ fase.Id }}">rediger</a></td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
-    <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til fase</a>
-    
+    {% if brukerKanRedigere %}
+        <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til fase</a>
+    {% endif %}
     
     {% for fase in faseliste %}
         <h1>{{ fase.Navn }}</h1>
@@ -120,7 +123,7 @@
             {% for oppgave in oppgaveliste %}
                 {% if oppgave.FaseId == fase.Id %}
                 <tr>
-                    {% if brukerTilgang.isTeamleder %}
+                    {% if brukerTilgang.isTeamleder and brukerKanRedigere %}
                     <td><a href="oppgavedetaljer.php?oppgaveId={{ oppgave.Id }}">{{ oppgave.Navn }}</a></td>
                     {% else %}
                     <td>{{ oppgave.Navn }}</td>
@@ -136,8 +139,9 @@
             {% endfor %}
         </table>
     {% endfor %}
-
-    <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til ny oppgave</a>
+    {% if brukerKanRedigere %}
+        <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til ny oppgave</a>
+    {% endif %}
 </div>
     {% include 'footer.html' %}
 </body>
