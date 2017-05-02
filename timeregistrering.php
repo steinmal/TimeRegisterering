@@ -12,9 +12,11 @@ $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
 $sendt = "";
 $error = "";
-$oppgave_id = "";
 $oppgaveListe= "";
 $aktivert = "";
+$visTid = false;
+$tidsestimat = 0;
+$aktivTid = 0;
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -125,10 +127,39 @@ else{
         $prosjekt_id = $_POST['prosjektId'];
         $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     }
+    
+    $oppgave_id = 0;
+    if(isset($_POST['oppgave'])) {
+        $oppgave_id = $_POST['oppgave'];
+        //$visTid = true;
+        $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
+        $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave_id);
+        $prosjekt_id = $_POST['prosjektId'];
+    }
 
-
-    $visSkjema = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0) ? true : false;
-    echo $twig->render('timeregistrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'sendt'=>$sendt, 'bruker'=>$_SESSION['bruker'], 'aktiv'=>false, 'visSkjema'=>$visSkjema, 'prosjektListe'=>$prosjektListe, 'oppgaveListe'=>$oppgaveListe, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'klokkeslett'=>date('H:i'), 'valgtProsjekt'=>$prosjekt_id, 'valgtOppgave'=>$oppgave_id, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+    $visSkjema = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
+    $visTid = $oppgave_id > 0 ? true : false; 
+    
+    echo $twig->render('timeregistrering.html', 
+                array('aktivert'=>$aktivert, 
+                      'innlogget'=>$_SESSION['innlogget'], 
+                      'TeamReg'=>$TeamReg, 'sendt'=>$sendt, 
+                      'bruker'=>$_SESSION['bruker'], 
+                      'aktiv'=>false, 
+                      'visSkjema'=>$visSkjema, 
+                      'prosjektListe'=>$prosjektListe, 
+                      'oppgaveListe'=>$oppgaveListe, 
+                      'brukernavn'=>$brukernavn, 
+                      'dagensdato'=>date("Y-m-d"), 
+                      'klokkeslett'=>date('H:i'), 
+                      'valgtProsjekt'=>$prosjekt_id, 
+                      'valgtOppgave'=>$oppgave_id, 
+                      'brukerTilgang'=>$_SESSION['brukerTilgang'], 
+                      'OppgaveReg'=>$OppgaveReg,
+                      'visTid'=>$visTid,
+                      'tidsestimat'=>$tidsestimat,
+                      'aktivTid'=>$aktivTid,
+                      'error'=>$error));
 }
 
 
