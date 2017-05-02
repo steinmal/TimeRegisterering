@@ -64,13 +64,15 @@ if(isset($_POST['opprettProsjekt'])){
     $slutt = $_REQUEST['sluttDato'];
     if($nyttProsjekt->getParent() != 1){
         $parent = $ProsjektReg->hentProsjekt($nyttProsjekt->getParent());
-        if(DateHelper::dateCompare($parent->getStartDato(), $start) < 1){
-            $inputOk = false;
-            $error = "ugyldigStart";
-        }
-        if(DateHelper::dateCompare($slutt, $parent->getSluttDato()) < 1){
-            $inputOk = false;
-            $error = "ugyldigStopp";
+        if ($parent != NULL) {  //grunnprosjekter har ikke parent, fikk fatal error i linje 68 ved opprettelse av grunnprosjekt
+            if(DateHelper::dateCompare($parent->getStartDato(), $start) < 1){
+                $inputOk = false;
+                $error = "ugyldigStart";
+            }
+            if(DateHelper::dateCompare($slutt, $parent->getSluttDato()) < 1){
+                $inputOk = false;
+                $error = "ugyldigStopp";
+            }
         }
     }
     //$idString = isset($_POST['prosjektId']) ? ("&prosjektId=" . $_POST['prosjektId']) : "";

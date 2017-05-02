@@ -90,7 +90,9 @@
                 <option selected="selected"></option>
                 {% endif %}
                 {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                    {% if prosjekt.Status == "Aktiv" %}
+                        <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
             {% if valgtProsjekt < 1 %}
