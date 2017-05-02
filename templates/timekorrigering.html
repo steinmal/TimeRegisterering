@@ -12,25 +12,25 @@
         <h1>Korrigering av timeregistrering - {{ brukernavn }}</h1>
     
         {% if error == "datoForandret" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Dato kan ikke endres
         </div>
         {% elseif error == "stoppEtterStart" %}
-        <div class="alert alert-error" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Stopptid må være etter starttid
         </div>
         {% elseif error == "pauseForLang" %}
-        <div class="alert alert-error" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Pausetiden må være kortere enn arbeidstiden
         </div>
         {% elseif error == "ingenVerdi" %}
-        <div class="alert alert-error" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Alle felter må fylles ut
@@ -42,7 +42,7 @@
             Ugyldig ID
         </div>
         {% elseif error == "ingenKommentar" %}
-        <div class="alert alert-error" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Kommentar må fylles inn

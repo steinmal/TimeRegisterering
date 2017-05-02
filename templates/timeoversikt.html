@@ -32,7 +32,7 @@
     <!-- // Twig har switch-syntax -->
     
         {% if error == "kanIkkeEndres" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-info" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timeregistreringer som er deaktivert eller avvist kan ikke korrigeres
@@ -56,13 +56,13 @@
             Korrigeringen er lagret i en ny timeregistrering som venter godkjenning. Den ordinære timeregistreringen er deaktivert.
         </div>
         {% elseif error == "avvist" %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             En avvist timeregistrering kan ikke gjenopprettes
         </div>
         {% elseif error == "gjenopprettet" %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timeregistreringen er allerede gjenopprettet
@@ -74,7 +74,7 @@
             Du må velge timeregistrering
         </div>
         {% elseif error == "avbryt" %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-error" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Timekorrigeringen ble avbrutt
