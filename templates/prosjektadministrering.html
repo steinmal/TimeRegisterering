@@ -60,12 +60,11 @@
             <thead>
                 <tr>
                     <th class="col-lg-1" data-order="desc" data-field="project" data-sortable="true" data-sort-name="_project_data" data-sorter="projectSorter">Prosjekt</th>
-                    <th class="col-lg-1" data-order="desc" data-field="parent" data-sortable="true">Parent</th>
                     <th class="col-lg-1" data-order="desc" data-field="projectleader" data-sortable="true">Prosjektleder</th>
                     <th class="col-lg-1" data-order="desc" data-field="team" data-sortable="true">Team</th>
                     <th class="col-lg-1" data-order="desc" data-field="startdate" data-sortable="true">Startdato</th>
                     <th class="col-lg-1" data-order="desc" data-field="enddate" data-sortable="true">Sluttdato</th>
-                    <th class="col-lg-2" data-order="desc" data-field="description" data-sortable="true">Beskrivelse</th>
+                    <th class="col-lg-3" data-order="desc" data-field="description" data-sortable="true">Beskrivelse</th>
                     <th class="col-lg-1" data-order="desc" data-field="status" data-sortable="true">Status</th>
                     <th class="col-lg-1"></th>
                 </tr>
@@ -75,7 +74,6 @@
                     {% if (prosjekt.isArkivert > 0) == (visArkivert == "on") %}
                     <tr>
                         <td data-projectname="{{ prosjekt.Navn|lower }}"><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
-                        <td>{{ register.hentProsjekt(prosjekt.Parent).Navn }}</td>
                         <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
                         <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
                         <td>{{ prosjekt.StartDato }}</td>
