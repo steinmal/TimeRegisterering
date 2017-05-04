@@ -111,6 +111,10 @@ if(isset($_POST['opprettProsjekt'])){
             $valgtProsjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']); //Noe lignende dette
             break;
         case 'Opprett underprosjekt':
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
             $parent = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
             $valgtProsjekt->setParent($parent->getId());
             $valgtProsjekt->setStartDato($parent->getStartDato());
