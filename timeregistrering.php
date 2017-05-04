@@ -92,7 +92,7 @@ if(isset($_POST['submit'])){
             }
             break;
         case 'Stopp':
-            if ($timereg->getStatus == 3) { //status = stopp
+            if ($timereg->getStatus() == 3) { //status = stopp
                 header("Location: timeregistrering.php?error=ugyldigStopp");
                 return;
             }
