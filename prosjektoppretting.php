@@ -128,7 +128,16 @@ if(isset($_POST['opprettProsjekt'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
             }
-            $error = $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            header("Location: prosjektadministrering.php?error=$error");
+            return;
+        case 'Gjenopprett':
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $gjenopprett = true;
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
             header("Location: prosjektadministrering.php?error=$error");
             return;
         default:

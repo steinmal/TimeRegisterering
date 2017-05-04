@@ -40,6 +40,29 @@ if ($prosjekt == null) {
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
 }
+
+if (isset($_REQUEST['action'])) {
+    switch ($_REQUEST['action']) {
+        case 'Arkiver':
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            break;
+        case 'Gjenopprett':
+            $gjenopprett = true;
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
+            break;
+    }
+    //Reload project
+    if (isset($_REQUEST['visProsjekt'])) {
+        $prosjektId = $_REQUEST['visProsjekt'];
+    }
+    $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
+    if ($prosjekt == null) {
+        header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
+        //echo "Ugyldig prosjektID";
+        return;
+    }
+}
+
 $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 $TimeregReg = new TimeregistreringRegister($db);
