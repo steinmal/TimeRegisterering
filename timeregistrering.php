@@ -115,7 +115,7 @@ if($registrering != null && sizeof($registrering) > 0){
     $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
     $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
     $prosjekt_id = $prosjekt->getId();
-    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visSkjema'=>true, "visTid"=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
