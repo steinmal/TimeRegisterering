@@ -36,20 +36,34 @@ if(isset($_GET['error'])) {
 date_default_timezone_set('Europe/Oslo');
 
 if(isset($_POST['submit'])){
-    $id = $_POST['timeregId'];
-    // TODO: Valider timeregId vs om det eksisterer en aktiv timereg
-    if($_POST['submit'] != "Start" && isset($_POST['timeregId'])  && $TimeReg->hentTimeregistrering($id)->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
-        header("Location: timeregistrering.php?error=ugyldigTimereg");
-        return;
-    }
-    
-    $timereg = $TimeReg->hentTimeregistrering($id);
-    switch($_POST['submit']){
-        case 'Start':
-            if ($timereg != NULL && $timereg->getStatus() == 0) {   //status = start, allerede aktiv
-                header("Location: timeregistrering.php?error=alleredeAktivTimereg");
+    if($_POST['submit'] == "Start"){
+        $timereg = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
+        if(sizeof($timereg) > 0){
+            header("Location: timeregistrering.php?error=alleredeAktivTimereg");
+            return;
+        }
+        if(!isset($_POST['oppgave'])){
+            //if(!isset($_POST['prosjektId']))
+            header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
+            return;
+        }
+    } else {
+        $id = 0;
+        if(isset($_POST['timeregId']) && $_POST['timeregId'] == 0){
+            header("Location: timeregistrering.php?error=ugyldigTimereg");
+            return;
+        } else {
+            $id = $_POST['timeregId'];
+            $timereg = $TimeReg->hentTimeregistrering($id);
+            if($timereg == null || $timereg->getBrukerId() != $_SESSION['bruker']->getId()) {  //Registreringen hører ikke til innlogget bruker
+                header("Location: timeregistrering.php?error=ugyldigTimereg");
                 return;
             }
+        }
+    }
+
+    switch($_POST['submit']){
+        case 'Start':
             $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
             $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
             if(!in_array($prosjekt->getTeam(), $teamListe)){
