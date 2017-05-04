@@ -61,7 +61,10 @@ class TeamRegister {
     public function hentAlleTeamledere($BrukerReg) {
         $brukere = array();
         try {
-            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE brukertype_id=3");
+            $stmt = $this->db->prepare("SELECT b.*"
+            . " FROM bruker b"
+            . " INNER JOIN brukertype bt ON bt.brukertype_id=b.brukertype_id"
+            . " WHERE bt.brukertype_teamleder=1");
             $stmt->execute();
 
             while($bruker = $stmt->fetch()) {
