@@ -23,11 +23,12 @@
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            Start- og sluttdatoene for fasen må være innenfor start- og sluttdatoene for prosjektet, henholdsvis {{ prosjektStartSlutt }}
+            Start- og sluttdatoene for fasen må være innenfor start- og sluttdatoene for prosjektet, henholdsvis {{ prosjekt.StartDato }} og {{ prosjekt.SluttDato }}
         </div>
     {% endif %}
     
     <h2>Prosjekt: {{ prosjekt.Navn }}</h2>
+    <p>Prosjektet er aktivt mellom {{ prosjekt.StartDato }} og {{ prosjekt.SluttDato }}</p>
     <form method="post" action="faseoppretting.php"  class="col-md-4">
         <input type="hidden" name="prosjektId" value="{{ prosjekt.Id }}"/>
         {% if fase.Id > -1 %}
@@ -39,11 +40,11 @@
         </div>
         <div class="form-group ">
             <label for="faseStartdato">Startdato:</label>
-            <input type="date" class="form-control" id="faseStartdato" name="faseStartdato" value="{{ fase.StartDato }}">
+            <input type="date" class="form-control" id="faseStartdato" name="faseStartdato" value="{{ fase.StartDato }}" min="{{ prosjekt.StartDato }}" max="{{ prosjekt.SluttDato }}">
         </div>
         <div class="form-group ">
             <label for="faseSluttdato">Sluttdato:</label>
-            <input type="date" class="form-control" id="faseSluttdato" name="faseSluttdato" value="{{ fase.SluttDato }}">
+            <input type="date" class="form-control" id="faseSluttdato" name="faseSluttdato" value="{{ fase.SluttDato }}" min="{{ prosjekt.StartDato }}" max="{{ prosjekt.SluttDato }}">
         </div>
         <div class="form-group ">
             <label for="faseTilstand">Tilstand:</label>

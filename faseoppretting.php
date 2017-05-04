@@ -44,7 +44,7 @@ if ($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjek
 if(isset($_POST['lagre'])){
     $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
     if($_POST['faseStartdato'] < $prosjekt->getStartDato() || $_POST['faseSluttdato'] > $prosjekt->getSluttDato()) {
-        header("Location: faseoppretting.php?error=datoUtenforProsjekt&prosjektId=" . $prosjektId . "&prosjektDatoer=true");
+        header("Location: faseoppretting.php?error=datoUtenforProsjekt&prosjektId=" . $prosjektId);
         return;
     } if ($_POST['faseStartdato'] > $_POST['faseSluttdato']) {
         header("Location: faseoppretting.php?error=sluttEtterStart&prosjektId=" . $prosjektId);
@@ -88,9 +88,15 @@ else{
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
 }
-if (isset($_GET['prosjektDatoer'])) {
-    $prosjektStartSlutt = " " . $prosjekt->getStartDato() . " og " . $prosjekt->getSluttDato();
-}
 
-echo $twig->render('faseoppretting.html', array('aktivert'=>$aktivert,'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'prosjekt'=>$prosjekt, 'fase'=>$fase, 'fasetilstander'=>Fase::$tilstander, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error, 'prosjektStartSlutt'=>$prosjektStartSlutt));
+echo $twig->render('faseoppretting.html', 
+            array('aktivert'=>$aktivert,
+                  'innlogget'=>$_SESSION['innlogget'], 
+                  'bruker'=>$_SESSION['bruker'], 
+                  'TeamReg'=>$TeamReg, 
+                  'prosjekt'=>$prosjekt, 
+                  'fase'=>$fase, 
+                  'fasetilstander'=>Fase::$tilstander, 
+                  'brukerTilgang'=>$_SESSION['brukerTilgang'], 
+                  'error'=>$error));
 ?>

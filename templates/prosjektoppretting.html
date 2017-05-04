@@ -21,25 +21,25 @@
 
 
     {% if error == "ingenVerdi" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Alle felter må fylles ut
         </div>
         {% elseif error == "stoppEtterStart" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Sluttdato må være etter startdato
         </div>
         {% elseif error == "ugyldigStart" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Startdato må være innenfor foreldreprosjektets start {{ parent.StartDato() }} og slutt {{ parent.SluttDato() }}
         </div>
         {% elseif error == "ugyldigStopp" %}
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Sluttdato må være innenfor foreldreprosjektets start {{ parent.StartDato() }} og slutt {{ parent.SluttDato() }}

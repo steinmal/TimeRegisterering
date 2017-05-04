@@ -66,6 +66,7 @@
                 {% endfor %}
             </table>
         </div>
+        {% if brukerIsTeamleder %}
         <div class="col-lg-6">
             {% if brukerTilgang.isTeamleder %}
         <h2>Leder for team</h2>
@@ -91,6 +92,7 @@
         </table>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
     {% include 'footer.html' %}

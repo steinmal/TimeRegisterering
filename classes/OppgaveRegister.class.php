@@ -48,7 +48,7 @@ class OppgaveRegister {
     // TODO: Duplicate methods, remove one
     public function getOppgavetypeTekst($oppgavetype_id) {
         if ($this->oppgavetyper == null)
-            $this->oppgavetyper = $this->getAlleOppgavetyper();
+            $this->oppgavetyper = $this->hentAlleOppgavetyper();
 
         // TODO: Fiks dette
         if (!isset($this->oppgavetyper[$oppgavetype_id])) {
@@ -155,7 +155,7 @@ class OppgaveRegister {
         $stmt->bindParam(':oppgaveId', $oppgave_id, PDO::PARAM_INT);
         $stmt->bindParam(':brukerId', $bruker->getId(), PDO::PARAM_INT);
         $stmt->bindParam(':estimat', $estimat);
-        execStmt($stms);
+        execStmt($stmt);
     }
     
     public function hentAlleEstimatForOppgave($oppgave_id) {

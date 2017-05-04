@@ -156,16 +156,12 @@ class TimeregistreringRegister {
         $stmt->bindParam(':stopp', $til);
         $pause = $opprinneligTime->getPause();
         $stmt->bindParam(':pause', $pause);
-        //$aktiv = $opprinneligTime->getAktiv();
-        //$stmt->bindParam(':aktiv', $aktiv);
         $status = $opprinneligTime->getStatus();
         $stmt->bindParam(':status', $status, PDO::PARAM_INT);
         $tilstand = 1;
         $stmt->bindParam(':tilstand', $tilstand, PDO::PARAM_INT);
         $automatisk = $opprinneligTime->getAutomatisk();
         $stmt->bindParam(':automatisk', $automatisk, PDO::PARAM_INT);
-        //$godkjent = $opprinneligTime->getGodkjent();
-        //$stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
         $kommentar = $opprinneligTime->getKommentar();
         $stmt->bindParam(':kommentar', $kommentar, PDO::PARAM_STR);
         if(execStmt($stmt)){
@@ -182,9 +178,15 @@ class TimeregistreringRegister {
         return execStmt($stmt);
     }
 
-    public function gjenopprettTimeregistrering($timeregId) {       // tilstand 4 = gjenopprettet
-        $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_tilstand=4, timereg_redigeringsdato=now() WHERE timereg_id=:id");
+    public function gjenopprettTimeregistrering($timeregId, $deaktiv=false) {       // tilstand 4 = gjenopprettet (Deaktiv), tilstand 5 = gjenopprettet, venter godkjenning
+        if ($deaktiv) {
+            $tilstand = 4;
+        } else {
+            $tilstand = 5;
+        }
+        $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_tilstand=:tilstand, timereg_redigeringsdato=now() WHERE timereg_id=:id");
         $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
+        $stmt->bindParam(':tilstand', $tilstand, PDO::PARAM_INT);
         return execStmt($stmt);
     }
 

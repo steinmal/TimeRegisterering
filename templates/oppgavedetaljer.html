@@ -13,6 +13,8 @@
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjektId={{ fasereg.hentFase(oppgave.FaseId).ProsjektId }}">Prosjektdetaljer</a>
     <h1>Oppgavedetaljer for {{ oppgave.Navn }}</h1>
+    
+    <h3>Nåværende tidsestimat: {{ oppgave.Tidsestimat }}</h3>
 
     <div class="col-lg-4">
 

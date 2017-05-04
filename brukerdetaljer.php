@@ -50,7 +50,8 @@ foreach ($lederTeamIDs as $i) {
     $lederTeamListe[] = $TeamReg->hentTeam($i);
 }
 
+$brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
 
-echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'aktivert'=>$aktivert, 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'aktivert'=>$aktivert, 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerIsTeamleder'=>$brukerIsTeamleder, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 
 ?>

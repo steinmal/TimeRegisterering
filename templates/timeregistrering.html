@@ -76,53 +76,71 @@
         Forslag er sendt!
     </div>
     {% endif %}
-        
-    <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
+
+    <div class="form-horizontal">
         <div class="form-group">
-            <label for="prosjekt">Prosjekt:</label>
-        {% if aktiv %}
-            <select class="form-control" name="prosjektId" id="prosjekt" disabled>
-                <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
-            </select>
-        {% else %}
-            <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
-                {% if valgtProsjekt < 1 %}
-                <option selected="selected"></option>
-                {% endif %}
-                {% for prosjekt in prosjektListe %}
-                <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
-                {% endfor %}
-            </select>
-            {% if valgtProsjekt < 1 %}
-            <small class="form-text text-muted">Velg prosjekt</small>
-            {% elseif oppgaveListe|length == 0 %}
-            <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
-            {% endif %}
-        {% endif %}
-        </div>
-    </form>
-    {% if visSkjema %}
-    <form method="post" action="timeregistrering.php" class="col-md-4">
-        <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
-        <div class="form-group ">
-            <label for="oppgave">Oppgave:</label>
-            <div class="form-inline">
+            <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
+                <label for="prosjekt">Prosjekt:</label>
                 {% if aktiv %}
-                <select name="oppgave" class="form-control" disabled id="oppgave">
-                    <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}
-                    </option>
+                <select class="form-control" name="prosjektId" id="prosjekt" disabled>
+                    <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
                 </select>
                 {% else %}
-                <select name="oppgave" class="form-control" id="oppgave">
-                    {% for oppgave in oppgaveListe %}
-                    <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
-                            selected="selected" {% endif %}>{{ oppgave.Navn }}
-                    </option>
+                <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                    {% if valgtProsjekt < 1 %}
+                    <option selected="selected"></option>
+                    {% endif %}
+                    {% for prosjekt in prosjektListe %}
+                        {% if prosjekt.Status == "Aktiv" %}
+                            <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
+                {% if valgtProsjekt < 1 %}
+                <small class="form-text text-muted">Velg prosjekt</small>
+                {% elseif oppgaveListe|length == 0 %}
+                <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
                 {% endif %}
-                <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
-            </div>
+            {% endif %}
+            </form>
+        </div>
+        {% if visSkjema %}
+        <div class="form-group ">
+            <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm2">
+                <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}">
+                <label for="oppgave">Oppgave:</label>
+                    {% if aktiv %}
+                    <select name="oppgave" class="form-control" disabled id="oppgave">
+                        <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}<!--, estimat: {{ oppgave.Tidsestimat }} timer, aktiv tid: {{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }} timer-->
+                        </option>
+                    </select>
+                    {% else %}
+                    <select name="oppgave" class="form-control" id="oppgave" onchange="document.getElementById('timeregForm2').submit();">
+                        {% if valgtOppgave < 1 %}
+                            <option selected="selected"></option>
+                        {% endif %}
+                        {% for oppgave in oppgaveListe %}
+                        <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
+                                selected="selected" {% endif %}>{{ oppgave.Navn }}<!--, estimat: {{ oppgave.Tidsestimat }} timer, aktiv tid: {{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }} timer-->
+                        </option>
+                        {% endfor %}
+                    </select>
+                        {% if visTid %}
+                        <br>Tidsestimat: {{ tidsestimat }}
+                        <br>Aktiv tid: {{ aktivTid }}
+                        {% endif %}
+                    {% endif %}
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% if visTid %}
+    <div class="form-group">
+    <form method="post" action="timeregistrering.php" class="col-md-4">
+        <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
+        <input type="hidden" name="oppgave" value="{{ valgtOppgave }}">
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
         </div>
 
         <div class="form-group ">
@@ -145,8 +163,8 @@
             {% endif %}
         </div>
     </form>
+    </div>
     {% endif %}
-</div>
 {% include 'footer.html' %}
 </body>
 </html>
