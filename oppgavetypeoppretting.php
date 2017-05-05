@@ -19,7 +19,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 $aktivert = $_SESSION['bruker']->isAktivert();
-if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
+if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isProsjektadmin() != true || !$_SESSION['bruker']->isAktivert())
     && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=optopp");
     return;

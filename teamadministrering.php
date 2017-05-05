@@ -70,8 +70,12 @@ if(isset($_GET['teamId'])){
     $brukerliste = array_diff($brukerliste, $loggetInn); //Fjerne leder.
 
     if(isset($_POST['leggTilMedlem'])) {
-        $brukerId = $_POST['navn'];
         $teamId = $_POST['teamId'];
+        if ($TeamReg->hentTeam($teamId)->getLeder() != $_SESSION['bruker']->getId()) {
+            header("Location: teamadministrering.php?feilTeam");
+            return;
+        }
+        $brukerId = $_POST['navn'];
         $TeamReg->leggTilMedlem($brukerId, $teamId);
         header("Location: teamadministrering.php?teamId=" . $teamId);
 
