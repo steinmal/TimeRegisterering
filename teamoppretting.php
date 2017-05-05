@@ -61,6 +61,10 @@ if(isset($_POST['opprettTeam'])){
     else{
         $nyttTeam->setId($_POST['teamId']);
         $TeamReg->redigerTeam($nyttTeam);
+        $teamMedlemmer = $TeamReg->getTeamMedlemmerId($nyttTeam->getId());
+        if(!in_array($nyttTeam->getLeder(), teamMedlemmer)) {
+            $TeamReg->leggTilMedlem($nyttTeam->getLeder(), $nyttTeam->getId());
+        }
         header("Location: teamadministrering.php?adminerror=redigert");
         return;
     }
