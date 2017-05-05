@@ -59,6 +59,11 @@ if(isset($_POST['opprettTeam'])){
         return;
     }
     else{
+        if($_POST['fjernesFraTeam'] == true) {
+            $gammeltTeam = $TeamReg->hentTeam($_POST['teamId']);
+            $gammelLeder = $gammeltTeam->getLeder();
+            $TeamReg->slettMedlemskap($gammelLeder, $gammeltTeam->getId());
+        }
         $nyttTeam->setId($_POST['teamId']);
         $TeamReg->redigerTeam($nyttTeam);
         $teamMedlemmer = $TeamReg->getTeamMedlemmerId($nyttTeam->getId());
