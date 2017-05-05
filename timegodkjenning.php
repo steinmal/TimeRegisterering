@@ -36,8 +36,8 @@ if(isset($_GET['visGodkjent'])){
 if(isset($_GET['action'])){
     //teamleder kan kun godkjenne timereg'er som er i oppgaver som tilhører prosjekter som teamet han er leder for har (timereg->oppgave->fase->prosjekt->team -> teamleder)
     $teamlederId = $TeamReg->hentTeam($ProsjektReg->hentProsjekt($FaseReg->hentFase($OppgaveReg->hentOppgave($TimeReg->hentTimeregistrering($_GET['timeregId'])->getOppgaveId())->getFaseId())->getProsjektId())->getTeam())->getLeder();
-    if ($teamlederId != $_SESSION['bruker']->getId()) {
-        header("Location: timegodkjenning.php?error=ugyldigTimereg");
+    if ($teamlederId != $_SESSION['bruker']->getId() && $_SESSION['brukerTilgang']->isProsjektadmin() == false) {
+        header("Location: timegodkjenning.php?error=ugyldigTimereg");   //slår ut dersom teamleder ikke har tilgang til aktuell timereg, eller brukeren ikke har brukertilgang prosjektadmin
         return;
     }
     if ($TimeReg->hentTimeregistrering($_GET['timeregId'])->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
