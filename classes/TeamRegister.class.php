@@ -17,7 +17,7 @@ class TeamRegister {
         $stmt = $this->db->prepare("INSERT INTO team (team_navn, team_leder) VALUES (:teamNavn, :teamLeder)");
         $stmt->bindParam(':teamNavn', $teamNavn, PDO::PARAM_STR);
         $stmt->bindParam(':teamLeder', $teamLeder, PDO::PARAM_INT);
-        return execStmt($stmt);
+        return execStmtReturnId($stmt, $this->db);
     }
     
     public function redigerTeam($team) {
@@ -108,7 +108,7 @@ class TeamRegister {
         return $teamId;
     }
 
-    // TODO: Burde kanskje være i BrukerRegister ettersom den returnerer brukere
+    // TODO: Burde kanskje være i BrukerRegister ettersom den returnerer brukere. Funksjonen brukes ikke?
     public function hentTeamMedlemmer($team_id) {
         $stmt = $this->db->prepare("SELECT * FROM brukere WHERE bruker_id IN (SELECT bruker_id FROM teammedlemskap WHERE team_id=:team_id)");
         $stmt->bindparam(':team_id', $team_id, PDO::PARAM_INT);
@@ -137,7 +137,7 @@ class TeamRegister {
             $stmt->execute();
 
             $num = $stmt->fetchColumn();
-            return $num + 1; //Teamleder er ikke med i teammedlemskaptabell //Teamleder burde være med
+            return $num;
         }
         catch (Exception $e) {
             feil($e->getMessage());

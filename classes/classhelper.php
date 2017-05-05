@@ -14,6 +14,16 @@ function execStmt(PDOStatement $stmt){
     return false;
 }
 
+function execStmtReturnId(PDOStatement $stmt, PDO $db){
+    try{
+        $stmt->execute();
+        return $db->lastInsertId();
+    } catch (Exception $e) {
+        feil($e->getMessage());
+    }
+    return false;
+}
+
 function getEn(PDOStatement $stmt, $type){
     try{
         $stmt->execute();

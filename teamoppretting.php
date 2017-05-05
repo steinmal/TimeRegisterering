@@ -53,7 +53,8 @@ if(isset($_POST['opprettTeam'])){
     $idString = isset($_POST['teamId']) ? ("&teamId=" . $_POST['teamdId']) : "";
 
     if(!isset($_POST['teamId'])){
-        $TeamReg->lagTeam($nyttTeam);
+        $teamId = $TeamReg->lagTeam($nyttTeam);
+        $TeamReg->leggTilMedlem($_POST['teamLeder'], $teamId);
         header("Location: teamadministrering.php?adminerror=lagret");
         return;
     }
