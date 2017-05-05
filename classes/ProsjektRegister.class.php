@@ -60,10 +60,11 @@ class ProsjektRegister {
     }
     
     public function redigerProsjekt($prosjekt) {
-        $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse, team_id=:team WHERE prosjekt_id=:id");
+        $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_navn=:navn, prosjekt_leder=:leder, prosjekt_product_owner=:productowner, prosjekt_startdato=:startdato, prosjekt_sluttdato=:sluttdato, prosjekt_beskrivelse=:beskrivelse, team_id=:team WHERE prosjekt_id=:id");
         
         $stmt->bindParam(':navn', $prosjekt->getNavn(), PDO::PARAM_STR);
         $stmt->bindParam(':leder', $prosjekt->getLeder(), PDO::PARAM_INT);
+        $stmt->bindParam(':productowner', $prosjekt->getProductOwner(), PDO::PARAM_INT);
         $stmt->bindParam(':startdato', $prosjekt->getStartDato());
         $stmt->bindParam(':sluttdato', $prosjekt->getSluttDato());
         $stmt->bindParam(':beskrivelse', $prosjekt->getBeskrivelse(), PDO::PARAM_STR);

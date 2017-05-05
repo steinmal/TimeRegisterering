@@ -52,7 +52,8 @@
     <table class="table table-striped">
         <tr>
             <th class="col-lg-2">Prosjekt</th>
-            <th class="col-lg-2">Prosjektleder</th>
+            <th class="col-lg-1">Prosjektleder</th>
+            <th class="col-lg-1">Product Owner</th>
             <th class="col-lg-1">Team</th>
             <th class="col-lg-1">Startdato</th>
             <th class="col-lg-1">Sluttdato</th>
@@ -64,6 +65,7 @@
             <tr>
                 <td><a href="prosjektdetaljer.php?prosjektId={{ parentProsjekt.Id }}">[{{ parentProsjekt.Navn }}]</a></td>
                 <td>{{ brukerReg.hentBruker(parentProsjekt.Leder).Navn}}</td>
+                <td>{{ brukerReg.hentBruker(parentProsjekt.ProductOwner).Navn }}</td>
                 <td>{{ TeamReg.hentTeam(parentProsjekt.Team).Navn }}</td>
                 <td>{{ parentProsjekt.StartDato }}</td>
                 <td>{{ parentProsjekt.SluttDato }}</td>
@@ -83,6 +85,7 @@
                     {% endif %}
                 </td>
                 <td>{{ brukerReg.hentBruker(prosjektoversikt.Prosjekt.Leder).Navn}}</td>
+                <td>{{ brukerReg.hentBruker(prosjektoversikt.Prosjekt.ProductOwner).Navn }}</td>
                 <td>{{ TeamReg.hentTeam(prosjektoversikt.Prosjekt.Team).Navn }}</td>
                 <td>{{ prosjektoversikt.Prosjekt.StartDato }}</td>
                 <td>{{ prosjektoversikt.Prosjekt.SluttDato }}</td>

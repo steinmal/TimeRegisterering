@@ -61,6 +61,7 @@
                 <tr>
                     <th class="col-lg-1" data-order="desc" data-field="project" data-sortable="true" data-sort-name="_project_data" data-sorter="projectSorter">Prosjekt</th>
                     <th class="col-lg-1" data-order="desc" data-field="projectleader" data-sortable="true">Prosjektleder</th>
+                    <th class="col-lg-1" data-order="desc" data-field="projectowner" data-sortable="true">Product Owner</th>
                     <th class="col-lg-1" data-order="desc" data-field="team" data-sortable="true">Team</th>
                     <th class="col-lg-1" data-order="desc" data-field="startdate" data-sortable="true">Startdato</th>
                     <th class="col-lg-1" data-order="desc" data-field="enddate" data-sortable="true">Sluttdato</th>
@@ -75,6 +76,7 @@
                     <tr>
                         <td data-projectname="{{ prosjekt.Navn|lower }}"><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">{{ prosjekt.Navn }}</a></td>
                         <td>{{ brukerReg.hentBruker(prosjekt.Leder).Navn}}</td>
+                        <td>{{ brukerReg.hentBruker(prosjekt.ProductOwner).Navn }}</td>
                         <td>{{ TeamReg.hentTeam(prosjekt.Team).Navn }}</td>
                         <td>{{ prosjekt.StartDato }}</td>
                         <td>{{ prosjekt.SluttDato }}</td>

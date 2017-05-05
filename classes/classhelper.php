@@ -9,7 +9,7 @@ function execStmt(PDOStatement $stmt){
         $stmt->execute();
         return true;
     } catch (Exception $e) {
-        $this->Feil($e->getMessage());
+        feil($e->getMessage());
     }
     return false;
 }
