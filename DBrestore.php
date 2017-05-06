@@ -25,12 +25,25 @@ if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
             $forceLogout = true;
             //return;
         }
-        if ($_GET['action'] == "backup-220417") {
+        if ($_GET['action'] == "backup-060517") {
             DbHelper::executeMySQLFile("sql/wipe.sql");
-            DbHelper::executeMySQLFile("sql/22-04-2017DataBaseDump.sql");
+            DbHelper::executeMySQLFile("sql/06-05-2017DataBaseDump.sql");
             $alert = "Database har blitt gjenopprettet. Du må logge inn på nytt.";
             $forceLogout = true;
             //return;
+        }
+
+    }
+    if (isset($_POST['action']) && $_POST['action'] == "Gjenopprett backup") {
+        define('FILENAME_TAG', "userfile");
+        $file = $_FILES[FILENAME_TAG]['tmp_name'];
+        $size = $_FILES[FILENAME_TAG]['size'];
+        // VIKTIG !  sjekk at vi jobber med riktig fil
+        if(is_uploaded_file($file) && $size != 0 && $size <= 10000000) {
+            DbHelper::executeMySQLFile("sql/wipe.sql");
+            DbHelper::executeMySQLFile($file);
+            $alert = "Database har blitt gjenopprettet. Du må logge inn på nytt.";
+            $forceLogout = true;
         }
     }
     //$alert = "asdfg";
