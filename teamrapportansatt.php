@@ -31,16 +31,20 @@ date_default_timezone_set('Europe/Oslo');
 $firstDayOfMonth = mktime(0, 0, 0, date("m"), 1, date("Y"));
 $lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
 
-//$datefrom = date("Y-m-d", $firstDayOfMonth);          // Finne en standarddato som får med alle registreringer.   
-//$dateto = date("Y-m-d", $lastDayOfMonth); 
-$datefrom = date("Y-m-d", strtotime('1970-01-01'));          // Manuell, fjernes // Fikk en warning på denne, måtte sette strtotime().
-$dateto = date("Y-m-d"); 
+$datefrom = date("Y-m-d", $firstDayOfMonth);
+$dateto = date("Y-m-d", $lastDayOfMonth);
 
-/* Følgende er ikke implementert enda... 
+if (isset($_SESSION['datefrom'])) $datefrom = $_SESSION['datefrom'];
+if (isset($_SESSION['dateto'])) $dateto = $_SESSION['dateto'];
+
+
 if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $datefrom = substr($_GET['daterange'], 0, 10);
     $dateto = substr($_GET['daterange'], 13, 10);
-}*/
+}
+
+$_SESSION['datefrom'] = $datefrom;
+$_SESSION['dateto'] = $dateto;
 
 $bruker = $_SESSION['bruker'];
 
@@ -83,7 +87,9 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'teams'=>$teams,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
     'ansatt'=>$ansatt,
-    'oppgavetype'=>$oppgavetype
+    'oppgavetype'=>$oppgavetype,
+    'datefrom'=>$datefrom,
+    'dateto'=>$dateto
     );
 
 if(isset($_GET['download'])){
