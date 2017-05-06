@@ -141,6 +141,13 @@ class TimeregistreringRegister {
         return getAlle($stmt, $this->typeName);
     }
 
+    public function brukerKanRedigere($id, $TeamReg){
+        if ($_SESSION['brukerTilgang']->isProsjektadmin()) return true;
+        $team = $TeamReg->hentTeamFraTimeregistrering($id);
+        if ($team->getLeder() == $_SESSION['bruker']->getId()) return true;
+        return false;
+    }
+
     public function kopierTimeregistrering($timeregId) { //kopierte timeregistreringer får tilstand ikke godkjent (venter godkjenning)  
         // TODO: Refactor vha hentTimeregistrering -> gjør endringer på denne -> lagTimeregistrering
         $opprinneligTime = $this->hentTimeregistrering($timeregId);
@@ -193,7 +200,7 @@ class TimeregistreringRegister {
     }
 
 
-    public function godkjennTimeregistrering($timeregId){       //tilstand 0 = godkjent 
+    public function godkjennTimeregistrering($timeregId){       //tilstand 0 = godkjent
         $stmt = $this->db->prepare("UPDATE `timeregistrering` SET timereg_tilstand=0 WHERE timereg_id=:id");
         $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
         return execStmt($stmt);
