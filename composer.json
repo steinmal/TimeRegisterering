@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "twig/twig": "2.3.2",
+    "twig/twig": "1.33.2",
     "twbs/bootstrap": "^3.3",
     "phpoffice/phpexcel": "^1.8",
     "ifsnop/mysqldump-php": "v2.2",
