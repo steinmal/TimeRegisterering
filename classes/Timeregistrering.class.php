@@ -72,6 +72,13 @@
             }
             return $diff;
         }
+        public function getWorkHoursAsSeconds(){
+            $dateInterval = $this->getHourAsDateInterval();
+            //http://stackoverflow.com/questions/3176609/calculate-total-seconds-in-php-dateinterval
+            $reference = new DateTimeImmutable;
+            $endTime = $reference->add($dateInterval);
+            return $endTime->getTimestamp() - $reference->getTimestamp();
+        }
         public function getHourString() {
             return $this->getHourAsDateInterval()->format("%H:%I");
         }
