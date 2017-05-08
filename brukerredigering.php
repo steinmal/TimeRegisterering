@@ -100,6 +100,7 @@ if(isset($_GET['error'])){
         $mismatch = 1;
     }
     $error = $_GET['error'];
+    $bruker = $BrukerReg->hentBruker($_GET['brukerId']);
 }
 
 echo $twig->render('brukerredigering.html', array('aktivert'=>$aktivert, 'mismatch'=>$mismatch, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'brukerRed'=>$bruker, 'bruker'=>$_SESSION['bruker'], 'error'=>$error, 'typer'=>$typer, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
