@@ -127,7 +127,7 @@
             {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
             <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
             <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
-            {% if brukerTilgang.isBrukeradmin %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<a href="SystemInnstillinger.php"><button type="button" class="btn btn-default">Systeminnstillinger</button></a>{% endif %}
         </div>
         {% else %}
         <h2>Brukeren din er deaktivert</h2>

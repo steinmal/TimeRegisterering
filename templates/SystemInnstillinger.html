@@ -17,7 +17,7 @@
         {% include 'header.html' %}
 
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
-    <h1>Backup/gjenopretting</h1>
+    <h1>Systeminnstillinger</h1>
         {% if alert %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -26,13 +26,43 @@
         </div>
         {% endif %}
 
-    
-        <div class="btn-group">
-            <a href="DBdump.php"><button type="button" class="btn btn-primary">Ta backup</button></a>
-            <a href="#"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#factoryResetModal">Factory reset</button></a>
-            <a href="#"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#backup-060517-Modal">Gjenopprett backup 06.05.17</button></a>
-            <a href="#"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#uploadBackupModal">Last opp backup</button></a>
-         </div>
+        <div class="row">
+            <div class="btn-group">
+                <a href="DBdump.php">
+                    <button type="button" class="btn btn-primary">Ta backup</button>
+                </a>
+                <a href="#">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#factoryResetModal">
+                        Factory reset
+                    </button>
+                </a>
+                <a href="#">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#backup-060517-Modal">
+                        Gjenopprett backup 06.05.17
+                    </button>
+                </a>
+                <a href="#">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#uploadBackupModal">
+                        Last opp backup
+                    </button>
+                </a>
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <form class="form-horizontal" method="post" action="SystemInnstillinger.php">
+                <div class="form-group">
+                    <label class="control-label col-sm-5" for="tidsparameter">Definer hvor mange dager man kan redigere en
+                        timeregistrering:</label>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" id="tidsparameter" name="tidsparameter"
+                               value="{{ systemVariabler.Tidsparameter }}">
+                    </div>
+                    <input class="btn btn-primary" type="submit" name="submit" value="Endre verdi">
+                </div>
+
+            </form>
+        </div>
 
     </div>
     <!-- Modal -->
@@ -84,6 +114,7 @@
             </div>
         </div>
     </div>
+
     {% include 'footer.html' %}
 </body>
 </html>
