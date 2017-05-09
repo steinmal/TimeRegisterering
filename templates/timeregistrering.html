@@ -14,9 +14,11 @@
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timeregistrering</h1>
     
+    {% if not aktiv %}
     <form method=get>
         <input type="checkbox" name="manuell" onClick="submit()" {% if manuell %}checked{% endif %}/>Manuell timeregistrering
     </form>
+    {% endif %}
     
     {% if error == "ugyldigId" %}
         <div class="alert alert-danger" role="alert">
@@ -97,6 +99,7 @@
             Den manuelle registreringen ble lagret
         </div>
     {% endif %}
+    
     {% if sendt %}
     <div class="alert alert-success" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -117,22 +120,22 @@
                     <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
                 </select>
                 {% else %}
-                <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
-                    {% if valgtProsjekt < 1 %}
-                    <option selected="selected"></option>
-                    {% endif %}
-                    {% for prosjekt in prosjektListe %}
-                        {% if prosjekt.Status == "Aktiv" %}
-                            <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                    <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                        {% if valgtProsjekt < 1 %}
+                        <option selected="selected"></option>
                         {% endif %}
-                    {% endfor %}
-                </select>
-                {% if valgtProsjekt < 1 %}
-                <small class="form-text text-muted">Velg prosjekt</small>
-                {% elseif oppgaveListe|length == 0 %}
-                <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
-                {% endif %}
-            {% endif %}
+                        {% for prosjekt in prosjektListe %}
+                            {% if prosjekt.Status == "Aktiv" %}
+                                <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% if valgtProsjekt < 1 %}
+                    <small class="form-text text-muted">Velg prosjekt</small>
+                    {% elseif oppgaveListe|length == 0 %}
+                    <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+                    {% endif %}
+                {% endif %} <!-- manuell -->
             </form>
         </div>
         {% if visOppgave %}
@@ -163,11 +166,12 @@
                     <br>Tidsestimat: {{ tidsestimat }}
                     <br>Aktiv tid: {{ aktivTid }}
                     {% endif %}
-                {% endif %}
+                {% endif %} <!-- aktiv -->
             </form>
         </div>
     </div>
-    {% endif %}
+    {% endif %} <!-- visOppgave -->
+    
     {% if visSkjema %}
     <div class="form-group">
         {% if manuell %}
@@ -197,7 +201,7 @@
                 <input class="btn btn-primary" type="submit" name="regManuell" value="Registrer">
             </div>
         </form>
-    {% else %}
+        {% else %}
         <form method="post" action="timeregistrering.php" class="col-md-4">
             <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
             <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}"/>
@@ -226,10 +230,35 @@
                 {% endif %}
             </div>
         </form>
-    {% endif %}
+        {% endif %} <!-- manuell -->
     </div>
+    {% endif %} <!-- visSkjema -->
     
-    {% endif %}
+    {% if not aktiv %}
+    <div class="col-lg-10">
+        <h3>Fortsett på en tidligere oppgave?</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Prosjekt</th>
+                <th>Oppgave</th>
+                <th>Oppgavetype</th>
+                <th>Estimert tid</th>
+                <th>Registrert tid</th>
+                <th></th>
+            </tr>
+            {% for o in nyligeOppgaver %}
+                <tr>
+                    <td>{{ ProsjektReg.hentProsjektFraOppgave(o.Id).Navn }}</td>
+                    <td>{{ o.Navn }}</td>
+                    <td>{{ OppgaveReg.hentOppgavetypeTekst(o.Type) }}</td>
+                    <td>{{ o.Tidsestimat }}</td>
+                    <td>{{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(o.Id) }}</td>
+                    <td><a href="timeregistrering.php?prosjektId={{ ProsjektReg.hentProsjektFraOppgave(o.Id).Id }}&oppgaveId={{ o.Id }}&fortsettTimereg=true" class="btn btn-success" aria-label="Fortsett"><span class="glyphicon glyphicon-play" aria-hidden="true"></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %} <!-- aktiv -->
 {% include 'footer.html' %}
 </body>
 </html>

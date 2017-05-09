@@ -20,6 +20,22 @@ $aktivTid = 0;
 $manuell = false;
 session_start();
 
+//hente ut nylig brukte oppgaver for å fylle listen man kan trykke fortsette på
+$timeregs = array_reverse($TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId()));
+$nyligeOppgaveId = array();
+$i = 0;
+while (sizeof($nyligeOppgaveId) < 3 && $i < sizeof($timeregs)) {
+    if (!in_array($timeregs[$i]->getOppgaveId(), $nyligeOppgaveId)) {
+        $nyligeOppgaveId[] = $timeregs[$i]->getOppgaveId();
+    }
+    $i++;
+}
+$nyligeOppgaver = array();
+foreach ($nyligeOppgaveId as $n) {
+    $nyligeOppgaver[] = $OppgaveReg->hentOppgave($n);
+}
+
+
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
@@ -126,6 +142,25 @@ if (isset($_POST['regManuell'])){
     return;
 }
 
+if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen over tidligere oppgaver
+    $timereg = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
+    if(sizeof($timereg) > 0){
+        header("Location: timeregistrering.php?error=alleredeAktivTimereg");
+        return;
+    }
+    if(!isset($_REQUEST['oppgaveId'])){
+        header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
+        return;
+    }
+    $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+    $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
+    if(!in_array($prosjekt->getTeam(), $teamListe)){
+        header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
+        return;
+    }
+    $TimeReg->startTimeReg($_REQUEST['oppgaveId'], $_SESSION['bruker']->getId());
+    echo "Start";
+}
 
 
 $brukernavn = $_SESSION['bruker']->getNavn();
@@ -185,7 +220,8 @@ else{
     echo $twig->render('timeregistrering.html', 
                 array('aktivert'=>$aktivert, 
                       'innlogget'=>$_SESSION['innlogget'], 
-                      'TeamReg'=>$TeamReg, 'sendt'=>$sendt, 
+                      'TeamReg'=>$TeamReg, 
+                      'sendt'=>$sendt, 
                       'bruker'=>$_SESSION['bruker'], 
                       'aktiv'=>false, 
                       'visOppgave'=>$visOppgave, 
@@ -204,6 +240,8 @@ else{
                       'now'=>$now,
                       'ikkeLengerBak'=>$ikkeLengerBak,
                       'manuell'=>$manuell,
+                      'nyligeOppgaver'=>$nyligeOppgaver,
+                      'ProsjektReg'=>$ProsjektReg,
                       'error'=>$error));
 }
 
