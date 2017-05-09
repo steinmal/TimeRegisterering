@@ -13,9 +13,22 @@ $bruker = "";
 $brukerTilgang = "";
 $alert = "";
 $forceLogout = false;
+$SysReg = new SystemRegister($db);
 session_start();
 
 if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
+
+    $systemVariabler = $SysReg->hentSystemvariabel();
+    if(isset($_POST['submit'])){
+        if(isset($_POST['tidsparameter'])) {
+            if($systemVariabler[0]) {
+                $SysReg->redigerSystemvariabel($_POST['tidsparameter']);
+            }
+            else {
+                $SysReg->lagSystemvariabel($_POST['tidsparameter']);
+            }
+        }
+    }
     
     if(isset($_GET['action'])){
         if ($_GET['action'] == "factoryreset") {
@@ -47,7 +60,7 @@ if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
         }
     }
     //$alert = "asdfg";
-    echo $twig->render('DBrestore.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
+    echo $twig->render('SystemInnstillinger.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'systemVariabler'=>$systemVariabler[0],
     'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'error'=>$error, 'alert'=>$alert, 'forceLogout'=>$forceLogout));
 
 }
