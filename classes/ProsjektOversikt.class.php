@@ -11,8 +11,12 @@ class ProsjektOversikt {
     
 
     private $delNivaa;
-    private $tid = array();
-    private $totaltid = array();
+    private $tid = array(); //Tid arbeidet for kvar oppgavetype, ikkje inkludert underprosjekt
+    private $totaltid = array(); //Tid arbeidet for kvar oppgavetype, inkludert underprosjekt
+
+    //Data til burnup:
+    private $totalestimat = array(); //Estimat for kvar oppgavetype, inkludert underprosjekt
+    private $totaltidprdag = array(); //Tid arbeidet for kvar dag, for kvar oppgavetype, inkludert underprosjekt
 
     public function __construct(
             Prosjekt $prosjekt,
@@ -35,10 +39,22 @@ class ProsjektOversikt {
             $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
             $faseOversiktListe[] = $oversikt;
             //$tidHelper->add($oversikt->getTid());
-            
+
             foreach($oversikt->getTidArray() as $type => $tid){
+                if (!array_key_exists($type, $this->tid)) $this->tid[$type] = new DateInterval('PT0S');
                 //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
                 $this->tid[$type] = DateHelper::sumDateInterval($this->tid[$type], $tid);
+            }
+            foreach($oversikt->getEstimatArray() as $type => $tid){
+                if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
+                $this->totalestimat[$type] += $tid;
+            }
+            foreach($oversikt->getTidPrDagArray() as $dag => $data){
+                foreach($data as $type => $tid){
+                    if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
+                    if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
+                    $this->totaltidprdag[$dag][$type] += $tid;
+                }
             }
         }
 
@@ -67,9 +83,19 @@ class ProsjektOversikt {
                 $this->totaltid[$type] = DateHelper::sumDateInterval($this->totaltid[$type], $tid);
             }
             //var_dump($this->totaltid);
+            foreach($oversikt->getEstimatArray() as $type => $tid){
+                if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
+                $this->totalestimat[$type] += $tid;
+            }
+            foreach($oversikt->getTidPrDagArray() as $dag => $data){
+                foreach($data as $type => $tid){
+                    if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
+                    if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
+                    $this->totaltidprdag[$dag][$type] += $tid;
+                }
+            }
         }
-        //}
-        //$this->totaltid = $totalHelper->getInterval();
+        ksort($this->totaltidprdag);
     }
 
     public function getProsjekt(){ return $this->prosjekt; }
@@ -117,7 +143,79 @@ class ProsjektOversikt {
     public function getTotalTidArray(){
         return $this->totaltid;
     }
-    
+
+    public function getEstimatArray(){
+        return $this->totalestimat;
+    }
+
+    public function getTotalEstimat(){ //timer
+        $totaltid = 0;
+        foreach($this->getEstimatArray() as $type => $tid){
+            $totaltid += $tid;
+        }
+        return $totaltid;
+    }
+
+    public function getTotalEstimatAsLinearData(){
+        $total = 0;
+        $totalestimataslinear = array();
+        //$totalestimataslinear[strtotime($this->prosjekt->getStartDato())] = 0;
+        //$totalestimataslinear[strtotime($this->prosjekt->getSluttDato())] = $this->getTotalEstimat();
+        $totalestimataslinear[$this->prosjekt->getStartDato()] = 0;
+        $totalestimataslinear[$this->prosjekt->getSluttDato()] = $this->getTotalEstimat();
+        return $totalestimataslinear;
+    }
+
+    public function getTidPrDagArray(){
+        return $this->totaltidprdag;
+    }
+
+    public function getTotalTidPrDagArrayAsHours(){
+        $totaltidprdag = array();
+        foreach($this->getTidPrDagArray() as $dag => $data){
+            foreach($data as $type => $tid){
+                if (!array_key_exists($dag, $totaltidprdag)) $totaltidprdag[$dag] = 0;
+                $totaltidprdag[$dag] += ($tid / 86400);
+            }
+        }
+        return $totaltidprdag;
+    }
+
+    public function getTotalTidPrDagArrayAsLinearData(){
+        $total = 0;
+        $startVerdi = 0;
+        $totaltidprdagaslinear = array();
+        $startDato = $this->prosjekt->getStartDato();
+        $sluttDato = $this->prosjekt->getSluttDato();
+        $idag = date("Y-m-d");
+        foreach($this->getTotalTidPrDagArrayAsHours() as $dag => $tid){
+            if (count($totaltidprdagaslinear) == 0 && $dag > $startDato) {
+                $totaltidprdagaslinear[$startDato] = $total;
+            }
+            if ($dag > $idag) break;
+            $total += $tid;
+            //$totaltidprdagaslinear[strtotime($dag)] = $total;
+            if ($dag >= $this->prosjekt->getStartDato() && $dag <= $idag) {
+                $totaltidprdagaslinear[$dag] = $total;
+            }
+        }
+        if ($idag >= $startDato) { //Sjekk at det er minst to punkt
+            if (count($totaltidprdagaslinear) == 0) {
+                $totaltidprdagaslinear[$startDato] = $total;
+            }
+            if ($idag < $sluttDato) {
+                if (!isset($totaltidprdagaslinear[$idag])) {
+                    $totaltidprdagaslinear[$idag] = $total;
+                }
+            } else {
+                if (!isset($totaltidprdagaslinear[$sluttDato])) {
+                    $totaltidprdagaslinear[$sluttDato] = $total;
+                }
+            }
+        }
+        return $totaltidprdagaslinear;
+    }
+
     public function getTimer($type_id = 0){
         return DateHelper::intervallTilTimer($this->getTid($type_id));
     }
@@ -125,5 +223,6 @@ class ProsjektOversikt {
     public function getTotalTimer($type_id = 0){
         return DateHelper::intervallTilTimer($this->getTotalTid($type_id));
     }
+
 }
 

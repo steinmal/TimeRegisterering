@@ -53,13 +53,23 @@ if(isset($_POST['opprettTeam'])){
     $idString = isset($_POST['teamId']) ? ("&teamId=" . $_POST['teamdId']) : "";
 
     if(!isset($_POST['teamId'])){
-        $TeamReg->lagTeam($nyttTeam);
+        $teamId = $TeamReg->lagTeam($nyttTeam);
+        $TeamReg->leggTilMedlem($_POST['teamLeder'], $teamId);
         header("Location: teamadministrering.php?adminerror=lagret");
         return;
     }
     else{
+        if($_POST['fjernesFraTeam'] == true) {
+            $gammeltTeam = $TeamReg->hentTeam($_POST['teamId']);
+            $gammelLeder = $gammeltTeam->getLeder();
+            $TeamReg->slettMedlemskap($gammelLeder, $gammeltTeam->getId());
+        }
         $nyttTeam->setId($_POST['teamId']);
         $TeamReg->redigerTeam($nyttTeam);
+        $teamMedlemmer = $TeamReg->getTeamMedlemmerId($nyttTeam->getId());
+        if(!in_array($nyttTeam->getLeder(), teamMedlemmer)) {
+            $TeamReg->leggTilMedlem($nyttTeam->getLeder(), $nyttTeam->getId());
+        }
         header("Location: teamadministrering.php?adminerror=redigert");
         return;
     }

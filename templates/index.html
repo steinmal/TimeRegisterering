@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Timeregistrering</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -125,7 +127,7 @@
             {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
             <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
             <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
-            {% if brukerTilgang.isBrukeradmin %}<a href="DBrestore.php"><button type="button" class="btn btn-default">Backup/gjenoppretting</button></a>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<a href="SystemInnstillinger.php"><button type="button" class="btn btn-default">Systeminnstillinger</button></a>{% endif %}
         </div>
         {% else %}
         <h2>Brukeren din er deaktivert</h2>
@@ -141,7 +143,31 @@
             Registreringen var vellykket!
         </div>
         {% endif %}
-        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel-body">
+                    <div class="row ">
+                        <div class="col-xs-6 col-lg-3">
+                            <a href="dashbordBruker.php" class="btn btn-danger btn-xl" role="button"><span
+                                    class="glyphicon glyphicon-user"></span> <br/>Bruker</br> </a>
+                        </div>
+                        <div class="col-xs-6 col-lg-3">
+                            <a href="#" class="btn btn-warning btn-xl" role="button"><span
+                                    class="glyphicon glyphicon-bookmark"></span> <br/>Teamleder</br> </a>
+                        </div>
+                        <div class="col-xs-6 col-lg-3">
+                            <a href="#" class="btn btn-success btn-xl" role="button"><span
+                                    class="glyphicon glyphicon-folder-open"></span> <br/>Prosjektleder</a>
+                        </div>
+                        <div class="col-xs-6 col-lg-3">
+                            <a href="#" class="btn btn-info btn-xl" role="button"><span
+                                    class="glyphicon glyphicon-eye-open"></span> <br/>Product </br> Owner</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     {% else %} <!-- ikke innlogget -->
         {% if error == "ikkeInnlogget" %}
         <div class="alert alert-error" role="alert">
@@ -173,6 +199,8 @@
         </form>
     {% endif %}
     </div>
+
+
 
     {% include 'footer.html' %}
 

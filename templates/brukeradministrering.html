@@ -10,10 +10,11 @@
     <!-- Bootstrap table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
     <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
     <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
@@ -89,7 +90,8 @@
     {% endif %}
     <h2></h2>
     <p>
-        <a href="brukerregistrering.php"><button class="btn-primary">Opprett bruker</button></a>
+        <a href="brukerregistrering.php" class="btn btn-success" aria-label="Opprett bruker">Opprett bruker</a>
+        
         <form action="brukerredigering.php" method=get>
             <table id="table" class="table table-striped" data-toggle="table" data-sort-name="id" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
                 <thead>

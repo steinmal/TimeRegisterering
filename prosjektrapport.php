@@ -63,6 +63,8 @@ switch ($type) {
         $twigs['oppgaveliste'] = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
         $twigs['faseliste'] = $FaseReg->hentAlleFaser($prosjekt->getId());
         $twigs['oppgavereg'] = $OppgaveReg;
+        $twigs['burnupEstimatData'] = $oversikt->getTotalEstimatAsLinearData();
+        $twigs['burnupTidprdagData'] = $oversikt->getTotalTidPrDagArrayAsLinearData();
         //var_dump($twigs['oppgaver']);
         break;
 }

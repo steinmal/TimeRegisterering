@@ -13,9 +13,22 @@ $bruker = "";
 $brukerTilgang = "";
 $alert = "";
 $forceLogout = false;
+$SysReg = new SystemRegister($db);
 session_start();
 
 if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
+
+    $systemVariabler = $SysReg->hentSystemvariabel();
+    if(isset($_POST['submit'])){
+        if(isset($_POST['tidsparameter'])) {
+            if($systemVariabler[0]) {
+                $SysReg->redigerSystemvariabel($_POST['tidsparameter']);
+            }
+            else {
+                $SysReg->lagSystemvariabel($_POST['tidsparameter']);
+            }
+        }
+    }
     
     if(isset($_GET['action'])){
         if ($_GET['action'] == "factoryreset") {
@@ -25,16 +38,29 @@ if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
             $forceLogout = true;
             //return;
         }
-        if ($_GET['action'] == "backup-220417") {
+        if ($_GET['action'] == "backup-060517") {
             DbHelper::executeMySQLFile("sql/wipe.sql");
-            DbHelper::executeMySQLFile("sql/22-04-2017DataBaseDump.sql");
+            DbHelper::executeMySQLFile("sql/06-05-2017DataBaseDump.sql");
             $alert = "Database har blitt gjenopprettet. Du må logge inn på nytt.";
             $forceLogout = true;
             //return;
         }
+
+    }
+    if (isset($_POST['action']) && $_POST['action'] == "Gjenopprett backup") {
+        define('FILENAME_TAG', "userfile");
+        $file = $_FILES[FILENAME_TAG]['tmp_name'];
+        $size = $_FILES[FILENAME_TAG]['size'];
+        // VIKTIG !  sjekk at vi jobber med riktig fil
+        if(is_uploaded_file($file) && $size != 0 && $size <= 10000000) {
+            DbHelper::executeMySQLFile("sql/wipe.sql");
+            DbHelper::executeMySQLFile($file);
+            $alert = "Database har blitt gjenopprettet. Du må logge inn på nytt.";
+            $forceLogout = true;
+        }
     }
     //$alert = "asdfg";
-    echo $twig->render('DBrestore.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],
+    echo $twig->render('SystemInnstillinger.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'systemVariabler'=>$systemVariabler[0],
     'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'error'=>$error, 'alert'=>$alert, 'forceLogout'=>$forceLogout));
 
 }

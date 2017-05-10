@@ -33,25 +33,43 @@ if(isset($_GET['visGodkjent'])){
     $visGodkjent = $_GET['visGodkjent'];
 }
 
+
+
 if(isset($_GET['action'])){
-    //teamleder kan kun godkjenne timereg'er som er i oppgaver som tilhører prosjekter som teamet han er leder for har (timereg->oppgave->fase->prosjekt->team -> teamleder)
-    $teamlederId = $TeamReg->hentTeam($ProsjektReg->hentProsjekt($FaseReg->hentFase($OppgaveReg->hentOppgave($TimeReg->hentTimeregistrering($_GET['timeregId'])->getOppgaveId())->getFaseId())->getProsjektId())->getTeam())->getLeder();
-    if ($teamlederId != $_SESSION['bruker']->getId()) {
-        header("Location: timegodkjenning.php?error=ugyldigTimereg");
-        return;
+    if($_GET['action'] == "Godkjenn alle markerte") {
+        if (isset($_GET['selection']))
+        {
+            for($i=0; $i < count($_GET['selection']); $i++){
+                if ($TimeReg->brukerKanRedigere($_GET['selection'][$i], $TeamReg))
+                    $TimeReg->godkjennTimeregistrering($_GET['selection'][$i]);
+                else
+                    $error = "ugyldigTimereg"; //slår ut dersom teamleder ikke har tilgang til aktuell timereg, eller brukeren ikke har brukertilgang prosjektadmin
+            }
+        }
     }
-    if ($TimeReg->hentTimeregistrering($_GET['timeregId'])->getTilstand() == 3) {  //skal ikke kunne godkjenne deaktiverte timereg
-        header("Location: timegodkjenning.php?error=deaktivertTimereg");
-        return;
+    else if($_GET['action'] == "Avvis alle markerte") {
+        if (isset($_GET['selection']))
+        {
+            for($i=0; $i < count($_GET['selection']); $i++){
+                if ($TimeReg->brukerKanRedigere($_GET['selection'][$i], $TeamReg))
+                    $TimeReg->avvisTimeregistrering($_GET['selection'][$i]);
+                else
+                    $error = "ugyldigTimereg";
+            }
+        }
     }
-    if($_GET['action'] == "godkjenn") {
-        $TimeReg->godkjennTimeregistrering($_GET['timeregId']);
+    else if($_GET['action'] == "godkjenn") {
+        if ($TimeReg->brukerKanRedigere($_GET['timeregId'], $TeamReg))
+            $TimeReg->godkjennTimeregistrering($_GET['timeregId']);
+        else
+            $error = "ugyldigTimereg";
     }
     else if($_GET['action'] == "avvis") {
-        echo "Avvis timereg " . $_GET['timeregId'];
-        $TimeReg->avvisTimeregistrering($_GET['timeregId']);
+        if ($TimeReg->brukerKanRedigere($_GET['timeregId'], $TeamReg))
+            $TimeReg->avvisTimeregistrering($_GET['timeregId']);
+        else
+            $error = "ugyldigTimereg";
     }
-    //header('location: timegodkjenning.php');
 } else {
     //Koden skal kjøre selv om ingen action er etterspurt
     //header('Location: timegodkjenning.php?error=noAction');

@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektrapport</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <!-- Ekstra -->
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
@@ -18,4 +26,62 @@
         <h1>Teamrapport - Timeoversikt medarbeidere</h1>
 
         <div class="rapport">
+            <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
+                <input type="text" name="daterange" />
+                <!--
+                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <span></span> <b class="caret"></b>
+                </div>-->
+            </form>
+            <script type="text/javascript">
+                //       <!--
+                $(function() {
+                    //var start = moment().subtract(29, 'days');
+                    //var end = moment();
+                    //var start = moment().startOf('month');
+                    //var end = moment().endOf('month');
+                    {% if datefrom %}
+                    var start = moment("{{ datefrom }}");
+                    var end = moment("{{ dateto }}");
+                    {% else %}
+                    var start = moment().startOf('month');
+                    var end = moment().endOf('month');
+                    {% endif %}
+
+                    moment.lang("nb"); //Norsk bokmaal
+
+                    function cb(start, end) {
+                        $('input[name="daterange"]').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                    }
+////'This Month'
+//           moment().startOf('month').format('MMM'): [moment().startOf('month'), moment().endOf('month')],
+
+                    $('input[name="daterange"]').daterangepicker({
+                        startDate: start,
+                        endDate: end,
+                        ranges: {
+                                [moment().startOf('month').format('MMMM')]: [moment().startOf('month'), moment().endOf('month')],
+                            [moment().startOf('month').subtract(1, 'month').format('MMMM')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                            [moment().startOf('month').subtract(2, 'month').format('MMMM')]: [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                            [moment().startOf('month').subtract(3, 'month').format('MMMM')]: [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                            [moment().startOf('month').subtract(4, 'month').format('MMMM')]: [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
+                            [moment().startOf('month').subtract(5, 'month').format('MMMM')]: [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
+                            [moment().startOf('month').subtract(6, 'month').format('MMMM')]: [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
+                            'Dette året': [moment().startOf('year'), moment().endOf('year')],
+                            'Forrige år': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                            'Alt': [moment('1970-01-01'), moment('2038-01-19')]
+                },
+
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                }, cb);
+                    cb(start, end);
+                    $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+                        document.getElementById("datefilterform").submit();
+                    });
+                });
+                //-->
+            </script>
             <form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">

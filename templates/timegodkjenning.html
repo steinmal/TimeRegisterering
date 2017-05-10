@@ -10,10 +10,11 @@
     <!-- Bootstrap table -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
     <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
     <!-- Ekstra -->
     <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
@@ -26,7 +27,7 @@
     <h1>Timegodkjenning</h1>
     <p>
         <form method="get">
-            <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}/> Vis godkjente og avviste timer
+            <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}> Vis godkjente og avviste timer
         </form>
     </p>    
     {% if error == "ugyldigTimereg" %}
@@ -51,6 +52,7 @@
             <table id="table" class="table table-striped" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
                 <thead>
                     <tr>
+                        <th><input type="checkbox" onClick="toggle_{{ team.Id}}(this)"></th>
                         <th data-field="name" data-sortable="true">Navn</th>
                         <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
                         <th data-field="from">Fra</th>
@@ -63,11 +65,12 @@
                 </thead>
 
                 <tbody>
-                <!--Alle aktive (godkjent, venter godkjenning, avvist og gjenopprettede) timeoppføringer på teamet-->
+                <!--Alle timeoppføringer på teamet-->
                 {% for timereg in timeReg.hentTimeregistreringerFraTeam(team.Id) %}
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.TilstandTekst == "Godkjent" or timereg.TilstandTekst == "Avvist" %}
                             <tr>
+                                <td><input type="checkbox" class="checkbox_{{ team.Id}}" name='selection[]' value="{{ timereg.Id }}"></td>
                                 <td>{{ timereg.BrukerNavn }}</td>
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
@@ -87,9 +90,10 @@
                                 {% endif %}
                             </tr>
                        {% endif %}
-                    {% else %}  <!-- Viser de som kan godkjennes eller avvises, venter godkjenning (1) og gjenopprettet (4) --> 
+                    {% else %}  <!-- Viser de som kan godkjennes eller avvises: venter godkjenning (1) og gjenopprettet, venter godkjenning (5) --> 
                        {% if timereg.TilstandTekst == "Venter godkjenning" or timereg.TilstandTekst == "Gjenopprettet, venter godkjenning" %}
                             <tr>
+                                <td><input type="checkbox" class="checkbox_{{ team.Id}}" name='selection[]' value="{{ timereg.Id }}"></td>
                                 <td>{{ timereg.BrukerNavn }}</td>
                                 <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
                                 <td>{{ timereg.Fra }}</td>
@@ -114,7 +118,18 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <input type="submit" name="action" value="Godkjenn alle markerte">
+            <input type="submit" name="action" value="Avvis alle markerte">
         </form>
+        <script language="JavaScript">
+            //Basert på http://stackoverflow.com/questions/386281/how-to-implement-select-all-check-box-in-html
+            function toggle_{{ team.Id}}(source) {
+                checkboxes = document.getElementsByClassName('checkbox_{{ team.Id}}');
+                for(var i=0, n=checkboxes.length;i<n;i++) {
+                    checkboxes[i].checked = source.checked;
+                }
+            }
+        </script>
     {% endfor %}
     </div>
     <script type="text/javascript">

@@ -21,9 +21,9 @@ class TimeregistreringRegister {
         return getAlle($stmt, $this->typeName);
     }
 
-    public function lagTimeregistrering($oppgave_id, $bruker_id, $timereg_dato, $timereg_start, $timereg_stopp, $timereg_automatisk) {     
-        $stmt = $this->db->prepare("INSERT INTO `timeregistrering` (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_tilstand, timereg_automatisk)
-        VALUES (:bruker_id, :oppgave_id, :dato, :start, :stopp, :tilstand, :automatisk)");
+    public function lagTimeregistrering($oppgave_id, $bruker_id, $timereg_dato, $timereg_start, $timereg_stopp, $timereg_automatisk, $timereg_pause=0, $timereg_kommentar="") {     
+        $stmt = $this->db->prepare("INSERT INTO `timeregistrering` (bruker_id, oppgave_id, timereg_dato, timereg_start, timereg_stopp, timereg_tilstand, timereg_automatisk, timereg_pause, timereg_kommentar)
+        VALUES (:bruker_id, :oppgave_id, :dato, :start, :stopp, :tilstand, :automatisk, :pause, :kommentar)");
         $timeregTilstand = $timereg_automatisk ? 0 : 1;
         $stmt->bindParam(':oppgave_id', $oppgave_id, PDO::PARAM_INT);
         $stmt->bindParam(':bruker_id', $bruker_id, PDO::PARAM_INT);
@@ -32,6 +32,8 @@ class TimeregistreringRegister {
         $stmt->bindParam(':stopp', $timereg_stopp);
         $stmt->bindParam(':tilstand', $timeregTilstand, PDO::PARAM_INT);
         $stmt->bindParam(':automatisk', $timereg_automatisk, PDO::PARAM_INT);
+        $stmt->bindParam(':pause', $timereg_pause, PDO::PARAM_INT);
+        $stmt->bindParam(':kommentar', $timereg_kommentar, PDO::PARAM_STR);
         return execStmt($stmt);
     }
     
@@ -139,6 +141,13 @@ class TimeregistreringRegister {
         return getAlle($stmt, $this->typeName);
     }
 
+    public function brukerKanRedigere($id, $TeamReg){
+        if ($_SESSION['brukerTilgang']->isProsjektadmin()) return true;
+        $team = $TeamReg->hentTeamFraTimeregistrering($id);
+        if ($team->getLeder() == $_SESSION['bruker']->getId()) return true;
+        return false;
+    }
+
     public function kopierTimeregistrering($timeregId) { //kopierte timeregistreringer får tilstand ikke godkjent (venter godkjenning)  
         // TODO: Refactor vha hentTimeregistrering -> gjør endringer på denne -> lagTimeregistrering
         $opprinneligTime = $this->hentTimeregistrering($timeregId);
@@ -191,7 +200,7 @@ class TimeregistreringRegister {
     }
 
 
-    public function godkjennTimeregistrering($timeregId){       //tilstand 0 = godkjent 
+    public function godkjennTimeregistrering($timeregId){       //tilstand 0 = godkjent
         $stmt = $this->db->prepare("UPDATE `timeregistrering` SET timereg_tilstand=0 WHERE timereg_id=:id");
         $stmt->bindParam(':id', $timeregId, PDO::PARAM_INT);
         return execStmt($stmt);

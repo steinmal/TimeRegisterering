@@ -14,6 +14,12 @@
     <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timeregistrering</h1>
     
+    {% if not aktiv %}
+    <form method=get>
+        <input type="checkbox" name="manuell" onClick="submit()" {% if manuell %}checked{% endif %}/>Manuell timeregistrering
+    </form>
+    {% endif %}
+    
     {% if error == "ugyldigId" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -68,7 +74,32 @@
             <span class="sr-only">Error:</span>
             Du har ikke tilgang til å foreslå tidsestimat på oppgaven.
         </div>
+    {% elseif error == "ingenVerdi" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du må fylle inn alle felter for å registrere tid
+        </div>
+    {% elseif error == "startEtterSlutt" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Starttiden må være før sluttiden
+        </div>
+    {% elseif error == "forLangtBak" %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Du kan ikke lage manuelle registreringer eldre enn en måned (?)
+        </div>
+    {% elseif error == "manLagret" %}
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Den manuelle registreringen ble lagret
+        </div>
     {% endif %}
+    
     {% if sendt %}
     <div class="alert alert-success" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -80,91 +111,154 @@
     <div class="form-horizontal">
         <div class="form-group">
             <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
+                {% if manuell %}
+                    <input type="hidden" name="manuell" value="on"/>
+                {% endif %}
                 <label for="prosjekt">Prosjekt:</label>
                 {% if aktiv %}
                 <select class="form-control" name="prosjektId" id="prosjekt" disabled>
                     <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
                 </select>
                 {% else %}
-                <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
-                    {% if valgtProsjekt < 1 %}
-                    <option selected="selected"></option>
-                    {% endif %}
-                    {% for prosjekt in prosjektListe %}
-                        {% if prosjekt.Status == "Aktiv" %}
-                            <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                    <select class="form-control" name="prosjektId" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                        {% if valgtProsjekt < 1 %}
+                        <option selected="selected"></option>
                         {% endif %}
-                    {% endfor %}
-                </select>
-                {% if valgtProsjekt < 1 %}
-                <small class="form-text text-muted">Velg prosjekt</small>
-                {% elseif oppgaveListe|length == 0 %}
-                <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
-                {% endif %}
-            {% endif %}
+                        {% for prosjekt in prosjektListe %}
+                            {% if prosjekt.Status == "Aktiv" %}
+                                <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% if valgtProsjekt < 1 %}
+                    <small class="form-text text-muted">Velg prosjekt</small>
+                    {% elseif oppgaveListe|length == 0 %}
+                    <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+                    {% endif %}
+                {% endif %} <!-- manuell -->
             </form>
         </div>
-        {% if visSkjema %}
+        {% if visOppgave %}
         <div class="form-group ">
             <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm2">
                 <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}">
+                {% if manuell %}
+                    <input type="hidden" name="manuell" value="on"/>
+                {% endif %}
                 <label for="oppgave">Oppgave:</label>
-                    {% if aktiv %}
-                    <select name="oppgave" class="form-control" disabled id="oppgave">
-                        <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}<!--, estimat: {{ oppgave.Tidsestimat }} timer, aktiv tid: {{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }} timer-->
-                        </option>
-                    </select>
-                    {% else %}
-                    <select name="oppgave" class="form-control" id="oppgave" onchange="document.getElementById('timeregForm2').submit();">
-                        {% if valgtOppgave < 1 %}
-                            <option selected="selected"></option>
-                        {% endif %}
-                        {% for oppgave in oppgaveListe %}
-                        <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
-                                selected="selected" {% endif %}>{{ oppgave.Navn }}<!--, estimat: {{ oppgave.Tidsestimat }} timer, aktiv tid: {{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }} timer-->
-                        </option>
-                        {% endfor %}
-                    </select>
-                        {% if visTid %}
-                        <br>Tidsestimat: {{ tidsestimat }}
-                        <br>Aktiv tid: {{ aktivTid }}
-                        {% endif %}
+                {% if aktiv %}
+                <select name="oppgave" class="form-control" disabled id="oppgave">
+                    <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}
+                    </option>
+                </select>
+                {% else %}
+                <select name="oppgave" class="form-control" id="oppgave" onchange="document.getElementById('timeregForm2').submit();">
+                    {% if valgtOppgave < 1 %}
+                        <option selected="selected"></option>
                     {% endif %}
+                    {% for oppgave in oppgaveListe %}
+                    <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
+                            selected="selected" {% endif %}>{{ oppgave.Navn }}
+                    </option>
+                    {% endfor %}
+                </select>
+                    {% if visSkjema %}
+                    <br>Tidsestimat: {{ tidsestimat }}
+                    <br>Aktiv tid: {{ aktivTid }}
+                    {% endif %}
+                {% endif %} <!-- aktiv -->
             </form>
         </div>
     </div>
-    {% endif %}
-    {% if visTid %}
+    {% endif %} <!-- visOppgave -->
+    
+    {% if visSkjema %}
     <div class="form-group">
-    <form method="post" action="timeregistrering.php" class="col-md-4">
-        <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
-        <input type="hidden" name="oppgave" value="{{ valgtOppgave }}">
-        <div class="form-group">
-            <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
-        </div>
-
-        <div class="form-group ">
-            <label for="dato">Dato:</label>
-            <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
-        </div>
-        <div class="form-group">
-            {% if aktiv %}
-                <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
-                {% if registrering.Status == 1 %}
-                <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
+        {% if manuell %}
+        <form method="post" action="timeregistrering.php" class="col-md-4">
+            <input type="hidden" name="oppgaveId" value="{{ valgtOppgave }}"/>
+            <div class="form-group ">
+                <label for="dato">Dato:</label>
+                <input type="date" class="form-control" id="dato" name="dato" value="{{ dagensdato }}" min="{{ ikkeLengerBak }}" max="{{ dagensdato }}">
+            </div>
+            <div class="form-group ">
+                <label for="starttid">Starttid:</label>
+                <input type="time" class="form-control" id="starttid" name="start" value="{{ now }}">
+            </div>
+            <div class="form-group ">
+                <label for="sluttid">Startdato:</label>
+                <input type="time" class="form-control" id="sluttid" name="slutt" value="{{ now }}">
+            </div>
+            <div class="form-group">
+                <label for="pause">Pause:</label>
+                <input type="number" class="form-control" id="pause" name="pause"/>
+            </div>
+            <div class="form-group">
+                <label for="kommentar">Kommentar til registreringen:</label>
+                <input type="text" name="kommentar" rows="5" cols="15" id="kommentar">
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" name="regManuell" value="Registrer">
+            </div>
+        </form>
+        {% else %}
+        <form method="post" action="timeregistrering.php" class="col-md-4">
+            <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
+            <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}"/>
+            <input type="hidden" name="oppgave" value="{{ valgtOppgave }}">
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
+            </div>
+    
+            <div class="form-group ">
+                <label for="dato">Dato:</label>
+                <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
+            </div>
+            <div class="form-group">
+                {% if aktiv %}
+                    <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
+                    {% if registrering.Status == 1 %}
+                    <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
+                    {% else %}
+                    <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
+                    {% endif %}
+                    <input class="btn btn-danger btn-lg" type="submit" name="submit" value="Stopp"/>
                 {% else %}
-                <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
+                    <input class="btn btn-success btn-lg" type="submit" name="submit" value="Start"/>
+                    <input class ="btn btn-lg" type="submit" name="submit" value="Pause" disabled/>
+                    <input class="btn btn-lg" type="submit" name="submit" value="Stopp" disabled/>
                 {% endif %}
-                <input class="btn btn-danger btn-lg" type="submit" name="submit" value="Stopp"/>
-            {% else %}
-                <input class="btn btn-success btn-lg" type="submit" name="submit" value="Start"/>
-                <input class ="btn btn-lg" type="submit" name="submit" value="Pause" disabled/>
-                <input class="btn btn-lg" type="submit" name="submit" value="Stopp" disabled/>
-            {% endif %}
-        </div>
-    </form>
+            </div>
+        </form>
+        {% endif %} <!-- manuell -->
     </div>
-    {% endif %}
+    {% endif %} <!-- visSkjema -->
+    
+    {% if not aktiv %}
+    <div class="col-lg-10">
+        <h3>Fortsett på en tidligere oppgave?</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Prosjekt</th>
+                <th>Oppgave</th>
+                <th>Oppgavetype</th>
+                <th>Estimert tid</th>
+                <th>Registrert tid</th>
+                <th></th>
+            </tr>
+            {% for o in nyligeOppgaver %}
+                <tr>
+                    <td>{{ ProsjektReg.hentProsjektFraOppgave(o.Id).Navn }}</td>
+                    <td>{{ o.Navn }}</td>
+                    <td>{{ OppgaveReg.hentOppgavetypeTekst(o.Type) }}</td>
+                    <td>{{ o.Tidsestimat }}</td>
+                    <td>{{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(o.Id) }}</td>
+                    <td><a href="timeregistrering.php?prosjektId={{ ProsjektReg.hentProsjektFraOppgave(o.Id).Id }}&oppgaveId={{ o.Id }}&fortsettTimereg=true" class="btn btn-success" aria-label="Fortsett"><span class="glyphicon glyphicon-play" aria-hidden="true"></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %} <!-- aktiv -->
 {% include 'footer.html' %}
 </body>
 </html>

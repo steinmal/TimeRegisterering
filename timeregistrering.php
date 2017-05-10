@@ -14,10 +14,27 @@ $sendt = "";
 $error = "";
 $oppgaveListe= "";
 $aktivert = "";
-$visTid = false;
+$visSkjema = false;
 $tidsestimat = 0;
 $aktivTid = 0;
+$manuell = false;
 session_start();
+
+//hente ut nylig brukte oppgaver for å fylle listen man kan trykke fortsette på
+$timeregs = array_reverse($TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId()));
+$nyligeOppgaveId = array();
+$i = 0;
+while (sizeof($nyligeOppgaveId) < 3 && $i < sizeof($timeregs)) {
+    if (!in_array($timeregs[$i]->getOppgaveId(), $nyligeOppgaveId)) {
+        $nyligeOppgaveId[] = $timeregs[$i]->getOppgaveId();
+    }
+    $i++;
+}
+$nyligeOppgaver = array();
+foreach ($nyligeOppgaveId as $n) {
+    $nyligeOppgaver[] = $OppgaveReg->hentOppgave($n);
+}
+
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
@@ -92,7 +109,7 @@ if(isset($_POST['submit'])){
             }
             break;
         case 'Stopp':
-            if ($timereg->getStatus == 3) { //status = stopp
+            if ($timereg->getStatus() == 3) { //status = stopp
                 header("Location: timeregistrering.php?error=ugyldigStopp");
                 return;
             }
@@ -105,19 +122,65 @@ if(isset($_POST['forslag'])){
     header("Location: nyttTidsestimat.php?oppgaveId=" . $oppgaveId);
     return;
 }
+if (isset($_POST['regManuell'])){
+    if (!isset($_POST['kommentar']) || $_POST['kommentar'] == "" || !isset($_POST['dato']) || !isset($_POST['start']) || !isset($_POST['slutt'])) {
+        header("Location: timeregistrering.php?error=ingenVerdi&manuell=on");
+        return;
+    }
+    $oppgaveId = $_POST['oppgaveId'];
+    $dato = $_POST['dato'];
+    $fra = $_POST['start'];
+    $til = $_POST['slutt'];
+    if ($fra > $til) {
+        header("Location: timeregistrering.php?error=startEtterSlutt&manuell=on");
+        return;
+    }
+    $pause = $_POST['pause'];
+    $kommentar = $_POST['kommentar'];
+    $automatisk = 0;
+    $TimeReg->lagTimeregistrering($oppgaveId, $_SESSION['bruker']->getId(), $dato, $fra, $til, $automatisk, $pause, $kommentar);
+    header("Location: timeregistrering.php?error=manLagret");
+    return;
+}
+
+if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen over tidligere oppgaver
+    $timereg = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
+    if(sizeof($timereg) > 0){
+        header("Location: timeregistrering.php?error=alleredeAktivTimereg");
+        return;
+    }
+    if(!isset($_REQUEST['oppgaveId'])){
+        header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
+        return;
+    }
+    $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+    $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
+    if(!in_array($prosjekt->getTeam(), $teamListe)){
+        header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
+        return;
+    }
+    $TimeReg->startTimeReg($_REQUEST['oppgaveId'], $_SESSION['bruker']->getId());
+    echo "Start";
+}
 
 
 $brukernavn = $_SESSION['bruker']->getNavn();
 $registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
 $prosjekt_id = 0;
 //$prosjekt = $ProsjektReg->hentAlleProsjekt();
-if($registrering != null && sizeof($registrering) > 0){
+if($registrering != null && sizeof($registrering) > 0){     //aktiv timereg
     $registrering = $registrering[0];
     $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
     $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
     $prosjekt_id = $prosjekt->getId();
+<<<<<<< HEAD
     echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visSkjema'=>true, 'visTid'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
 } else {
+=======
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visOppgave'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'manuell'=>false, 'error'=>$error));
+}
+else{
+>>>>>>> dbb8a17befd649d57510133c6c4feac053981c5a
     $brukerID = $_SESSION['bruker']->getId();
     $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
     $grunnProsjekter = array();
@@ -145,34 +208,46 @@ if($registrering != null && sizeof($registrering) > 0){
     $oppgave_id = 0;
     if(isset($_POST['oppgave'])) {
         $oppgave_id = $_POST['oppgave'];
-        //$visTid = true;
         $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
         $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave_id);
         $prosjekt_id = $_POST['prosjektId'];
     }
 
-    $visSkjema = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
-    $visTid = $oppgave_id > 0 ? true : false; 
+    $visOppgave = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
+    $visSkjema = $oppgave_id > 0 ? true : false; 
+    $dagensdato = date('Y-m-d');
+    $now = date('h:i:s');
+    $ikkeLengerBak = date('Y-m-d', strtotime('-1 months'));    //har midlertidig satt denne en måned bak
+    
+    if(isset($_REQUEST['manuell'])) {
+        $manuell = true;
+    }
     
     echo $twig->render('timeregistrering.html', 
                 array('aktivert'=>$aktivert, 
                       'innlogget'=>$_SESSION['innlogget'], 
-                      'TeamReg'=>$TeamReg, 'sendt'=>$sendt, 
+                      'TeamReg'=>$TeamReg, 
+                      'sendt'=>$sendt, 
                       'bruker'=>$_SESSION['bruker'], 
                       'aktiv'=>false, 
-                      'visSkjema'=>$visSkjema, 
+                      'visOppgave'=>$visOppgave, 
                       'prosjektListe'=>$prosjektListe, 
                       'oppgaveListe'=>$oppgaveListe, 
                       'brukernavn'=>$brukernavn, 
-                      'dagensdato'=>date("Y-m-d"), 
                       'klokkeslett'=>date('H:i'), 
                       'valgtProsjekt'=>$prosjekt_id, 
                       'valgtOppgave'=>$oppgave_id, 
                       'brukerTilgang'=>$_SESSION['brukerTilgang'], 
                       'OppgaveReg'=>$OppgaveReg,
-                      'visTid'=>$visTid,
+                      'visSkjema'=>$visSkjema,
                       'tidsestimat'=>$tidsestimat,
                       'aktivTid'=>$aktivTid,
+                      'dagensdato'=>$dagensdato,
+                      'now'=>$now,
+                      'ikkeLengerBak'=>$ikkeLengerBak,
+                      'manuell'=>$manuell,
+                      'nyligeOppgaver'=>$nyligeOppgaver,
+                      'ProsjektReg'=>$ProsjektReg,
                       'error'=>$error));
 }
 

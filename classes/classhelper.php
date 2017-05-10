@@ -9,7 +9,17 @@ function execStmt(PDOStatement $stmt){
         $stmt->execute();
         return true;
     } catch (Exception $e) {
-        $this->Feil($e->getMessage());
+        feil($e->getMessage());
+    }
+    return false;
+}
+
+function execStmtReturnId(PDOStatement $stmt, PDO $db){
+    try{
+        $stmt->execute();
+        return $db->lastInsertId();
+    } catch (Exception $e) {
+        feil($e->getMessage());
     }
     return false;
 }

@@ -76,6 +76,14 @@
                 </select>
             </div>
             <div class="form-group ">
+                <label for="productOwner">Product Owner:</label>
+                <select name="productOwner" class="form-control" id="productOwner">
+                    {% for bruker in brukere %}
+                    <option value="{{ bruker.Id }}" {% if valgtProsjekt.ProductOwner == bruker.Id %} selected {% endif %}>{{ bruker.Navn }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group ">
                 <label for="team">Team:</label>
                 <select name="team" class="form-control" id="team">
                     {% for team in teamListe %}
@@ -99,6 +107,7 @@
                 <input type="submit" name="opprettProsjekt" {% if valgtProsjekt.Id >= 0 %} value="Endre prosjekt" {% else %} value="Opprett prosjekt" {% endif %}>
                 <a href="prosjektadministrering.php">Avbryt</a>
             </div>
+
         </form>
     </div>
     {% include 'footer.html' %}

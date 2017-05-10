@@ -47,6 +47,9 @@
                     </option>
                     {% endfor %}
                 </select>
+                {% if valgtTeam.Id >= 0 %}
+                <input type="checkbox" name="fjernesFraTeam" value="true" checked>Slette gammel leder fra team?</input>
+                {% endif %}
             </div>
             <div class="form-group ">
                 <input type="submit" name="opprettTeam" {% if valgtTeam.Id>= 0 %} value="Endre Team" {% else %}

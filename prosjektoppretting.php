@@ -55,8 +55,9 @@ if(isset($_POST['opprettProsjekt'])){
     $inputOk = true;
     
     $nyttProsjekt->setNavn($_POST['prosjektNavn']);
-    $nyttProsjekt->setParent($_POST['foreldreProsjekt']);
+    $nyttProsjekt->setParent($_POST['foreldreProsjekt'] == null ? 1 : $_POST['foreldreProsjekt']);
     $nyttProsjekt->setLeder($_POST['prosjektLeder']);
+    $nyttProsjekt->setProductOwner($_POST['productOwner']);
     $nyttProsjekt->setTeam($_POST['team']);
     $nyttProsjekt->setBeskrivelse($_POST['prosjektBeskrivelse']);
     
@@ -128,7 +129,16 @@ if(isset($_POST['opprettProsjekt'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
             }
-            $error = $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            header("Location: prosjektadministrering.php?error=$error");
+            return;
+        case 'Gjenopprett':
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $gjenopprett = true;
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
             header("Location: prosjektadministrering.php?error=$error");
             return;
         default:

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brukerdashbord</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    
+    
+        <h1>Min side - {{ bruker.Navn }}</h1>
+        
+        <p>Her kan du se hvilke team du er med i, hvilke prosjekter du/teamet deltar på og detaljene for disse, du kan se og endre dine brukeropplysninger, og fortsette en timeregistrering på en oppgave du har jobbet på tidligere.</p>
+        <div class="col-lg">
+            <div class="btn-group">
+                {% if aktivert %}
+                    <a href="index.php"><button type="button" class="btn btn-primary">Hovedside</button></a>
+                    <a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>
+                    <a href="timeregistrering.php"><button type="button" class="btn btn-primary"> Timeregistrering</button></a>
+                {% endif %}
+                <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+            </div>
+        </div>
+        
+    
+        <!-- Viser brukerinfo og team bruker er med i -->
+        <div class="row">
+            <div class="col-lg-5">
+                <h2>Brukeropplysninger</h2>
+                <p><b>Navn: </b> {{ bruker.Navn }}<br/>
+                   <b>Epost: </b> {{ bruker.Epost }}<br/>
+                   <b>Telefon: </b> {{ bruker.Telefon }}<br/>
+                   <b>Brukertype: </b> {{ brukerType }}<br/></p>
+            </div>
+            <div class="col-lg-7">
+                <h2>Medlem i team</h2>
+                <table class="table table-striped col-md-6">
+                    <tr>
+                        <th>Navn</th>
+                        <th>Leder</th>
+                    </tr>
+                    {% for t in teamliste %}
+                        <tr>
+                            <td>{{ t.Navn }}</td>
+                            <td>{{ brukerReg.hentBruker(t.Leder).Navn }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    
+        <div class="col-lg">
+        <h2>Prosjekter</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Prosjektleder</th>
+                    <th>Product owner</th>
+                    <th>Team</th>
+                    <th>Startdato</th>
+                    <th>Sluttdato</th>
+                    <th></th>
+                </tr>
+                {% for p in prosjekter %}
+                    <tr>
+                        <td>{{ p.Navn }}</td>
+                        <td>{{ p.Beskrivelse }}</td>
+                        <td>{{ brukerReg.hentBruker(p.Leder).Navn }}</td>
+                        <td>{{ brukerReg.hentBruker(p.ProductOwner).Navn }}</td>
+                        <td>{{ TeamReg.hentTeam(p.Team).Navn }}</td>
+                        <td>{{ p.StartDato }}</td>
+                        <td>{{ p.SluttDato }}</td>
+                        {% if aktivert %}
+                        <td><a href="prosjektdetaljer.php?prosjektId={{ p.Id }}" class="btn btn-default" aria-label="Detaljer"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        {% if aktivert %}
+        <div class="col-lg">
+            <h3>Fortsette på en tidligere oppgave?</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Prosjekt</th>
+                    <th>Oppgave</th>
+                    <th>Oppgavetype</th>
+                    <th>Estimert tid</th>
+                    <th>Registrert tid</th>
+                    <th></th>
+                </tr>
+                {% for o in nyligeOppgaver %}
+                    <tr>
+                        <td>{{ ProsjektReg.hentProsjektFraOppgave(o.Id).Navn }}</td>
+                        <td>{{ o.Navn }}</td>
+                        <td>{{ OppgaveReg.hentOppgavetypeTekst(o.Type) }}</td>
+                        <td>{{ o.Tidsestimat }}</td>
+                        <td>{{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(o.Id) }}</td>
+                        <td><a href="timeregistrering.php?prosjektId={{ ProsjektReg.hentProsjektFraOppgave(o.Id).Id }}&oppgaveId={{ o.Id }}&fortsettTimereg=true" class="btn btn-success" aria-label="Fortsett"><span class="glyphicon glyphicon-play" aria-hidden="true"></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+        
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
