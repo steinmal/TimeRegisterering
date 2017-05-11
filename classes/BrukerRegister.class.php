@@ -86,6 +86,7 @@ class BrukerRegister {
         return getEn($stmt, $this->typeName);
     }
     
+    
     public function getAlleBrukertyper() {
         $stmt = $this->db->prepare("SELECT * FROM brukertype");
         return getAlle($stmt, "Brukertype", true);
@@ -177,4 +178,5 @@ class BrukerRegister {
             feil($e->getMessage());
         }
     }
+    
 }
