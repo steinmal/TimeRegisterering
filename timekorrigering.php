@@ -11,6 +11,9 @@ $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $TeamReg = new TeamRegister($db);
 $aktivert = "";
+$sysReg = new SystemRegister($db);
+$sysVar = $sysReg->hentSystemvariabel();
+$redigeringsgrense = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days')); 
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -39,7 +42,8 @@ if (isset($_REQUEST['action'])) {
         $error = "ingenValgt";
     } else if ($TimeReg->hentTimeregistrering($timeId)->getBrukerId() != $_SESSION['bruker']->getId() ){
         $error = "ugyldigId";
-
+    } else if($TimeReg->hentTimeregistrering($timeId)->getDato() < $redigeringsgrense) {
+        $error = "forGammelTimereg";
     } else {
         switch ($_REQUEST['action']) {
             case 'Korriger':

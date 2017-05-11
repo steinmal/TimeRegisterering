@@ -176,6 +176,7 @@
     <div class="form-group">
         {% if manuell %}
         <form method="post" action="timeregistrering.php" class="col-md-4">
+            <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}"/>
             <input type="hidden" name="oppgaveId" value="{{ valgtOppgave }}"/>
             <div class="form-group ">
                 <label for="dato">Dato:</label>
@@ -234,7 +235,7 @@
     </div>
     {% endif %} <!-- visSkjema -->
     
-    {% if not aktiv %}
+    {% if not aktiv and not visOppgave %} <!-- "fortsett" vises bare hvis det ikke allerede er en aktiv timereg, og hvis prosjekt ikke er valgt -->
     <div class="col-lg-10">
         <h3>Fortsett på en tidligere oppgave?</h3>
         <table class="table table-striped">

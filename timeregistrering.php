@@ -80,7 +80,7 @@ if(isset($_POST['submit'])){
             }
         }
     }
-
+    
     switch($_POST['submit']){
         case 'Start':
             $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
@@ -113,6 +113,8 @@ if(isset($_POST['submit'])){
                 return;
             }
             $TimeReg->stoppTimeReg($id);
+            break;
+        default:
             break;
     }
 }
@@ -159,7 +161,6 @@ if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen o
         return;
     }
     $TimeReg->startTimeReg($_REQUEST['oppgaveId'], $_SESSION['bruker']->getId());
-    echo "Start";
 }
 
 
@@ -211,7 +212,9 @@ else{
     $visSkjema = $oppgave_id > 0 ? true : false; 
     $dagensdato = date('Y-m-d');
     $now = date('h:i:s');
-    $ikkeLengerBak = date('Y-m-d', strtotime('-1 months'));    //har midlertidig satt denne en måned bak
+    $sysReg = new SystemRegister($db);
+    $sysVar = $sysReg->hentSystemvariabel();
+    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
     
     if(isset($_REQUEST['manuell'])) {
         $manuell = true;
