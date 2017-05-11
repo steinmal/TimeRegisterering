@@ -126,7 +126,7 @@ class TeamRegister {
             $stmt = $this->db->prepare("SELECT team_id FROM team WHERE team_leder=:brukerId");
             $stmt->bindParam(':brukerId', $brukerId, PDO::PARAM_INT);
             $stmt->execute();
-   
+
             while ($id = $stmt->fetch()) {
                 $teamId[] = $id['team_id'];
             }
@@ -134,6 +134,12 @@ class TeamRegister {
             feil($e->getMessage());
         }
         return $teamId;
+    }
+
+    public function getAlleTeamFraTeamleder($brukerId) {
+        $stmt = $this->db->prepare("SELECT * FROM team WHERE team_leder=:brukerId");
+        $stmt->bindParam(':brukerId', $brukerId, PDO::PARAM_INT);
+        return getAlle($stmt, $this->typeName);
     }
 
     // TODO: Burde kanskje være i BrukerRegister ettersom den returnerer brukere. Funksjonen brukes ikke?

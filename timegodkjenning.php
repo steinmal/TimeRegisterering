@@ -79,24 +79,23 @@ if(isset($_GET['action'])){
 
 $bruker = $_SESSION['bruker'];
 $teamIDs = array();
-$teamIDs = $TeamReg->getTeamIdFraTeamleder($bruker->getId());
-
-$teams = array();
-$brukerIds = array();
-foreach ($teamIDs as $teamID) {
-    $teams[] = $TeamReg->hentTeam($teamID);
-    $brukerIdArray = $TeamReg->getTeamMedlemmerId($teamID);;
-    foreach ($brukerIdArray as $brukerId) {
-        $brukerIds[] = $brukerId;
-    }
+if ($_SESSION['brukerTilgang']->isProsjektadmin()) {
+    $teams = $TeamReg->hentAlleTeam();
+} else {
+    $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
 }
-
+$brukerIds = array();
 $timeregistreringer = array();
-foreach ($brukerIds as $brukerId) {
-    $timeregArray = $TimeReg->hentTimeregistreringerFraBruker($brukerId);
-    foreach ($timeregArray as $timereg) {
-        $timeregistreringer[] = $timereg;
+foreach ($teams as $team) {
+    $teamID = $team->getId();
+    $timeregistreringer[$teamID] = $TimeReg->hentTimeregistreringerFraTeam($teamID);
+    $manglerGodkjenning = 0;
+    foreach ($timeregistreringer[$teamID] as $timeregistrering) {
+        if ($timeregistrering->getTilstandTekst() == "Venter godkjenning" || $timeregistrering->getTilstandTekst() == "Gjenopprettet, venter godkjenning") {
+            $manglerGodkjenning++;
+        }
     }
+    $timeregManglerGodkjenning[$teamID] = $manglerGodkjenning;
 }
 
 if (isset($_GET['error'])) {
@@ -113,6 +112,7 @@ echo $twig->render('timegodkjenning.html', array(
     'oppgaveReg'=>$OppgaveReg,
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
+    'timeregManglerGodkjenning'=>$timeregManglerGodkjenning,
     'visGodkjent'=>$visGodkjent,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
     'error'=>$error,

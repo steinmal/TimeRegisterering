@@ -43,6 +43,14 @@
             Du kan ikke godkjenne/avvise en deaktivert timeregistrering
         </div>
     {% endif %}
+    {% for team in teams if timeregManglerGodkjenning[team.Id] > 0 %}
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team {{ team.Navn }}: {{ timeregManglerGodkjenning[team.Id] }} time{% if timeregManglerGodkjenning[team.Id] > 1 %}r{% endif %} venter på godkjenning
+        </div>
+    {% endfor %}
+
 
     <!--Teamleders team-->
     {% for team in teams %}
@@ -66,7 +74,7 @@
 
                 <tbody>
                 <!--Alle timeoppføringer på teamet-->
-                {% for timereg in timeReg.hentTimeregistreringerFraTeam(team.Id) %}
+                {% for timereg in timeregistreringer[team.Id] %}
                     {% if visGodkjent == "on" %}  <!-- Vis godkjente = vis de som er godkjent (0) og avvist (2) -->
                        {% if timereg.TilstandTekst == "Godkjent" or timereg.TilstandTekst == "Avvist" %}
                             <tr>
