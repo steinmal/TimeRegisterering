@@ -193,7 +193,7 @@ else{
     }
     foreach ($grunnProsjekter as $p) {
         $alleProsjekter[] = $p;
-        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg);
+        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg, ProsjektOversikt::$OT_PROSJEKTER);
         $alleProsjekter = array_merge($alleProsjekter, $prosjektOversikt->getAlleUnderProsjekt());
     }
 

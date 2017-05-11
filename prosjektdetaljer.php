@@ -67,7 +67,7 @@ $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 $TimeregReg = new TimeregistreringRegister($db);
 
-$prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg);
+$prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
 $parentProsjekt = null;
 if ($prosjekt->getParent()) {
     $parentProsjekt = $ProsjektReg->hentProsjekt($prosjekt->getParent());
