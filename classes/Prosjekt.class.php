@@ -1,5 +1,7 @@
 <?php
     class Prosjekt {
+        // TODO: Globale variabler for ARKIVERT, AKTIV, AS_PARENT
+        
         private $prosjekt_id;
         private $foreldre_prosjekt_id;
         private $prosjekt_navn;
@@ -27,7 +29,8 @@
         public function getBeskrivelse() { return $this->prosjekt_beskrivelse; }
         public function getProductOwner() { return $this->prosjekt_product_owner; }
         public function getRegistreringsDato() { return $this->prosjekt_registrerings_dato; }
-        public function getStatus() { return $this->isArkivert() ? "Arkivert" : "Aktiv"; }
+        public function getStatus(){ return $this->prosjekt_arkivert; }
+        public function getStatusString() { return $this->isArkivert() ? "Arkivert" : "Aktiv"; }
         
         public function getDelNivaa(){ return $this->delNivaa; }
 
@@ -42,6 +45,7 @@
         public function setSluttDato($sluttdato) { $this->prosjekt_sluttdato = $sluttdato;}
         public function setBeskrivelse($beskrivelse) { $this->prosjekt_beskrivelse = $beskrivelse;}
         public function setProductOwner($product_owner) { $this->prosjekt_product_owner = $product_owner;}
+        public function setStatus($status){ $this->prosjekt_arkivert = $status; }
         
         public function setDelNivaa(int $nivaa){ $this->delNivaa = $nivaa; }
         

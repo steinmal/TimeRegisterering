@@ -44,12 +44,48 @@ if (isset($_GET['error'])) {
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
         case 'Arkiver':
-            $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            /*$ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
+            break;*/
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+            $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
+            $ProsjektReg->arkiverProsjekt($prosjekt->getId());
+            foreach($oversikt->getAlleUnderProsjekt(true) as $uProsjekt){
+                if($uProsjekt->getStatus() == 0){
+                    $ProsjektReg->arkiverProsjekt($uProsjekt->getId(), 2);
+                }
+            }
             break;
         case 'Gjenopprett':
-            $gjenopprett = true;
+            /*$gjenopprett = true;
             $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
-            break;
+            break;*/
+            if(!isset($_REQUEST['prosjektId'])){
+                header("Location: prosjektadministrering.php?error=noRadio");
+                return;
+            }
+            $prosjektTemp = clone $prosjekt;
+            $prosjekt->setStatus(0);
+            while($prosjektTemp->getParent() != 1){
+                $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
+                while($prosjektTemp->getStatus != 1 && $prosjektTemp->getParent() != 1){
+                    $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
+                }
+                $oversikt = new ProsjektOversikt($prosjektTemp, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
+                $oversikt->gjennopprett();
+                $prosjektTemp->setStatus(0);
+            }
+            if($prosjektTemp->getStatus() != 0){
+                $oversikt = new ProsjektOversikt($prosjektTemp, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
+                $oversikt->gjennopprett($ProsjektReg);
+            }
+            $error = "arkivert";
+            //$ProsjektReg->arkiverProsjekt($_GET['prosjektId'], 0);
+            header("Location: prosjektdetaljer.php?prosjektId=".$prosjektId."&error=$error");
+            return;
     }
     //Reload project
     if (isset($_REQUEST['visProsjekt'])) {

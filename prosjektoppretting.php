@@ -129,6 +129,14 @@ if(isset($_POST['opprettProsjekt'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
             }
+            $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+            $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
+            foreach($oversikt->getAlleUnderProsjekt(true) as $uProsjekt){
+                var_dump($uProsjekt);
+                if($uProsjekt->getStatus() == 0){
+                    $ProsjektReg->arkiverProsjekt($uProsjekt->getId(), 2);
+                }
+            }
             $ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
             header("Location: prosjektadministrering.php?error=$error");
             return;
@@ -137,8 +145,16 @@ if(isset($_POST['opprettProsjekt'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
             }
-            $gjenopprett = true;
-            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
+            $prosjektTemp = clone $prosjekt;
+            while($prosjektTemp->getParent() != 1){
+                $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
+                while($prosjektTemp->getStatus != 1 && $prosjektTemp->getParent() != 1){
+                    $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
+                }
+                $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
+                $oversikt->gjennopprett();
+            }
+            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], 0);
             header("Location: prosjektadministrering.php?error=$error");
             return;
         default:

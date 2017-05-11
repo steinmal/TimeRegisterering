@@ -2,13 +2,15 @@
 class ProsjektOversikt {
     private $prosjekt;
     private $prosjektListe = array(); //Alle underordnede prosjekt
+    private $prosjektListeRekursiv = array();
 
     private $oversiktListe = array();
+    private $oversiktListeRekursiv = array();
+    
     private $faseOversiktListe = array();
 
     private $oppgaver = array();
     private $timeregistreringer = array();
-    
 
     private $delNivaa;
     private $tid = array(); //Tid arbeidet for kvar oppgavetype, ikkje inkludert underprosjekt
@@ -29,7 +31,6 @@ class ProsjektOversikt {
     {
         $this->prosjekt = $prosjekt;
         $this->delNivaa = $nivaa;
-        $this->prosjektOgUnderProsjekt[] = $prosjekt;
 
         //$tidHelper = new DateHelper();
         //$totalHelper = new DateHelper();
@@ -68,14 +69,16 @@ class ProsjektOversikt {
             $this->totaltid[$type]->s = $tid->s;
         }
 
-        $this->oversiktListe[] = $this;
+        $this->oversiktListeRekursiv[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
             $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
-            //$this->oversiktListe[] = $oversikt;
-            $this->oversiktListe = array_merge($this->oversiktListe, $oversikt->getOversiktListe());
-            $this->prosjektListe[] = $p;
+            $this->oversiktListe[] = $oversikt;
+            $this->oversiktListeRekursiv = array_merge($this->oversiktListeRekursiv, $oversikt->getOversiktListe());
+            $this->oversiktListeRekursiv[] = $p;
+            $this->prosjektListeRekursiv[] = $p;
+            $this->prosjektListeRekursiv = array_merge($this->prosjektListeRekursiv, $oversikt->getAlleUnderProsjekt(true));
             //$totalHelper->add($oversikt->getTid());
             //var_dump($this->totaltid);
             foreach($oversikt->getTotalTidArray() as $type => $tid){
@@ -97,10 +100,29 @@ class ProsjektOversikt {
         }
         ksort($this->totaltidprdag);
     }
+    
+    public function gjennopprett(ProsjektRegister $ProsjektReg){
+        if($this->prosjekt->getStatus() == 1 || $this->prosjekt->getParent() == 1){
+            $this->gjennopprettUnderProsjekt($ProsjektReg);
+        } else {
+            // TODO: Feilmelding dersom man forsøker å gjennopprette et prosjekt som ikke er arkivert direkte
+        }
+    }
+    
+    private function gjennopprettUnderProsjekt(ProsjektRegister $ProsjektReg){
+        echo "INSIDE INNER: " . $this->prosjekt->getId();
+        $ProsjektReg->arkiverProsjekt($this->prosjekt->getId(), 0);
+        //$this->prosjekt->setStatus(0);
+        foreach($this->oversiktListe as $oversikt){
+            if($oversikt->getProsjekt()->getStatus() != 1){
+                $oversikt->gjennopprettUnderProsjekt($ProsjektReg);
+            }
+        }
+    }
 
     public function getProsjekt(){ return $this->prosjekt; }
-    public function getAlleUnderProsjekt(){ return $this->prosjektListe; }
-    public function getOversiktListe(){ return $this->oversiktListe; }
+    public function getAlleUnderProsjekt($rekursiv = false){ return $rekursiv ? $this->prosjektListeRekursiv : $this->prosjektListe; }
+    public function getOversiktListe($rekursiv = true){ return $rekursiv ? $this->oversiktListeRekursiv : $this->oversiktListe; }
     public function getFaseOversiktListe(){ return $this->faseOversiktListe; }
 
     public function getNavnMedInnrykk(){

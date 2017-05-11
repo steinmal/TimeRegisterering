@@ -2,6 +2,8 @@
 require_once("classhelper.php");
 
 class ProsjektRegister {
+    // TODO: Smart solution for avoiding exceptions from prepare or bindParam methods.
+    // As of now there is no try/catch around those in favor of the "pretty" code inside the classHelper file.
     private $db;
     private $typeName = "Prosjekt";
 
@@ -73,10 +75,9 @@ class ProsjektRegister {
         return execStmt($stmt);
     }
     
-    public function arkiverProsjekt($id, $gjenopprett=false){
-        $arkiver = ($gjenopprett ? 0 : 1);
+    public function arkiverProsjekt($id, $status=1){
         $stmt = $this->db->prepare("UPDATE prosjekt SET prosjekt_arkivert=:arkiver WHERE prosjekt_id=:id");
-        $stmt->bindParam(':arkiver', $arkiver, PDO::PARAM_INT);
+        $stmt->bindParam(':arkiver', $status, PDO::PARAM_INT);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return execStmt($stmt);
     }
