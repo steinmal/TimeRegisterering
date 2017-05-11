@@ -33,6 +33,14 @@ if(isset($_GET['oppgaveId'])) {
 
     $oppgave_id = $_GET['oppgaveId'];
     $oppgave = $OppgaveReg->hentOppgave($oppgave_id);
+    $fase = $FaseReg->hentFase($oppgave->getFaseId());
+    $prosjekt = $ProsjektReg->hentProsjektFraFase($fase->getId());
+    $team = $TeamReg->hentTeam($prosjekt->getTeam());
+    $antallMedlemmer = $TeamReg->antallMedlemmerTeam($team->getId());
+    $oppgaveType = $OppgaveReg->hentOppgaveTypeTekst($oppgave->getId());
+    $regTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave->getId());
+    $godkjentTid = $OppgaveReg->hentGodkjenteTimerPrOppgave($oppgave->getId());
+    
     $brukerId = $_SESSION['bruker']->getId();
     $teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
     $prosjektlederId = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getLeder();
@@ -68,4 +76,22 @@ if (isset($_GET['error'])) {
 
 
 
-echo $twig->render('oppgavedetaljer.html', array('aktivert'=>$aktivert, 'fasereg'=>$FaseReg,'oppgave'=>$oppgave, 'TeamReg'=>$TeamReg, 'estimatliste'=>$estimatListe, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error));
+echo $twig->render('oppgavedetaljer.html', 
+             array('aktivert'=>$aktivert, 
+                   'fasereg'=>$FaseReg,
+                   'oppgave'=>$oppgave, 
+                   'TeamReg'=>$TeamReg, 
+                   'estimatliste'=>$estimatListe, 
+                   'innlogget'=>$_SESSION['innlogget'], 
+                   'bruker'=>$_SESSION['bruker'], 
+                   'brukerReg'=>$BrukerReg, 
+                   'brukerTilgang'=>$_SESSION['brukerTilgang'], 
+                   'error'=>$error,
+                   'prosjekt'=>$prosjekt,
+                   'fase'=>$fase,
+                   'team'=>$team,
+                   'antallMedlemmer'=>$antallMedlemmer,
+                   'BrukerReg'=>$BrukerReg,
+                   'oppgaveType'=>$oppgaveType,
+                   'registrertTid'=>$regTid,
+                   'godkjentTid'=>$godkjentTid));

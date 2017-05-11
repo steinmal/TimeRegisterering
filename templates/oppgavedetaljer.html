@@ -13,9 +13,85 @@
     {% include 'header.html' %}
     <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjektId={{ fasereg.hentFase(oppgave.FaseId).ProsjektId }}">Prosjektdetaljer</a>
     <h1>Oppgavedetaljer for {{ oppgave.Navn }}</h1>
+    <div class="col-lg">
+    <h3>Grunnleggende informasjon om oppgaven</h3>
+    <p>
+        <b>Oppgavenavn: </b> {{ oppgave.Navn }}</br>
+        <b>Oppgavetype: </b> {{ oppgaveType }}</br>
+        <b>Estimert tid: </b> {{ oppgave.Tidsestimat }} timer</br>
+        <b>Registrert tid: </b> {{ registrertTid }} timer</br>
+        <b>Godkjent tid: </b> {{ godkjentTid }}
+    </p>
+    </div>
+    <div>
+        <br/>
+    </div>
     
-    <h3>Nåværende tidsestimat: {{ oppgave.Tidsestimat }}</h3>
-
+    <div class="col-lg">
+        <h3>Informasjon om oppgavens prosjekt, fase og team</h3>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="6"><h4>Prosjekt</h4></th>
+            </tr>
+            <tr>
+                <th>Navn</th>
+                <th>Leder</th>
+                <th>Owner</th>
+                <th>Team</th>
+                <th>Start</th>
+                <th>Slutt</th>
+            </tr>
+            <tr>
+                <td>{{ prosjekt.Navn }}</td>
+                <td>{{ BrukerReg.hentBruker(prosjekt.Leder).Navn }}</td>
+                <td>{{ BrukerReg.hentBruker(prosjekt.ProductOwner).Navn }}</td>
+                <td>{{ team.Navn }}</td>
+                <td>{{ prosjekt.StartDato }}</td>
+                <td>{{ prosjekt.SluttDato }}</td>
+            </tr>
+        </table>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="4"><h4>Fase</h4></th>
+            </tr>
+            <tr>
+                <th>Navn</th>
+                <th>Tilstand</th>
+                <th>Start</th>
+                <th>Slutt</th>
+            </tr>
+            <tr>
+                <td>{{ fase.Navn }}</td>
+                <td>{{ fase.Tilstand }}</td>
+                <td>{{ fase.StartDato }}</td>
+                <td>{{ fase.SluttDato }}</td>
+            </tr>
+        </table>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="3"><h4>Team</h4></th>
+            </tr>
+            <tr>
+                <th>Navn</th>
+                <th>Leder</th>
+                <th>Antall medlemmer</th>
+            </tr>
+            <tr>
+                <td>{{ team.Navn }}</td>
+                <td>{{ BrukerReg.hentBruker(team.Leder).Navn }}</td>
+                <td>{{ antallMedlemmer }}</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div>
+        <br/>
+    </div>
+    
+    <p>v Dette flyttes kanskje i oppgave 60.1? v</p>
+    
+    <h3>Endre oppgavens tidsestimat</h3>
+    <p>Nåværende tidsestimat: {{ oppgave.Tidsestimat }}</p>
     <div class="col-lg-4">
 
             <table class="table table-striped">
