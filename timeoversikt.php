@@ -68,6 +68,25 @@ if(isset($_GET['visVentende'])) {
 
 $timeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), $datefrom, $dateto);
 
-echo $twig->render('timeoversikt.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'timeregistreringer'=>$timeregistreringer, 'brukernavn'=>$brukernavn,
-    'oppgavereg'=>$OppgaveReg, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'datefrom'=>$datefrom, 'dateto'=>$dateto, 'error'=>$error, 'visDeaktiverte'=>$visDeaktiverte, 'visVentende'=>$visVentende));
+$sysReg = new SystemRegister($db);
+$sysVar = $sysReg->hentSystemvariabel();
+$ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
+
+echo $twig->render('timeoversikt.html', 
+             array('aktivert'=>$aktivert, 
+                   'innlogget'=>$_SESSION['innlogget'], 
+                   'TeamReg'=>$TeamReg, 
+                   'bruker'=>$_SESSION['bruker'], 
+                   'timeregistreringer'=>$timeregistreringer, 
+                   'brukernavn'=>$brukernavn,
+                   'oppgavereg'=>$OppgaveReg, 
+                   'brukerTilgang'=>$_SESSION['brukerTilgang'], 
+                   'noRadio'=>$noRadio, 
+                   'deaktivertError'=>$deaktivertError, 
+                   'datefrom'=>$datefrom, 
+                   'dateto'=>$dateto, 
+                   'error'=>$error, 
+                   'visDeaktiverte'=>$visDeaktiverte, 
+                   'visVentende'=>$visVentende,
+                   'redigeringsgrense'=>$ikkeLengerBak));
 ?>

@@ -102,6 +102,23 @@ class TeamRegister {
         }
         return $brukerIds;
     }
+    
+    public function getTeamMedlemmer($team_id) {
+        $brukere = array();
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_id IN(SELECT bruker_id FROM teammedlemskap WHERE team_id=:teamId)");
+            $stmt->bindparam(':teamId', $team_id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            while ($bruker = $stmt->fetchObject('Bruker')) {
+                $brukere[] = $bruker;
+            }
+            
+        } catch (Exception $e) {
+            feil($e->getMessage());
+        }
+        return $brukere;
+    }
 
     public function getTeamIdFraTeamleder($brukerId) {
         $teamId = array();
@@ -109,7 +126,7 @@ class TeamRegister {
             $stmt = $this->db->prepare("SELECT team_id FROM team WHERE team_leder=:brukerId");
             $stmt->bindParam(':brukerId', $brukerId, PDO::PARAM_INT);
             $stmt->execute();
-   
+
             while ($id = $stmt->fetch()) {
                 $teamId[] = $id['team_id'];
             }
@@ -119,14 +136,21 @@ class TeamRegister {
         return $teamId;
     }
 
+    public function getAlleTeamFraTeamleder($brukerId) {
+        $stmt = $this->db->prepare("SELECT * FROM team WHERE team_leder=:brukerId");
+        $stmt->bindParam(':brukerId', $brukerId, PDO::PARAM_INT);
+        return getAlle($stmt, $this->typeName);
+    }
+
     // TODO: Burde kanskje være i BrukerRegister ettersom den returnerer brukere. Funksjonen brukes ikke?
-    public function hentTeamMedlemmer($team_id) {
+    // TODO: Tror ikke denne funksjonen er i bruk, har derfor kommentert den ut. 
+    // Om det viser seg at den likevel trengs så dukker det vel snart opp en feil.. BK
+   /* public function hentTeamMedlemmer($team_id) {
         $stmt = $this->db->prepare("SELECT * FROM brukere WHERE bruker_id IN (SELECT bruker_id FROM teammedlemskap WHERE team_id=:team_id)");
         $stmt->bindparam(':team_id', $team_id, PDO::PARAM_INT);
         return getAlle($stms, "Bruker");
-    }
+    }*/
     
-
     public function harTeamlederEtTeam($bruker_id) {
         try {
             $stmt = $this->db->prepare("SELECT count(*) FROM team WHERE team_leder=:brukerId");

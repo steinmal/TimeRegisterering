@@ -80,14 +80,16 @@ if(isset($_POST['submit'])){
             }
         }
     }
-
+    
     switch($_POST['submit']){
         case 'Start':
-            $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
-            $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
-            if(!in_array($prosjekt->getTeam(), $teamListe)){
-                header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
-                return;
+            if (!$_SESSION['brukerTilgang']->isProsjektadmin()) {
+                $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
+                $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
+                if (!in_array($prosjekt->getTeam(), $teamListe)) {
+                    header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_POST['prosjektId']);
+                    return;
+                }
             }
             //echo "Hei";
             $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
@@ -114,6 +116,8 @@ if(isset($_POST['submit'])){
                 return;
             }
             $TimeReg->stoppTimeReg($id);
+            break;
+        default:
             break;
     }
 }
@@ -153,14 +157,15 @@ if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen o
         header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
         return;
     }
-    $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
-    $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
-    if(!in_array($prosjekt->getTeam(), $teamListe)){
-        header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
-        return;
+    if (!$_SESSION['brukerTilgang']->isProsjektadmin()) {
+        $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
+        $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
+        if (!in_array($prosjekt->getTeam(), $teamListe)) {
+            header("Location: timeregistrering.php?error=ugyldigOppgave&prosjekt=" . $_REQUEST['prosjektId']);
+            return;
+        }
     }
     $TimeReg->startTimeReg($_REQUEST['oppgaveId'], $_SESSION['bruker']->getId());
-    echo "Start";
 }
 
 
@@ -177,22 +182,26 @@ if($registrering != null && sizeof($registrering) > 0){     //aktiv timereg
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
-    $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
     $grunnProsjekter = array();
     $alleProsjekter = array();
-    foreach ($teamIDs as $i) {
-        $grunnProsjekter = array_merge($grunnProsjekter, $ProsjektReg->hentProsjekterFraTeam($i));
+    if ($_SESSION['brukerTilgang']->isProsjektadmin()) {
+        $grunnProsjekter = $ProsjektReg->hentAlleProsjekt();
+    } else {
+        $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
+        foreach ($teamIDs as $i) {
+            $grunnProsjekter = array_merge($grunnProsjekter, $ProsjektReg->hentProsjekterFraTeam($i));
+        }
     }
     foreach ($grunnProsjekter as $p) {
         $alleProsjekter[] = $p;
-        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg);
+        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg, ProsjektOversikt::$OT_PROSJEKTER);
         $alleProsjekter = array_merge($alleProsjekter, $prosjektOversikt->getAlleUnderProsjekt());
     }
 
     $prosjektListe = array_unique($alleProsjekter);
     
     if(isset($_POST['prosjektId'])) {
-        if(!in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
+        if(!$_SESSION['brukerTilgang']->isProsjektadmin() && !in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }
@@ -212,7 +221,9 @@ else{
     $visSkjema = $oppgave_id > 0 ? true : false; 
     $dagensdato = date('Y-m-d');
     $now = date('h:i:s');
-    $ikkeLengerBak = date('Y-m-d', strtotime('-1 months'));    //har midlertidig satt denne en måned bak
+    $sysReg = new SystemRegister($db);
+    $sysVar = $sysReg->hentSystemvariabel();
+    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
     
     if(isset($_REQUEST['manuell'])) {
         $manuell = true;

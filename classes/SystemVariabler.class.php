@@ -9,6 +9,8 @@
 class SystemVariabler
 {
     private $tidsparameter;
+    
+    function __construct() {}
 
     public function getTidsparameter() { return $this->tidsparameter; }
 

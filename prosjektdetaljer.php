@@ -58,6 +58,7 @@ if (isset($_REQUEST['action'])) {
                     $ProsjektReg->arkiverProsjekt($uProsjekt->getId(), 2);
                 }
             }
+            $error = "arkivert";
             break;
         case 'Gjenopprett':
             /*$gjenopprett = true;
@@ -68,25 +69,24 @@ if (isset($_REQUEST['action'])) {
                 return;
             }
             $prosjektTemp = clone $prosjekt;
-            $prosjekt->setStatus(0);
             while($prosjektTemp->getParent() != 1){
-                $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
-                while($prosjektTemp->getStatus != 1 && $prosjektTemp->getParent() != 1){
+                while($prosjektTemp->getStatus() != 1 && $prosjektTemp->getParent() != 1){
                     $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
                 }
                 $oversikt = new ProsjektOversikt($prosjektTemp, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
-                $oversikt->gjennopprett();
+                $oversikt->gjennopprett($ProsjektReg);
                 $prosjektTemp->setStatus(0);
+                $prosjektTemp = $ProsjektReg->hentProsjekt($prosjektTemp->getParent());
             }
             if($prosjektTemp->getStatus() != 0){
                 $oversikt = new ProsjektOversikt($prosjektTemp, $ProsjektReg, new FaseRegister($db), new OppgaveRegister($db), new TimeregistreringRegister($db));
                 $oversikt->gjennopprett($ProsjektReg);
             }
-            $error = "arkivert";
+            $error = "gjennopprettet";
             //$ProsjektReg->arkiverProsjekt($_GET['prosjektId'], 0);
-            header("Location: prosjektdetaljer.php?prosjektId=".$prosjektId."&error=$error");
-            return;
     }
+    //header("Location: prosjektdetaljer.php?prosjektId=".$prosjektId."&error=$error");
+    //return;
     //Reload project
     if (isset($_REQUEST['visProsjekt'])) {
         $prosjektId = $_REQUEST['visProsjekt'];
@@ -103,7 +103,7 @@ $OppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
 $FaseListe = $FaseReg->hentAlleFaser($prosjekt->getId());
 $TimeregReg = new TimeregistreringRegister($db);
 
-$prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg);
+$prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
 $parentProsjekt = null;
 if ($prosjekt->getParent()) {
     $parentProsjekt = $ProsjektReg->hentProsjekt($prosjekt->getParent());

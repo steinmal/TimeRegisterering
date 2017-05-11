@@ -24,6 +24,22 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
 
         <h1>Teamrapport - Timeoversikt medarbeidere</h1>
+    
+        <p><form method="GET" action="teamrapportansatt.php" id="teamSelectForm">
+            <p><label for="teamID">Team:</label> 
+                <select class="form-control" name="team" id="teamID" onchange="document.getElementById('teamSelectForm').submit();">
+                    {% if valgtTeam < 1 %}
+                        <option selected="selected"></option>
+                    {% endif %}
+                    
+                    {% for team in teams %}
+                        <option value="{{ team.getId() }}" {% if team.getId() == valgtTeam %} selected="selected" {% endif %}>{{ team.getNavn() }}</option>
+                    {% endfor %}
+                </select>
+                {% if valgtTeam < 1 %}<small class="form-text text-muted">Velg team</small>{% endif %}</p>
+                
+
+        </form></p>  
 
         <div class="rapport">
             <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
@@ -85,3 +101,4 @@
                 //-->
             </script>
             <form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">
+

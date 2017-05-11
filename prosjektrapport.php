@@ -42,7 +42,6 @@ $twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'
 $TimeregReg = new TimeregistreringRegister($db);
 $FaseReg = new FaseRegister($db);
 //$rapportProsjekt = new RapportProsjekt($ProsjektReg, $OppgaveReg, $TimeregReg, $prosjekt);
-$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg);
 
 //Type kan slås sammen med rapportType
 
@@ -50,22 +49,29 @@ $type = 'team';
 if(isset($_GET['rapportType'])){ $type = $_GET['rapportType']; }
 switch ($type) {
     case 'team':
+        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
     case 'prosjekt':
         /*$grunnProsjekt = $prosjekt;
         $underProsjekt = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());*/
+        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         $twigs['oversiktListe'] = $oversikt->getOversiktListe();
         $twigs['oppgaveTyper'] = $OppgaveReg->hentAlleOppgavetyper();
         break;
     case 'oppgave':
+        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
     case 'fremdrift':
+        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_BURNUP);
         $twigs['oppgaveliste'] = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt->getId());
         $twigs['faseliste'] = $FaseReg->hentAlleFaser($prosjekt->getId());
         $twigs['oppgavereg'] = $OppgaveReg;
         $twigs['burnupEstimatData'] = $oversikt->getTotalEstimatAsLinearData();
         $twigs['burnupTidprdagData'] = $oversikt->getTotalTidPrDagArrayAsLinearData();
         //var_dump($twigs['oppgaver']);
+        break;
+    default:
+        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
 }
 

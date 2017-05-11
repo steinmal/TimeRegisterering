@@ -20,12 +20,18 @@ class ProsjektOversikt {
     private $totalestimat = array(); //Estimat for kvar oppgavetype, inkludert underprosjekt
     private $totaltidprdag = array(); //Tid arbeidet for kvar dag, for kvar oppgavetype, inkludert underprosjekt
 
+    //Oversikttyper:
+    public static $OT_PROSJEKTER = 1; //Minst detaljer - kun prosjekt og underprosjekt
+    public static $OT_TIMER = 2; //Meir detaljer - timer pr oppgave
+    public static $OT_BURNUP = 3; //Mest detaljert - timer pr dag pr oppgave
+
     public function __construct(
             Prosjekt $prosjekt,
             ProsjektRegister $ProsjektReg,
             FaseRegister $FaseReg,
             OppgaveRegister $OppgaveReg,
             TimeregistreringRegister $TimeregRegister,
+            $oversiktType = 2,
             $nivaa = 0)//,
             //ProsjektOversikt $grunnRapport = null) // For debugging
     {
@@ -35,45 +41,46 @@ class ProsjektOversikt {
         //$tidHelper = new DateHelper();
         //$totalHelper = new DateHelper();
         //$this->timeregistreringer = $TimeregRegister->hentTimeregistreringerFraProsjekt($prosjekt->getId());
+        if ($oversiktType != self::$OT_PROSJEKTER) {
+            foreach ($FaseReg->hentAlleFaser($prosjekt->getId()) as $fase) {
+                $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
+                $faseOversiktListe[] = $oversikt;
+                //$tidHelper->add($oversikt->getTid());
 
-        foreach($FaseReg->hentAlleFaser($prosjekt->getId()) as $fase){
-            $oversikt = new FaseOversikt($fase, $OppgaveReg, $TimeregRegister);
-            $faseOversiktListe[] = $oversikt;
-            //$tidHelper->add($oversikt->getTid());
-
-            foreach($oversikt->getTidArray() as $type => $tid){
-                if (!array_key_exists($type, $this->tid)) $this->tid[$type] = new DateInterval('PT0S');
-                //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
-                $this->tid[$type] = DateHelper::sumDateInterval($this->tid[$type], $tid);
-            }
-            foreach($oversikt->getEstimatArray() as $type => $tid){
-                if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
-                $this->totalestimat[$type] += $tid;
-            }
-            foreach($oversikt->getTidPrDagArray() as $dag => $data){
-                foreach($data as $type => $tid){
-                    if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
-                    if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
-                    $this->totaltidprdag[$dag][$type] += $tid;
+                foreach ($oversikt->getTidArray() as $type => $tid) {
+                    if (!array_key_exists($type, $this->tid)) $this->tid[$type] = new DateInterval('PT0S');
+                    //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
+                    $this->tid[$type] = DateHelper::sumDateInterval($this->tid[$type], $tid);
+                }
+                foreach ($oversikt->getEstimatArray() as $type => $tid) {
+                    if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
+                    $this->totalestimat[$type] += $tid;
+                }
+                foreach ($oversikt->getTidPrDagArray() as $dag => $data) {
+                    foreach ($data as $type => $tid) {
+                        if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
+                        if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
+                        $this->totaltidprdag[$dag][$type] += $tid;
+                    }
                 }
             }
-        }
 
-        //$this->tid = $tidHelper->getInterval();
-        //$totalHelper->add($this->tid);
-        foreach($this->tid as $type => $tid){
-            $this->totaltid[$type] = new DateInterval("PT0S");
-            $this->totaltid[$type]->d = $tid->d;
-            $this->totaltid[$type]->h = $tid->h;
-            $this->totaltid[$type]->i = $tid->i;
-            $this->totaltid[$type]->s = $tid->s;
+            //$this->tid = $tidHelper->getInterval();
+            //$totalHelper->add($this->tid);
+            foreach($this->tid as $type => $tid){
+                $this->totaltid[$type] = new DateInterval("PT0S");
+                $this->totaltid[$type]->d = $tid->d;
+                $this->totaltid[$type]->h = $tid->h;
+                $this->totaltid[$type]->i = $tid->i;
+                $this->totaltid[$type]->s = $tid->s;
+            }
         }
 
         $this->oversiktListeRekursiv[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
-            $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
+            $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $oversiktType, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
             $this->oversiktListe[] = $oversikt;
             $this->oversiktListeRekursiv = array_merge($this->oversiktListeRekursiv, $oversikt->getOversiktListe());
             $this->oversiktListeRekursiv[] = $p;
@@ -81,24 +88,26 @@ class ProsjektOversikt {
             $this->prosjektListeRekursiv = array_merge($this->prosjektListeRekursiv, $oversikt->getAlleUnderProsjekt(true));
             //$totalHelper->add($oversikt->getTid());
             //var_dump($this->totaltid);
-            foreach($oversikt->getTotalTidArray() as $type => $tid){
-                //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
-                $this->totaltid[$type] = DateHelper::sumDateInterval($this->totaltid[$type], $tid);
-            }
-            //var_dump($this->totaltid);
-            foreach($oversikt->getEstimatArray() as $type => $tid){
-                if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
-                $this->totalestimat[$type] += $tid;
-            }
-            foreach($oversikt->getTidPrDagArray() as $dag => $data){
-                foreach($data as $type => $tid){
-                    if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
-                    if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
-                    $this->totaltidprdag[$dag][$type] += $tid;
+            if ($oversiktType != self::$OT_PROSJEKTER) {
+                foreach ($oversikt->getTotalTidArray() as $type => $tid) {
+                    //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
+                    $this->totaltid[$type] = DateHelper::sumDateInterval($this->totaltid[$type], $tid);
+                }
+                //var_dump($this->totaltid);
+                foreach ($oversikt->getEstimatArray() as $type => $tid) {
+                    if (!array_key_exists($type, $this->totalestimat)) $this->totalestimat[$type] = 0;
+                    $this->totalestimat[$type] += $tid;
+                }
+                foreach ($oversikt->getTidPrDagArray() as $dag => $data) {
+                    foreach ($data as $type => $tid) {
+                        if (!array_key_exists($dag, $this->totaltidprdag)) $this->totaltidprdag[$dag] = array();
+                        if (!array_key_exists($type, $this->totaltidprdag[$dag])) $this->totaltidprdag[$dag][$type] = 0;
+                        $this->totaltidprdag[$dag][$type] += $tid;
+                    }
                 }
             }
         }
-        ksort($this->totaltidprdag);
+        if ($oversiktType != self::$OT_BURNUP) ksort($this->totaltidprdag);
     }
     
     public function gjennopprett(ProsjektRegister $ProsjektReg){
@@ -110,11 +119,10 @@ class ProsjektOversikt {
     }
     
     private function gjennopprettUnderProsjekt(ProsjektRegister $ProsjektReg){
-        echo "INSIDE INNER: " . $this->prosjekt->getId();
         $ProsjektReg->arkiverProsjekt($this->prosjekt->getId(), 0);
-        //$this->prosjekt->setStatus(0);
+        $this->prosjekt->setStatus(0);
         foreach($this->oversiktListe as $oversikt){
-            if($oversikt->getProsjekt()->getStatus() != 1){
+            if($oversikt->getProsjekt()->getStatus() == 2){
                 $oversikt->gjennopprettUnderProsjekt($ProsjektReg);
             }
         }

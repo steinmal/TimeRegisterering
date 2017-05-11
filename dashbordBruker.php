@@ -13,6 +13,7 @@ $TeamReg = new TeamRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $aktivert = "";
+$aktiv = false;
 
 
 session_start();
@@ -69,6 +70,11 @@ foreach ($lederTeamIDs as $i) {
 
 $brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
 
+$registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
+if($registrering != null && sizeof($registrering) > 0){
+    $aktiv = true;
+}
+
 echo $twig->render('dashbordBruker.html', 
              array('innlogget'=>$_SESSION['innlogget'], 
                    'aktivert'=>$aktivert, 
@@ -83,6 +89,7 @@ echo $twig->render('dashbordBruker.html',
                    'brukerTilgang'=>$_SESSION['brukerTilgang'],
                    'nyligeOppgaver'=>$nyligeOppgaver,
                    'OppgaveReg'=>$OppgaveReg,
-                   'ProsjektReg'=>$ProsjektReg));
+                   'ProsjektReg'=>$ProsjektReg,
+                   'aktiv'=>$aktiv));
 
 ?>
