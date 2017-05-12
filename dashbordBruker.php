@@ -14,6 +14,10 @@ $TimeReg = new TimeregistreringRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $aktivert = "";
 $aktiv = false;
+$oppgave = "";
+$tidsestimat = "";
+$aktivTid = "";
+$prosjekt = "";
 
 
 session_start();
@@ -39,7 +43,7 @@ $brukerType = $BrukerReg->getBrukerType($brukerTypeID)->getNavn();
 $brukerID = $bruker->getId();
 
 //henter de timereg brukeren kan fortsette på
-$timeregs = array_reverse($TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId()));
+$timeregs = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), false, false, true);
 $nyligeOppgaveId = array();
 $i = 0;
 while (sizeof($nyligeOppgaveId) < 3 && $i < sizeof($timeregs)) {
@@ -73,7 +77,13 @@ $brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
 $registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
 if($registrering != null && sizeof($registrering) > 0){
     $aktiv = true;
+    $oppgave = $OppgaveReg->hentOppgave($registrering[0]->getOppgaveId());
+    $tidsestimat = $OppgaveReg->hentOppgave($oppgave->getId())->getTidsestimat();
+    $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave->getId());
+    $prosjekt = $ProsjektReg->hentProsjektFraOppgave($oppgave->getId());
 }
+
+
 
 echo $twig->render('dashbordBruker.html', 
              array('innlogget'=>$_SESSION['innlogget'], 
@@ -90,6 +100,12 @@ echo $twig->render('dashbordBruker.html',
                    'nyligeOppgaver'=>$nyligeOppgaver,
                    'OppgaveReg'=>$OppgaveReg,
                    'ProsjektReg'=>$ProsjektReg,
-                   'aktiv'=>$aktiv));
+                   'aktiv'=>$aktiv,
+                   'registrering'=>$registrering[0],
+                   'dagensdato'=>date('Y-m-d'),
+                   'valgtOppgave'=>$oppgave,
+                   'valgtProsjekt'=>$prosjekt,
+                   'tidsestimat'=>$tidsestimat,
+                   'aktivTid'=>$aktivTid));
 
 ?>

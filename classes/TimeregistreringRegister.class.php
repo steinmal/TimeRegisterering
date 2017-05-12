@@ -90,7 +90,7 @@ class TimeregistreringRegister {
         return getEn($stmt, $this->typeName);
     }
     
-    public function hentTimeregistreringerFraBruker($bruker_id, $datefrom = "", $dateto = "") {
+    public function hentTimeregistreringerFraBruker($bruker_id, $datefrom = "", $dateto = "", $sortByDate="") {
         $stmt = $this->db->prepare(
             "SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
             . " FROM timeregistrering t"
@@ -98,7 +98,8 @@ class TimeregistreringRegister {
             . " INNER JOIN oppgavetype ot on ot.oppgavetype_id=o.oppgavetype_id"
             . " INNER JOIN bruker b on b.bruker_id=t.bruker_id"
             . " WHERE t.bruker_id = :id"
-            . ($datefrom && $dateto ? " AND (t.timereg_dato BETWEEN :datefrom AND :dateto)" : ""));
+            . ($datefrom && $dateto ? " AND (t.timereg_dato BETWEEN :datefrom AND :dateto)" : "")
+            . ($sortByDate ? " ORDER BY t.timereg_dato DESC, t.timereg_start DESC" : ""));
         $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
         if($datefrom && $dateto){
             $stmt->bindParam(':datefrom', $datefrom, PDO::PARAM_STR);
