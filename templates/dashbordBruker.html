@@ -85,32 +85,64 @@
             </table>
         </div>
         
-        {% if aktivert and not aktiv %}
-        <div class="col-lg">
-            <h3>Fortsette på en tidligere oppgave?</h3>
-            <table class="table table-striped">
-                <tr>
-                    <th>Prosjekt</th>
-                    <th>Oppgave</th>
-                    <th>Oppgavetype</th>
-                    <th>Estimert tid</th>
-                    <th>Registrert tid</th>
-                    <th></th>
-                </tr>
-                {% for o in nyligeOppgaver %}
+        {% if aktivert %}
+            {% if not aktiv %}
+            <div class="col-lg">
+                <h3>Fortsette på en tidligere oppgave?</h3>
+                <table class="table table-striped">
                     <tr>
-                        <td>{{ ProsjektReg.hentProsjektFraOppgave(o.Id).Navn }}</td>
-                        <td>{{ o.Navn }}</td>
-                        <td>{{ OppgaveReg.hentOppgavetypeTekst(o.Type) }}</td>
-                        <td>{{ o.Tidsestimat }}</td>
-                        <td>{{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(o.Id) }}</td>
-                        <td><a href="timeregistrering.php?prosjektId={{ ProsjektReg.hentProsjektFraOppgave(o.Id).Id }}&oppgaveId={{ o.Id }}&fortsettTimereg=true" class="btn btn-success" aria-label="Fortsett"><span class="glyphicon glyphicon-play" aria-hidden="true"></td>
+                        <th>Prosjekt</th>
+                        <th>Oppgave</th>
+                        <th>Oppgavetype</th>
+                        <th>Estimert tid</th>
+                        <th>Registrert tid</th>
+                        <th></th>
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
+                    {% for o in nyligeOppgaver %}
+                        <tr>
+                            <td>{{ ProsjektReg.hentProsjektFraOppgave(o.Id).Navn }}</td>
+                            <td>{{ o.Navn }}</td>
+                            <td>{{ OppgaveReg.hentOppgavetypeTekst(o.Type) }}</td>
+                            <td>{{ o.Tidsestimat }}</td>
+                            <td>{{ OppgaveReg.hentAktiveTimerPrOppgaveDesimal(o.Id) }}</td>
+                            <td><a href="timeregistrering.php?prosjektId={{ ProsjektReg.hentProsjektFraOppgave(o.Id).Id }}&oppgaveId={{ o.Id }}&fortsettTimereg=true" class="btn btn-success" aria-label="Fortsett"><span class="glyphicon glyphicon-play" aria-hidden="true"></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% else %}
+            <div class="col-lg">
+                <h3>Aktiv registrering:</h3>
+                <form method="post" action="timeregistrering.php" class="col-md-4">
+                    <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
+                    <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.Id }}"/>
+                    <input type="hidden" name="oppgave" value="{{ valgtOppgave.Id }}">
+                    <select class="form-control" name="prosjektId" id="prosjekt" disabled>
+                        <option value="{{ valgtProsjekt.Id }}" selected>{{ valgtProsjekt.Navn }}</option>
+                    </select>
+                    <select name="oppgave" class="form-control" disabled id="oppgave">
+                        <option value="{{ valgtOppgave.Id }}" selected="selected">{{ valgtOppgave.Navn }}
+                        </option>
+                            <br>Tidsestimat: {{ tidsestimat }}
+                            <br>Aktiv tid: {{ aktivTid }}
+                    </select>
+                    <div class="form-group ">
+                        <label for="dato">Dato:</label>
+                        <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
+                        {% if registrering.Status == 1 %}
+                        <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
+                        {% else %}
+                        <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
+                        {% endif %}
+                        <input class="btn btn-danger btn-lg" type="submit" name="submit" value="Stopp"/>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
         {% endif %}
-        
     </div>
     {% include 'footer.html' %}
 </body>
