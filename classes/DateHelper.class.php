@@ -34,7 +34,14 @@ class DateHelper{
         $formatted = $dt->format('H:i:s');
         list($hours, $minutes, $seconds) = sscanf($formatted, '%d:%d:%d');
         return new DateInterval(sprintf('PT%dH%dM%dS', $hours, $minutes, $seconds));
-    }    
+    }
+    
+    public static function isBeforeToday(DateTime $dt){
+        return dateCompareToday($dt) < 0;
+    }
+    public static function isToday(DateTime $dt){
+        return dateCompareToday($dt) == 0;
+    }
 
     private $before;
     private $after;
@@ -60,6 +67,12 @@ class DateHelper{
         $dt1 = (new DateTime($date1))->getTimestamp();
         $dt2 = (new DateTime($date2))->getTimestamp();
         return $dt1 < $dt2 ? 1 : ($dt1 > $dt2 ? -1 : 0);
+    }
+    public static function dateCompareToday(DateTime $dt){
+        $dt1 = $dt->getTimestamp();
+        $dt2 = strtotime('today midnight');
+        $dt3 = strtotime('tomorrow midnight');
+        return $dt1 < $dt2 ? -1 : ($dt1 >= $dt3 ? 1 : 0);
     }
     
     /*public static function dateInside(DateTime $startOuter, DateTime $stopOuter, DateTime $startInner, DateTime $stopInner){

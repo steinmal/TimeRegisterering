@@ -48,6 +48,34 @@ class TimeregistreringRegister {
     }
     
     public function pauserTimeReg($id){
+        $reg = $this->hentTimeregistrering($id);
+        /**
+         * Dersom en timereg går over midnatt stoppes den, og en ny startes i stedet.
+         * For pause stoppes orginal timereg ved midnatt samme dato.
+         * Deretter opprettes en timereg pr hele døgn fram til d.d.
+         * Til slutt starter en timereg fra midnatt dags dato som sette på pause fra nåværende tidspunmkt
+         * 
+         * Det antas at en timereg som settes på pause ikke har dato senere enn nåtid.
+         */
+        if(!DateHelper::isToday($reg->getStartDato())){
+            $prepareString = "UPDATE timeregistrering SET timereg_stopp=23:59:59, timereg_status=3, timereg_redigeringsdato=NOW() WHERE timereg_id=:id; ";
+            $day = clone $reg->getStartDato();
+            $day.add(new DateInterval("1 day"));
+            while(DateHelper::isBeforeToday($day)){
+                $prepareString .= "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)" +
+                        "VALUES (:bId, :oId, 3, $day, 00:00:00, 23:59:59, 1, 1); "; // TODO: Ta stilling til om timereg som varer et helt døgn skal være godkjent
+                $day.add(new DateInterval("1 day"));
+            }
+            $prepareString .= "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)" +
+                    "VALUES (:bId, :oId, 1, $day, 00:00:00, NOW(), 1, 0); "; // TODO: Ta stilling til om timereg som varer et helt døgn skal være godkjent
+            
+            
+            $stmt = $this->db->prepare($prepareString);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':oId', $reg->getOppgaveId(), PDO::PARAM_INT);
+            $stmt->bindParam(':bId', $reg->getBrukerId(), PDO::PARAM_INT);
+            return execStmt($stmt);
+        }
         $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_stopp=NOW(), timereg_status=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -58,6 +86,21 @@ class TimeregistreringRegister {
         $reg = $this->hentTimeregistrering($id);
         $pause = $reg->getPause();
         if($reg->getStatus() == 1){
+            /**
+             * Dersom en timereg går over midnatt stoppes den, og en ny startes i stedet.
+             * I tilfellet hvor man forsøker å fortsette timereg fra tidligere dato kan pause-beregningen droppes,
+             * og stopptidspunkt for arbeidsøkt før pausen brukes som endelig stopp for den første timereg.
+             */
+            if(!DateHelper::isToday($reg->getStartDato())){
+                $stmt = $this->db->prepare(
+                        "UPDATE timeregistrering SET timereg_status=3, timereg_godkjent=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id; " +
+                        "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)
+                        VALUES (:bId, :oId, 0, CURDATE(), NOW(), NOW(), 1, 0)");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->bindParam(':oId', $reg->getOppgaveId(), PDO::PARAM_INT);
+                $stmt->bindParam(':bId', $reg->getBrukerId(), PDO::PARAM_INT);
+                return execStmt($stmt);
+            }
             $pause += $this->beregnPause($reg->getTil(), date('H:i'));
         }
         $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_status=2, timereg_pause=:pause, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
@@ -70,7 +113,37 @@ class TimeregistreringRegister {
         $reg = $this->hentTimeregistrering($id);
         $pause = $reg->getPause();
         if($reg->getStatus() == 1){
+            /**
+             * Dersom man stopper en timereg som allere ble satt på pause ved tidligere datp, skifter man bare status og godkjenning.
+             * Unødvendig å lage ny timereg for senere datoer som kun har pause hele dagen(e) og derfor 0 arbeidstimer.
+             */
+            if(!DateHelper::isToday($reg->getStartDato())){
+                $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_status=3, timereg_godkjent=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id;");
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                return execStmt($stmt);
+            }
             $pause += $this->beregnPause($reg->getTil(), date('H:i'));
+        } elseif(!DateHelper::isToday($reg->getStartDato())){
+            /**
+             * Dersom man stopper en timereg som har gått over flere dager (som fortsatt går, dvs. status 0 eller 2)
+             * Fungerer dette likt som for pause, bære at siste timereg får status 3 og godkjent 1.
+             */
+            $prepareString = "UPDATE timeregistrering SET timereg_stopp=23:59:59, timereg_status=3, timereg_redigeringsdato=NOW() WHERE timereg_id=:id; ";
+            $day = clone $reg->getStartDato();
+            $day.add(new DateInterval("1 day"));
+            while(DateHelper::isBeforeToday($day)){
+                $prepareString .= "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)" +
+                        "VALUES (:bId, :oId, 3, $day, 00:00:00, 23:59:59, 1, 1); "; // TODO: Ta stilling til om timereg som varer et helt døgn skal være godkjent
+                $day.add(new DateInterval("1 day"));
+            }
+            $prepareString .= "INSERT INTO timeregistrering (bruker_id, oppgave_id, timereg_status, timereg_dato, timereg_start, timereg_stopp, timereg_automatisk, timereg_godkjent)" +
+                    "VALUES (:bId, :oId, 3, $day, 00:00:00, NOW(), 1, 1); "; // TODO: Ta stilling til om timereg som varer et helt døgn skal være godkjent
+            
+            $stmt = $this->db->prepare($prepareString);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':oId', $reg->getOppgaveId(), PDO::PARAM_INT);
+            $stmt->bindParam(':bId', $reg->getBrukerId(), PDO::PARAM_INT);
+            return execStmt($stmt);
         }
         $stmt = $this->db->prepare(
             "UPDATE timeregistrering SET timereg_stopp=NOW(), timereg_pause=:pause, timereg_status=3, timereg_godkjent=1, timereg_redigeringsdato=NOW() WHERE timereg_id=:id");
