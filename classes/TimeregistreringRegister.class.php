@@ -43,7 +43,7 @@ class TimeregistreringRegister {
             VALUES (:bId, :oId, 0, CURDATE(), NOW(), NOW(), 1, 0)");
         $stmt->bindParam(':oId', $oppgave_id, PDO::PARAM_INT);
         $stmt->bindParam(':bId', $bruker_id, PDO::PARAM_INT);
-        $stmt->execute();
+//        $stmt->execute();
         return execStmt($stmt);
     }
     
