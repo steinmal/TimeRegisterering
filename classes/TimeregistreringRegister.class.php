@@ -212,8 +212,8 @@ class TimeregistreringRegister {
         return execStmt($stmt);
     }
     
-    public function oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar, $godkjent=0) {
-        $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_dato=:dato, timereg_start=:start, timereg_stopp=:slutt, timereg_pause=:pause, timereg_kommentar=:komm, timereg_godkjent=:godkjent, timereg_redigeringsdato=now() WHERE timereg_id=:id");
+    public function oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar, $gammelTimeId, $godkjent=0) {
+        $stmt = $this->db->prepare("UPDATE timeregistrering SET timereg_dato=:dato, timereg_start=:start, timereg_stopp=:slutt, timereg_pause=:pause, timereg_kommentar=:komm, timereg_godkjent=:godkjent, timereg_redigeringsdato=now(), timereg_ordinaer=:ordinaer WHERE timereg_id=:id");
         $stmt->bindParam(':id', $timeId, PDO::PARAM_INT);
         $stmt->bindParam(':dato', $dato);
         $stmt->bindParam(':start', $fra);
@@ -221,6 +221,7 @@ class TimeregistreringRegister {
         $stmt->bindParam(':pause', $pause, PDO::PARAM_INT);
         $stmt->bindParam(':komm', $kommentar, PDO::PARAM_STR);
         $stmt->bindParam(':godkjent', $godkjent, PDO::PARAM_INT);
+        $stmt->bindParam(':ordinaer', $gammelTimeId, PDO::PARAM_INT);
         return execStmt($stmt);
     }
 }

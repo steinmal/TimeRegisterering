@@ -146,7 +146,7 @@ if (isset($_REQUEST['action'])) {
     
     var_dump($timeId);
     var_dump($dato);
-    $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar);
+    $TimeReg->oppdaterTimeregistrering($timeId, $dato, $fra, $til, $pause, $kommentar, $gammelTimeId);
     $error = "lagret";
 
     

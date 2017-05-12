@@ -15,6 +15,7 @@
         private $timereg_automatisk;
         //private $timereg_godkjent;
         private $timereg_kommentar;
+        private $timereg_ordinaer;
         
         //Fra andre tabeller:
         private $oppgave_navn;
@@ -39,6 +40,7 @@
         public function getOppgaveNavn() { return $this->oppgave_navn; }
         public function getOppgavetypeNavn() { return $this->oppgavetype_navn; }
         public function getBrukerNavn() { return $this->bruker_navn; }
+        public function getOrdinaer() { return $this->timereg_ordinaer;}
 
         public function isIkkeGodkjent() { //deaktive, avviste og gjenopprettede (den deaktiverte som ble gjenopprettet)
             if ($this->timereg_tilstand == 2 || $this->timereg_tilstand == 3 || $this->timereg_tilstand == 4) {
