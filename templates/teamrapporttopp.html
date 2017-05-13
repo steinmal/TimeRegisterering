@@ -27,6 +27,7 @@
         
         <div class="rapport">
             <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
+                {% if valgtTeam %}<input type="hidden" name="team" value="{{ valgtTeam }}"/>{% endif %}
                 <label for="daterange">Periode:</label>
                 <input type="text" name="daterange" />
                 <!--
@@ -36,7 +37,6 @@
                 </div>-->
             </form>
             
-    
         <br /><br />
         <p><form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">
             <p><label for="teamID">Team:</label> 
