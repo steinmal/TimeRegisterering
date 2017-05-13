@@ -117,9 +117,11 @@
                     <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
                     <input type="hidden" name="prosjektId" value="{{ valgtProsjekt.Id }}"/>
                     <input type="hidden" name="oppgave" value="{{ valgtOppgave.Id }}">
+                    <label for="prosjekt">Prosjekt:</label>
                     <select class="form-control" name="prosjektId" id="prosjekt" disabled>
                         <option value="{{ valgtProsjekt.Id }}" selected>{{ valgtProsjekt.Navn }}</option>
                     </select>
+                    <label for="oppgave">Oppgave:</label>
                     <select name="oppgave" class="form-control" disabled id="oppgave">
                         <option value="{{ valgtOppgave.Id }}" selected="selected">{{ valgtOppgave.Navn }}
                         </option>
