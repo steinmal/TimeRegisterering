@@ -177,7 +177,8 @@ if($registrering != null && sizeof($registrering) > 0){     //aktiv timereg
     $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
     $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
     $prosjekt_id = $prosjekt->getId();
-    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'valgtOppgave'=>$oppgave->getId(), 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visOppgave'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'manuell'=>false, 'error'=>$error));
+    
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'valgtOppgave'=>$oppgave->getId(), 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visOppgave'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'manuell'=>false, 'error'=>$error, 'oppgave'=>$oppgave, 'prosjekt'=>$prosjekt));
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
@@ -217,6 +218,7 @@ else{
         $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
         $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave_id);
         $prosjekt_id = $_POST['prosjektId'];
+        $prosjekt = $ProsjektReg->hentProsjekt($prosjekt_id);
     }
 
     $visOppgave = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
@@ -225,7 +227,7 @@ else{
     $now = date('h:i:s');
     $sysReg = new SystemRegister($db);
     $sysVar = $sysReg->hentSystemvariabel();
-    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
+    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));
     
     if(isset($_REQUEST['manuell'])) {
         $manuell = true;
