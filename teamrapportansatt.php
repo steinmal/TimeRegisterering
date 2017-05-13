@@ -75,6 +75,12 @@ if (isset($_GET['team'])) {
     $sumHours = sumHours($timeregistreringer);
 }
 
+if(isset($_GET['ansatt'])) {
+    $ansatt = $_GET['ansatt'];
+    $timeregistreringer = filtrerTimeregsForAnsatt($timeregistreringer, $ansatt, $BrukerReg);
+    $sumHours = sumHours($timeregistreringer);
+}
+
 $ansatt = isset($_GET['ansatt'])?$_GET['ansatt']:"";
 $oppgavetype = isset($_GET['oppgavetype'])?$_GET['oppgavetype']:"";
 
@@ -124,7 +130,7 @@ if(isset($_GET['download'])){
     $tmpFile = tempnam('tempfolder', 'tmp');
     
     if ($ansatt) {
-    $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . " - " . $ansatt . ".xlsx";
+        $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . " - " . $ansatt . ".xlsx";
         file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
         $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
         $objPHPExcel = $excelHTMLReader->load($tmpFile);
@@ -164,7 +170,7 @@ if(isset($_GET['download'])){
                     $i++;
                 }
             }
-            //$sheetArray[] = array(Sum, "", "", $sumHours);
+            //$sheetArray[] = array(Sum, "", "", $sumHours); // TODO: Legge inn sum
             $currentSheet->fromArray($sheetArray, null, 'A1');
         }
         $objPHPExcel->removeSheetByIndex($objPHPExcel->getIndex($objPHPExcel->getSheetByName('Worksheet')));
