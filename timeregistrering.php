@@ -181,26 +181,29 @@ if($registrering != null && sizeof($registrering) > 0){     //aktiv timereg
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
-    $grunnProsjekter = array();
-    $alleProsjekter = array();
+    //$alleProsjekter = array();
     if ($_SESSION['brukerTilgang']->isProsjektadmin()) {
-        $alleProsjekter = $ProsjektReg->hentAlleProsjekt();
-    } else {
-        $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
-        foreach ($teamIDs as $i) {
-            $grunnProsjekter = array_merge($grunnProsjekter, $ProsjektReg->hentProsjekterFraTeam($i));
+        $prosjektListe = $ProsjektReg->hentAlleProsjekt();
+    } else { // Optimalisert kode!! Hurra!!!!
+        $prosjektListe = $ProsjektReg->hentTeamProsjektFraBruker($_SESSION['bruker']->getId());
+        $idArr = array();
+        foreach($prosjektListe as $p){
+            $idArr[] = $p->getId();
         }
-        
-        foreach ($grunnProsjekter as $p) {
-            $alleProsjekter[] = $p;
-            $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg, ProsjektOversikt::$OT_PROSJEKTER);
-            $alleProsjekter = array_merge($alleProsjekter, $prosjektOversikt->getAlleUnderProsjekt());
+        $children = array();
+        while($children = $ProsjektReg->hentUnderProsjektFraListe($idArr)){
+            $idArr = array();
+            foreach($children as $c){
+                if(!isset($prosjektListe[$c->getId])){
+                    $prosjektListe[$c->getId] = $c;
+                    $idArr[] = $c->getId();
+                }
+            }
         }
     }
-    $prosjektListe = array_unique($alleProsjekter);
-    
+
     if(isset($_POST['prosjektId'])) {
-        if(!$_SESSION['brukerTilgang']->isProsjektadmin() && !in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
+        if(!isset($prosjektListe[$_POST['prosjektId']])) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }

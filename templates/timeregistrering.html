@@ -130,7 +130,7 @@
                         <option value="1">Hei1</option>
                         <option value="2">Hei2</option>
                         {% for prosjekt in prosjektListe %}
-                            {% if prosjekt.Status == "Aktiv" %} 
+                            {% if prosjekt.StatusString == "Aktiv" %}
                                 <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
                             {% endif %}
                         {% endfor %}

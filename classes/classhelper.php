@@ -35,10 +35,10 @@ function getEn(PDOStatement $stmt, $type){
     }
 }
 
-function getAlle(PDOStatement $stmt, $type, $idAsArrayIndex = false){
+function getAlle(PDOStatement $stmt, $type, $idAsArrayIndex = false, $execArg = null){
     $ret = array();
     try {
-        $stmt->execute();
+        $stmt->execute($execArg);
 
         if($idAsArrayIndex){
             while ($obj = $stmt->fetchObject($type)) {

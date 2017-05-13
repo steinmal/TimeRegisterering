@@ -8,6 +8,7 @@ include('auth.php');
 
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
+
 $ProsjektReg = new ProsjektRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TimeReg = new TimeregistreringRegister($db);
@@ -15,6 +16,9 @@ $TeamReg = new TeamRegister($db);
 $BrukerReg = new BrukerRegister($db);
 $aktivert = "";
 session_start();
+
+$teamMedlemmer = array();
+$timeregistreringer = array();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
@@ -54,28 +58,16 @@ foreach ($teamIDs as $teamID) {
     $teams[] = $TeamReg->hentTeam($teamID);
 }
 
-$teamMedlemmer = array();
 if (isset($_GET['team'])) {
-    $teamID = $_GET['team'];
-    $teamMedlemmer = $TeamReg->getTeamMedlemmer($teamID);
-
-}
-
-$brukerIds = array();
-foreach ($teamIDs as $teamId) {
-    $brukerIdArray = array();
-    $brukerIdArray = $TeamReg->getTeamMedlemmerId($teamId);
-    foreach ($brukerIdArray as $brukerId) {
-        $brukerIds[] = $brukerId;
-    }
-}
-
-$timeregistreringer = array();
-foreach($brukerIds as $brukerId) {
-    $brukersTimeregistreringer = array();
-    $brukersTimeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($brukerId, $datefrom, $dateto);
-    foreach ($brukersTimeregistreringer as $timereg) {
-        $timeregistreringer[] = $timereg;
+    $valgtTeam = $_GET['team'];
+    $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);
+    
+    foreach($teamMedlemmer as $medlem) {
+        $brukersTimeregistreringer = array();
+        $brukersTimeregistreringer = $TimeReg->hentTimeregistreringerFraBruker($medlem->getId(), $datefrom, $dateto);
+        foreach ($brukersTimeregistreringer as $timereg) {
+            $timeregistreringer[] = $timereg;
+        }
     }
 }
 
@@ -84,17 +76,18 @@ $oppgavetype = isset($_GET['oppgavetype'])?$_GET['oppgavetype']:"";
 
 $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
-    'timeregistreringer'=>$timeregistreringer,
+    'brukerTilgang'=>$_SESSION['brukerTilgang'],
+
     'oppgavereg'=>$OppgaveReg,
     'teamReg'=>$TeamReg,
     'timeReg'=>$TimeReg,
     'brukerReg'=>$BrukerReg,
     'teams'=>$teams,
-    'valgtTeam'=>$teamID,
+    'valgtTeam'=>$valgtTeam,
+    'timeregistreringer'=>$timeregistreringer,
     //'brukerIds'=>$brukerIds,
-    'teamMedlemmer'=>$teamMedlemmer,
-    
-    'brukerTilgang'=>$_SESSION['brukerTilgang'],
+    //'teamMedlemmer'=>$teamMedlemmer,
+
     'ansatt'=>$ansatt,
     'oppgavetype'=>$oppgavetype,
     'datefrom'=>$datefrom,
@@ -116,34 +109,35 @@ if(isset($_GET['download'])){
             }
         }
     }
-    
     $twigArray['timeregistreringer'] = $timeregistreringer;
     $tabellRender = $twig->render('rapportansatt.html', $twigArray);
     
-    $filename = date('Y-m-d') . ' TimeRegistrering rapport.xlsx'; // TODO: Ta med periode
+    $teamNavn = $TeamReg->hentTeam($valgtTeam)->getNavn();
+    $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . ".xlsx";
+
     
     $objPHPExcel = new PHPExcel();
     $tmpFile = tempnam('tempfolder', 'tmp');
     
     if ($ansatt) {
+    $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . " - " . $ansatt . ".xlsx";
+        
         file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
         $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
         $objPHPExcel = $excelHTMLReader->load($tmpFile);
         unlink($tmpFile); 
     } else {
-        $teamMedlemmer = $TeamReg->getTeamMedlemmer($teamID);
+
         foreach($teamMedlemmer as $bruker) {
             $currentSheet = $objPHPExcel->createSheet();
-
             $id = $bruker->getId();
             $navn = $bruker->getNavn();
             $currentSheet->setTitle($navn);
             $sheetArray = array();
             $sheetArray[0] = array("Ansatt: ", $navn);
-            $sheetArray[1] = array("Bruker ID:", $id);
-            $sheetArray[2] = array("Periode :", $datefrom, $dateto);
-            $sheetArray[3] = array("");
-            $sheetArray[4] = array(
+            $sheetArray[1] = array("Periode :", $datefrom, $dateto);
+            $sheetArray[2] = array("");
+            $sheetArray[3] = array(
                 "Dato",
                 "Fra",
                 "Til",
@@ -151,7 +145,7 @@ if(isset($_GET['download'])){
                 "Oppgave",
                 "Oppgavetype"
                 );
-            $i = 5;
+            $i = 4;
             foreach($timeregistreringer as $timereg) {
                 $timeregBrukerId = $timereg->getBrukerId();
                 if($id == $timeregBrukerId) {
