@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teamleder Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    
+    
+        <h1>Teamleder side - {{ bruker.Navn }}</h1>
+        
+        <p>Her kan du se hvilke team du er leder for, og administrere disse.</p>
+        <div class="col-lg">
+            <div class="btn-group">
+                {% if aktivert %}
+                    <a href="index.php"><button type="button" class="btn btn-primary">Hovedside</button></a>
+                    <a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>
+                    <a href="teamrapportansatt.php"><button type="button" class="btn btn-primary"> Teamrapport - Ansatt</button></a>
+                    <a href="teamadministrering.php"><button type="button" class="btn btn-primary"> Teamadministrering</button></a>
+                {% endif %}
+            </div>
+        </div>
+        <br/>
+        {% for team in lederTeamListe if timeregManglerGodkjenning[team.Id] > 0 %}
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team {{ team.Navn }}: {{ timeregManglerGodkjenning[team.Id] }} time{% if timeregManglerGodkjenning[team.Id] > 1 %}r{% endif %} venter på godkjenning <br/> <a href="timegodkjenning.php">Gå til timegodkjenning</a>
+        </div>
+        {% endfor %}
+
+        <div class="row">
+
+            {% if brukerIsTeamleder %}
+            <div class="col-lg-6">
+                {% if brukerTilgang.isTeamleder %}
+                <h2>Leder for team</h2>
+                <table class="table table-striped col-md-6">
+                    <tr>
+                        <th>Navn</th>
+                        <th>Antall medlemmer</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for lt in lederTeamListe %}
+                    <tr>
+                        <td>{{ lt.Navn }}</td>
+                        <td>{{ TeamReg.antallMedlemmerTeam(lt.Id) }}</td>
+                        {% if aktivert %}
+                        <td><a href="teamrapportansatt.php">Se rapporter</a></td>
+                        <td><a href="timegodkjenning.php">Godkjenn timer</a></td>
+                        <td><a href="teamadministrering.php?teamId={{ lt.Id }}">Administrer</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg">
+        <h2>Prosjekter i team</h2>
+            {% for team in lederTeamListe %}
+            <h3>{{team.Navn}}</h3>
+                <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Prosjektleder</th>
+                    <th>Product owner</th>
+                    <th>Team</th>
+                    <th>Startdato</th>
+                    <th>Sluttdato</th>
+                    <th></th>
+                </tr>
+                    {% for p in prosjekter[team.Id] %}
+                    <tr>
+                        <td>{{ p.Navn }}</td>
+                        <td>{{ p.Beskrivelse }}</td>
+                        <td>{{ brukerReg.hentBruker(p.Leder).Navn }}</td>
+                        <td>{{ brukerReg.hentBruker(p.ProductOwner).Navn }}</td>
+                        <td>{{ TeamReg.hentTeam(p.Team).Navn }}</td>
+                        <td>{{ p.StartDato }}</td>
+                        <td>{{ p.SluttDato }}</td>
+                        {% if aktivert %}
+                        <td><a href="prosjektdetaljer.php?prosjektId={{ p.Id }}" class="btn btn-default" aria-label="Detaljer"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </table>
+                {% endfor %}
+
+        </div>
+
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
