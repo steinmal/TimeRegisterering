@@ -91,7 +91,7 @@ class ProsjektOversikt {
             if ($oversiktType != self::$OT_PROSJEKTER) {
                 foreach ($oversikt->getTotalTidArray() as $type => $tid) {
                     //Treg måte å gjøre dette på, alternativer krever omskriving av hvordan tid behandles
-                    if (!array_key_exists($type, $this->totaltid)) $this->totalestimat[$type] = new DateInterval('PT0S');
+                    if (!array_key_exists($type, $this->totaltid)) $this->totaltid[$type] = new DateInterval('PT0S');
                     $this->totaltid[$type] = DateHelper::sumDateInterval($this->totaltid[$type], $tid);
                 }
                 //var_dump($this->totaltid);
