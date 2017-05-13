@@ -10,33 +10,42 @@ $twig = new Twig_Environment($loader);
 $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $TeamReg = new TeamRegister($db);
-//$BrukerReg = new BrukerRegister($db);
+$BrukerReg = new BrukerRegister($db);
 $aktivert = "";
 $prosjektStartSlutt = "";
 $error = "";
 
 session_start();
 
-$aktivert = $_SESSION['bruker']->isAktivert();
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
+$bruker = $_SESSION['bruker'];
+$tilgang = $_SESSION['brukerTilgang'];
+$aktivert = $bruker->isAktivert();
 
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: prosjektadministrering.php?error=ingenProsjekt");
     return;
 }
+$prosjektId = $_REQUEST['prosjektId'];
+$prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
+if ($prosjekt == null) {
+    header('Location: prosjektadministrering.php?error=ugyldigProsjekt');
+    return;
+}
 
-if(!isset($_SESSION['brukerTilgang']) || !(($_SESSION['brukerTilgang']->isTeamleder() && $ProsjektReg) || $_SESSION['brukerTilgang']->isProsjektadmin())){
-    //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
-    //echo "Du har ikke tilgang til faseoppretting";
+if(!isset($tilgang) || !($tilgang->isTeamleder() || $tilgang->isProsjektadmin()))
+{
     header("Location: index.php?error=manglendeRettighet&side=fasopp");
     return;
 }
 
-$prosjektId = $_REQUEST['prosjektId'];
-if ($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
+if (!$tilgang->isProsjektadmin() && !($bruker->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getTeamLeder()
+        || $bruker->getId() == $prosjekt->getProductOwner()
+        || $bruker->getId() == $prosjekt->getLeder()))
+{
     header("Location: prosjektdetaljer.php?error=ugyldigFase&prosjektId=" . $prosjektId);
     return;
 }
