@@ -82,8 +82,13 @@ class BrukerRegister {
     
     public function hentBruker($id) {
         $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_id=:id");
-        $stmt->bindparam(':id', $id, PDO::PARAM_STR);
+        $stmt->bindparam(':id', $id, PDO::PARAM_INT);
         return getEn($stmt, $this->typeName);
+    }
+    
+    public function getTeamLederForProsjekt($prosjekt_id){
+        $stmt = $this->db->prepare("SELECT * FROM bruker WHERE bruker_id = (SELECT team_leder FROM team WHERE team_id = (SELECT team_id FROM prosjekt WHERE prosjekt_id=:id))");
+        $stmt->bindParam(':id', $prosjekt_id, PDO::PARAM_INT);
     }
     
     

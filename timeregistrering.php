@@ -157,6 +157,7 @@ if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen o
         return;
     }
     if (!$_SESSION['brukerTilgang']->isProsjektadmin()) {
+        // TODO: Refactor, én spørring er nok
         $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
         $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
         if (!in_array($prosjekt->getTeam(), $teamListe)) {
@@ -203,11 +204,11 @@ else{
     }
 
     if(isset($_POST['prosjektId'])) {
-        if(!isset($prosjektListe[$_POST['prosjektId']])) {
+        $prosjekt_id = $_POST['prosjektId'];
+        if(!isset($prosjektListe[$prosjekt_id])) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }
-        $prosjekt_id = $_POST['prosjektId'];
         $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     }
     
@@ -216,7 +217,7 @@ else{
         $oppgave_id = $_POST['oppgave'];
         $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
         $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave_id);
-        $prosjekt_id = $_POST['prosjektId'];
+        $prosjekt_id = $_POST['prosjektId']; //overflødig
     }
 
     $visOppgave = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
