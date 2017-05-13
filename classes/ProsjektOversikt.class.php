@@ -76,14 +76,14 @@ class ProsjektOversikt {
             }
         }
 
-        $this->oversiktListeRekursiv[] = $this;
+        //$this->oversiktListeRekursiv[] = $this;
         $underProsjektListe = $ProsjektReg->hentUnderProsjekt($prosjekt->getId());
         //if(isset($underProsjektListe) && sizeof($underProsjektListe) > 0 && $underProsjektListe[0] != null && $underProsjektListe[0]->getId() != 1){
         foreach($underProsjektListe as $p){
             $oversikt = new ProsjektOversikt($p, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregRegister, $oversiktType, $this->delNivaa + 1/*, $this->nivaa == 0 ? $this : $grunnRapport*/);
             $this->oversiktListe[] = $oversikt;
             $this->oversiktListeRekursiv = array_merge($this->oversiktListeRekursiv, $oversikt->getOversiktListe());
-            $this->oversiktListeRekursiv[] = $p;
+            $this->oversiktListeRekursiv[] = $oversikt;
             $this->prosjektListeRekursiv[] = $p;
             $this->prosjektListeRekursiv = array_merge($this->prosjektListeRekursiv, $oversikt->getAlleUnderProsjekt(true));
             //$totalHelper->add($oversikt->getTid());

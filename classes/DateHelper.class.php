@@ -37,10 +37,10 @@ class DateHelper{
     }
     
     public static function isBeforeToday(DateTime $dt){
-        return dateCompareToday($dt) < 0;
+        return DateHelper::dateCompareToday($dt) < 0;
     }
     public static function isToday(DateTime $dt){
-        return dateCompareToday($dt) == 0;
+        return DateHelper::dateCompareToday($dt) == 0;
     }
 
     private $before;
