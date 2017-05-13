@@ -222,7 +222,7 @@ else{
     }
 
     $visOppgave = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
-    $visSkjema = $oppgave_id > 0 ? true : false; 
+    $visSkjema = $oppgave_id > 0 ? true : false;
     $dagensdato = date('Y-m-d');
     $now = date('h:i:s');
     $sysReg = new SystemRegister($db);

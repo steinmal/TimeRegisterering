@@ -45,14 +45,17 @@ $action =  $_REQUEST['action'];
 if(isset($_POST['opprettProsjekt'])){
     $nyttProsjekt = new Prosjekt();
     
-    foreach(array('prosjektNavn', 'prosjektLeder', 'team', 'prosjektBeskrivelse', 'startDato', 'sluttDato') as $field) {
+    $inputOk = true;
+    foreach(array('prosjektNavn', 'prosjektLeder', 'team', 'startDato', 'sluttDato') as $field) {
         if(!isset($_POST[$field]) || strcmp($_POST[$field], "") == 0) {
-            header('Location: prosjektoppretting.php?error=ingenVerdi&felt=' . $field . '&action=' . $action);
+            $inputOk = false;
+            $error="ingenVerdi";
+            $felt=$field; //Burde vise alle felt samtidig
+            //header('Location: prosjektoppretting.php?error=ingenVerdi&felt=' . $field . '&action=' . $action);
             // REFACTOR: Ikke bruk header for reload, men sett $error og fiks if-else-logikk slik at skjemaet vises på nytt men med feilmelding
-            return;
+            break;
         }
     }
-    $inputOk = true;
     
     $nyttProsjekt->setNavn($_POST['prosjektNavn']);
     $nyttProsjekt->setParent($_POST['foreldreProsjekt'] == null ? 1 : $_POST['foreldreProsjekt']);
