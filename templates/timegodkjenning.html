@@ -25,11 +25,22 @@
 
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
     <h1>Timegodkjenning</h1>
+        {% if not timeRegistrering %}
     <p>
         <form method="get">
             <input type="checkbox" name="visGodkjent" onClick="submit()" {% if visGodkjent %}checked{% endif %}> Vis godkjente og avviste timer
         </form>
-    </p>    
+    </p>
+
+        {% for team in teams if timeregManglerGodkjenning[team.Id] > 0 %}
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Team {{ team.Navn }}: {{ timeregManglerGodkjenning[team.Id] }} time{% if timeregManglerGodkjenning[team.Id] > 1 %}r{% endif %} venter på godkjenning
+        </div>
+        {% endfor %}
+
+        {% endif %}
     {% if error == "ugyldigTimereg" %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -43,15 +54,9 @@
             Du kan ikke godkjenne/avvise en deaktivert timeregistrering
         </div>
     {% endif %}
-    {% for team in teams if timeregManglerGodkjenning[team.Id] > 0 %}
-        <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            Team {{ team.Navn }}: {{ timeregManglerGodkjenning[team.Id] }} time{% if timeregManglerGodkjenning[team.Id] > 1 %}r{% endif %} venter på godkjenning
-        </div>
-    {% endfor %}
 
 
+    {% if not timeRegistrering %}
     <!--Teamleders team-->
     {% for team in teams %}
         <h2>{{ team.Navn }}</h2>
@@ -69,6 +74,7 @@
                         <th data-field="task" data-sortable="true">Oppgave</th>
                         <th data-fielt="status" data-sortable="true">Status</th>
                         <th data-field="changeStatus">Endre status</th>
+                        <th>Link til eldre versjon</th>
                     </tr>
                 </thead>
 
@@ -96,6 +102,11 @@
                                     Godkjenn
                                     </a></td>
                                 {% endif %}
+                                <td>
+                                    {% if timereg.Ordinaer > 0 %}
+                                    <a href="timegodkjenning.php?timeregId={{timereg.ordinaer}}&nytimeregId={{timereg.Id}}" class="btn btn-default"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
+                                    {% endif %}
+                                </td>
                             </tr>
                        {% endif %}
                     {% else %}  <!-- Viser de som kan godkjennes eller avvises: venter godkjenning (1) og gjenopprettet, venter godkjenning (5) --> 
@@ -118,6 +129,11 @@
                                     <a href="timegodkjenning.php?action=avvis&timeregId={{ timereg.Id }}" class="btn btn-danger">
                                         Avvis
                                     </a></td>
+                                <td>
+                                    {% if timereg.Ordinaer > 0 %}
+                                    <a href="timegodkjenning.php?timeregId={{timereg.ordinaer}}&nytimeregId={{timereg.Id}}" class="btn btn-default"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></a>
+                                    {% endif %}
+                                </td>
                             </tr>
                        {% endif %}
                     
@@ -139,6 +155,34 @@
             }
         </script>
     {% endfor %}
+        {% else %}
+        <h2>Sammenligning av korrigert og ny registrering</h2>
+        <form action=timegodkjenning.php method=GET>
+            <table id="table" class="table table-striped" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+                <thead>
+                <tr>
+                    <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
+                    <th data-field="from">Fra</th>
+                    <th data-field="to">Til</th>
+                    <th data-field="pause">Pause</th>
+                    <th data-fielt="status" data-sortable="true">Status</th>
+
+                </tr>
+                </thead>
+
+                {% for timereg in sammenligneRegistreringer %}
+                <tr>
+
+                    <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
+                    <td>{{ timereg.Fra }}</td>
+                    <td>{{ timereg.Til }}</td>
+                    <td>{{ timereg.Pause }} min</td>
+                    <td>{{ timereg.TilstandTekst }}</td>
+                {% endfor %}
+
+                </tr>
+            </table>
+        {% endif %}
     </div>
     <script type="text/javascript">
         //<!--

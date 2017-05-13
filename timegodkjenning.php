@@ -18,6 +18,9 @@ $ProsjektReg = new ProsjektRegister($db);
 $visGodkjent = "";
 $error = "";
 $aktivert = "";
+$timereg_id = 0;
+$nytimeregId = 0;
+$sammenligneRegistreringer = array();
 session_start();
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
@@ -32,7 +35,15 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 if(isset($_GET['visGodkjent'])){
     $visGodkjent = $_GET['visGodkjent'];
 }
+if(isset($_GET['timeregId']) && isset($_GET['nytimeregId'])) {
+    $timereg_id = $_GET['timeregId'];
+    $nytimeregId =$_GET['nytimeregId'];
+    $timeRegistrering = $TimeReg->hentTimeregistrering($timereg_id); //Gammel
+    $nytimeRegistrering = $TimeReg->hentTimeregistrering($nytimeregId);//Korrigert
+    $sammenligneRegistreringer[0] = $timeRegistrering;
+    $sammenligneRegistreringer[1] = $nytimeRegistrering;
 
+}
 
 
 if(isset($_GET['action'])){
@@ -112,6 +123,8 @@ echo $twig->render('timegodkjenning.html', array(
     'oppgaveReg'=>$OppgaveReg,
     'teams'=>$teams,
     'timeregistreringer'=>$timeregistreringer,
+    'timeRegistrering'=>$timeRegistrering,
+    'sammenligneRegistreringer' => $sammenligneRegistreringer,
     'timeregManglerGodkjenning'=>$timeregManglerGodkjenning,
     'visGodkjent'=>$visGodkjent,
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
