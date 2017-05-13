@@ -26,6 +26,21 @@ class ProsjektRegister {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return getAlle($stmt, $this->typeName);
     }
+    
+    public function hentUnderProsjektFraListe(array $idArr){
+        $c = count($idArr);
+        if($c > 0){
+            $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE foreldre_prosjekt_id IN (?" . str_repeat(',?', $c-1) . ") AND prosjekt_id != 1");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return getAlle($stmt, $this->typeName, false, $idArr);
+        }
+    }
+    
+    public function hentTeamProsjektFraBruker($bruker_id){
+        $stmt = $this->db->prepare("SELECT DISTINCT * FROM prosjekt WHERE team_id IN (SELECT team_id FROM teammedlemskap WHERE bruker_id=:bId)");
+        $stmt->bindParam(':bId', $bruker_id, PDO::PARAM_INT);
+        return getAlle($stmt, $this->typeName, true);
+    }
 
     public function lagProsjekt($prosjekt) {
         $stmt = $this->db->prepare("

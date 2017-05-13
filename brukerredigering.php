@@ -1,5 +1,5 @@
 <?php
-spl_autoload_register(function ($class_name) {
+    spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
@@ -20,7 +20,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
 }
 $aktivert = $_SESSION['bruker']->isAktivert();
 
-if((!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isBrukeradmin() != true || !$_SESSION['bruker']->isAktivert())
+if((!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isBrukeradmin() || !$_SESSION['bruker']->isAktivert())
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=brred");
     return;
@@ -35,6 +35,7 @@ if(isset($_REQUEST['action'])){
     switch ($_REQUEST['action']) {
         case 'Rediger':
             // når man prøver å komme inn på redigeringssiden til en annen (skal kunne redigere egen) bruker som har høyere rettighet enn seg selv
+            // TODO: Her er det tillatt å 
             if ($_REQUEST['brukerId'] != $_SESSION['bruker']->getId() && $_SESSION['bruker']->getBrukertype() > $BrukerReg->hentBruker($_REQUEST['brukerId'])->getBrukertype()) {
                 header("Location: brukeradministrering.php?error=brukerHoyereNiva");
                 return;

@@ -69,7 +69,8 @@ INSERT INTO `brukertype` (`brukertype_id`, `brukertype_navn`, `brukertype_teamle
 (1, 'Systemadministrator', 1, 1, 1, 1),
 (2, 'Prosjektadministrator', 1, 1, 1, 0),
 (3, 'Teamleder', 1, 0, 0, 0),
-(4, 'Ansatt', 0, 0, 0, 0);
+(4, 'Ansatt', 0, 0, 0, 0),
+(5, 'ProductOwner', 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -182,6 +183,23 @@ INSERT INTO `prosjekt` (`prosjekt_id`, `foreldre_prosjekt_id`, `prosjekt_navn`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `system`
+--
+
+CREATE TABLE `system` (
+  `tidsparameter` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `system`
+--
+
+INSERT INTO `system` (`tidsparameter`) VALUES
+(30);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `team`
 --
 
@@ -237,7 +255,8 @@ CREATE TABLE `timeregistrering` (
   `timereg_aktiv` tinyint(1) NOT NULL DEFAULT '1',
   `timereg_automatisk` tinyint(1) NOT NULL,
   `timereg_godkjent` tinyint(1) NOT NULL,
-  `timereg_kommentar` varchar(200) DEFAULT NULL
+  `timereg_kommentar` varchar(200) DEFAULT NULL,
+  `timereg_ordinaer` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -333,7 +352,7 @@ ALTER TABLE `bruker`
 -- AUTO_INCREMENT for table `brukertype`
 --
 ALTER TABLE `brukertype`
-  MODIFY `brukertype_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `brukertype_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `fase`
 --

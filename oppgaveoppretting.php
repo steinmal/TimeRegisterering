@@ -21,9 +21,32 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
-    header("Location: index.php?error=manglendeRettighet&side=oppgopp");
+$bruker = $_SESSION['bruker'];
+$tilgang = $_SESSION['brukerTilgang'];
+$aktivert = $bruker->isAktivert();
+
+if(!isset($_REQUEST['prosjektId'])){
+    header("Location: prosjektadministrering.php?error=ingenProsjekt");
+    return;
+}
+$prosjektId = $_REQUEST['prosjektId'];
+$prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
+if ($prosjekt == null) {
+    header('Location: prosjektadministrering.php?error=ugyldigProsjekt');
+    return;
+}
+
+if(!isset($tilgang) || !($tilgang->isTeamleder() || $tilgang->isProsjektadmin()))
+{
+    header("Location: index.php?error=manglendeRettighet&side=fasopp");
+    return;
+}
+
+if (!$tilgang->isProsjektadmin() && !($bruker->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getTeamLeder()
+        || $bruker->getId() == $prosjekt->getProductOwner()
+        || $bruker->getId() == $prosjekt->getLeder()))
+{
+    header('Location: prosjektdetaljer.php?error=ugyldigOppgaveAct&prosjektId=' . $prosjektId);
     return;
 }
 
@@ -31,20 +54,6 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 //Hvis ikke, anta at skjema er ferdig utfyllt, men da må faseId være satt
 //else: header(location...)
 
-//ProsjektId = 0 har lite hensikt, tror databasen gir feilmelding i slikt tilfelle pga foreign key-forventninger
-$prosjektId = 0;
-if (isset($_REQUEST['prosjektId']))
-    $prosjektId = $_REQUEST['prosjektId'];
-$prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
-if ($prosjekt == null) {
-    header('Location: prosjektadministrering.php?error=ugyldigProsjekt');
-   // echo "Ugyldig prosjektID";
-    return;
-}
-if($_SESSION['bruker']->getId() != $TeamReg->hentTeam($ProsjektReg->hentProsjekt($prosjektId)->getTeam())->getLeder() && $_SESSION['bruker']->getId() != $ProsjektReg->hentProsjekt($prosjektId)->getLeder()) {
-    header('Location: prosjektdetaljer.php?error=ugyldigOppgaveAct&prosjektId=' . $prosjektId);
-    return;
-}
 $oppgaveTyper = $OppgaveReg->hentAlleOppgaveTyper();
 $faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 

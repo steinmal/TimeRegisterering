@@ -21,7 +21,7 @@ $manuell = false;
 session_start();
 
 //hente ut nylig brukte oppgaver for å fylle listen man kan trykke fortsette på
-$timeregs = array_reverse($TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId()));
+$timeregs = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), false, false, true);
 $nyligeOppgaveId = array();
 $i = 0;
 while (sizeof($nyligeOppgaveId) < 3 && $i < sizeof($timeregs)) {
@@ -91,7 +91,6 @@ if(isset($_POST['submit'])){
                     return;
                 }
             }
-            //echo "Hei";
             $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
@@ -158,6 +157,7 @@ if (isset($_REQUEST['fortsettTimereg'])) {  //bruker fortsett-knappen i listen o
         return;
     }
     if (!$_SESSION['brukerTilgang']->isProsjektadmin()) {
+        // TODO: Refactor, én spørring er nok
         $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
         $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
         if (!in_array($prosjekt->getTeam(), $teamListe)) {
@@ -178,34 +178,38 @@ if($registrering != null && sizeof($registrering) > 0){     //aktiv timereg
     $oppgave = $OppgaveReg->hentOppgave($registrering->getOppgaveId());
     $prosjekt = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId());
     $prosjekt_id = $prosjekt->getId();
-    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'valgtOppgave'=>$oppgave->getId(), 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visOppgave'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'manuell'=>false, 'error'=>$error));
+    
+    echo $twig->render('timeregistrering.html', array( 'innlogget'=>$_SESSION['innlogget'], 'valgtOppgave'=>$oppgave->getId(), 'bruker'=>$_SESSION['bruker'], 'TeamReg'=>$TeamReg, 'aktiv'=>true, 'visOppgave'=>true, 'visSkjema'=>true, 'prosjekt'=>$prosjekt, 'oppgave'=>$oppgave, 'registrering'=>$registrering, 'brukernavn'=>$brukernavn, 'dagensdato'=>date("Y-m-d"), 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'manuell'=>false, 'error'=>$error, 'oppgave'=>$oppgave, 'prosjekt'=>$prosjekt));
 }
 else{
     $brukerID = $_SESSION['bruker']->getId();
-    $grunnProsjekter = array();
-    $alleProsjekter = array();
+    //$alleProsjekter = array();
     if ($_SESSION['brukerTilgang']->isProsjektadmin()) {
-        $grunnProsjekter = $ProsjektReg->hentAlleProsjekt();
-    } else {
-        $teamIDs = $TeamReg->hentTeamIdFraBruker($brukerID);
-        foreach ($teamIDs as $i) {
-            $grunnProsjekter = array_merge($grunnProsjekter, $ProsjektReg->hentProsjekterFraTeam($i));
+        $prosjektListe = $ProsjektReg->hentAlleProsjekt();
+    } else { // Optimalisert kode!! Hurra!!!!
+        $prosjektListe = $ProsjektReg->hentTeamProsjektFraBruker($_SESSION['bruker']->getId());
+        $idArr = array();
+        foreach($prosjektListe as $p){
+            $idArr[] = $p->getId();
+        }
+        $children = array();
+        while($children = $ProsjektReg->hentUnderProsjektFraListe($idArr)){
+            $idArr = array();
+            foreach($children as $c){
+                if(!isset($prosjektListe[$c->getId])){
+                    $prosjektListe[$c->getId] = $c;
+                    $idArr[] = $c->getId();
+                }
+            }
         }
     }
-    foreach ($grunnProsjekter as $p) {
-        $alleProsjekter[] = $p;
-        $prosjektOversikt = new ProsjektOversikt($p, $ProsjektReg, new FaseRegister($db), $OppgaveReg, $TimeReg, ProsjektOversikt::$OT_PROSJEKTER);
-        $alleProsjekter = array_merge($alleProsjekter, $prosjektOversikt->getAlleUnderProsjekt());
-    }
 
-    $prosjektListe = array_unique($alleProsjekter);
-    
     if(isset($_POST['prosjektId'])) {
-        if(!$_SESSION['brukerTilgang']->isProsjektadmin() && !in_array($ProsjektReg->hentProsjekt($_POST['prosjektId']), $prosjektListe)) {
+        $prosjekt_id = $_POST['prosjektId'];
+        if(!isset($prosjektListe[$prosjekt_id])) {
             header("Location: timeregistrering.php?error=ugyldigProsjekt");
             return;
         }
-        $prosjekt_id = $_POST['prosjektId'];
         $oppgaveListe = $OppgaveReg->hentOppgaverFraProsjekt($prosjekt_id);
     }
     
@@ -214,21 +218,21 @@ else{
         $oppgave_id = $_POST['oppgave'];
         $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
         $aktivTid = $OppgaveReg->hentAktiveTimerPrOppgaveDesimal($oppgave_id);
-        $prosjekt_id = $_POST['prosjektId'];
+        $prosjekt_id = $_POST['prosjektId']; //overflødig
+        $prosjekt = $ProsjektReg->hentProsjekt($prosjekt_id);
     }
 
     $visOppgave = ($prosjekt_id > 0 && sizeof($oppgaveListe) > 0 || $prosjekt_id > 0 && $oppgave_id > 0) ? true : false;
-    $visSkjema = $oppgave_id > 0 ? true : false; 
+    $visSkjema = $oppgave_id > 0 ? true : false;
     $dagensdato = date('Y-m-d');
     $now = date('h:i:s');
     $sysReg = new SystemRegister($db);
     $sysVar = $sysReg->hentSystemvariabel();
-    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
+    $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));
     
     if(isset($_REQUEST['manuell'])) {
         $manuell = true;
     }
-    
     echo $twig->render('timeregistrering.html', 
                 array('aktivert'=>$aktivert, 
                       'innlogget'=>$_SESSION['innlogget'], 

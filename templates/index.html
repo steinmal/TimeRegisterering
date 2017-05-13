@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Timeregistrering</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -118,17 +118,139 @@
         {% endif %}
         
         {% if aktivert %}
-        <div class="btn-group">
-            <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
-            <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
-            {% if brukerTilgang.isTeamleder and TeamReg.harTeamlederEtTeam(bruker.Id) %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
-            <!--<a href="brukerdetaljer.php"><button type="button" class="btn btn-primary">Brukerdetaljer</button></a>-->
-            {% if brukerTilgang.isTeamleder %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
-            {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
-            <!--<a href="faseadministrering.php">Faseadministrering</a><br/>-->
-            <!--<a href="brukerredigering.php?action=Rediger&brukerId={{ bruker.Id }}"><button type="button" class="btn btn-primary">Rediger brukeropplysninger</button></a>-->
-            {% if brukerTilgang.isBrukeradmin %}<a href="SystemInnstillinger.php"><button type="button" class="btn btn-default">Systeminnstillinger</button></a>{% endif %}
-        </div>
+            <!--
+            <div class="btn-group">
+                <a href="timeregistrering.php"><button type="button" class="btn btn-primary">Timeregistrering</button></a>
+                <a href="timeoversikt.php"><button type="button" class="btn btn-primary">Timeoversikt</button></a>
+                {% if brukerTilgang.isTeamleder and TeamReg.harTeamlederEtTeam(bruker.Id) %}<a href="timegodkjenning.php"><button type="button" class="btn btn-primary">Timegodkjenning</button></a>{% endif %}
+                {% if brukerTilgang.isTeamleder %}<a href="prosjektadministrering.php"><button type="button" class="btn btn-primary">Prosjektadministrering</button></a>{% endif %}
+                {% if brukerTilgang.isBrukeradmin %}<a href="brukeradministrering.php"><button type="button" class="btn btn-primary">Brukeradministrering</button></a>{% endif %}
+                {% if brukerTilgang.isBrukeradmin %}<a href="SystemInnstillinger.php"><button type="button" class="btn btn-default">Systeminnstillinger</button></a>{% endif %}
+            </div> -->
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-body">
+                        <div class="row ">
+                            <div class="col-xs-6 col-lg-3">
+                                <a href="dashbordBruker.php" class="btn btn-danger btn-xl" role="button"><span
+                                        class="glyphicon glyphicon-user"></span> <br/>Bruker</br> </a>
+                            </div>
+                            <div class="col-xs-6 col-lg-3">
+                                <a href="dashbordTeamleder.php" class="btn btn-warning btn-xl" role="button"><span
+                                        class="glyphicon glyphicon-bookmark"></span> <br/>Teamleder</br> </a>
+                            </div>
+                            <div class="col-xs-6 col-lg-3">
+                                <a href="#" class="btn btn-success btn-xl" role="button"><span
+                                        class="glyphicon glyphicon-folder-open"></span> <br/>Prosjektleder</a>
+                            </div>
+                            <div class="col-xs-6 col-lg-3">
+                                <a href="#" class="btn btn-info btn-xl" role="button"><span
+                                        class="glyphicon glyphicon-eye-open"></span> <br/>Product </br> Owner</a>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+            
+            <h2>Timeregistrering</h2>
+            <div class="form-horizontal">
+            <div class="form-group">
+                <form method="post" action="index.php" class="col-md-4" id="timeregForm">
+                    <label for="prosjekt">Prosjekt:</label>
+                    {% if aktiv %}
+                    <select class="form-control" name="prosjektId" id="prosjekt" disabled>
+                        <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
+                    </select>
+                    {% else %}
+                        <select name="prosjektId" class="form-control" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
+                            {% if valgtProsjekt < 1 %}
+                            <option selected="selected"></option>
+                            {% endif %}
+                            {% for prosjekt in prosjektListe %}
+                                {% if prosjekt.StatusString == "Aktiv" %}
+                                    <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        {% if valgtProsjekt < 1 %}
+                        <small class="form-text text-muted">Velg prosjekt</small>
+                        {% elseif oppgaveListe|length == 0 %}
+                        <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+                        {% endif %}
+                    {% endif %} <!-- manuell -->
+                </form>
+            </div>
+            
+            {% if visOppgave %}
+            <div class="form-group ">
+                <form method="post" action="index.php" class="col-md-4" id="timeregForm2">
+                    <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}">
+                    <label for="oppgave">Oppgave:</label>
+                    {% if aktiv %}
+                    <select name="oppgave" class="form-control" disabled id="oppgave">
+                        <option value="{{ oppgave.Id }}" selected="selected">{{ oppgave.Navn }}
+                        </option>
+                        {% if visSkjema %}
+                        <br>Tidsestimat: {{ tidsestimat }}
+                        <br>Aktiv tid: {{ aktivTid }}
+                        {% endif %}
+                    </select>
+                    {% else %}
+                    <select name="oppgave" class="form-control" id="oppgave" onchange="document.getElementById('timeregForm2').submit();">
+                        {% if valgtOppgave < 1 %}
+                            <option selected="selected"></option>
+                        {% endif %}
+                        {% for oppgave in oppgaveListe %}
+                        <option value="{{ oppgave.Id }}" {% if oppgave.Id== valgtOppgave %}
+                                selected="selected" {% endif %}>{{ oppgave.Navn }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                        {% if visSkjema %}
+                        <br>Tidsestimat: {{ tidsestimat }}
+                        <br>Aktiv tid: {{ aktivTid }}
+                        {% endif %}
+                    {% endif %} <!-- aktiv -->
+                </form>
+            </div>
+            </div>
+            {% endif %} <!-- visOppgave -->
+        
+            {% if visSkjema %}
+            <div class="form-group">
+                <form method="post" action="index.php" class="col-md-4">
+                    <input type="hidden" name="timeregId" value="{{ registrering.Id }}">
+                    <input type="hidden" name="prosjektId" value="{{ valgtProsjekt }}"/>
+                    <input type="hidden" name="oppgave" value="{{ valgtOppgave }}">
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" name="forslag" value="Foreslå tidsestimat">
+                    </div>
+            
+                    <div class="form-group ">
+                        <label for="dato">Dato:</label>
+                        <input type="date" class="form-control" id="dato" name="dato" disabled value="{{ dagensdato }}">
+                    </div>
+                    <div class="form-group">
+                        {% if aktiv %}
+                            <input class="btn btn-lg" type="submit" name="submit" value="Start" disabled/>
+                            {% if registrering.Status == 1 %}
+                            <input class="btn btn-success btn-lg" type="submit" name="submit" value="Fortsett"/>
+                            {% else %}
+                            <input class="btn btn-primary btn-lg" type="submit" name="submit" value="Pause"/>
+                            {% endif %}
+                            <input class="btn btn-danger btn-lg" type="submit" name="submit" value="Stopp"/>
+                        {% else %}
+                            <input class="btn btn-success btn-lg" type="submit" name="submit" value="Start"/>
+                            <input class ="btn btn-lg" type="submit" name="submit" value="Pause" disabled/>
+                            <input class="btn btn-lg" type="submit" name="submit" value="Stopp" disabled/>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            {% endif %} <!-- visSkjema -->
+
         {% else %}
         <h2>Brukeren din er deaktivert</h2>
         <div class="btn-group">
@@ -143,31 +265,7 @@
             Registreringen var vellykket!
         </div>
         {% endif %}
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel-body">
-                    <div class="row ">
-                        <div class="col-xs-6 col-lg-3">
-                            <a href="dashbordBruker.php" class="btn btn-danger btn-xl" role="button"><span
-                                    class="glyphicon glyphicon-user"></span> <br/>Bruker</br> </a>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <a href="#" class="btn btn-warning btn-xl" role="button"><span
-                                    class="glyphicon glyphicon-bookmark"></span> <br/>Teamleder</br> </a>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <a href="#" class="btn btn-success btn-xl" role="button"><span
-                                    class="glyphicon glyphicon-folder-open"></span> <br/>Prosjektleder</a>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <a href="#" class="btn btn-info btn-xl" role="button"><span
-                                    class="glyphicon glyphicon-eye-open"></span> <br/>Product </br> Owner</a>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-        </div>
     {% else %} <!-- ikke innlogget -->
         {% if error == "ikkeInnlogget" %}
         <div class="alert alert-error" role="alert">
@@ -200,8 +298,7 @@
     {% endif %}
     </div>
 
-
-
+</div>
     {% include 'footer.html' %}
 
 </body>
