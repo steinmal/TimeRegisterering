@@ -21,7 +21,7 @@ $manuell = false;
 session_start();
 
 //hente ut nylig brukte oppgaver for å fylle listen man kan trykke fortsette på
-$timeregs = array_reverse($TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId()));
+$timeregs = $TimeReg->hentTimeregistreringerFraBruker($_SESSION['bruker']->getId(), false, false, true);
 $nyligeOppgaveId = array();
 $i = 0;
 while (sizeof($nyligeOppgaveId) < 3 && $i < sizeof($timeregs)) {
@@ -91,7 +91,6 @@ if(isset($_POST['submit'])){
                     return;
                 }
             }
-            //echo "Hei";
             $TimeReg->startTimeReg($_POST['oppgave'], $_SESSION['bruker']->getId());
             break;
         case 'Pause':
@@ -231,7 +230,6 @@ else{
     if(isset($_REQUEST['manuell'])) {
         $manuell = true;
     }
-    
     echo $twig->render('timeregistrering.html', 
                 array('aktivert'=>$aktivert, 
                       'innlogget'=>$_SESSION['innlogget'], 
