@@ -24,12 +24,25 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
 
         <h1>Teamrapport - Timeoversikt medarbeidere</h1>
+        
+        <div class="rapport">
+            <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
+                <label for="daterange">Periode:</label>
+                <input type="text" name="daterange" />
+                <!--
+                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <span></span> <b class="caret"></b>
+                </div>-->
+            </form>
+            
     
-        <p><form method="GET" action="teamrapportansatt.php" id="teamSelectForm">
+        <br /><br />
+        <p><form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">
             <p><label for="teamID">Team:</label> 
-                <select class="form-control" name="team" id="teamID" onchange="document.getElementById('teamSelectForm').submit();">
+                <select class="form-control" name="team" id="teamID" onchange="document.getElementById('myForm').submit();">
                     {% if valgtTeam < 1 %}
-                        <option selected="selected"></option>
+                        <option selected="selected"> </option>
                     {% endif %}
                     
                     {% for team in teams %}
@@ -38,18 +51,11 @@
                 </select>
                 {% if valgtTeam < 1 %}<small class="form-text text-muted">Velg team</small>{% endif %}</p>
                 
-
-        </form></p>  
-
-        <div class="rapport">
-            <form action="teamrapportansatt.php" method="GET" class="col-md-4" id="datefilterform">
-                <input type="text" name="daterange" />
-                <!--
-                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                    <span></span> <b class="caret"></b>
-                </div>-->
-            </form>
+                
+                
+                
+                
+                
             <script type="text/javascript">
                 //       <!--
                 $(function() {
@@ -100,5 +106,16 @@
                 });
                 //-->
             </script>
-            <form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">
+                
+                
+                
+                
+                
+
+                
+
+       
+
+       
+            
 
