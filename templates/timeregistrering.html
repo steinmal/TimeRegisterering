@@ -120,9 +120,6 @@
                     <option value="{{ prosjekt.Id }}" selected>{{ prosjekt.Navn }}</option>
                 </select>
                 {% else %}
-                {% for p in prosjektListe %}
-                    <p>{{p.Navn}}</p>
-                {% endfor %}
                     <select name="prosjektId" class="form-control" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                         {% if valgtProsjekt < 1 %}
                         <option selected="selected"></option>
