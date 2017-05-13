@@ -23,15 +23,15 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     return;
 }
 
-if(!isset($_SESSION['brukerTilgang']) || !($_SESSION['brukerTilgang']->isTeamleder() || $_SESSION['brukerTilgang']->isProsjektadmin())){
-    //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
-    //echo "Du har ikke tilgang til faseoppretting";
-    header("Location: index.php?error=manglendeRettighet&side=fasopp");
+if(!isset($_REQUEST['prosjektId'])){
+    header("Location: prosjektadministrering.php?error=ingenProsjekt");
     return;
 }
 
-if(!isset($_REQUEST['prosjektId'])){
-    header("Location: prosjektadministrering.php?error=ingenProsjekt");
+if(!isset($_SESSION['brukerTilgang']) || !(($_SESSION['brukerTilgang']->isTeamleder() && $ProsjektReg) || $_SESSION['brukerTilgang']->isProsjektadmin())){
+    //Sjekk om brukeren er prosjektadmin eller teamleder for dette prosjektet
+    //echo "Du har ikke tilgang til faseoppretting";
+    header("Location: index.php?error=manglendeRettighet&side=fasopp");
     return;
 }
 

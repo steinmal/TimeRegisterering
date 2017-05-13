@@ -232,5 +232,16 @@ if(isset($_SESSION['innlogget'])) {
         'nyligeOppgaver'=>$nyligeOppgaver,
         'ProsjektReg'=>$ProsjektReg));
     }
+} else {
+    echo $twig->render('index.html', array(
+    'loginFail'=>$loginFail,
+    'innlogget'=>$innlogget,
+    'bruker'=>$bruker,
+    'brukerTilgang'=>$brukerTilgang,
+    'error'=>$error,
+    'side'=>$side,
+    'TeamReg'=>$TeamReg,
+    'regSucc'=>$regSucc));
 }
+
 ?>
