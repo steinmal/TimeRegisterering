@@ -115,23 +115,24 @@
             <div class="form-group">
                 <form method="post" action="timeregistrering.php" class="col-md-4" id="timeregForm">
                     <label for="prosjekt">Prosjekt:</label>
-                        <select name="prosjektId" class="form-control" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
-                            {% if valgtProsjekt < 1 %}
-                            <option selected="selected"></option>
-                            {% endif %}
-                            {% for prosjekt in prosjektListe %}
-                                {% if prosjekt.StatusString == "Aktiv" %}
-                                    <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                    <select name="prosjektId" class="form-control" id="prosjekt" onchange="document.getElementById('timeregForm').submit();">
                         {% if valgtProsjekt < 1 %}
-                        <small class="form-text text-muted">Velg prosjekt</small>
-                        {% elseif oppgaveListe|length == 0 %}
-                        <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+                        <option selected="selected"></option>
                         {% endif %}
+                        {% for prosjekt in prosjektListe %}
+                        {% if prosjekt.StatusString == "Aktiv" %}
+                        <option value="{{ prosjekt.Id }}"{% if prosjekt.Id == valgtProsjekt %} selected="selected"{% endif %}>{{ prosjekt.Navn }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% if valgtProsjekt < 1 %}
+                    <small class="form-text text-muted">Velg prosjekt</small>
+                    {% elseif oppgaveListe|length == 0 %}
+                    <small class="form-text text-muted">Valgt prosjekt har ingen oppgaver</small>
+                    {% endif %}
                 </form>
             </div>
+        </div>
             
             {% if visOppgave %}
             <div class="form-group ">
@@ -185,7 +186,7 @@
                 </div>
             </form>
         </div>
-        </div>
+    </div>
         {% endif %}
         {% if not visOppgave %}
         <div class="col-lg-10">
@@ -245,7 +246,10 @@
         </form>
     </div>
     {% endif %} <!-- aktiv -->
-    <div><br/><br/></div>
+    <!--<div><br/><br/></div>-->
+</div>
+</div>
 {% include 'footer.html' %}
+
 </body>
 </html>
