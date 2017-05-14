@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -17,12 +18,12 @@ $aktivert = "";
 session_start();
 
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['bruker']->isAktivert()){
+$aktivert = isAktiv();
+if(!$aktivert){
     header("Location: index.php?error=manglendeRettighet&side=nyttEst");
     return;
 }
@@ -35,7 +36,7 @@ $oppgave = $OppgaveReg->hentOppgave($oppgaveId);
 
 $teamID = $ProsjektReg->hentProsjektFraFase($FaseReg->hentFase($oppgave->getFaseId())->getId())->getTeam();
 $brukerTeamIds = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
-$tilgang = $_SESSION['brukerTilgang']->isProsjektAdmin();
+$tilgang = isProsjektAdmin();
 if(!$tilgang){
     foreach ($brukerTeamIds as $tID) {
         if ($teamID == $tID) {

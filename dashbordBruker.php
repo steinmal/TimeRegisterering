@@ -66,7 +66,7 @@ foreach ($lederTeamIDs as $i) {
     $lederTeamListe[] = $TeamReg->hentTeam($i);
 }
 
-$brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
+$brukerIsTeamleder = isTeamleder();
 
 $registrering = $TimeReg->hentAktiveTimeregistreringer($_SESSION['bruker']->getId());
 if($registrering != null && sizeof($registrering) > 0){

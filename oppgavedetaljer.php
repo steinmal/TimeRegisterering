@@ -19,13 +19,13 @@ $aktivert = "";
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
+$aktivert = isAktiv();
 
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isTeamleder()  || !$_SESSION['bruker']->isAktivert()){
+if(!isTeamleder() || !$aktivert)){
     header("Location: index.php?error=manglendeRettighet&side=oppgdet");
     return;
 }
@@ -42,9 +42,11 @@ if(isset($_GET['oppgaveId'])) {
     $godkjentTid = $OppgaveReg->hentGodkjenteTimerPrOppgave($oppgave->getId());
     
     $brukerId = $_SESSION['bruker']->getId();
-    $teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
-    $prosjektlederId = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getLeder();
-    if ($brukerId != $teamLederId && $brukerId != $prosjektlederId && !$_SESSION['brukerTilgang']->isProsjektAdmin()) {
+    $teawmLederId = $team->getLeder();
+    //$teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
+    $prosjektlederId = $prosjekt->getLeder();
+    //$prosjektlederId = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getLeder();
+    if ($brukerId != $teamLederId && $brukerId != $prosjektlederId && !isProsjektAdmin()) {
         header("Location: prosjektdetaljer.php?error=ugyldigOppgave&prosjektId=" . $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getId());
         return;
     }
