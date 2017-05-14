@@ -13,6 +13,7 @@ $OppgaveReg = new OppgaveRegister($db);
 $TeamReg = new TeamRegister($db);
 $aktivert = "";
 $valgtOppgave = "";
+$tilstander = Oppgave::getTilstander();
 
 
 session_start();
@@ -76,6 +77,7 @@ if(isset($_POST['opprettOppgave'])){
         header("Location: oppgaveOppretting.php?prosjektId=" . $prosjektId . "&error=ingenFase");
         return;
     }
+    $faseId = $_POST['fase'];
     $foreldreId = null;
     if(isset($_POST['foreldreId']) && $_POST['foreldreId'] != 0) {
         $foreldreId = $_POST['foreldreId'];
@@ -84,14 +86,16 @@ if(isset($_POST['opprettOppgave'])){
     $oppgaveNavn = $_POST['oppgaveNavn'];
     $tidsestimat = $_POST['tidsestimat'];
     $periode = $_POST['periode'];
+    $tilstand = $_POST['tilstand'];
+
 
     if(!isset($_POST['oppgaveId'])){
-        $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand);
         header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
     else{
-        $OppgaveReg->redigerOppgave($_POST['oppgaveId'], $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        $OppgaveReg->redigerOppgave($_POST['oppgaveId'], $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand);
         header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
@@ -107,5 +111,6 @@ echo $twig->render('oppgaveoppretting.html', array(
         'valgtOppgave'=>$valgtOppgave,
         'oppgavetyper'=>$oppgaveTyper,
         'faser'=>$faser,
+        'tilstander'=>$tilstander,
         'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

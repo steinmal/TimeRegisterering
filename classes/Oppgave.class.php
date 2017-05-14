@@ -7,7 +7,8 @@
         private $oppgave_navn;
         private $oppgave_tidsestimat;
         private $oppgave_periode;
-        
+        private $oppgave_tilstand;
+
         function __construct() {
             
         }
@@ -19,7 +20,13 @@
         public function getType() { return $this->oppgavetype_id; }
         public function getFaseId() { return $this->fase_id; }
         public function getPeriode() { return $this->oppgave_periode; }
-        
+
         public function setFaseID($id){ $this->fase_id = $id; }
+        public function getTilstand() { return $this->oppgave_tilstand; }
+
+        public static function getTilstander() {
+            $tilstander = array("Ikke-påbegynt","Påbegynt", "Ferdig");
+            return $tilstander;
+        }
 
     }

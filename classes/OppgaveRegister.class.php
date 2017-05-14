@@ -27,15 +27,16 @@ class OppgaveRegister {
         return getAlle($stmt, $this->typeName);
     }
 
-    public function lagOppgave($foreldre_oppgave_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode) {
-        $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode)
-        VALUES (:foreldre_id, :oppgavetype_id, :fase_id, :navn, :tidsestimat, :periode)");
+    public function lagOppgave($foreldre_oppgave_id, $oppgavetype_id, $fase_id, $oppgave_navn, $oppgave_tidsestimat, $oppgave_periode, $oppgave_tilstand) {
+        $stmt = $this->db->prepare("INSERT INTO oppgave (foreldre_oppgave_id, oppgavetype_id, fase_id, oppgave_navn, oppgave_tidsestimat, oppgave_periode, oppgave_tilstand)
+        VALUES (:foreldre_id, :oppgavetype_id, :fase_id, :navn, :tidsestimat, :periode, :tilstand)");
         $stmt->bindParam(':foreldre_id', $foreldre_oppgave_id, PDO::PARAM_INT);
         $stmt->bindParam(':oppgavetype_id', $oppgavetype_id, PDO::PARAM_INT);
         $stmt->bindParam(':fase_id', $fase_id, PDO::PARAM_INT);
         $stmt->bindParam(':navn', $oppgave_navn);
         $stmt->bindParam(':tidsestimat', $oppgave_tidsestimat, PDO::PARAM_INT);
         $stmt->bindParam(':periode', $oppgave_periode, PDO::PARAM_INT);
+        $stmt->bindParam(':tilstand', $oppgave_tilstand);
         return execStmt($stmt);
     }
     
@@ -177,8 +178,8 @@ class OppgaveRegister {
         return execStmt($stmt);
     }
 
-    public function redigerOppgave($oppgaveId, $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode) {
-        $stmt = $this->db->prepare("UPDATE oppgave SET foreldre_oppgave_id = :foreldre_id, oppgavetype_id = :oppgavetype_id, fase_id =:fase_id, oppgave_navn=:navn, oppgave_tidsestimat=:tidsestimat, oppgave_periode=:periode WHERE oppgave_id =:id");
+    public function redigerOppgave($oppgaveId, $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand) {
+        $stmt = $this->db->prepare("UPDATE oppgave SET foreldre_oppgave_id = :foreldre_id, oppgavetype_id = :oppgavetype_id, fase_id =:fase_id, oppgave_navn=:navn, oppgave_tidsestimat=:tidsestimat, oppgave_periode=:periode, oppgave_tilstand=:tilstand WHERE oppgave_id =:id");
         $stmt->bindParam(':foreldre_id', $foreldreId, PDO::PARAM_INT);
         $stmt->bindParam(':oppgavetype_id', $oppgaveTypeId, PDO::PARAM_INT);
         $stmt->bindParam(':fase_id', $faseId, PDO::PARAM_INT);
@@ -186,6 +187,7 @@ class OppgaveRegister {
         $stmt->bindParam(':tidsestimat', $tidsestimat, PDO::PARAM_INT);
         $stmt->bindParam(':periode', $periode, PDO::PARAM_INT);
         $stmt->bindParam(':id', $oppgaveId, PDO::PARAM_INT);
+        $stmt->bindParam(':tilstand', $tilstand);
         return execStmt($stmt);
     }
 }
