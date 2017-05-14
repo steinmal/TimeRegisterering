@@ -34,7 +34,6 @@ if (isset($_REQUEST['prosjektId']))
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 if ($prosjekt == null) {
     header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
-    //echo "Ugyldig prosjektID";
     return;
 }
 if (isset($_GET['error'])) {
@@ -44,8 +43,7 @@ if (isset($_GET['error'])) {
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
         case 'Arkiver':
-            /*$ProsjektReg->arkiverProsjekt($_GET['prosjektId']);
-            break;*/
+
             if(!isset($_REQUEST['prosjektId'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
@@ -61,9 +59,6 @@ if (isset($_REQUEST['action'])) {
             $error = "arkivert";
             break;
         case 'Gjenopprett':
-            /*$gjenopprett = true;
-            $ProsjektReg->arkiverProsjekt($_GET['prosjektId'], $gjenopprett);
-            break;*/
             if(!isset($_REQUEST['prosjektId'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
@@ -83,18 +78,13 @@ if (isset($_REQUEST['action'])) {
                 $oversikt->gjennopprett($ProsjektReg);
             }
             $error = "gjennopprettet";
-            //$ProsjektReg->arkiverProsjekt($_GET['prosjektId'], 0);
     }
-    //header("Location: prosjektdetaljer.php?prosjektId=".$prosjektId."&error=$error");
-    //return;
-    //Reload project
     if (isset($_REQUEST['visProsjekt'])) {
         $prosjektId = $_REQUEST['visProsjekt'];
     }
     $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
     if ($prosjekt == null) {
         header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
-        //echo "Ugyldig prosjektID";
         return;
     }
 }
@@ -105,7 +95,7 @@ $TimeregReg = new TimeregistreringRegister($db);
 
 $prosjektOversiktRoot = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
 $parentProsjekt = null;
-if ($prosjekt->getParent()) {
+if ($prosjekt->getParent() > 1) {
     $parentProsjekt = $ProsjektReg->hentProsjekt($prosjekt->getParent());
 }
 
@@ -125,7 +115,7 @@ echo $twig->render('prosjektdetaljer.html',
                    'oppgaveliste'=>$OppgaveListe, 
                    'brukerTilgang'=>$_SESSION['brukerTilgang'], 
                    'error'=>$error, 
-                   "prosjektOversiktRoot"=>$prosjektOversiktRoot->getOversiktListe(), 
+                   "prosjektOversiktRoot"=>$prosjektOversiktRoot, 
                    'parentProsjekt'=>$parentProsjekt,
                    'brukerKanRedigere'=>$brukerKanRedigere));
 

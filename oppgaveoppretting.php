@@ -12,6 +12,7 @@ $FaseReg = new FaseRegister($db);
 $OppgaveReg = new OppgaveRegister($db);
 $TeamReg = new TeamRegister($db);
 $aktivert = "";
+$valgtOppgave = "";
 
 
 session_start();
@@ -60,10 +61,13 @@ $faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 //Benytt hentOppgave dersom en oppgave skal redigeres
 //Forslag for oppretting av oppgaver: Gjør om "lagoppgave"-metoden til å ta inn et objekt av type Oppgave
 //Bruk isåfall new Oppgave og fyll inn denne fra $_POST vha set-metodene.
-$valgtOppgave = new Oppgave();
+if(isset($_GET['oppgaveId'])) {
+    $valgtOppgave = $OppgaveReg->hentOppgave($_GET['oppgaveId']);
+}
+
 
 if(isset($_POST['opprettOppgave'])){
-    if(!isset($_POST['faseId']) && $_POST['faseId'] <= 0){
+    if(!isset($_POST['fase']) && $_POST['fase'] <= 0){
         header("Location: oppgaveOppretting.php?prosjektId=" . $prosjektId . "&error=ingenFase");
     }
     $faseId = $_POST['fase'];
@@ -83,9 +87,8 @@ if(isset($_POST['opprettOppgave'])){
         return;
     }
     else{
-        $nyttProsjekt->setId($_POST['prosjektId']);
-        $ProsjektReg->redigerProsjekt($nyttProsjekt);
-        header("Location: prosjektadministrering.php");
+        $OppgaveReg->redigerOppgave($_POST['oppgaveId'], $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
 }
