@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -24,12 +25,12 @@ $aktivert = "";
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || ($_SESSION['brukerTilgang']->isProsjektadmin() != true && !isset($_GET['teamId'])) || !$_SESSION['bruker']->isAktivert()){
+$aktivert = isAktiv();
+if(!(isProsjektadmin() || isTeamLeder()) || !$aktivert){
     header("Location: index.php?error=manglendeRettighet&side=teamadm");
     return;
 }
@@ -42,7 +43,10 @@ if(isset($_GET['teamId'])){
     $teamId = $_GET['teamId'];
     $team = $TeamReg->hentTeam($teamId);
 
-    if($team == null || $team->getLeder() != $_SESSION['bruker']->getId()) { //Sjekk om innlogget bruker er leder av teamet man aksesserer.
+    if($team == null
+        || !(isProsjektAdmin() 
+        || (isTeamLeder() && $team->getLeder() == $_SESSION['bruker']->getId())))
+    {
         header("Location: teamadministrering.php?error=feilTeam");
         return;
     }
@@ -71,7 +75,8 @@ if(isset($_GET['teamId'])){
 
     if(isset($_POST['leggTilMedlem'])) {
         $teamId = $_POST['teamId'];
-        if ($TeamReg->hentTeam($teamId)->getLeder() != $_SESSION['bruker']->getId()) {
+        if(!(isProsjektLeder || isTeamLeder($TimeReg, $teamId))) {
+        //if ($TeamReg->hentTeam($teamId)->getLeder() != $_SESSION['bruker']->getId()) {
             header("Location: teamadministrering.php?feilTeam");
             return;
         }
@@ -85,7 +90,7 @@ elseif(!isset($_GET['error'])){
     if(isset($_GET['adminerror'])) {
         $adminerror = $_GET['adminerror'];
     }
-    if($_SESSION['bruker']->getBrukertype() == 1 || $_SESSION['bruker']->getBrukertype() == 2) {
+    if(isProsjektAdmin() || isSystemAdmin()) {
         $admin = true;
         $alleTeam = $TeamReg->hentAlleTeam();
     }

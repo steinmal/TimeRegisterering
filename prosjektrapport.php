@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -17,26 +18,27 @@ $aktivert = "";
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
-if(!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isProsjektadmin() || !$_SESSION['bruker']->isAktivert()){
+$aktivert = isAktiv();
+if(!isset($_REQUEST['prosjektId'])){
+    header("Location: prosjektadministrering.php");
+    return;
+}
+$prosjektId = $_REQUEST['prosjektId'];
+if(!(isProsjektadmin() || isProsjektOwner($ProsjektReg, $prosjektId)) || !$aktivert ){
     header("Location: index.php?error=manglendeRettighet&side=prrapp");
     //echo "Du har ikke tilgang til prosjektrapporter<br/>";
     //header-relokasjon med feilmelding eller en egen feilmeldingstemplate?
     return;
 }
 
-if(!isset($_GET['prosjektId'])){
-    header("Location: prosjektadministrering.php");
-    return;
-}
 if(isset($_GET['rapportType'])){
     $rapportType = $_GET['rapportType'];
 }
-$prosjekt = $ProsjektReg->hentProsjekt($_GET['prosjektId']);
+$prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
 $twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'prosjekt'=>$prosjekt, 'type'=>$rapportType);
 
 $TimeregReg = new TimeregistreringRegister($db);
@@ -45,6 +47,7 @@ $FaseReg = new FaseRegister($db);
 
 //Type kan slås sammen med rapportType
 
+$tabellRender = "";
 $type = 'prosjekt';
 $download = false;
 if(isset($_GET['rapportType'])){ $type = $_GET['rapportType']; }
@@ -80,8 +83,6 @@ switch ($type) {
         //$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
 }
-
-//$tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
 
 if($download){
     $filename = date('Y-m-d') . ' prosjektrapport.xlsx';

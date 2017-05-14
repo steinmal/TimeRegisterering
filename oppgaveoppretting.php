@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -19,13 +20,13 @@ $tilstander = Oppgave::getTilstander();
 session_start();
 
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 $bruker = $_SESSION['bruker'];
 $tilgang = $_SESSION['brukerTilgang'];
-$aktivert = $bruker->isAktivert();
+$aktivert = isAktiv();
 
 if(!isset($_REQUEST['prosjektId'])){
     header("Location: prosjektadministrering.php?error=ingenProsjekt");
@@ -38,15 +39,15 @@ if ($prosjekt == null) {
     return;
 }
 
-if(!isset($tilgang) || !($tilgang->isTeamleder() || $tilgang->isProsjektadmin()))
+if(!(isTeamleder() || isProsjektadmin()))
 {
     header("Location: index.php?error=manglendeRettighet&side=fasopp");
     return;
 }
 
-if (!$tilgang->isProsjektadmin() && !($bruker->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getLeder()
-        || $bruker->getId() == $prosjekt->getProductOwner()
-        || $bruker->getId() == $prosjekt->getLeder()))
+if (!(isProsjektadmin()
+    || isProsjektTeamLeder($BrukerReg, $prosjektId)
+    || isProsjektOwner($ProsjektReg, $prosjektId)))
 {
     header('Location: prosjektdetaljer.php?error=ugyldigOppgaveAct&prosjektId=' . $prosjektId);
     return;
