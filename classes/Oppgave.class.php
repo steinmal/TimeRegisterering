@@ -22,4 +22,9 @@
         public function getPeriode() { return $this->oppgave_periode; }
         public function getTilstand() { return $this->oppgave_tilstand; }
 
+        public static function getTilstander() {
+            $tilstander = array("Ikke-påbegynt","Påbegynt", "Ferdig");
+            return $tilstander;
+        }
+
     }

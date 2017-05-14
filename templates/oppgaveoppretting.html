@@ -55,9 +55,15 @@
             <label for="periode">Oppgaveperiode:</label>
             <input type="text" class="form-control" id="periode" name="periode" value="{{ valgtOppgave.Periode }}">
         </div>
-        <div class="form-group">
-            <label for="tilstand">Oppgavetilstand:</label>
-            <input type="text" class="form-control" id="tilstand" name="tilstand" value="{{ valgtOppgave.Tilstand }}">
+
+        <div class="form-group ">
+            <label for="tilstand">Fase:</label>
+            <select name="tilstand" class="form-control" id="tilstand">
+                {% for tilstand in tilstander %}
+                <option value="{{ tilstand }}"{% if valgtOppgave.Tilstand == tilstand %} selected="selected"{% endif %}>{{ tilstand }}</option>
+                {% endfor %}
+            </select>
+
         </div>
         <div class="form-group ">
             {% if valgtOppgave.Id > 0 %}

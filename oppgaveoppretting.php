@@ -13,6 +13,7 @@ $OppgaveReg = new OppgaveRegister($db);
 $TeamReg = new TeamRegister($db);
 $aktivert = "";
 $valgtOppgave = "";
+$tilstander = Oppgave::getTilstander();
 
 
 session_start();
@@ -95,5 +96,5 @@ if(isset($_POST['opprettOppgave'])){
 }
 
 echo $twig->render('oppgaveoppretting.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgavetyper'=>$oppgaveTyper, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+                    'oppgavetyper'=>$oppgaveTyper, 'tilstander'=>$tilstander, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>
