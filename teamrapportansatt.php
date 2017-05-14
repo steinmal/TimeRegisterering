@@ -62,25 +62,19 @@ if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $dateto = substr($_GET['daterange'], 13, 10);
 }
 
+
+
 $_SESSION['datefrom'] = $datefrom;
 $_SESSION['dateto'] = $dateto;
 
 $bruker = $_SESSION['bruker'];
 $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
-
 if (isset($_GET['team'])) {
     $valgtTeam = $_GET['team'];
     $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);
     $timeregistreringer = $TimeReg->hentTimeregistreringerFraTeam($valgtTeam, $datefrom, $dateto, true);
     $sumHours = sumHours($timeregistreringer);
 }
-
-if(isset($_GET['ansatt'])) {
-    $ansatt = $_GET['ansatt'];
-    $timeregistreringer = filtrerTimeregsForAnsatt($timeregistreringer, $ansatt, $BrukerReg);
-    $sumHours = sumHours($timeregistreringer);
-}
-
 $ansatt = isset($_GET['ansatt'])?$_GET['ansatt']:"";
 $oppgavetype = isset($_GET['oppgavetype'])?$_GET['oppgavetype']:"";
 
@@ -119,8 +113,10 @@ if(isset($_GET['download'])){
         }
     }
     $twigArray['timeregistreringer'] = $timeregistreringer;
-    $tabellRender = $twig->render('rapportansatt.html', $twigArray);
     $sumHours = sumHours($timeregistreringer);
+    $twigArray['sumHours'] = $sumHours;
+    $tabellRender = $twig->render('rapportansatt.html', $twigArray);
+
     
     $teamNavn = $TeamReg->hentTeam($valgtTeam)->getNavn();
     $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . ".xlsx";
