@@ -160,7 +160,8 @@
     </table>
 
     {% if brukerKanRedigere %}
-        <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til fase</a>
+        <a href="faseoppretting.php?prosjektId={{ prosjekt.Id }}"><button class="btn btn-primary">Legg til fase</button></a>
+        <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}"><button class="btn btn-primary">Legg til ny oppgave</button></a>
     {% endif %}
 
     {% for fase in faseliste %}
@@ -201,9 +202,7 @@
         </table>
     {% endfor %}
 
-    {% if brukerKanRedigere %}
-        <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}">Legg til ny oppgave</a>
-    {% endif %}
+
 
 </div>
     <script type="text/javascript">
