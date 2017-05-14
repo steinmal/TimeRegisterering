@@ -24,9 +24,6 @@
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektadministrering.php">Prosjektoversikt</a>
 
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.Navn }}</h1>
-        {% if brukerTilgang.isProsjektAdmin %}
-        <a href="oppgavetyper.php" class="btn btn-primary">Endre oppgavetyper</a> 
-        {% endif %}
         <a href="prosjektrapport.php?prosjektId={{ prosjekt.Id }}" class="btn btn-primary">Vis prosjektrapport</a>
         
     {% if error == "ugyldigOppgave" %}
