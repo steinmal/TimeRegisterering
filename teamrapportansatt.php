@@ -97,6 +97,8 @@ if($brukerType->isProsjektadmin() or $brukerType->isSystemadmin()) {
     $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
 }
 
+$valgtTeam = null;
+$sumHours = "";
 if (isset($_GET['team'])) {
     $valgtTeam = $_GET['team'];
     $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);

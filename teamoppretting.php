@@ -93,5 +93,5 @@ if(isset($_GET['error'])) {
     $error = $_GET['error'];
 }
 
-echo $twig->render('teamoppretting.html', array('aktivert'=>$aktivert, 'error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'teamListe'=>$teamListe, 'bruker'=>$_SESSION['bruker'], 'valgtTeam'=>$valgtTeam, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('teamoppretting.html', array('aktivert'=>$aktivert, 'error'=>$error, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'action'=>$action, 'bruker'=>$_SESSION['bruker'], 'valgtTeam'=>$valgtTeam, 'brukere'=>$brukerliste, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>

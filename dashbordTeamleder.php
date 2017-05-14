@@ -84,8 +84,6 @@ echo $twig->render('dashbordTeamleder.html',
                    'OppgaveReg'=>$OppgaveReg,
                    'ProsjektReg'=>$ProsjektReg,
                    'aktiv'=>$aktiv,
-
-                   'registrering'=>$registrering[0],
                    'dagensdato'=>date('Y-m-d'),
                    'valgtOppgave'=>$oppgave,
                    'prosjekter'=>$prosjekter,
