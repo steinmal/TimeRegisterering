@@ -116,5 +116,11 @@ class ProsjektRegister {
         $stmt->bindParam(':id', $fase_id, PDO::PARAM_INT);
         return getEn($stmt, $this->typeName);
     }
+    public function hentGrunnprosjekterFraLeder($bruker_id){
+        $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE prosjekt_leder=:prosjektleder AND foreldre_prosjekt_id=1");
+        $stmt->bindParam(':prosjektleder', $bruker_id, PDO::PARAM_INT);
+        return getAlle($stmt, $this->typeName);
+    }
+
 }
 ?>
