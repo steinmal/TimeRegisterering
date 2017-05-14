@@ -89,7 +89,14 @@ $_SESSION['datefrom'] = $datefrom;
 $_SESSION['dateto'] = $dateto;
 
 $bruker = $_SESSION['bruker'];
-$teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
+
+$brukerType = $BrukerReg->getBrukertype($bruker->getBrukertype());
+if($brukerType->isProsjektadmin() or $brukerType->isSystemadmin()) {
+    $teams = $TeamReg->hentAlleTeam();
+} else {
+    $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
+}
+
 if (isset($_GET['team'])) {
     $valgtTeam = $_GET['team'];
     $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);
