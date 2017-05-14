@@ -196,8 +196,8 @@ else{
         while($children = $ProsjektReg->hentUnderProsjektFraListe($idArr)){
             $idArr = array();
             foreach($children as $c){
-                if(!isset($prosjektListe[$c->getId])){
-                    $prosjektListe[$c->getId] = $c;
+                if(!isset($prosjektListe[$c->getId()])){
+                    $prosjektListe[$c->getId()] = $c;
                     $idArr[] = $c->getId();
                 }
             }

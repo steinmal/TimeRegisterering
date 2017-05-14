@@ -164,14 +164,15 @@ if(isset($_SESSION['innlogget'])) {
             while($children = $ProsjektReg->hentUnderProsjektFraListe($idArr)){
                 $idArr = array();
                 foreach($children as $c){
-                    if(!isset($prosjektListe[$c->getId])){
-                        $prosjektListe[$c->getId] = $c;
+                    if(!isset($prosjektListe[$c->getId()])){
+                        $prosjektListe[$c->getId()] = $c;
                         $idArr[] = $c->getId();
                     }
                 }
             }
         }
-    
+
+        $oppgaveListe = array();
         if(isset($_POST['prosjektId'])) {
             if(!isset($prosjektListe[$_POST['prosjektId']])) {
                 header("Location: index.php?error=ugyldigProsjekt");
@@ -182,6 +183,8 @@ if(isset($_SESSION['innlogget'])) {
         }
         
         $oppgave_id = 0;
+        $tidsestimat = 0;
+        $aktivTid = 0;
         if(isset($_POST['oppgave'])) {
             $oppgave_id = $_POST['oppgave'];
             $tidsestimat = $OppgaveReg->hentOppgave($oppgave_id)->getTidsestimat();
@@ -195,13 +198,9 @@ if(isset($_SESSION['innlogget'])) {
         $now = date('h:i:s');
         $sysReg = new SystemRegister($db);
         $sysVar = $sysReg->hentSystemvariabel();
-        $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));    
-        
-        if(isset($_REQUEST['manuell'])) {
-            $manuell = true;
-        }
+        $ikkeLengerBak = date('Y-m-d', strtotime('-' . $sysVar[0]->getTidsparameter() . ' days'));
     
-    
+    if (!isset($sendt)) $sendt = ""; //Quickfix - usikker på funksjon
     echo $twig->render('index.html', array(
         'loginFail'=>$loginFail,
         'innlogget'=>$innlogget,
@@ -212,8 +211,8 @@ if(isset($_SESSION['innlogget'])) {
         'TeamReg'=>$TeamReg,
         'regSucc'=>$regSucc,
         'aktivert'=>$aktivert,
-        'sendt'=>$sendt, 
-        'aktiv'=>false, 
+        'sendt'=>$sendt,
+        'aktiv'=>false,
         'visOppgave'=>$visOppgave, 
         'prosjektListe'=>$prosjektListe, 
         'oppgaveListe'=>$oppgaveListe, 
@@ -228,8 +227,6 @@ if(isset($_SESSION['innlogget'])) {
         'dagensdato'=>$dagensdato,
         'now'=>$now,
         'ikkeLengerBak'=>$ikkeLengerBak,
-        'manuell'=>$manuell,
-        'nyligeOppgaver'=>$nyligeOppgaver,
         'ProsjektReg'=>$ProsjektReg));
     }
 } else {

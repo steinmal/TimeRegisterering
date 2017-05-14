@@ -35,6 +35,7 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 if(isset($_GET['visGodkjent'])){
     $visGodkjent = $_GET['visGodkjent'];
 }
+$timeRegistrering = null;
 if(isset($_GET['timeregId']) && isset($_GET['nytimeregId'])) {
     $timereg_id = $_GET['timeregId'];
     $nytimeregId =$_GET['nytimeregId'];
@@ -101,8 +102,8 @@ foreach ($teams as $team) {
     $teamID = $team->getId();
     $timeregistreringer[$teamID] = $TimeReg->hentTimeregistreringerFraTeam($teamID);
     $manglerGodkjenning = 0;
-    foreach ($timeregistreringer[$teamID] as $timeregistrering) {
-        if ($timeregistrering->getTilstandTekst() == "Venter godkjenning" || $timeregistrering->getTilstandTekst() == "Gjenopprettet, venter godkjenning") {
+    foreach ($timeregistreringer[$teamID] as $timeregistreringData) {
+        if ($timeregistreringData->getTilstandTekst() == "Venter godkjenning" || $timeregistreringData->getTilstandTekst() == "Gjenopprettet, venter godkjenning") {
             $manglerGodkjenning++;
         }
     }
