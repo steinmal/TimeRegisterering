@@ -111,7 +111,6 @@ if ($prosjekt->getParent()) {
 
 $aktivert = $_SESSION['bruker']->isAktivert();
 
-var_dump($_SESSION['brukerTilgang']);
 $brukerKanRedigere = ($_SESSION['brukerTilgang']->isProsjektadmin() || $_SESSION['bruker']->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getLeder()); //hvis brukerID == prosjekt->getLeder eller prosjekt->getTeam->getLeder
 
 echo $twig->render('prosjektdetaljer.html', 

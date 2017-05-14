@@ -15,7 +15,6 @@
         <tbody>
 
         {% for timereg in timeregistreringer %}
-        {% if timereg.isGodkjent() %}
         <tr>
             <td>{{ timereg.BrukerNavn }}</td>
             <td data-datoklokkeslett="{{ timereg.Dato }} {{ timereg.Fra }}">{{ timereg.Dato }}</td>
@@ -26,9 +25,20 @@
             <td>{{ timereg.OppgavetypeNavn }}</td>
 
         </tr>
-        {% endif %}
         {% endfor %}
         </tbody>
+        
+        <tfoot>
+            <tr>
+                <td>Totalt: </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td>{{ sumHours }}</td>
+                <td> </td>
+                <td> </td>
+            </tr>
+        </tfoot>
 
     </table>
 

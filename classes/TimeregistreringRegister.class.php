@@ -182,7 +182,7 @@ class TimeregistreringRegister {
         return getAlle($stmt, $this->typeName);
     }
 
-    public function hentTimeregistreringerFraTeam($team_id, $datefrom = "", $dateto = "") {
+    public function hentTimeregistreringerFraTeam($team_id, $datefrom = "", $dateto = "", $kunGodkjent = false) {
         $stmt = $this->db->prepare("SELECT t.*, o.oppgave_navn, ot.oppgavetype_navn, b.bruker_navn"
             . " FROM timeregistrering t"
             . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
@@ -191,6 +191,7 @@ class TimeregistreringRegister {
             . " INNER JOIN fase f on f.fase_id=o.fase_id"
             . " INNER JOIN prosjekt p on p.prosjekt_id=f.prosjekt_id"
             . " WHERE p.team_id = :id"
+            . ($kunGodkjent ? " AND t.timereg_tilstand = 0": "") // TODO: Tillate flere tilstander
             . ($datefrom && $dateto ? " AND (t.timereg_dato BETWEEN :datefrom AND :dateto)" : ""));
         $stmt->bindParam(':id', $team_id, PDO::PARAM_INT);
         if ($datefrom && $dateto) {
