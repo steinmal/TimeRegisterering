@@ -12,16 +12,16 @@
             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Timeadministrering <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="timeregistrering.php">Timeregistrering</a></li>
-                    <li><a href="timeoversikt.php">Timeoversikt</a></li>
-                    {% if brukerTilgang.isTeamleder %}<li class=".hidden-xs"><a href="timegodkjenning.php">Timegodkjenning</a></li>{% endif %}
+                    <li class="hidden-xs"><a href="timeoversikt.php">Timeoversikt</a></li>
+                    {% if brukerTilgang.isTeamleder %}<li class="hidden-xs"><a href="timegodkjenning.php">Timegodkjenning</a></li>{% endif %}
                 </ul>
             </li>
 
-            {% if brukerTilgang.isTeamleder %}<li class=".hidden-xs"><a href="prosjektadministrering.php" class=".hidden-xs">Prosjektadministrering</a></li>{% endif %}
-            {% if brukerTilgang.isBrukeradmin %}<li class=".hidden-xs"><a href="brukeradministrering.php">Brukeradministrering</a></li>{% endif %}
+            {% if brukerTilgang.isTeamleder %}<li class="hidden-xs"><a href="prosjektadministrering.php" class="hidden-xs">Prosjektadministrering</a></li>{% endif %}
+            {% if brukerTilgang.isBrukeradmin %}<li class="hidden-xs"><a href="brukeradministrering.php">Brukeradministrering</a></li>{% endif %}
 
             {% if brukerTilgang.isTeamleder %}
-                <li class="dropdown .hidden-xs"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Teamadministrering <span class="caret"></span></a>
+                <li class="dropdown hidden-xs"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Teamadministrering <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="teamrapportansatt.php">Teamrapport Ansatt</a></li>
                         {% if TeamReg.harTeamLederEtTeam(bruker.Id)%}
