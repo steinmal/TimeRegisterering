@@ -1,7 +1,55 @@
-        <input name="download" type="submit" value="Last ned rapport"/>
+            </div>
+            <input name="download" type="submit" value="Last ned rapport"/>
         </form>
-        </div>
-        
     </div>
+    <script type="text/javascript">
+        //<!--
+        $(function() {
+            {% if datefrom %}
+            var start = moment("{{ datefrom }}");
+            var end = moment("{{ dateto }}");
+            {% else %}
+            var start = moment().startOf('month');
+            var end = moment().endOf('month');
+            {% endif %}
+
+            moment.lang("nb"); //Norsk bokmaal
+
+            function cb(start, end) {
+                $('input[name="daterange"]').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+            }
+
+            $('input[name="daterange"]').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    [moment().startOf('month').format('MMMM')]: [moment().startOf('month'), moment().endOf('month')],
+                    [moment().startOf('month').subtract(1, 'month').format('MMMM')]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    [moment().startOf('month').subtract(2, 'month').format('MMMM')]: [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                    [moment().startOf('month').subtract(3, 'month').format('MMMM')]: [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                    [moment().startOf('month').subtract(4, 'month').format('MMMM')]: [moment().subtract(4, 'month').startOf('month'), moment().subtract(4, 'month').endOf('month')],
+                    [moment().startOf('month').subtract(5, 'month').format('MMMM')]: [moment().subtract(5, 'month').startOf('month'), moment().subtract(5, 'month').endOf('month')],
+                    [moment().startOf('month').subtract(6, 'month').format('MMMM')]: [moment().subtract(6, 'month').startOf('month'), moment().subtract(6, 'month').endOf('month')],
+                    'Dette året': [moment().startOf('year'), moment().endOf('year')],
+                    'Forrige år': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                    'Alt': [moment('1970-01-01'), moment('2038-01-19')]
+                },
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            }, cb);
+            cb(start, end);
+            $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+                document.getElementById("datefilterform").submit();
+            });
+        });
+
+        function dateSorter(a, b) {
+            if (a.datoklokkeslett < b.datoklokkeslett) return -1;
+            if (a.datoklokkeslett > b.datoklokkeslett) return 1;
+            return 0;
+            }
+        //-->
+    </script>
 </body>
 </html>

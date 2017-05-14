@@ -1,139 +1,25 @@
-{% if type == "team" %}
-{% elseif type == "prosjekt" %}
-<table class="table table-striped">
-    <tr>
-        <th>Prosjekt</th>
-        {% for oType in  oppgaveTyper %}
-            <th>{{ oType.Navn }}</th>
-        {% endfor %}
-        <th>Sum</th>
-    </tr>
-    {% for oversikt in oversiktListe %}
-    <tr>
-        <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ oversikt.Prosjekt.Id }}">{{ oversikt.NavnMedInnrykk|raw }}</a></td>
-        {% for oType in  oppgaveTyper %}
-            <td>{{ oversikt.Timer(oType.Id) }}</td>
-        {% endfor %}
-        <td>{{ oversikt.Timer }}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <td id="sum-linje">Totalt:</td>
-        {% for oType in  oppgaveTyper %}
-            <td>{{ oversiktListe[0].TotalTimer(oType.Id) }}</td>
-        {% endfor %}
-        <td>{{ oversiktListe[0].TotalTimer }}</td>
-    </tr>
-</table>
-{% elseif type == "oppgave" %}
-{% elseif type == "fremdrift" %}
-<!-- CanvasJs -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
-
-    <h1>Prosjekt som helhet:</h1>
-
-<script type="text/javascript">
-    window.onload = function () {
-        var chart = new CanvasJS.Chart("chartContainer",
-                {
-
-                    title:{
-                        text: "Prosjekt burnup",
-                        fontSize: 30
-                    },
-                    animationEnabled: true,
-                    axisX:{
-
-                        gridColor: "Silver",
-                        tickColor: "silver",
-                        valueFormatString: "YYYY-MM-DD",
-                    },
-                    toolTip:{
-                        shared:true
-                    },
-                    theme: "theme2",
-                    axisY: {
-                        gridColor: "Silver",
-                        tickColor: "silver"
-                    },
-                    legend:{
-                        verticalAlign: "center",
-                        horizontalAlign: "right"
-                    },
-                    data: [
-                        {
-                            type: "line",
-                            showInLegend: true,
-                            lineThickness: 2,
-                            name: "Lineært estimat",
-                            markerType: "square",
-                            color: "#F08080",
-                            dataPoints: [
-                            {% for key, value in burnupEstimatData %}
-                                { x: new Date("{{ key }}"), y: {{ value }} },
-                            {% endfor %}
-                            ]
-                        },
-                        {
-                            type: "line",
-                            showInLegend: true,
-                            name: "Timer registrert",
-                            color: "#20B2AA",
-                            lineThickness: 2,
-
-                            dataPoints: [
-                                {% for key, value in burnupTidprdagData %}
-                                    { x: new Date("{{ key }}"), y: {{ value|round(1) }} },
-                                {% endfor %}
-                            ]
-                        }
-
-
-                    ],
-                    legend:{
-                        cursor:"pointer",
-                        itemclick:function(e){
-                            if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-                                e.dataSeries.visible = false;
-                            }
-                            else{
-                                e.dataSeries.visible = true;
-                            }
-                            chart.render();
-                        }
-                    }
-                });
-
-        chart.render();
-    }
-</script>
-<div id="chartContainer" style="height: 300px; width: 100%;">
-</div>
-
-    {% for fase in faseliste %}
-
-        <h1>{{ fase.Navn }}</h1>
-        <table class="table table-striped">
-            <tr>
-                <th>Oppgave</th>
-                <th>Timer utført</th>
-                <th>Estimat</th>
-                <th>Gjenstående timer</th>
-                <th>Prosent</th>
-                <th>Status</th>
-            </tr>
-            {% for oppgave in oppgaveliste %}
-                {% if oppgave.FaseId == fase.Id %}
-                <tr>
-                    <td>{{ oppgave.Navn }}</td>
-                    <td>{{ oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }}</td>
-                    <td>{{ oppgave.Tidsestimat }}</td>
-                    <td>{{ oppgave.Tidsestimat - oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }}</td>
-                    <td>{{ oppgavereg.calculatePercent(oppgave.Id) }}%</td>
-                    <td>Oppgaver har ingen status</td>
-                </tr>
-                {% endif %}
-            {% endfor %}
-        </table>
-    {% endfor %}
-{% endif %}
+                <table class="table table-striped">
+                    <tr>
+                        <th>Prosjekt</th>
+                        {% for oType in  oppgaveTyper %}
+                            <th>{{ oType.Navn }}</th>
+                        {% endfor %}
+                        <th>Sum</th>
+                    </tr>
+                    {% for oversikt in oversiktListe %}
+                    <tr>
+                        <td><a href="prosjektrapport.php?rapportType=prosjekt&prosjektId={{ oversikt.Prosjekt.Id }}">{{ oversikt.NavnMedInnrykk|raw }}</a></td>
+                        {% for oType in  oppgaveTyper %}
+                            <td>{{ oversikt.Timer(oType.Id) }}</td>
+                        {% endfor %}
+                        <td>{{ oversikt.Timer }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td id="sum-linje">Totalt:</td>
+                        {% for oType in  oppgaveTyper %}
+                            <td>{{ oversiktListe[0].TotalTimer(oType.Id) }}</td>
+                        {% endfor %}
+                        <td>{{ oversiktListe[0].TotalTimer }}</td>
+                    </tr>
+                </table>

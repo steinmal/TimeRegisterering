@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -15,21 +16,14 @@ $aktivert = "";
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
-
-if(!isset($_SESSION['brukerTilgang'])){
-    header('Location: index.php?error=feil');
-    return;
-}
-
-
 $bruker = $_SESSION['bruker'];
 
-$aktivert = $_SESSION['bruker']->isAktivert();
+$aktivert = isAktiv();
 
 $brukerTypeID = $bruker->getBrukertype();
 $brukerType = $BrukerReg->getBrukerType($brukerTypeID)->getNavn();
@@ -50,7 +44,7 @@ foreach ($lederTeamIDs as $i) {
     $lederTeamListe[] = $TeamReg->hentTeam($i);
 }
 
-$brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
+$brukerIsTeamleder = isTeamLeder();
 
 echo $twig->render('brukerdetaljer.html', array('innlogget'=>$_SESSION['innlogget'], 'aktivert'=>$aktivert, 'lederTeamListe'=>$lederTeamListe, 'bruker'=>$bruker, 'prosjekter'=>$prosjekter, 'teamliste'=>$teamliste, 'brukerIsTeamleder'=>$brukerIsTeamleder, 'brukerType'=>$brukerType, 'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
 

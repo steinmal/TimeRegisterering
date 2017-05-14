@@ -6,6 +6,7 @@
         private $brukertype_prosjektadmin;
         private $brukertype_brukeradmin;
         private $brukertype_systemadmin;
+        private $brukertyper_product_owner;
 
         public function __construct(){
         }
@@ -16,4 +17,5 @@
         public function isProsjektadmin() { return $this->brukertype_prosjektadmin; }
         public function isBrukeradmin() { return $this->brukertype_brukeradmin; }
         public function isSystemadmin() { return $this->brukertype_systemadmin; }
+        public function isProductOwner() { return $this->brukertype_product_owner; }
     }

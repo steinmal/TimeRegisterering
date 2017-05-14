@@ -3,6 +3,7 @@
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -14,13 +15,13 @@ $error = "";
 $aktivert = "";
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = $_SESSION['bruker']->isAktivert();
+$aktivert = isAktiv();
 
-if((!isset($_SESSION['brukerTilgang']) || !$_SESSION['brukerTilgang']->isBrukeradmin() || !$_SESSION['bruker']->isAktivert())
+if((!isBrukerAdmin || !$aktivert)
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=brred");
     return;
@@ -50,7 +51,7 @@ if(isset($_REQUEST['action'])){
                 header("Location: brukerredigering.php?error=mailExists&brukerId=" . $_REQUEST['brukerId']);
                 return;
             }
-            if($_SESSION['brukerTilgang']->isBrukeradmin()){
+            if(isBrukeradmin()){
                 $bruker->setNavn($_POST['navn']);
                 if($_SESSION['bruker']->getBrukertype() > $_POST['type']) { //brukeradmin skal ikke kunne gi andre brukere høyere rettighet enn seg selv
                     header("Location: brukerredigering.php?brukerId=" . $_REQUEST['brukerId'] . "&error=forLavRettighet");

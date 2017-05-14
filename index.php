@@ -76,7 +76,7 @@ if(isset($_SESSION['innlogget'])) {
         }
         switch($_POST['submit']){
             case 'Start':
-                if (!$_SESSION['brukerTilgang']->isProsjektadmin()) {
+                if (!isProsjektadmin()) {
                     $prosjekt = $ProsjektReg->hentProsjektFraOppgave($_POST['oppgave']);
                     $teamListe = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
                     if (!in_array($prosjekt->getTeam(), $teamListe)) {

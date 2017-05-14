@@ -45,11 +45,11 @@ $FaseReg = new FaseRegister($db);
 
 //Type kan slås sammen med rapportType
 
-$type = 'team';
+$type = 'prosjekt';
 if(isset($_GET['rapportType'])){ $type = $_GET['rapportType']; }
 switch ($type) {
     case 'team':
-        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
+        //$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
     case 'prosjekt':
         /*$grunnProsjekt = $prosjekt;
@@ -57,9 +57,10 @@ switch ($type) {
         $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         $twigs['oversiktListe'] = $oversikt->getOversiktListe();
         $twigs['oppgaveTyper'] = $OppgaveReg->hentAlleOppgavetyper();
+        $tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
         break;
     case 'oppgave':
-        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
+        //$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
     case 'fremdrift':
         $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_BURNUP);
@@ -69,9 +70,10 @@ switch ($type) {
         $twigs['burnupEstimatData'] = $oversikt->getTotalEstimatAsLinearData();
         $twigs['burnupTidprdagData'] = $oversikt->getTotalTidPrDagArrayAsLinearData();
         //var_dump($twigs['oppgaver']);
+        $tabellRender = $twig->render('rapportframdrift.html', $twigs);
         break;
     default:
-        $oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
+        //$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
         break;
 }
 

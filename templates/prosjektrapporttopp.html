@@ -3,18 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Prosjektrapport</title>
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap table -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <!-- Ekstra -->
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
 </head>
 <body>
     <div class="container">
         {% include 'header.html' %}
         <span class="glyphicon glyphicon-arrow-left"></span><a href="prosjektdetaljer.php?prosjektId={{ prosjekt.Id }}">Prosjektdetaljer</a>
 
-        <h1>Prosjektrapport for prosjekt {{ prosjekt.Navn }}</h1>
-        <form method=get class="col-md-4">
+        <h1>Prosjektrapport for {{ prosjekt.Navn }}</h1>
+
+        <form action="prosjektrapport.php" method="GET" class="col-md-4" id="datefilterform">
+        <input type="hidden" name="prosjektId" value="{{ prosjekt.Id }}"/>
+            {% if rapportType != null %}
+            <input type="hidden" name="rapportType" value="{{ type }}"/>
+            {% endif %}
+            <label for="daterange">Periode:</label>
+            <input type="text" name="daterange" />
+        </form><br /><br />
+        
+        <form action="prosjektrapport.php" method="GET" id="myForm">
             <input type="hidden" name="prosjektId" value="{{ prosjekt.Id }}"/>
+
             <div class="form-group">
                 <label for="rapportType">Type rapport:</label>
                 <select id=rapportType name=rapportType class="form-control" onchange="submit()">
@@ -24,5 +45,4 @@
                     <option value="fremdrift"{% if type == "fremdrift" %}selected{% endif %}>Fremdriftsrapport</option>
                 </select>
             </div>
-
-        <div class="rapport">
+            <div class="rapport">

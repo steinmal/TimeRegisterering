@@ -3,6 +3,7 @@ spl_autoload_register(function ($class_name) {
     require_once 'classes/' . $class_name . '.class.php';
 });
 
+require_once 'tilgangsfunksjoner.php';
 require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
@@ -24,21 +25,20 @@ $timeregManglerGodkjenning = array();
 
 session_start();
 
-if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
+if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
 
-
-if(!isset($_SESSION['brukerTilgang'])){
-    header('Location: index.php?error=feil');
+if(!isTeamLeder()){
+    header("Location: index.php?error=manglendeRettighet");
     return;
 }
-
+$brukerIsTeamleder = true;
 
 $bruker = $_SESSION['bruker'];
 
-$aktivert = $_SESSION['bruker']->isAktivert();
+$aktivert = isAktiv();
 
 $brukerTypeID = $bruker->getBrukertype();
 $brukerType = $BrukerReg->getBrukerType($brukerTypeID)->getNavn();
@@ -50,9 +50,6 @@ $lederTeamIDs = $TeamReg->getTeamIdFraTeamleder($brukerID);
 foreach ($lederTeamIDs as $i) {
     $lederTeamListe[] = $TeamReg->hentTeam($i);
 }
-
-$brukerIsTeamleder = $_SESSION['brukerTilgang']->isTeamleder();
-
 
 $timeregistreringer = array();
 foreach ($lederTeamIDs as $team) {
