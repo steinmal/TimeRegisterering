@@ -37,6 +37,7 @@
                     <th>Startdato</th>
                     <th>Sluttdato</th>
                     <th></th>
+                    <th></th>
                 </tr>
             {% for p in prosjekter %}
                     <tr>
@@ -49,9 +50,9 @@
                         <td>{{ p.SluttDato }}</td>
                         {% if aktivert %}
                         <td><a href="prosjektdetaljer.php?prosjektId={{ p.Id }}" class="btn btn-default" aria-label="Detaljer"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></td>
+                        <td><a href="prosjektrapport.php?prosjektId={{ p.Id }}" class="btn btn-default" aria-label="Rapport"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span></a></td>
                         {% endif %}
                     </tr>
-
                 {% endfor %}
             </table>
         </div>
