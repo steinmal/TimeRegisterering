@@ -46,7 +46,11 @@ $FaseReg = new FaseRegister($db);
 //Type kan slås sammen med rapportType
 
 $type = 'prosjekt';
+$download = false;
 if(isset($_GET['rapportType'])){ $type = $_GET['rapportType']; }
+if(isset($_GET['download'])){ $download = true; }
+$twigs['download'] = $download;
+
 switch ($type) {
     case 'team':
         //$oversikt = new ProsjektOversikt($prosjekt, $ProsjektReg, $FaseReg, $OppgaveReg, $TimeregReg, ProsjektOversikt::$OT_TIMER);
@@ -79,13 +83,13 @@ switch ($type) {
 
 //$tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
 
-if(isset($_GET['download'])){
+if($download){
     $filename = date('Y-m-d') . ' prosjektrapport.xlsx';
  
     $objPHPExcel = new PHPExcel();
     $tmpFile = tempnam('tempfolder', 'tmp');
     
-    file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
+    file_put_contents($tmpFile, "<html><head><meta charset=\"UTF-8\"></head><body>" . $tabellRender . "</body></html>");
     
     $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
     //$excelHTMLReader->loadIntoExisting($testTemp, $objPHPExcel); //
