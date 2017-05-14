@@ -4,7 +4,7 @@ spl_autoload_register(function ($class_name) {
 });
 
 require_once 'vendor/autoload.php';
-include('auth.php');
+require_once('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
 $BrukerReg = new BrukerRegister($db);

@@ -32,4 +32,4 @@ if(isset($_GET['error'])){
 $oppgavetyper= $OppgaveRegister->hentAlleOppgaveTyper();
 
 
-echo $twig->render('oppgavetyper.html', array('aktivert'=>$aktivert, 'oppgavetyper'=>$oppgavetyper, 'TeamReg'=>$TeamReg, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('oppgavetyper.html', array('aktivert'=>$aktivert, 'oppgavetyper'=>$oppgavetyper, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'],  'error'=>$error, 'brukerReg'=>$BrukerReg, 'brukerTilgang'=>$_SESSION['brukerTilgang']));

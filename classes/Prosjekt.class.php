@@ -23,6 +23,7 @@
         public function getParent() { return $this->foreldre_prosjekt_id; }
         //public function getProsjektParent() { return ProsjektRegister::hentProsjekt($this->foreldre_prosjekt_id); }
         public function getLeder() { return $this->prosjekt_leder; }
+        public function getOwner() { return $this->prosjekt_product_owner; }
         public function getTeam() { return $this->team_id; }
         public function getStartDato() { return $this->prosjekt_startdato; }
         public function getSluttDato() { return $this->prosjekt_sluttdato; }
