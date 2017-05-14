@@ -35,11 +35,13 @@ $oppgave = $OppgaveReg->hentOppgave($oppgaveId);
 
 $teamID = $ProsjektReg->hentProsjektFraFase($FaseReg->hentFase($oppgave->getFaseId())->getId())->getTeam();
 $brukerTeamIds = $TeamReg->hentTeamIdFraBruker($_SESSION['bruker']->getId());
-$tilgang = false;
-foreach ($brukerTeamIds as $tID) {
-    if ($teamID == $tID) {
-        $tilgang = true;
-        break;
+$tilgang = $_SESSION['brukerTilgang']->isProsjektAdmin();
+if(!$tilgang){
+    foreach ($brukerTeamIds as $tID) {
+        if ($teamID == $tID) {
+            $tilgang = true;
+            break;
+        }
     }
 }
 if (! $tilgang ) {

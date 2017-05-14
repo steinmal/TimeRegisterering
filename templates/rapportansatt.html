@@ -57,6 +57,9 @@
         $('.bootstrap-table-filter-control-oppgavetype > option[value="{{ oppgavetype}}"]').attr("selected", "selected");
         $('.bootstrap-table-filter-control-ansatt').attr("onchange", "document.getElementById('myForm').submit()");
         $('.bootstrap-table-filter-control-oppgavetype').attr("onchange", "document.getElementById('myForm').submit()");
+        timeoutId = setTimeout(function () {
+            that.onColumnSearch(event);
+        }, that.options.searchTimeOut);
     });
     
 
