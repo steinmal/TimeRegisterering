@@ -39,11 +39,16 @@
         if (a.datoklokkeslett > b.datoklokkeslett) return 1;
         return 0;
     }
-    
-    function doSubmit() {
+
+    $(function(){
         $('.bootstrap-table-filter-control-ansatt').attr("name","ansatt");
+        $('.bootstrap-table-filter-control-ansatt > option[value="{{ ansatt}}"]').attr("selected", "selected");
         $('.bootstrap-table-filter-control-oppgavetype').attr("name","oppgavetype");
-    }
+        $('.bootstrap-table-filter-control-oppgavetype > option[value="{{ oppgavetype}}"]').attr("selected", "selected");
+        $('.bootstrap-table-filter-control-ansatt').attr("onchange", "document.getElementById('myForm').submit()");
+        $('.bootstrap-table-filter-control-oppgavetype').attr("onchange", "document.getElementById('myForm').submit()");
+    });
+    
 
     //-->
 </script>

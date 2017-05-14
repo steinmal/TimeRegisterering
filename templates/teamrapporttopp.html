@@ -38,7 +38,7 @@
             
     
         <br /><br />
-        <p><form action="teamrapportansatt.php" method="GET" id="myForm" onsubmit="return doSubmit()">
+        <p><form action="teamrapportansatt.php" method="GET" id="myForm">
             <p><label for="teamID">Team:</label> 
                 <select class="form-control" name="team" id="teamID" onchange="document.getElementById('myForm').submit();">
                     {% if valgtTeam < 1 %}
