@@ -25,9 +25,9 @@
 
     <h1>Prosjektdetaljer for prosjekt {{ prosjekt.Navn }}</h1>
         {% if brukerTilgang.isProsjektAdmin %}
-        <a href="oppgavetyper.php">Endre oppgavetyper</a><br/>
+        <a href="oppgavetyper.php" class="btn btn-primary">Endre oppgavetyper</a> 
         {% endif %}
-        <a href="prosjektrapport.php?prosjektId={{ prosjekt.Id }}">Vis prosjektrapport</a>
+        <a href="prosjektrapport.php?prosjektId={{ prosjekt.Id }}" class="btn btn-primary">Vis prosjektrapport</a>
         
     {% if error == "ugyldigOppgave" %}
         <div class="alert alert-danger" role="alert">
@@ -205,7 +205,7 @@
             </tbody>
         </table>
     {% if brukerKanRedigere %}
-        <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}&fase={{ fase.Id }}">Legg til ny oppgave</a>
+        <a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}&fase={{ fase.Id }}" class="btn btn-primary">Legg til ny oppgave</a>
     {% endif %}
     {% endfor %}
 
