@@ -23,7 +23,7 @@ if(!isInnlogget()){
     return;
 }
 $aktivert = isAktiv();
-if(!isSystemAdmin() || !isAktivert()){
+if(!isSystemAdmin() || !isAktiv()){
     header("Location: index.php?error=manglendeRettighet");
     return;
 }
