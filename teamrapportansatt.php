@@ -19,6 +19,8 @@ session_start();
 
 $ansatt = "";
 $oppgavetype = "";
+$oppgavetyper = $OppgaveReg->hentAlleOppgaveTyper();
+
 $teamMedlemmer = array();
 $timeregistreringer = array();
 
@@ -90,8 +92,7 @@ $bruker = $_SESSION['bruker'];
 $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
 if (isset($_GET['team'])) {
     $valgtTeam = $_GET['team'];
-    $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam); 
-    $oppgavetyper = 
+    $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);
     $timeregistreringer = $TimeReg->hentTimeregistreringerFraTeam($valgtTeam, $datefrom, $dateto, true);
     $sumHours = sumHours($timeregistreringer);
 }
@@ -109,25 +110,25 @@ if(isset($_GET['oppgavetype'])) {
     if($oppgavetype) {
         $timeregistreringer = filtrerTimeregsForOppgavetype($timeregistreringer, $oppgavetype, $OppgaveReg);
         $sumHours = sumHours($timeregistreringer);
-    } 
+    }
 }
 
 $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
     'brukerTilgang'=>$_SESSION['brukerTilgang'],
 
-    'oppgavereg'=>$OppgaveReg,
-    'teamReg'=>$TeamReg,
-    'timeReg'=>$TimeReg,
-    'brukerReg'=>$BrukerReg,
     'teams'=>$teams,
     'valgtTeam'=>$valgtTeam,
+    
     'timeregistreringer'=>$timeregistreringer,
     'sumHours'=>$sumHours,
 
     'teamMedlemmer'=>$teamMedlemmer,
     'valgtAnsatt'=>$ansatt,
+    
+    'oppgavetyper'=>$oppgavetyper,
     'valgtOppgavetype'=>$oppgavetype,
+    
     'datefrom'=>$datefrom,
     'dateto'=>$dateto
 );
@@ -139,10 +140,10 @@ if(isset($_GET['download'])){
     if ($oppgavetype){
         $timeregistreringer = filtrerTimeregsForOppgavetype($timeregistreringer, $oppgavetype, $OppgaveReg);
     }
-
+    
     $twigArray['timeregistreringer'] = $timeregistreringer;
     $sumHours = sumHours($timeregistreringer);
-    $twigArray['sumHours'] = $sumHours; 
+    $twigArray['sumHours'] = $sumHours;
     $tabellRender = $twig->render('rapportansatt.html', $twigArray);
 
     $teamNavn = $TeamReg->hentTeam($valgtTeam)->getNavn();
@@ -150,12 +151,15 @@ if(isset($_GET['download'])){
     $objPHPExcel = new PHPExcel();
     $tmpFile = tempnam('tempfolder', 'tmp');
 
-    if ($ansatt) {
+    // Rapport når ansatt er valgt
+    if ($ansatt) { 
         $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . " - " . $ansatt . ".xlsx";
         file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
         $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
         $objPHPExcel = $excelHTMLReader->load($tmpFile);
         unlink($tmpFile);
+        
+    // Rapport for hele teamet, et ark per ansatt
     } else {
         $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . ".xlsx";
         foreach($teamMedlemmer as $bruker) {
@@ -167,7 +171,7 @@ if(isset($_GET['download'])){
             $sheetArray[0] = array("Ansatt: ", $navn);
             $sheetArray[1] = array("Periode :", $datefrom, $dateto);
             $sheetArray[2] = array("");
-            
+
             $brukersSum = sumHours(filtrerTimeregsForAnsatt($timeregistreringer, $navn, $BrukerReg));
             $brukersTimeregs = array();
             $brukersTimeregs[0] = array(
@@ -194,12 +198,11 @@ if(isset($_GET['download'])){
                     );
                     $i++;
                 }
-            
             }
             $brukersTimeregs[$i] = array("Totalt", "", "", $brukersSum);
             $currentSheet->fromArray($sheetArray, null, 'A1');
             $currentSheet->fromArray($brukersTimeregs, null, 'A4');
-            if($i < 2) { // Ingen timeregs registrert på bruker, fjerner sheet for valgt bruker. 
+            if($i < 2) { // Ingen timeregs registrert på bruker, fjerner sheet for valgt bruker.
                 $objPHPExcel->removeSheetByIndex($objPHPExcel->getIndex($objPHPExcel->getSheetByName($navn)));
             }
         }

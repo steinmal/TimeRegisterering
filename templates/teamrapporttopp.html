@@ -46,6 +46,7 @@
                 </select>
                 {% if valgtTeam < 1 %}<small class="form-text text-muted">Velg team</small>{% endif %}</p>
                 
+                {% if valgtTeam > 1 %}
                 <p><label for="ansatt">Filtrer på ansatt:</label> 
                 <select class="form-control" name="ansatt" id="ansatt" onchange="document.getElementById('myForm').submit();">
                     {% if valgtAnsatt < 1 %}
@@ -56,11 +57,19 @@
                         <option value="{{ ansatt.getNavn() }}" {% if ansatt.getNavn() == valgtAnsatt %} selected="selected" {% endif %}>{{ ansatt.getNavn() }}</option>
                     {% endfor %}
                 </select>
-            
+                
+                <p><label for="oppgavetype">Filtrer på oppgavetype:</label> 
+                <select class="form-control" name="oppgavetype" id="oppgavetype" onchange="document.getElementById('myForm').submit();">
+                    {% if valgtOppgavetype < 1 %}
+                        <option value = "" selected="selected">Alle oppgavetyper</option>
+                    {% endif %}
+                    
+                    {% for type in oppgavetyper %}
+                        <option value="{{ type.getNavn() }}" {% if type.getNavn() == valgtOppgavetype %} selected="selected" {% endif %}>{{ type.getNavn() }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
 
-                
-                
-                
 
             <script type="text/javascript">
                 //       <!--
