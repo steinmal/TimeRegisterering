@@ -137,18 +137,28 @@
                                 <a href="dashbordBruker.php" class="btn btn-danger btn-xl" role="button"><span
                                         class="glyphicon glyphicon-user"></span> <br/>Bruker</br> </a>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                                <a href="dashbordTeamleder.php" class="btn btn-warning btn-xl" role="button"><span
-                                        class="glyphicon glyphicon-bookmark"></span> <br/>Teamleder</br> </a>
-                            </div>
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-                                <a href="dashbordProsjektleder.php" class="btn btn-success btn-xl" role="button"><span
-                                        class="glyphicon glyphicon-folder-open"></span> <br/>Prosjektleder</a>
-                            </div>
+                            {% if brukerTilgang.isTeamleder %}
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                                    <a href="dashbordTeamleder.php" class="btn btn-warning btn-xl" role="button"><span
+                                            class="glyphicon glyphicon-bookmark"></span> <br/>Teamleder</br> </a>
+                                </div>
+                            {% endif %}
+                            {% if brukerTilgang.isProsjektadmin %}
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                                    <a href="dashbordProsjektleder.php" class="btn btn-success btn-xl" role="button"><span
+                                            class="glyphicon glyphicon-folder-open"></span> <br/>Prosjektleder</a>
+                                </div>
+                            {% endif %}
                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
                                 <a href="#" class="btn btn-info btn-xl" role="button"><span
                                         class="glyphicon glyphicon-eye-open"></span> <br/>Product </br> Owner</a>
                             </div>
+                            {% if brukerTilgang.isSystemadmin %}
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                                    <a href="SystemInnstillinger.php" class="btn btn-info btn-xl" role="button"><span
+                                            class="glyphicon glyphicon-wrench"></span> <br/>Systeminnstillinger</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
     
