@@ -55,6 +55,10 @@
             <label for="periode">Oppgaveperiode:</label>
             <input type="text" class="form-control" id="periode" name="periode" value="{{ valgtOppgave.Periode }}">
         </div>
+        <div class="form-group">
+            <label for="tilstand">Oppgavetilstand:</label>
+            <input type="text" class="form-control" id="tilstand" name="tilstand" value="{{ valgtOppgave.Tilstand }}">
+        </div>
         <div class="form-group ">
             {% if valgOppgave.Id > 0 %}
             <input type="submit" name="opprettOppgave" value="Opprett oppgave">

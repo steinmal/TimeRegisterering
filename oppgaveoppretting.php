@@ -79,15 +79,16 @@ if(isset($_POST['opprettOppgave'])){
     $oppgaveNavn = $_POST['oppgaveNavn'];
     $tidsestimat = $_POST['tidsestimat'];
     $periode = $_POST['periode'];
+    $tilstand = $_POST['tilstand'];
     
     
     if(!isset($_POST['oppgaveId'])){
-        $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand);
         header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
     else{
-        $OppgaveReg->redigerOppgave($_POST['oppgaveId'], $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode);
+        $OppgaveReg->redigerOppgave($_POST['oppgaveId'], $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand);
         header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
         return;
     }
