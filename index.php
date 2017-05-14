@@ -152,7 +152,7 @@ if(isset($_SESSION['innlogget'])) {
     else{
         $brukerID = $_SESSION['bruker']->getId();
         //$alleProsjekter = array();
-        if ($_SESSION['brukerTilgang']->isProsjektadmin()) {
+        if (isProsjektadmin()) {
             $prosjektListe = $ProsjektReg->hentAlleProsjekt();
         } else { // Optimalisert kode!! Hurra!!!!
             $prosjektListe = $ProsjektReg->hentTeamProsjektFraBruker($_SESSION['bruker']->getId());
