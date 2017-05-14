@@ -43,13 +43,17 @@
             {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            
             {% if innlogget %}
-            <li><a href="brukerdetaljer.php">Logget inn som <u>{{ bruker.Navn }}</u></a></li>
-                <li><a href="logout.php"><span class="glyphicon glyphicon-user"></span> Logg ut</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ bruker.navn }}</a>
+                <ul class="dropdown-menu">
+                    <li><a href="brukerdetaljer.php">Brukerdetaljer</u></a></li>
+                    <li><a href="logout.php">Logg ut</a></li>
+                </ul>
+            </li>
             {% else %}
                 <li><a href="brukerregistrering.php"><span class="glyphicon glyphicon-user"></span> Opprett bruker</a></li>
             {% endif %}
-
         </ul>
     </div>
 </nav>
