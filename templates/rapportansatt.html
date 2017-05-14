@@ -1,15 +1,15 @@
 
-    <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-control="true" data-filter-show-clear="true">
+    <table id="table" data-toggle="table" data-sort-name="date" data-sort-order="asc" data-search="true" data-show-columns="true" data-id-field="id" data-show-pagination-switch="true" data-filter-show-clear="true">
         <thead>
         <tr>
-            <th data-field="ansatt" data-sortable="true" data-filter-control="select">Ansatt</th>
+            <th data-field="ansatt" data-sortable="true">Ansatt</th>
             <th data-field="date" data-sortable="true" data-sort-name="_date_data" data-sorter="dateSorter">Dato</th>
             <!--<th data-field="date" data-sortable="true">Dato</th>-->
             <th data-field="from">Fra</th>
             <th data-field="to">Til</th>
             <th data-field="hours" data-sortable="true">Timer</th>
             <th data-field="task" data-sortable="true">Oppgave</th>
-            <th data-field="oppgavetype" data-sortable="true" data-filter-control="select">Oppgavetype</th>
+            <th data-field="oppgavetype" data-sortable="true">Oppgavetype</th>
         </tr>
         </thead>
         <tbody>
@@ -49,16 +49,5 @@
         if (a.datoklokkeslett > b.datoklokkeslett) return 1;
         return 0;
     }
-
-    $(function(){
-        $('.bootstrap-table-filter-control-ansatt').attr("name","ansatt");
-        $('.bootstrap-table-filter-control-ansatt > option[value="{{ ansatt}}"]').attr("selected", "selected");
-        $('.bootstrap-table-filter-control-oppgavetype').attr("name","oppgavetype");
-        $('.bootstrap-table-filter-control-oppgavetype > option[value="{{ oppgavetype}}"]').attr("selected", "selected");
-        $('.bootstrap-table-filter-control-ansatt').attr("onchange", "document.getElementById('myForm').submit()");
-        $('.bootstrap-table-filter-control-oppgavetype').attr("onchange", "document.getElementById('myForm').submit()");
-    });
-    
-
     //-->
 </script>

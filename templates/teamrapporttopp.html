@@ -30,11 +30,6 @@
                 {% if valgtTeam %}<input type="hidden" name="team" value="{{ valgtTeam }}"/>{% endif %}
                 <label for="daterange">Periode:</label>
                 <input type="text" name="daterange" />
-                <!--
-                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                    <span></span> <b class="caret"></b>
-                </div>-->
             </form>
             
         <br /><br />
@@ -51,11 +46,22 @@
                 </select>
                 {% if valgtTeam < 1 %}<small class="form-text text-muted">Velg team</small>{% endif %}</p>
                 
+                <p><label for="ansatt">Filtrer på ansatt:</label> 
+                <select class="form-control" name="ansatt" id="ansatt" onchange="document.getElementById('myForm').submit();">
+                    {% if valgtAnsatt < 1 %}
+                        <option value = "" selected="selected">Alle ansatte</option>
+                    {% endif %}
+                    
+                    {% for ansatt in teamMedlemmer %}
+                        <option value="{{ ansatt.getNavn() }}" {% if ansatt.getNavn() == valgtAnsatt %} selected="selected" {% endif %}>{{ ansatt.getNavn() }}</option>
+                    {% endfor %}
+                </select>
+            
+
                 
                 
                 
-                
-                
+
             <script type="text/javascript">
                 //       <!--
                 $(function() {

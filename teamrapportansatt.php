@@ -17,6 +17,8 @@ $BrukerReg = new BrukerRegister($db);
 $aktivert = "";
 session_start();
 
+$ansatt = "";
+$oppgavetype = "";
 $teamMedlemmer = array();
 $timeregistreringer = array();
 
@@ -26,7 +28,7 @@ function sumHours($timeregArray) {
         $hoursArray[] = $timeregs->getHourAsDateInterval();
     }
     $sumHours = DateHelper::sumDateIntervalList($hoursArray);
-    $days = $sumHours->format("%d"); 
+    $days = $sumHours->format("%d");
 
     if($days > 0) {
         $daysHours = explode(':', DateHelper::sumDateIntervalList($hoursArray)->format("%d:%H"));
@@ -36,6 +38,25 @@ function sumHours($timeregArray) {
         return $sumHours->format("%H:%I");
     }
 }
+
+function filtrerTimeregsForAnsatt($timeregs, $ansattNavn, $BrukerReg) {
+    foreach($timeregs as $key => $element) {
+        if($BrukerReg->hentBruker($element->getBrukerId())->getNavn() != $ansattNavn) {
+            unset($timeregs[$key]);
+        }
+    }
+    return $timeregs;
+}
+
+function filtrerTimeregsForOppgavetype($timeregs, $oppgavetypeNavn, $OppgaveReg) {
+    foreach($timeregs as $key => $element) {
+        if ($OppgaveReg->getOppgavetypeTekst($OppgaveReg->hentOppgave($element->getOppgaveId())->getType()) != $oppgavetypeNavn) {
+            unset($timeregs[$key]);
+        }
+    }
+    return $timeregs;
+}
+
 
 if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
     header("Location: index.php?error=ikkeInnlogget");
@@ -62,8 +83,6 @@ if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
     $dateto = substr($_GET['daterange'], 13, 10);
 }
 
-
-
 $_SESSION['datefrom'] = $datefrom;
 $_SESSION['dateto'] = $dateto;
 
@@ -71,12 +90,27 @@ $bruker = $_SESSION['bruker'];
 $teams = $TeamReg->getAlleTeamFraTeamleder($bruker->getId());
 if (isset($_GET['team'])) {
     $valgtTeam = $_GET['team'];
-    $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam);
+    $teamMedlemmer = $TeamReg->getTeamMedlemmer($valgtTeam); 
+    $oppgavetyper = 
     $timeregistreringer = $TimeReg->hentTimeregistreringerFraTeam($valgtTeam, $datefrom, $dateto, true);
     $sumHours = sumHours($timeregistreringer);
 }
-$ansatt = isset($_GET['ansatt'])?$_GET['ansatt']:"";
-$oppgavetype = isset($_GET['oppgavetype'])?$_GET['oppgavetype']:"";
+
+if(isset($_GET['ansatt'])) {
+    $ansatt = $_GET['ansatt'];
+    if($ansatt) {
+        $timeregistreringer = filtrerTimeregsForAnsatt($timeregistreringer, $ansatt, $BrukerReg);
+        $sumHours = sumHours($timeregistreringer);
+    }
+}
+
+if(isset($_GET['oppgavetype'])) {
+    $oppgavetype = $_GET['oppgavetype'];
+    if($oppgavetype) {
+        $timeregistreringer = filtrerTimeregsForOppgavetype($timeregistreringer, $oppgavetype, $OppgaveReg);
+        $sumHours = sumHours($timeregistreringer);
+    } 
+}
 
 $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'bruker'=>$_SESSION['bruker'],
@@ -91,47 +125,39 @@ $twigArray = array('innlogget'=>$_SESSION['innlogget'],
     'timeregistreringer'=>$timeregistreringer,
     'sumHours'=>$sumHours,
 
-    'ansatt'=>$ansatt,
-    'oppgavetype'=>$oppgavetype,
+    'teamMedlemmer'=>$teamMedlemmer,
+    'valgtAnsatt'=>$ansatt,
+    'valgtOppgavetype'=>$oppgavetype,
     'datefrom'=>$datefrom,
     'dateto'=>$dateto
-    );
+);
 
 if(isset($_GET['download'])){
     if ($ansatt){
-        foreach($timeregistreringer as $key => $element) {
-            if ($BrukerReg->hentBruker($element->getBrukerId())->getNavn() != $ansatt) {
-                unset($timeregistreringer[$key]);
-            }
-        }
+        $timeregistreringer = filtrerTimeregsForAnsatt($timeregistreringer, $ansatt, $BrukerReg);
     }
     if ($oppgavetype){
-        foreach($timeregistreringer as $key => $element) {
-            if ($OppgaveReg->getOppgavetypeTekst($OppgaveReg->hentOppgave($element->getOppgaveId())->getType()) != $oppgavetype) {
-                unset($timeregistreringer[$key]);
-            }
-        }
+        $timeregistreringer = filtrerTimeregsForOppgavetype($timeregistreringer, $oppgavetype, $OppgaveReg);
     }
+
     $twigArray['timeregistreringer'] = $timeregistreringer;
     $sumHours = sumHours($timeregistreringer);
-    $twigArray['sumHours'] = $sumHours;
+    $twigArray['sumHours'] = $sumHours; 
     $tabellRender = $twig->render('rapportansatt.html', $twigArray);
 
-    
     $teamNavn = $TeamReg->hentTeam($valgtTeam)->getNavn();
-    $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . ".xlsx";
 
-    
     $objPHPExcel = new PHPExcel();
     $tmpFile = tempnam('tempfolder', 'tmp');
-    
+
     if ($ansatt) {
         $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . " - " . $ansatt . ".xlsx";
         file_put_contents($tmpFile, "<html><body>" . $tabellRender . "</body></html>");
         $excelHTMLReader = PHPExcel_IOFactory::createReader('HTML');
         $objPHPExcel = $excelHTMLReader->load($tmpFile);
-        unlink($tmpFile); 
+        unlink($tmpFile);
     } else {
+        $filename = $datefrom . "_" . $dateto . " TimeRegistrering - " . $teamNavn . ".xlsx";
         foreach($teamMedlemmer as $bruker) {
             $currentSheet = $objPHPExcel->createSheet();
             $id = $bruker->getId();
@@ -141,37 +167,45 @@ if(isset($_GET['download'])){
             $sheetArray[0] = array("Ansatt: ", $navn);
             $sheetArray[1] = array("Periode :", $datefrom, $dateto);
             $sheetArray[2] = array("");
-            $sheetArray[3] = array(
+            
+            $brukersSum = sumHours(filtrerTimeregsForAnsatt($timeregistreringer, $navn, $BrukerReg));
+            $brukersTimeregs = array();
+            $brukersTimeregs[0] = array(
                 "Dato",
                 "Fra",
                 "Til",
                 "Timer",
                 "Oppgave",
                 "Oppgavetype"
-                );
-            $i = 4;
+            );
+            $i = 1;
             foreach($timeregistreringer as $timereg) {
                 $timeregBrukerId = $timereg->getBrukerId();
                 if($id == $timeregBrukerId) {
                     $oppgave = $OppgaveReg->hentOppgave($timereg->getOppgaveId());
                     $oppgavetype = $OppgaveReg->hentOppgaveType($oppgave->getType());
-                    $sheetArray[$i] = array(
+                    $brukersTimeregs[$i] = array(
                         $timereg->getDato(),
-                        $timereg->getFra(), 
+                        $timereg->getFra(),
                         $timereg->getTil(),
                         $timereg->getHourString(),
                         $oppgave->getNavn(),
                         $oppgavetype->getNavn()
-                        );
+                    );
                     $i++;
                 }
+            
             }
-            //$sheetArray[] = array(Sum, "", "", $sumHours); // TODO: Legge inn sum
+            $brukersTimeregs[$i] = array("Totalt", "", "", $brukersSum);
             $currentSheet->fromArray($sheetArray, null, 'A1');
+            $currentSheet->fromArray($brukersTimeregs, null, 'A4');
+            if($i < 2) { // Ingen timeregs registrert på bruker, fjerner sheet for valgt bruker. 
+                $objPHPExcel->removeSheetByIndex($objPHPExcel->getIndex($objPHPExcel->getSheetByName($navn)));
+            }
         }
         $objPHPExcel->removeSheetByIndex($objPHPExcel->getIndex($objPHPExcel->getSheetByName('Worksheet')));
     }
-    
+
     fclose($tmpFile);
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment;filename='.$filename);
