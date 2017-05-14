@@ -121,6 +121,12 @@ class ProsjektRegister {
         $stmt->bindParam(':prosjektleder', $bruker_id, PDO::PARAM_INT);
         return getAlle($stmt, $this->typeName);
     }
+    
+    public function hentProsjektFraProductOwner($bruker_id) {
+        $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE prosjekt_product_owner=:id");
+        $stmt->bindParam(':id', $bruker_id, PDO::PARAM_INT);
+        return getAlle($stmt, $this->typeName);
+    }
 
 }
 ?>

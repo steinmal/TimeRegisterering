@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prosjektleder Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="templates/footer.css" />
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <span class="glyphicon glyphicon-arrow-left"></span><a href="index.php">Hovedside</a>
+    
+        <h1>Product Owner side - {{ bruker.Navn }}</h1>
+        
+        <p>Her kan du se hvilke prosjekt du er Product Owner for.</p>
+        <div class="col-lg">
+            <div class="btn-group">
+                {% if aktivert %}
+                    <a href="index.php"><button type="button" class="btn btn-primary">Hovedside</button></a>
+                {% endif %}
+            </div>
+        </div>
+        <br/>
+
+        <div class="col-lg">
+        <h2>Prosjekter du er Product Owner for</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Beskrivelse</th>
+                    <th>Prosjektleder</th>
+                    <th>Product owner</th>
+                    <th>Team</th>
+                    <th>Startdato</th>
+                    <th>Sluttdato</th>
+                    <th></th>
+                </tr>
+            {% for p in prosjekter %}
+                    <tr>
+                        <td>{{ p.Navn }}</td>
+                        <td>{{ p.Beskrivelse }}</td>
+                        <td>{{ brukerReg.hentBruker(p.Leder).Navn }}</td>
+                        <td>{{ brukerReg.hentBruker(p.ProductOwner).Navn }}</td>
+                        <td>{{ TeamReg.hentTeam(p.Team).Navn }}</td>
+                        <td>{{ p.StartDato }}</td>
+                        <td>{{ p.SluttDato }}</td>
+                        {% if aktivert %}
+                        <td><a href="prosjektdetaljer.php?prosjektId={{ p.Id }}" class="btn btn-default" aria-label="Detaljer"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></td>
+                        {% endif %}
+                    </tr>
+
+                {% endfor %}
+            </table>
+        </div>
+        
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
