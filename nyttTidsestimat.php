@@ -42,7 +42,7 @@ foreach ($brukerTeamIds as $tID) {
         break;
     }
 }
-if (! $tilgang) {
+if (! $tilgang ) {
     header('Location: timeregistrering.php?error=ugyldigTimeEst');
     return;
 }
@@ -51,6 +51,7 @@ if (isset($_POST['submit'])) {
         $estimat = $_POST['estimat'];
         $OppgaveReg->lagNyttEstimat($oppgaveId, $estimat, $_SESSION['bruker']);
         header("Location: timeregistrering.php?sendt=1");
+        header("Location: index.php");
         return;
     }
     else {
