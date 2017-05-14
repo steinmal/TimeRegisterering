@@ -120,7 +120,8 @@ CREATE TABLE `oppgave` (
   `fase_id` int(11) DEFAULT '4',
   `oppgave_navn` varchar(30) DEFAULT NULL,
   `oppgave_tidsestimat` decimal(6,1) DEFAULT NULL,
-  `oppgave_periode` int(11) DEFAULT NULL
+  `oppgave_periode` int(11) DEFAULT NULL,
+  `oppgave_tilstand` varchar(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
