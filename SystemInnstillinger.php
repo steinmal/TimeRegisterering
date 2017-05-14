@@ -14,8 +14,22 @@ $brukerTilgang = "";
 $alert = "";
 $forceLogout = false;
 $SysReg = new SystemRegister($db);
+$aktivert = "";
 session_start();
 
+if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] == false){
+    header("Location: index.php?error=ikkeInnlogget");
+    return;
+}
+$aktivert = $_SESSION['bruker']->isAktivert();
+if(!isset($_SESSION['brukerTilgang']) || ($_SESSION['brukerTilgang']->isProsjektadmin() != true && !isset($_GET['teamId'])) || !$_SESSION['bruker']->isAktivert()){
+    header("Location: index.php?error=manglendeRettighet&side=teamadm");
+    return;
+}
+
+if(isset($_GET['error'])){
+    $error = $_GET['error'];
+}
 if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
 
     $systemVariabler = $SysReg->hentSystemvariabel();
@@ -60,12 +74,9 @@ if($_SESSION['innlogget'] && $_SESSION['brukerTilgang']->isBrukeradmin()) {
         }
     }
     //$alert = "asdfg";
-    echo $twig->render('SystemInnstillinger.html', array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'systemVariabler'=>$systemVariabler[0],
-    'brukerTilgang'=>$_SESSION['brukerTilgang'], 'noRadio'=>$noRadio, 'deaktivertError'=>$deaktivertError, 'error'=>$error, 'alert'=>$alert, 'forceLogout'=>$forceLogout));
+    echo $twig->render('SystemInnstillinger.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'systemVariabler'=>$systemVariabler[0],
+    'brukerTilgang'=>$_SESSION['brukerTilgang'], 'error'=>$error, 'alert'=>$alert, 'forceLogout'=>$forceLogout));
 
-}
-else {
-    header("Location: index.php?error=manglendeRettighet");
 }
 //echo $twig->render('index.html', array(
 //    'error'=>$error));
