@@ -77,7 +77,7 @@ switch ($type) {
         break;
 }
 
-$tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
+//$tabellRender = $twig->render('rapportdelprosjekt.html', $twigs);
 
 if(isset($_GET['download'])){
     $filename = date('Y-m-d') . ' prosjektrapport.xlsx';

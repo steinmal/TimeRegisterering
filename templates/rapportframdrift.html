@@ -98,7 +98,7 @@
                                 <td>{{ oppgave.Tidsestimat }}</td>
                                 <td>{{ oppgave.Tidsestimat - oppgavereg.hentAktiveTimerPrOppgaveDesimal(oppgave.Id) }}</td>
                                 <td>{{ oppgavereg.calculatePercent(oppgave.Id) }}%</td>
-                                <td>Oppgaver har ingen status</td>
+                                <td>{{ oppgave.StatusString }}</td>
                             </tr>
                             {% endif %}
                         {% endfor %}
