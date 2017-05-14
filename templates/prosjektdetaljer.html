@@ -148,6 +148,7 @@
                     <th data-order="desc" data-field="estimatedtime" data-sortable="true">Estimert tid</th>
                     <th data-order="desc" data-field="registeredtime" data-sortable="true">Registrert tid</th>
                     <th data-order="desc" data-field="approvedtime" data-sortable="true">Godkjent tid</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -165,6 +166,7 @@
                         <td>{{ oppgave.Tidsestimat }}</td>
                         <td>{{ oppgavereg.hentAktiveTimerPrOppgave(oppgave.Id) }}</td>
                         <td>{{ oppgavereg.hentGodkjenteTimerPrOppgave(oppgave.Id) }}</td>
+                        <td><a href="oppgaveoppretting.php?prosjektId={{ prosjekt.Id }}&oppgaveId={{oppgave.Id}}" class="btn btn-default" aria-label="Rediger"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
                     </tr>
                     {% endif %}
                 {% endfor %}

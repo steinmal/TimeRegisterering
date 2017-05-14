@@ -176,5 +176,17 @@ class OppgaveRegister {
         $stmt->bindParam(':estimatId', $estimatId, PDO::PARAM_INT);
         return execStmt($stmt);
     }
+
+    public function redigerOppgave($oppgaveId, $foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode) {
+        $stmt = $this->db->prepare("UPDATE oppgave SET foreldre_oppgave_id = :foreldre_id, oppgavetype_id = :oppgavetype_id, fase_id =:fase_id, oppgave_navn=:navn, oppgave_tidsestimat=:tidsestimat, oppgave_periode=:periode WHERE oppgave_id =:id");
+        $stmt->bindParam(':foreldre_id', $foreldreId, PDO::PARAM_INT);
+        $stmt->bindParam(':oppgavetype_id', $oppgaveTypeId, PDO::PARAM_INT);
+        $stmt->bindParam(':fase_id', $faseId, PDO::PARAM_INT);
+        $stmt->bindParam(':navn', $oppgaveNavn);
+        $stmt->bindParam(':tidsestimat', $tidsestimat, PDO::PARAM_INT);
+        $stmt->bindParam(':periode', $periode, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $oppgaveId, PDO::PARAM_INT);
+        return execStmt($stmt);
+    }
 }
 ?>
