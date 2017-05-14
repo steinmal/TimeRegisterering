@@ -57,9 +57,9 @@
         </div>
         <div class="form-group ">
             {% if valgOppgave.Id > 0 %}
-            <input type="submit" name="opprettOppgave" value="Opprett oppgave">
-            {% else %}
             <input type="submit" name="opprettOppgave" value="Rediger oppgave">
+            {% else %}
+            <input type="submit" name="opprettOppgave" value="Opprett oppgave">
             {% endif %}
             <a href="prosjektdetaljer.php?prosjektId={{ valgtProsjekt.Id }}">Avbryt</a>
         </div>

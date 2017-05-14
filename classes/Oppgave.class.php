@@ -19,5 +19,7 @@
         public function getType() { return $this->oppgavetype_id; }
         public function getFaseId() { return $this->fase_id; }
         public function getPeriode() { return $this->oppgave_periode; }
+        
+        public function setFaseID($id){ $this->fase_id = $id; }
 
     }
