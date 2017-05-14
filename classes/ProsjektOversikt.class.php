@@ -108,7 +108,7 @@ class ProsjektOversikt {
                 }
             }
         }
-        if ($oversiktType != self::$OT_BURNUP) ksort($this->totaltidprdag);
+        if ($oversiktType == self::$OT_BURNUP) ksort($this->totaltidprdag);
     }
     
     public function gjennopprett(ProsjektRegister $ProsjektReg){

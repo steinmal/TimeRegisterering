@@ -44,7 +44,7 @@ if(!isset($tilgang) || !($tilgang->isTeamleder() || $tilgang->isProsjektadmin())
     return;
 }
 
-if (!$tilgang->isProsjektadmin() && !($bruker->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getTeamLeder()
+if (!$tilgang->isProsjektadmin() && !($bruker->getId() == $TeamReg->hentTeam($prosjekt->getTeam())->getLeder()
         || $bruker->getId() == $prosjekt->getProductOwner()
         || $bruker->getId() == $prosjekt->getLeder()))
 {
@@ -64,12 +64,18 @@ $faser = $FaseReg->hentAlleFaser($prosjekt->getId());
 //Bruk isåfall new Oppgave og fyll inn denne fra $_POST vha set-metodene.
 if(isset($_GET['oppgaveId'])) {
     $valgtOppgave = $OppgaveReg->hentOppgave($_GET['oppgaveId']);
+} else {
+    $valgtOppgave = new Oppgave();
+    if(isset($_REQUEST['fase']) && $_REQUEST['fase'] > 0){
+        $valgtOppgave->setFaseId($_REQUEST['fase']);
+    }
 }
 
 
 if(isset($_POST['opprettOppgave'])){
-    if(!isset($_POST['fase']) && $_POST['fase'] <= 0){
+    if($valgtOppgave->getFaseId() <= 0){
         header("Location: oppgaveOppretting.php?prosjektId=" . $prosjektId . "&error=ingenFase");
+        return;
     }
     $faseId = $_POST['fase'];
     $foreldreId = null;
@@ -81,8 +87,8 @@ if(isset($_POST['opprettOppgave'])){
     $tidsestimat = $_POST['tidsestimat'];
     $periode = $_POST['periode'];
     $tilstand = $_POST['tilstand'];
-    
-    
+
+
     if(!isset($_POST['oppgaveId'])){
         $OppgaveReg->lagOppgave($foreldreId, $oppgaveTypeId, $faseId, $oppgaveNavn, $tidsestimat, $periode, $tilstand);
         header("Location: prosjektdetaljer.php?prosjektId=" . $prosjektId);
@@ -95,6 +101,16 @@ if(isset($_POST['opprettOppgave'])){
     }
 }
 
-echo $twig->render('oppgaveoppretting.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'TeamReg'=>$TeamReg, 'bruker'=>$_SESSION['bruker'], 'valgtProsjekt'=>$prosjekt, 'valgtOppgave'=>$valgtOppgave,
-                    'oppgavetyper'=>$oppgaveTyper, 'tilstander'=>$tilstander, 'faser'=>$faser, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+
+echo $twig->render('oppgaveoppretting.html', array(
+        'aktivert'=>$aktivert,
+        'innlogget'=>$_SESSION['innlogget'],
+        'TeamReg'=>$TeamReg,
+        'bruker'=>$_SESSION['bruker'],
+        'valgtProsjekt'=>$prosjekt,
+        'valgtOppgave'=>$valgtOppgave,
+        'oppgavetyper'=>$oppgaveTyper,
+        'faser'=>$faser,
+        'tilstander'=>$tilstander,
+        'brukerTilgang'=>$_SESSION['brukerTilgang']));
 ?>
