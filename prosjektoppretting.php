@@ -22,8 +22,8 @@ if(!isInnlogget()){
     header("Location: index.php?error=ikkeInnlogget");
     return;
 }
-$aktivert = isAktivert();
-if(!isProsjektadmin() != true || !$aktivert){
+$aktivert = isAktiv();
+if(!isProsjektadmin() || !$aktivert){
     header("Location: index.php?error=manglendeRettighet&side=propp");
     return;
 }
