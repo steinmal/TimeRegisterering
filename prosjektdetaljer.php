@@ -23,6 +23,7 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
     return;
 }
 
+// Tilgang til involverte brukere, også ansatte
 if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
     return;

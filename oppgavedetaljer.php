@@ -26,7 +26,7 @@ if(!isInnlogget()){
 }
 $aktivert = isAktiv();
 
-if(!isTeamleder() || !$aktivert)){
+if(!isTeamleder() || !$aktivert){
     header("Location: index.php?error=manglendeRettighet&side=oppgdet");
     return;
 }
