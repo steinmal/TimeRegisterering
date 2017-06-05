@@ -32,7 +32,7 @@ function isSystemAdmin(){
 }
 
 function isTeamLeder($TeamReg = null, $teamId = null){
-    if($teamReg != null && $teawmId != null){
+    if($TeamReg != null && $teamId != null){
         $team = $TeamReg->hentTeam($teamId);
         return $_SESSION['brukerTilgang']->isTeamLeder() && $team->getLeder() == $_SESSION['bruker']->getId(); 
     }

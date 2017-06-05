@@ -43,7 +43,7 @@ if(isset($_GET['oppgaveId'])) {
     $godkjentTid = $OppgaveReg->hentGodkjenteTimerPrOppgave($oppgave->getId());
     
     $brukerId = $_SESSION['bruker']->getId();
-    $teawmLederId = $team->getLeder();
+    $teamLederId = $team->getLeder();
     //$teamLederId = $TeamReg->hentTeam($ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getTeam())->getLeder();
     $prosjektlederId = $prosjekt->getLeder();
     //$prosjektlederId = $ProsjektReg->hentProsjektFraFase($oppgave->getFaseId())->getLeder();
