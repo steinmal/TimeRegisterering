@@ -51,9 +51,9 @@ if(isset($_GET['action'])){
         $forceLogout = true;
         //return;
     }
-    if ($_GET['action'] == "backup-060517") {
+    if ($_GET['action'] == "backup-050617") {
         DbHelper::executeMySQLFile("sql/wipe.sql");
-        DbHelper::executeMySQLFile("sql/06-05-2017DataBaseDump.sql");
+        DbHelper::executeMySQLFile("sql/05-06-2017DataBaseDump.sql");
         $alert = "Database har blitt gjenopprettet. Du må logge inn på nytt.";
         $forceLogout = true;
         //return;
