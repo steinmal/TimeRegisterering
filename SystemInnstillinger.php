@@ -41,6 +41,7 @@ if(isset($_POST['submit'])){
             $SysReg->lagSystemvariabel($_POST['tidsparameter']);
         }
     }
+    $systemVariabler = $SysReg->hentSystemvariabel(); //Oppdater hvis det blir gjort endringer
 }
 
 if(isset($_GET['action'])){
