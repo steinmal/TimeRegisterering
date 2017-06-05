@@ -38,8 +38,37 @@ if(!(isProsjektadmin() || isProsjektOwner($ProsjektReg, $prosjektId)) || !$aktiv
 if(isset($_GET['rapportType'])){
     $rapportType = $_GET['rapportType'];
 }
+
+
+//Data til datepicker
+date_default_timezone_set('Europe/Oslo');
+$firstDayOfMonth = mktime(0, 0, 0, date("m"), 1, date("Y"));
+$lastDayOfMonth = mktime(0, 0, 0, date("m"), date("t"), date("Y"));
+
+$datefrom = date("Y-m-d", $firstDayOfMonth);
+$dateto = date("Y-m-d", $lastDayOfMonth);
+
+if (isset($_SESSION['datefrom'])) $datefrom = $_SESSION['datefrom'];
+if (isset($_SESSION['dateto'])) $dateto = $_SESSION['dateto'];
+
+if (isset($_GET['daterange']) && strlen($_GET['daterange']) == 23) {
+    $datefrom = substr($_GET['daterange'], 0, 10);
+    $dateto = substr($_GET['daterange'], 13, 10);
+}
+
+$_SESSION['datefrom'] = $datefrom;
+$_SESSION['dateto'] = $dateto;
+
+
 $prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
-$twigs = array('innlogget'=>$_SESSION['innlogget'], 'bruker'=>$_SESSION['bruker'], 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'prosjekt'=>$prosjekt, 'type'=>$rapportType);
+$twigs = array('innlogget'=>$_SESSION['innlogget'],
+    'bruker'=>$_SESSION['bruker'],
+    'brukerTilgang'=>$_SESSION['brukerTilgang'],
+    'prosjekt'=>$prosjekt,
+    'type'=>$rapportType,
+    'datefrom'=>$datefrom,
+    'dateto'=>$dateto
+);
 
 $TimeregReg = new TimeregistreringRegister($db);
 $FaseReg = new FaseRegister($db);

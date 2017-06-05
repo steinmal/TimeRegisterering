@@ -24,7 +24,12 @@ if(!isset($_SESSION['innlogget']) || $_SESSION['innlogget'] != true){
 }
 
 // Tilgang til involverte brukere, også ansatte
-if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder() != true || !$_SESSION['bruker']->isAktivert()){
+$harTilgang = false;
+if (isset($_SESSION['brukerTilgang']) && $_SESSION['bruker']->isAktivert()) {
+    if ($_SESSION['brukerTilgang']->isTeamleder()) $harTilgang = true;
+    if ($_SESSION['brukerTilgang']->isProductOwner()) $harTilgang = true; //TODO: Begrens product owners tilgang til andre prosjekter
+}
+if(!$harTilgang){
     header("Location: index.php?error=manglendeRettighet&side=pradm");
     return;
 }
@@ -32,7 +37,7 @@ if(!isset($_SESSION['brukerTilgang']) || $_SESSION['brukerTilgang']->isTeamleder
 $prosjektId = 0;
 if (isset($_REQUEST['prosjektId']))
     $prosjektId = $_REQUEST['prosjektId'];
-$prosjekt = $ProsjektReg->hentProsjekt($prosjektId);
+$prosjekt = $ProsjektReg->hentProsjekt($prosjektId); //TODO: Denne blir kjørt fleire gonger lenger nede i koden...
 if ($prosjekt == null) {
     header("Location: prosjektadministrering.php?error=ugyldigProsjekt");
     return;

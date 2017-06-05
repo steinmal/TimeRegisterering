@@ -26,7 +26,7 @@
 
         <form action="prosjektrapport.php" method="GET" class="col-md-4" id="datefilterform">
         <input type="hidden" name="prosjektId" value="{{ prosjekt.Id }}"/>
-            {% if rapportType != null %}
+            {% if type != null %}
             <input type="hidden" name="rapportType" value="{{ type }}"/>
             {% endif %}
             <label for="daterange">Periode:</label>
