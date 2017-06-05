@@ -6,7 +6,7 @@
         private $brukertype_prosjektadmin;
         private $brukertype_brukeradmin;
         private $brukertype_systemadmin;
-        private $brukertyper_product_owner;
+        private $brukertype_product_owner;
 
         public function __construct(){
         }
