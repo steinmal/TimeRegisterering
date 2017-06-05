@@ -13,6 +13,7 @@ $TeamReg = new TeamRegister($db);
 $error = "";
 $visNye = "";
 $aktivert  = "";
+$regSucc = "";
 
 session_start();
 
@@ -46,6 +47,9 @@ if(isset($_GET['action']) && $_GET['action'] == "aktiver"){
 if(isset($_GET['visNye'])){
     $visNye = 'on';
 }
+if(isset($_GET['regSucc'])) {
+    $regSucc = $_GET['regSucc'];
+}
 
 $brukere = $BrukerReg->hentAlleBrukere();
 $venterGodkjenning = 0;
@@ -55,6 +59,6 @@ foreach($brukere as $bruker){
     }
 }
 
-echo $twig->render('brukeradministrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'],'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang']));
+echo $twig->render('brukeradministrering.html', array('aktivert'=>$aktivert, 'innlogget'=>$_SESSION['innlogget'], 'error'=>$error, 'venterGodkjenning'=>$venterGodkjenning, 'visNye'=>$visNye, 'bruker'=>$_SESSION['bruker'],'TeamReg'=>$TeamReg, 'brukerReg'=>$BrukerReg, 'brukere'=>$brukere, 'brukerTilgang'=>$_SESSION['brukerTilgang'], 'regSucc'=>$regSucc));
 
 ?>

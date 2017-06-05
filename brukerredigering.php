@@ -21,7 +21,7 @@ if(!isInnlogget()){
 }
 $aktivert = isAktiv();
 
-if((!isBrukerAdmin || !$aktivert)
+if((!isBrukerAdmin() || !$aktivert)
         && $_REQUEST['brukerId'] != $_SESSION['bruker']->getId()){
     header("Location: index.php?error=manglendeRettighet&side=brred");
     return;

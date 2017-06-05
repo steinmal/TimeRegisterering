@@ -313,6 +313,7 @@
         </div>
         {% endif %}
 
+    {% else %} <!-- ikke innlogget -->
         {% if regSucc %}
         <div class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -321,7 +322,6 @@
         </div>
         {% endif %}
 
-    {% else %} <!-- ikke innlogget -->
         {% if error == "ikkeInnlogget" %}
         <div class="alert alert-error" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

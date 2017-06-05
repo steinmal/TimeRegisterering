@@ -13,8 +13,21 @@ $error="";
 $innlogget = 0;
 $bruker = "";
 $brukerTilgang = "";
+$regSucc = "";
 session_start();
 
+if(isset($_GET['error'])){
+    $error=$_GET['error'];
+}
+if(isset($_SESSION['bruker'])){
+    $bruker = $_SESSION['bruker'];
+}
+if(isset($_SESSION['innlogget'])){
+    $innlogget = $_SESSION['innlogget'];
+}
+if(isset($_SESSION['brukerTilgang'])){
+    $innlogget = $_SESSION['brukerTilgang'];
+}
 
 if(isset($_POST['opprettBruker'])){
     if($BrukerReg->brukernavnEksisterer($_POST['navn'])){
@@ -49,24 +62,16 @@ if(isset($_POST['opprettBruker'])){
     $nyBruker->setPassord($_POST['passord']);
     $nyBruker->setTelefon($_POST['telefonnummer']);
     $BrukerReg->opprettBruker($nyBruker);
-
-    header("Location: index.php?regSucc=1");
-}
-if(isset($_GET['error'])){
-    $error=$_GET['error'];
-}
-if(isset($_SESSION['bruker'])){
-    $bruker = $_SESSION['bruker'];
-}
-if(isset($_SESSION['innlogget'])){
-    $innlogget = $_SESSION['innlogget'];
-}
-if(isset($_SESSION['burkerTilgang'])){
-    $innlogget = $_SESSION['brukerTilgang'];
+    if ($innlogget)
+        header("Location: brukeradministrering.php?regSucc=1");
+    else
+        header("Location: index.php?regSucc=1");
 }
 
 
-
+if (!isset($_SESSION['regtelefon'])) $_SESSION['regtelefon'] = "";
+if (!isset($_SESSION['regepost'])) $_SESSION['regepost'] = "";
+if (!isset($_SESSION['regnavn'])) $_SESSION['regnavn'] = "";
 
 echo $twig->render('brukerregistrering.html', array('brukerTilgang'=>$brukerTilgang, 'TeamReg'=>$TeamReg, 'bruker'=>$bruker, 'innlogget'=>$innlogget, 'error'=>$error, 'telefon'=>$_SESSION['regtelefon'], 'epost'=>$_SESSION['regepost'], 'navn'=>$_SESSION['regnavn']));
 ?>
