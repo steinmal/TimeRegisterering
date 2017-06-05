@@ -8,6 +8,7 @@ require_once 'vendor/autoload.php';
 include('auth.php');
 $loader = new Twig_Loader_Filesystem('templates');
 $twig = new Twig_Environment($loader);
+$BrukerReg = new BrukerRegister($db);
 $ProsjektReg = new ProsjektRegister($db);
 $FaseReg = new FaseRegister($db);
 $OppgaveReg = new OppgaveRegister($db);

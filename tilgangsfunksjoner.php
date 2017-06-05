@@ -12,7 +12,7 @@ function isProsjektLeder(ProsjektRegister $ProsjektReg, $prosjektId){
 
 function isProsjektTeamLeder(BrukerRegister $BrukerReg, $prosjektId){
     $teamLeder = $BrukerReg->getTeamLederForProsjekt($prosjektId);
-    return $_SESSION['brukerTilgang']->isTeamLeder() && $teamLeder == $_SESSION['bruker']->getId();
+    return $_SESSION['brukerTilgang']->isTeamLeder() && $teamLeder->getId() == $_SESSION['bruker']->getId();
 }
 
 function isProductOwner(){

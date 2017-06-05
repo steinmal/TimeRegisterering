@@ -145,6 +145,7 @@ if(isset($_POST['opprettProsjekt'])){
                 header("Location: prosjektadministrering.php?error=noRadio");
                 return;
             }
+            $prosjekt = $ProsjektReg->hentProsjekt($_REQUEST['prosjektId']);
             $prosjektTemp = clone $prosjekt;
             while($prosjektTemp->getParent() != 1){
                 while($prosjektTemp->getStatus() != 1 && $prosjektTemp->getParent() != 1){

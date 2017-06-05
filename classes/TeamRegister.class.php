@@ -64,7 +64,7 @@ class TeamRegister {
             . " INNER JOIN oppgave o ON o.oppgave_id=t.oppgave_id"
             . " INNER JOIN fase f on f.fase_id=o.fase_id"
             . " INNER JOIN prosjekt p on p.prosjekt_id=f.prosjekt_id"
-            . " INNER JOIN team on team.team_id=o.team_id"
+            . " INNER JOIN team on team.team_id=p.team_id"
             . " WHERE t.timereg_id = :id");
         $stmt->bindparam(':id', $id, PDO::PARAM_INT);
         return getEn($stmt, $this->typeName);
