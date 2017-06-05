@@ -58,19 +58,20 @@ CREATE TABLE `brukertype` (
   `brukertype_teamleder` tinyint(1) NOT NULL,
   `brukertype_prosjektadmin` tinyint(1) NOT NULL,
   `brukertype_brukeradmin` tinyint(1) NOT NULL,
-  `brukertype_systemadmin` tinyint(1) NOT NULL
+  `brukertype_systemadmin` tinyint(1) NOT NULL,
+  `brukertype_product_owner` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `brukertype`
 --
 
-INSERT INTO `brukertype` (`brukertype_id`, `brukertype_navn`, `brukertype_teamleder`, `brukertype_prosjektadmin`, `brukertype_brukeradmin`, `brukertype_systemadmin`) VALUES
-(1, 'Systemadministrator', 1, 1, 1, 1),
-(2, 'Prosjektadministrator', 1, 1, 1, 0),
-(3, 'Teamleder', 1, 0, 0, 0),
-(4, 'Ansatt', 0, 0, 0, 0),
-(5, 'ProductOwner', 1, 1, 0, 0);
+INSERT INTO `brukertype` (`brukertype_id`, `brukertype_navn`, `brukertype_teamleder`, `brukertype_prosjektadmin`, `brukertype_brukeradmin`, `brukertype_systemadmin`, `brukertype_product_owner`) VALUES
+(1, 'Systemadministrator', 1, 1, 1, 1, 1),
+(2, 'Prosjektadministrator', 1, 1, 1, 0, 1),
+(3, 'Teamleder', 1, 0, 0, 0, 0),
+(4, 'Ansatt', 0, 0, 0, 0, 0),
+(5, 'ProductOwner', 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
