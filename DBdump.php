@@ -23,20 +23,15 @@ if(!isSystemAdmin()){
 
 try {
     $dump = new Ifsnop\Mysqldump\Mysqldump('mysql:dbname=stud_v17_gruppe2;host=kark.hin.no', 'stud_v17_gruppe2', 'gruppe2');
-    $dump->start('DataBaseDump.sql');
+
+    $file_url = 'DataBaseDump.sql';
+    header('Content-Type: application/octet-stream');
+    header("Content-Transfer-Encoding: Binary");
+    header("Content-disposition: attachment; filename=\"" . date('d-m-Y') . basename($file_url) . "\"");
+
+    $dump->start('php://output'); //Skriv direkte til stdout
 } catch (Exception $e) {
     echo "Connection failed: " . $e->getMessage();
 }
-
-$file_url = 'DataBaseDump.sql';
-header('Content-Type: application/octet-stream');
-header("Content-Transfer-Encoding: Binary");
-header("Content-disposition: attachment; filename=\"" . date('d-m-Y') . basename($file_url) . "\"");
-readfile($file_url);
-
-unlink($file_url); //Sletter filen fra server etter download.
-
-//echo $twig->render('index.html', array(
-//    'error'=>$error));
 
 ?>
