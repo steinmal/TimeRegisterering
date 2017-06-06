@@ -70,11 +70,11 @@ if(isset($_POST['opprettProsjekt'])){
     if($nyttProsjekt->getParent() != 1){
         $parent = $ProsjektReg->hentProsjekt($nyttProsjekt->getParent());
         if ($parent != NULL) {  //grunnprosjekter har ikke parent, tok med denne for å ikke få fatal error i linje 68 ved opprettelse av grunnprosjekt
-            if(DateHelper::dateCompare($parent->getStartDato(), $start) < 1){
+            if(DateHelper::dateCompare($parent->getStartDato(), $start) < 0){
                 $inputOk = false;
                 $error = "ugyldigStart";
             }
-            if(DateHelper::dateCompare($slutt, $parent->getSluttDato()) < 1){
+            if(DateHelper::dateCompare($slutt, $parent->getSluttDato()) < 0){
                 $inputOk = false;
                 $error = "ugyldigStopp";
             }

@@ -18,7 +18,7 @@ class ProsjektRegister {
         else{
             $stmt = $this->db->prepare("SELECT * FROM prosjekt WHERE prosjekt_arkivert=0");
         }
-        return getAlle($stmt, $this->typeName);
+        return getAlle($stmt, $this->typeName, true);
     }
     
     public function hentUnderProsjekt($id){
