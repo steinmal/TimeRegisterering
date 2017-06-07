@@ -206,7 +206,7 @@ class ProsjektOversikt {
         foreach($this->getTidPrDagArray() as $dag => $data){
             foreach($data as $type => $tid){
                 if (!array_key_exists($dag, $totaltidprdag)) $totaltidprdag[$dag] = 0;
-                $totaltidprdag[$dag] += ($tid / 86400);
+                $totaltidprdag[$dag] += ($tid / 3600);
             }
         }
         return $totaltidprdag;
